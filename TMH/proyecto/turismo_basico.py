@@ -9,8 +9,17 @@ lugares_turisticos = [
     {"nombre": "Plaza Mayor", "x": 40.4155, "y": -3.7074, "puntos": 85, "tiempo_visita": 45},
     {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 80, "tiempo_visita": 30},
     {"nombre": "Parque del Retiro", "x": 40.4153, "y": -3.6846, "puntos": 88, "tiempo_visita": 60},
-    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45}
+    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45},
+    # Nuevos lugares añadidos
+    {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 70, "tiempo_visita": 40},
+    {"nombre": "Catedral de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 85, "tiempo_visita": 50},
+    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 80, "tiempo_visita": 35},
+    {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 120},
+    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110},
+    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4017, "y": -3.7611, "puntos": 85, "tiempo_visita": 150}
 ]
+
+tiempo_maximo_dia = 12 * 60  # 12 horas en minutos
 
 def distancia_entre_puntos(lugar1: dict, lugar2: dict) -> float:
     return math.sqrt((lugar1["x"] - lugar2["x"])**2 + (lugar1["y"] - lugar2["y"])**2)
@@ -19,7 +28,7 @@ def redondear_a_franja_15(tiempo: float) -> int:
     # Redondea un tiempo dado a la franja de 15 minutos más cercana hacia arriba.
     return math.ceil(tiempo / 15) * 15
 
-def evaluar_ruta(ruta: List[int], tiempo_max: int = 400) -> dict:
+def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_maximo_dia) -> dict:
     if len(ruta) == 0:
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
     
@@ -60,7 +69,7 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = 400) -> dict:
         "valida": valida
     }
 
-def evaluar_ruta_multiobjetivo(ruta: List[int], tiempo_max: int = 12 * 60, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
+def evaluar_ruta_multiobjetivo(ruta: List[int], tiempo_max: int = tiempo_maximo_dia, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
     if len(ruta) == 0:
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
 
