@@ -1,29 +1,25 @@
-# Optimización de Rutas Turísticas - Versión Básica
-# Comparación entre Algoritmos Genéticos y Enfriamiento Simulado
-
 import random
 import math
 from typing import List, Tuple
 
-# Datos básicos: lugares turísticos con coordenadas simples
+# Datos básicos: lugares turísticos con coordenadas reales y puntos ajustados
 lugares_turisticos = [
-    {"nombre": "Museo del Prado", "x": 1, "y": 2, "puntos": 90, "tiempo_visita": 120},
-    {"nombre": "Palacio Real", "x": 3, "y": 3, "puntos": 80, "tiempo_visita": 90},
-    {"nombre": "Plaza Mayor", "x": 2, "y": 1, "puntos": 70, "tiempo_visita": 45},
-    {"nombre": "Puerta del Sol", "x": 2, "y": 2, "puntos": 60, "tiempo_visita": 30},
-    {"nombre": "Parque del Retiro", "x": 4, "y": 1, "puntos": 80, "tiempo_visita": 60},
-    {"nombre": "Gran Vía", "x": 1, "y": 3, "puntos": 60, "tiempo_visita": 40}
+    {"nombre": "Museo del Prado", "x": 40.4138, "y": -3.6921, "puntos": 95, "tiempo_visita": 120},
+    {"nombre": "Palacio Real", "x": 40.4179, "y": -3.7143, "puntos": 90, "tiempo_visita": 90},
+    {"nombre": "Plaza Mayor", "x": 40.4155, "y": -3.7074, "puntos": 85, "tiempo_visita": 45},
+    {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 80, "tiempo_visita": 30},
+    {"nombre": "Parque del Retiro", "x": 40.4153, "y": -3.6846, "puntos": 88, "tiempo_visita": 60},
+    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45}
 ]
 
-def calcular_distancia(lugar1: dict, lugar2: dict) -> float:
-    """Calcula la distancia euclidiana entre dos lugares"""
+def distancia_entre_puntos(lugar1: dict, lugar2: dict) -> float:
     return math.sqrt((lugar1["x"] - lugar2["x"])**2 + (lugar1["y"] - lugar2["y"])**2)
 
+def redondear_a_franja_15(tiempo: float) -> int:
+    # Redondea un tiempo dado a la franja de 15 minutos más cercana hacia arriba.
+    return math.ceil(tiempo / 15) * 15
+
 def evaluar_ruta(ruta: List[int], tiempo_max: int = 400) -> dict:
-    """
-    Evalúa una ruta y retorna sus métricas
-    ruta: lista de índices de lugares en el orden de visita
-    """
     if len(ruta) == 0:
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
     
@@ -41,7 +37,7 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = 400) -> dict:
     for i in range(len(ruta) - 1):
         lugar_actual = lugares_turisticos[ruta[i]]
         lugar_siguiente = lugares_turisticos[ruta[i + 1]]
-        distancia_total += calcular_distancia(lugar_actual, lugar_siguiente)
+        distancia_total += distancia_entre_puntos(lugar_actual, lugar_siguiente)
     
     # Agregar tiempo de viaje (asumiendo velocidad constante)
     tiempo_viaje = distancia_total * 20  # 20 minutos por unidad de distancia
@@ -64,9 +60,52 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = 400) -> dict:
         "valida": valida
     }
 
-def crear_ruta_aleatoria(max_lugares: int = 4) -> List[int]:
-    """Crea una ruta aleatoria seleccionando lugares al azar"""
-    num_lugares = random.randint(2, min(max_lugares, len(lugares_turisticos)))
+def evaluar_ruta_multiobjetivo(ruta: List[int], tiempo_max: int = 12 * 60, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
+    if len(ruta) == 0:
+        return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
+
+    puntos_total = 0
+    distancia_total = 0
+    tiempo_total = 0
+
+    # Calcular puntos y tiempo de visita
+    for i in ruta:
+        lugar = lugares_turisticos[i]
+        puntos_total += lugar["puntos"]
+        tiempo_total += lugar["tiempo_visita"]
+
+    # Calcular distancia total y tiempo de traslado
+    for i in range(len(ruta) - 1):
+        lugar_actual = lugares_turisticos[ruta[i]]
+        lugar_siguiente = lugares_turisticos[ruta[i + 1]]
+        distancia = distancia_entre_puntos(lugar_actual, lugar_siguiente)
+        distancia_total += distancia
+
+        # Convertir distancia a tiempo de traslado (en minutos)
+        tiempo_traslado = distancia * 50 * 30  # Factor de conversión: 1 unidad de distancia ≈ 30 minutos
+        tiempo_traslado_redondeado = redondear_a_franja_15(tiempo_traslado)
+        tiempo_total += tiempo_traslado_redondeado
+
+    # Verificar si la ruta es válida (dentro del tiempo máximo)
+    valida = tiempo_total <= tiempo_max
+
+    # Calcular fitness: maximizar puntos, minimizar distancia
+    if valida:
+        fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total)
+    else:
+        fitness = 0  # Ruta inválida
+
+    return {
+        "puntos": puntos_total,
+        "distancia": round(distancia_total, 2),
+        "tiempo": round(tiempo_total, 2),
+        "fitness": round(fitness, 2),
+        "valida": valida
+    }
+
+def crear_ruta_aleatoria(max_lugares: int = len(lugares_turisticos)) -> List[int]:
+    """Crea una ruta aleatoria seleccionando lugares al azar."""
+    num_lugares = random.randint(2, max_lugares)
     return random.sample(range(len(lugares_turisticos)), num_lugares)
 
 def imprimir_ruta(ruta: List[int], evaluacion: dict):
@@ -86,7 +125,7 @@ def imprimir_ruta(ruta: List[int], evaluacion: dict):
 
 # Ejemplo de uso básico
 if __name__ == "__main__":
-    print("OPTIMIZACIÓN DE RUTAS TURÍSTICAS - VERSIÓN BÁSICA")
+    print("OPTIMIZACIÓN DE RUTAS TURÍSTICAS - MULTIOBJETIVO")
     print("="*60)
     
     print("\nLugares disponibles:")
@@ -94,16 +133,15 @@ if __name__ == "__main__":
         print(f"{i}. {lugar['nombre']} - Puntos: {lugar['puntos']}, Tiempo: {lugar['tiempo_visita']}min, Posición: ({lugar['x']}, {lugar['y']})")
     
     print("\n" + "="*60)
-    print("PROBANDO RUTAS ALEATORIAS:")
+    print("PROBANDO RUTAS ALEATORIAS CON ENFOQUE MULTIOBJETIVO:")
     
-    # Generar y evaluar algunas rutas aleatorias
     mejor_fitness = -999999
     mejor_ruta = []
     mejor_evaluacion = {}
     
     for i in range(5):
         ruta = crear_ruta_aleatoria()
-        evaluacion = evaluar_ruta(ruta)
+        evaluacion = evaluar_ruta_multiobjetivo(ruta, w_puntos=1.0, w_distancia=0.5)
         
         print(f"\n--- RUTA {i+1} ---")
         imprimir_ruta(ruta, evaluacion)
@@ -115,5 +153,5 @@ if __name__ == "__main__":
             mejor_evaluacion = evaluacion
     
     print("\n" + "="*60)
-    print("MEJOR RUTA ENCONTRADA:")
+    print("MEJOR RUTA ENCONTRADA (MULTIOBJETIVO):")
     imprimir_ruta(mejor_ruta, mejor_evaluacion)

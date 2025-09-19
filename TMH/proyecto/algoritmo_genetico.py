@@ -1,6 +1,6 @@
 # Algoritmo Genético Simple para Optimización de Rutas Turísticas
 
-from turismo_basico import lugares_turisticos, evaluar_ruta, imprimir_ruta
+from turismo_basico import lugares_turisticos, evaluar_ruta, imprimir_ruta, distancia_entre_puntos
 import random
 from typing import List, Tuple
 
