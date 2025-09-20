@@ -23,7 +23,7 @@ def crear_ruta(tiempo_dia: int = tiempo_dia, num_lugares: int = len(lugares_turi
     num_lugares = random.randint(2, max_lugares_dinamico)
     return random.sample(range(len(lugares_turisticos)), num_lugares)
 
-def crear_poblacion_inicial(tamaño_poblacion: int = 1000, tiempo_disponible: int = tiempo_dia) -> List[List[int]]:
+def crear_poblacion_inicial(tamaño_poblacion: int, tiempo_disponible: int) -> List[List[int]]:
     poblacion = []
 
     while len(poblacion) < tamaño_poblacion:
@@ -97,24 +97,22 @@ def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], t
     # Combinar elite con los seleccionados
     return elite + seleccionados
 
-def cruce_simple(padre1: List[int], padre2: List[int]) -> Tuple[List[int], List[int]]:
+def cruce_dinamico_uniforme(padre1: List[int], padre2: List[int]) -> Tuple[List[int], List[int]]:
     """
-    Cruce simple: toma lugares del padre1 y algunos del padre2
-    Evita duplicados manteniendo orden
+    Cruce dinámico basado en la longitud de los padres y uniforme.
+    Cada gen del hijo se selecciona aleatoriamente de uno de los dos padres.
     """
-    # Tomar lugares únicos de ambos padres
-    lugares_combinados = list(set(padre1 + padre2))
-    
-    # Crear dos hijos con longitudes aleatorias
-    max_len = min(len(lugares_combinados), 4)  # máximo 4 lugares
-    len_hijo1 = random.randint(2, max_len)
-    len_hijo2 = random.randint(2, max_len)
-    
-    # Mezclar y seleccionar
-    random.shuffle(lugares_combinados)
-    hijo1 = lugares_combinados[:len_hijo1]
-    hijo2 = lugares_combinados[:len_hijo2]
-    
+    # Determinar la longitud dinámica de los hijos basada en la longitud promedio de los padres
+    longitud_hijo = random.randint(2, (len(padre1) + len(padre2)) // 2)
+
+    # Crear hijos seleccionando genes de forma uniforme
+    hijo1 = random.sample(padre1 + padre2, longitud_hijo)
+    hijo2 = random.sample(padre1 + padre2, longitud_hijo)
+
+    # Asegurar que no haya duplicados en los hijos
+    hijo1 = list(dict.fromkeys(hijo1))
+    hijo2 = list(dict.fromkeys(hijo2))
+
     return hijo1, hijo2
 
 def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
@@ -133,7 +131,7 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
             if nuevo_lugar not in ruta_mutada:
                 ruta_mutada[idx] = nuevo_lugar
         
-        elif tipo_mutacion == 'agregar' and len(ruta_mutada) < 4:
+        elif tipo_mutacion == 'agregar' and len(ruta_mutada) < len(lugares_turisticos):
             # Agregar un nuevo lugar
             lugares_disponibles = [i for i in range(len(lugares_turisticos)) if i not in ruta_mutada]
             if lugares_disponibles:
@@ -146,8 +144,8 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
     
     return ruta_mutada
 
-def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 10, 
-                             prob_cruce: float = 0.8, prob_mutacion: float = 0.1, tiempo_disponible: int = 120) -> dict:
+def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1000, 
+                             prob_cruce: float = 0.8, prob_mutacion: float = 0.1, tiempo_disponible: int = tiempo_dia) -> dict:
     """
     Ejecuta el algoritmo genético simple
     """
@@ -201,7 +199,7 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
             
             # Cruce
             if random.random() < prob_cruce:
-                hijo1, hijo2 = cruce_simple(padre1, padre2)
+                hijo1, hijo2 = cruce_dinamico_uniforme(padre1, padre2)
             else:
                 hijo1, hijo2 = padre1.copy(), padre2.copy()
             
@@ -245,7 +243,7 @@ if __name__ == "__main__":
     print("="*60)
     
     # Ejecutar algoritmo genético
-    resultado = algoritmo_genetico_simple(generaciones=20, tamaño_poblacion=15, tiempo_disponible=120)
+    resultado = algoritmo_genetico_simple(generaciones=20, tiempo_disponible=120)
     
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_ruta(resultado["mejor_ruta"], resultado["evaluacion"])

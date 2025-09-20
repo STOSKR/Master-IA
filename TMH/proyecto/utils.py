@@ -1,5 +1,4 @@
 import math
-import random
 
 lugares_turisticos = [
     {"nombre": "Museo del Prado", "x": 40.4138, "y": -3.6921, "puntos": 95, "tiempo_visita": 120},
@@ -12,7 +11,8 @@ lugares_turisticos = [
     {"nombre": "Catedral de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 85, "tiempo_visita": 50},
     {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 80, "tiempo_visita": 35},
     {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 120},
-    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110}
+    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110},
+    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4017, "y": -3.7611, "puntos": 85, "tiempo_visita": 150}
 ]
 
 def distancia_haversine(lugar1: dict, lugar2: dict) -> float:
@@ -82,4 +82,22 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_maximo_dia) -> dict:
         "fitness": round(fitness, 2),
         "valida": valida
     }
+    
+    
+def cruce_simple(padre1: List[int], padre2: List[int]) -> Tuple[List[int], List[int]]:
+    # Tomar lugares únicos de ambos padres
+    lugares_combinados = list(set(padre1 + padre2))
+    
+    # Crear dos hijos con longitudes aleatorias
+    max_len = min(len(lugares_combinados), 4)  # máximo 4 lugares
+    len_hijo1 = random.randint(2, max_len)
+    len_hijo2 = random.randint(2, max_len)
+    
+    # Mezclar y seleccionar
+    random.shuffle(lugares_combinados)
+    hijo1 = lugares_combinados[:len_hijo1]
+    hijo2 = lugares_combinados[:len_hijo2]
+    
+    return hijo1, hijo2
+
 """
