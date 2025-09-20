@@ -1,8 +1,9 @@
-# Algoritmo Genético Simple para Optimización de Rutas Turísticas
-from utils import lugares_turisticos
-from turismo_basico import evaluar_ruta_multiobjetivo, imprimir_ruta, crear_ruta_aleatoria
+# Algoritmo Genético para Optimización de Rutas Turísticas
 import random
 from typing import List, Tuple
+from utils import lugares_turisticos, distancia_haversine, redondear_a_franja_15
+
+tiempo_dia = 12 * 60  # 12 horas 
 
 """
 Limitaciones
@@ -16,14 +17,65 @@ No se garantiza que las rutas iniciales cubran diferentes regiones geográficas 
 Dependencia de Parámetros:
 El límite de 90 minutos por lugar es arbitrario y podría no ser adecuado para todos los casos.
 """
+
+def crear_ruta(tiempo_dia: int = tiempo_dia, num_lugares: int = len(lugares_turisticos)) -> List[int]:
+    max_lugares_dinamico = min(num_lugares, tiempo_dia // 90)
+    num_lugares = random.randint(2, max_lugares_dinamico)
+    return random.sample(range(len(lugares_turisticos)), num_lugares)
+
 def crear_poblacion_inicial(tamaño_poblacion: int = 10) -> List[List[int]]:
-    poblacion = set()
+    
+    poblacion = []
 
     while len(poblacion) < tamaño_poblacion:
-        ruta = crear_ruta_aleatoria()
-        poblacion.add(tuple(ruta))  # Convertir a tupla para agregar al conjunto
+        ruta = crear_ruta()
+        if ruta not in poblacion:
+            poblacion.append(ruta)
 
-    return [list(ruta) for ruta in poblacion]  # Convertir de vuelta a listas
+    return poblacion
+
+def evaluar_ruta_multiobjetivo(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
+    if len(ruta) == 0:
+        return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
+
+    puntos_total = 0
+    distancia_total = 0
+    tiempo_total = 0
+
+    # Calcular puntos y tiempo de visita
+    for i in ruta:
+        lugar = lugares_turisticos[i]
+        puntos_total += lugar["puntos"]
+        tiempo_total += lugar["tiempo_visita"]
+
+    # Calcular distancia total y tiempo de traslado
+    for i in range(len(ruta) - 1):
+        lugar_actual = lugares_turisticos[ruta[i]]
+        lugar_siguiente = lugares_turisticos[ruta[i + 1]]
+        distancia = distancia_haversine(lugar_actual, lugar_siguiente)
+        distancia_total += distancia
+
+        # Convertir distancia a tiempo de traslado (en minutos)
+        tiempo_traslado = distancia * 20  # 20 minutos por kilómetro
+        tiempo_traslado_redondeado = redondear_a_franja_15(tiempo_traslado)
+        tiempo_total += tiempo_traslado_redondeado
+
+    # Verificar si la ruta es válida (dentro del tiempo máximo)
+    valida = tiempo_total <= tiempo_max
+
+    # Calcular fitness: maximizar puntos, minimizar distancia
+    if valida:
+        fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total)
+    else:
+        fitness = 0  # Ruta inválida
+
+    return {
+        "puntos": puntos_total,
+        "distancia": round(distancia_total, 2),
+        "tiempo": round(tiempo_total, 2),
+        "fitness": round(fitness, 2),
+        "valida": valida
+    }
 
 def seleccion_torneo(poblacion: List[List[int]], fitness_scores: List[float], k: int = 3) -> List[int]:
     """Selecciona un individuo usando torneo de k individuos"""
@@ -161,6 +213,21 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         "algoritmo": "Genético"
     }
 
+def imprimir_ruta(ruta: List[int], evaluacion: dict):
+    """Imprime los detalles de una ruta"""
+    print("\n" + "="*50)
+    print("RUTA:")
+    for i, lugar_idx in enumerate(ruta):
+        lugar = lugares_turisticos[lugar_idx]
+        print(f"{i+1}. {lugar['nombre']} (Puntos: {lugar['puntos']}, Tiempo: {lugar['tiempo_visita']}min)")
+    
+    print(f"\nRESULTADOS:")
+    print(f"Puntos totales: {evaluacion['puntos']}")
+    print(f"Distancia total: {evaluacion['distancia']}")
+    print(f"Tiempo total: {evaluacion['tiempo']} minutos")
+    print(f"Válida: {'Sí' if evaluacion['valida'] else 'No'}")
+    print(f"Fitness: {evaluacion['fitness']}")
+    
 # Ejemplo de uso
 if __name__ == "__main__":
     print("OPTIMIZACIÓN CON ALGORITMO GENÉTICO")
