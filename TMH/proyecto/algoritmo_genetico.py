@@ -63,8 +63,22 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float 
     exceso_tiempo = max(0, tiempo_total - tiempo_max)
     penalizacion = exceso_tiempo * 0.7  # Penalización proporcional al exceso de tiempo
 
+    # Verificar restricciones de horarios
+    hora_actual = 10 * 60  # Día comienza a las 10:00 (en minutos)
+    penalizacion_horarios = 0
+
+    for i in ruta:
+        lugar = lugares_turisticos[i]
+        apertura = int(lugar["apertura"].split(":")[0]) * 60 + int(lugar["apertura"].split(":")[1])
+        cierre = int(lugar["cierre"].split(":")[0]) * 60 + int(lugar["cierre"].split(":")[1])
+
+        if hora_actual < apertura or hora_actual + lugar["tiempo_visita"] > cierre:
+            penalizacion_horarios += 1000  # Penalización alta por violar horarios
+
+        hora_actual += lugar["tiempo_visita"]
+
     # Calcular fitness: maximizar puntos, minimizar distancia y aplicar penalización
-    fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total) - penalizacion
+    fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total) - penalizacion - penalizacion_horarios
 
     return {
         "puntos": puntos_total,
@@ -144,8 +158,8 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
     
     return ruta_mutada
 
-def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1000, 
-                             prob_cruce: float = 0.8, prob_mutacion: float = 0.1, tiempo_disponible: int = tiempo_dia) -> dict:
+def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 1000, 
+                             prob_cruce: float = 0.8, prob_mutacion: float = 0.3, tiempo_disponible: int = tiempo_dia) -> dict:
     """
     Ejecuta el algoritmo genético simple
     """
@@ -243,7 +257,7 @@ if __name__ == "__main__":
     print("="*60)
     
     # Ejecutar algoritmo genético
-    resultado = algoritmo_genetico_simple(generaciones=20, tiempo_disponible=120)
+    resultado = algoritmo_genetico_simple()
     
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_ruta(resultado["mejor_ruta"], resultado["evaluacion"])

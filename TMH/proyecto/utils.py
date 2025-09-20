@@ -1,18 +1,20 @@
 import math
 
 lugares_turisticos = [
-    {"nombre": "Museo del Prado", "x": 40.4138, "y": -3.6921, "puntos": 95, "tiempo_visita": 120},
-    {"nombre": "Palacio Real", "x": 40.4179, "y": -3.7143, "puntos": 90, "tiempo_visita": 90},
-    {"nombre": "Plaza Mayor", "x": 40.4155, "y": -3.7074, "puntos": 85, "tiempo_visita": 45},
-    {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 80, "tiempo_visita": 30},
-    {"nombre": "Parque del Retiro", "x": 40.4153, "y": -3.6846, "puntos": 88, "tiempo_visita": 60},
-    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45},
-    {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 70, "tiempo_visita": 40},
-    {"nombre": "Catedral de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 85, "tiempo_visita": 50},
-    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 80, "tiempo_visita": 35},
-    {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 120},
-    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110},
-    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4017, "y": -3.7611, "puntos": 85, "tiempo_visita": 150}
+    {"nombre": "Museo del Prado", "x": 40.4138, "y": -3.6921, "puntos": 95, "tiempo_visita": 120, "apertura": "10:00", "cierre": "20:00"},
+    {"nombre": "Palacio Real", "x": 40.4179, "y": -3.7143, "puntos": 90, "tiempo_visita": 90, "apertura": "10:00", "cierre": "18:00"},
+    {"nombre": "Plaza Mayor", "x": 40.4155, "y": -3.7074, "puntos": 85, "tiempo_visita": 45, "apertura": "10:00", "cierre": "22:00"},
+    {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 80, "tiempo_visita": 30, "apertura": "10:00", "cierre": "22:00"},
+    {"nombre": "Parque del Retiro", "x": 40.4153, "y": -3.6846, "puntos": 88, "tiempo_visita": 60, "apertura": "06:00", "cierre": "22:00"},
+    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45, "apertura": "10:00", "cierre": "23:00"},
+    {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 70, "tiempo_visita": 40, "apertura": "10:00", "cierre": "20:00"},
+    {"nombre": "Catedral de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 85, "tiempo_visita": 50, "apertura": "09:00", "cierre": "20:30"},
+    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 80, "tiempo_visita": 35, "apertura": "10:00", "cierre": "00:00"},
+    {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 120, "apertura": "10:00", "cierre": "19:00"},
+    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110, "apertura": "10:00", "cierre": "21:00"},
+    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4017, "y": -3.7611, "puntos": 85, "tiempo_visita": 150, "apertura": "10:30", "cierre": "18:00"},
+    {"nombre": "Teleférico de Madrid", "x": 40.4350, "y": -3.7278, "puntos": 75, "tiempo_visita": 60, "apertura": "11:00", "cierre": "19:00"},
+    {"nombre": "Museo Thyssen-Bornemisza", "x": 40.4167, "y": -3.6945, "puntos": 90, "tiempo_visita": 90, "apertura": "10:00", "cierre": "19:00"}
 ]
 
 def distancia_haversine(lugar1: dict, lugar2: dict) -> float:
