@@ -1,18 +1,29 @@
 # Algoritmo Genético Simple para Optimización de Rutas Turísticas
-
-from turismo_basico import lugares_turisticos, evaluar_ruta, imprimir_ruta, distancia_entre_puntos
+from utils import lugares_turisticos
+from turismo_basico import evaluar_ruta_multiobjetivo, imprimir_ruta, crear_ruta_aleatoria
 import random
 from typing import List, Tuple
 
-def crear_poblacion_inicial(tamaño_poblacion: int, max_lugares: int = 4) -> List[List[int]]:
-    """Crea una población inicial de rutas aleatorias"""
-    poblacion = []
-    for _ in range(tamaño_poblacion):
-        # Crear ruta aleatoria
-        num_lugares = random.randint(2, min(max_lugares, len(lugares_turisticos)))
-        ruta = random.sample(range(len(lugares_turisticos)), num_lugares)
-        poblacion.append(ruta)
-    return poblacion
+"""
+Limitaciones
+
+Tiempo Disponible Fijo:
+Aunque el tamaño de las rutas es dinámico, el tiempo disponible es constante (12 horas). Esto limita la adaptabilidad del algoritmo a diferentes escenarios.
+
+Falta de Diversidad Controlada:
+No se garantiza que las rutas iniciales cubran diferentes regiones geográficas o incluyan lugares con puntuaciones altas.
+
+Dependencia de Parámetros:
+El límite de 90 minutos por lugar es arbitrario y podría no ser adecuado para todos los casos.
+"""
+def crear_poblacion_inicial(tamaño_poblacion: int = 10) -> List[List[int]]:
+    poblacion = set()
+
+    while len(poblacion) < tamaño_poblacion:
+        ruta = crear_ruta_aleatoria()
+        poblacion.add(tuple(ruta))  # Convertir a tupla para agregar al conjunto
+
+    return [list(ruta) for ruta in poblacion]  # Convertir de vuelta a listas
 
 def seleccion_torneo(poblacion: List[List[int]], fitness_scores: List[float], k: int = 3) -> List[int]:
     """Selecciona un individuo usando torneo de k individuos"""
@@ -72,7 +83,7 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
     return ruta_mutada
 
 def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 10, 
-                             prob_cruce: float = 0.8, prob_mutacion: float = 0.1) -> dict:
+                             prob_cruce: float = 0.8, prob_mutacion: float = 0.1, tiempo_disponible: int = 120) -> dict:
     """
     Ejecuta el algoritmo genético simple
     """
@@ -82,7 +93,7 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
     print("="*50)
     
     # 1. Crear población inicial
-    poblacion = crear_poblacion_inicial(tamaño_poblacion)
+    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
     mejor_fitness_historico = -999999
     mejor_ruta_historica = []
     historial_fitness = []
@@ -91,7 +102,7 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         # 2. Evaluar población
         fitness_scores = []
         for ruta in poblacion:
-            evaluacion = evaluar_ruta(ruta)
+            evaluacion = evaluar_ruta_multiobjetivo(ruta)
             fitness_scores.append(evaluacion["fitness"])
         
         # 3. Encontrar el mejor de esta generación
@@ -141,7 +152,7 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         poblacion = nueva_poblacion[:tamaño_poblacion]
     
     # Resultado final
-    evaluacion_final = evaluar_ruta(mejor_ruta_historica)
+    evaluacion_final = evaluar_ruta_multiobjetivo(mejor_ruta_historica)
     
     return {
         "mejor_ruta": mejor_ruta_historica,
@@ -156,7 +167,7 @@ if __name__ == "__main__":
     print("="*60)
     
     # Ejecutar algoritmo genético
-    resultado = algoritmo_genetico_simple(generaciones=20, tamaño_poblacion=15)
+    resultado = algoritmo_genetico_simple(generaciones=20, tamaño_poblacion=15, tiempo_disponible=120)
     
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_ruta(resultado["mejor_ruta"], resultado["evaluacion"])
