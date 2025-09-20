@@ -23,8 +23,7 @@ def crear_ruta(tiempo_dia: int = tiempo_dia, num_lugares: int = len(lugares_turi
     num_lugares = random.randint(2, max_lugares_dinamico)
     return random.sample(range(len(lugares_turisticos)), num_lugares)
 
-def crear_poblacion_inicial(tamaño_poblacion: int = 10) -> List[List[int]]:
-    
+def crear_poblacion_inicial(tamaño_poblacion: int = 1000) -> List[List[int]]:
     poblacion = []
 
     while len(poblacion) < tamaño_poblacion:
@@ -34,7 +33,7 @@ def crear_poblacion_inicial(tamaño_poblacion: int = 10) -> List[List[int]]:
 
     return poblacion
 
-def evaluar_ruta_multiobjetivo(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
+def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
     if len(ruta) == 0:
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
 
@@ -61,29 +60,34 @@ def evaluar_ruta_multiobjetivo(ruta: List[int], tiempo_max: int = tiempo_dia, w_
         tiempo_total += tiempo_traslado_redondeado
 
     # Verificar si la ruta es válida (dentro del tiempo máximo)
-    valida = tiempo_total <= tiempo_max
+    exceso_tiempo = max(0, tiempo_total - tiempo_max)
+    penalizacion = exceso_tiempo * 0.7  # Penalización proporcional al exceso de tiempo
 
-    # Calcular fitness: maximizar puntos, minimizar distancia
-    if valida:
-        fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total)
-    else:
-        fitness = 0  # Ruta inválida
+    # Calcular fitness: maximizar puntos, minimizar distancia y aplicar penalización
+    fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total) - penalizacion
 
     return {
         "puntos": puntos_total,
         "distancia": round(distancia_total, 2),
         "tiempo": round(tiempo_total, 2),
-        "fitness": round(fitness, 2),
-        "valida": valida
+        "fitness": max(0, round(fitness, 2)),  # Asegurar que el fitness no sea negativo
+        "valida": tiempo_total <= tiempo_max
     }
 
-def seleccion_torneo(poblacion: List[List[int]], fitness_scores: List[float], k: int = 3) -> List[int]:
-    """Selecciona un individuo usando torneo de k individuos"""
-    # Seleccionar k individuos aleatorios
-    candidatos = random.sample(list(zip(poblacion, fitness_scores)), k)
-    # Retornar el mejor (mayor fitness)
-    mejor = max(candidatos, key=lambda x: x[1])
-    return mejor[0].copy()
+def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], tamaño_seleccion: int = 200) -> List[List[int]]:
+    """
+    Selección por ranking: selecciona múltiples individuos basándose en el ranking de fitness.
+    """
+    # Ordenar población por fitness (mayor a menor)
+    ranking = sorted(zip(poblacion, fitness_scores), key=lambda x: x[1], reverse=True)
+
+    # Crear una lista acumulativa de probabilidades
+    total = sum(range(1, len(ranking) + 1))  # Suma de 1 + 2 + ... + n
+    probabilidades = [(i + 1) / total for i in range(len(ranking))]
+
+    # Seleccionar múltiples individuos basados en las probabilidades
+    seleccionados = random.choices(ranking, weights=probabilidades, k=tamaño_seleccion)
+    return [individuo[0] for individuo in seleccionados]
 
 def cruce_simple(padre1: List[int], padre2: List[int]) -> Tuple[List[int], List[int]]:
     """
@@ -154,7 +158,7 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         # 2. Evaluar población
         fitness_scores = []
         for ruta in poblacion:
-            evaluacion = evaluar_ruta_multiobjetivo(ruta)
+            evaluacion = evaluar_ruta(ruta)
             fitness_scores.append(evaluacion["fitness"])
         
         # 3. Encontrar el mejor de esta generación
@@ -184,8 +188,8 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         # Generar el resto
         while len(nueva_poblacion) < tamaño_poblacion:
             # Selección
-            padre1 = seleccion_torneo(poblacion, fitness_scores)
-            padre2 = seleccion_torneo(poblacion, fitness_scores)
+            padre1 = seleccion_ranking(poblacion, fitness_scores, 2)
+            padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
             
             # Cruce
             if random.random() < prob_cruce:
@@ -204,8 +208,7 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         poblacion = nueva_poblacion[:tamaño_poblacion]
     
     # Resultado final
-    evaluacion_final = evaluar_ruta_multiobjetivo(mejor_ruta_historica)
-    
+    evaluacion_final = evaluar_ruta(mejor_ruta_historica)
     return {
         "mejor_ruta": mejor_ruta_historica,
         "evaluacion": evaluacion_final,
