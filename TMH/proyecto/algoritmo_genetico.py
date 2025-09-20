@@ -19,15 +19,15 @@ El límite de 90 minutos por lugar es arbitrario y podría no ser adecuado para 
 """
 
 def crear_ruta(tiempo_dia: int = tiempo_dia, num_lugares: int = len(lugares_turisticos)) -> List[int]:
-    max_lugares_dinamico = min(num_lugares, tiempo_dia // 90)
+    max_lugares_dinamico = max(3, min(num_lugares, tiempo_dia // 90))  # Asegurar que el mínimo sea 2
     num_lugares = random.randint(2, max_lugares_dinamico)
     return random.sample(range(len(lugares_turisticos)), num_lugares)
 
-def crear_poblacion_inicial(tamaño_poblacion: int = 1000) -> List[List[int]]:
+def crear_poblacion_inicial(tamaño_poblacion: int = 1000, tiempo_disponible: int = tiempo_dia) -> List[List[int]]:
     poblacion = []
 
     while len(poblacion) < tamaño_poblacion:
-        ruta = crear_ruta()
+        ruta = crear_ruta(tiempo_disponible)
         if ruta not in poblacion:
             poblacion.append(ruta)
 
@@ -76,18 +76,26 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float 
 
 def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], tamaño_seleccion: int = 200) -> List[List[int]]:
     """
-    Selección por ranking: selecciona múltiples individuos basándose en el ranking de fitness.
+    Selección por ranking con elitismo: selecciona un porcentaje fijo de los mejores individuos
+    y el resto basándose en el ranking de fitness.
     """
     # Ordenar población por fitness (mayor a menor)
     ranking = sorted(zip(poblacion, fitness_scores), key=lambda x: x[1], reverse=True)
 
-    # Crear una lista acumulativa de probabilidades
+    # Determinar el número de individuos para elitismo (10% de tamaño_seleccion)
+    num_elitismo = max(1, tamaño_seleccion // 10)  # Al menos 1 individuo
+    elite = [individuo[0] for individuo in ranking[:num_elitismo]]
+
+    # Crear una lista acumulativa de probabilidades para el resto
     total = sum(range(1, len(ranking) + 1))  # Suma de 1 + 2 + ... + n
     probabilidades = [(i + 1) / total for i in range(len(ranking))]
 
-    # Seleccionar múltiples individuos basados en las probabilidades
-    seleccionados = random.choices(ranking, weights=probabilidades, k=tamaño_seleccion)
-    return [individuo[0] for individuo in seleccionados]
+    # Seleccionar el resto de los individuos basados en las probabilidades
+    seleccionados = random.choices(ranking, weights=probabilidades, k=tamaño_seleccion - num_elitismo)
+    seleccionados = [individuo[0] for individuo in seleccionados]
+
+    # Combinar elite con los seleccionados
+    return elite + seleccionados
 
 def cruce_simple(padre1: List[int], padre2: List[int]) -> Tuple[List[int], List[int]]:
     """
@@ -188,8 +196,8 @@ def algoritmo_genetico_simple(generaciones: int = 20, tamaño_poblacion: int = 1
         # Generar el resto
         while len(nueva_poblacion) < tamaño_poblacion:
             # Selección
-            padre1 = seleccion_ranking(poblacion, fitness_scores, 2)
-            padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
+            padre1 = seleccion_ranking(poblacion, fitness_scores, 2)[0]  # Seleccionar un individuo
+            padre2 = seleccion_ranking(poblacion, fitness_scores, 2)[0]  # Seleccionar otro individuo
             
             # Cruce
             if random.random() < prob_cruce:

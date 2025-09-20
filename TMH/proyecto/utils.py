@@ -8,13 +8,11 @@ lugares_turisticos = [
     {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 80, "tiempo_visita": 30},
     {"nombre": "Parque del Retiro", "x": 40.4153, "y": -3.6846, "puntos": 88, "tiempo_visita": 60},
     {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45},
-    
     {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 70, "tiempo_visita": 40},
     {"nombre": "Catedral de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 85, "tiempo_visita": 50},
     {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 80, "tiempo_visita": 35},
     {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 120},
-    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110},
-    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4017, "y": -3.7611, "puntos": 85, "tiempo_visita": 150}
+    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110}
 ]
 
 def distancia_haversine(lugar1: dict, lugar2: dict) -> float:
