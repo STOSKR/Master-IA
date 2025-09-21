@@ -1,5 +1,3 @@
-
-
 // Variables globales que van siempre
 var renderer, scene, camera;
 var cameraControls;
