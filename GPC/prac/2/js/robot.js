@@ -58,39 +58,105 @@ function loadScene() {
     let rotula = new THREE.Mesh(new THREE.SphereGeometry(20, 32, 32), new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true }));
     rotula.position.y = 120;
     brazo.add(rotula);
+
+    // Antebrazo
+    let antebrazo = new THREE.Object3D();
+    antebrazo.position.y = 120;
+
+    // Disco
+    let disco = new THREE.Mesh(new THREE.CylinderGeometry(22, 22, 6, 32), new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true }));
+    antebrazo.add(disco);
+
+    // Nervios
+    let nerviosMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true });
+    let distanciaNervios = 5;
+    let posicionesNervios = [
+        [distanciaNervios, 40, distanciaNervios],   // Nervio 1
+        [-distanciaNervios, 40, distanciaNervios],  // Nervio 2
+        [-distanciaNervios, 40, -distanciaNervios], // Nervio 3
+        [distanciaNervios, 40, -distanciaNervios]   // Nervio 4
+    ];
+    for (let i = 0; i < posicionesNervios.length; i++) {
+        let nervio = new THREE.Mesh(new THREE.BoxGeometry(4, 80, 4), nerviosMaterial);
+        nervio.position.set(posicionesNervios[i][0], posicionesNervios[i][1], posicionesNervios[i][2]);
+        antebrazo.add(nervio);
+    }
+
+    // Mano
+    let manoObjeto = new THREE.Object3D();
+    let mano = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, 40, 32), new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true }));
+    mano.position.y = 80;
+    mano.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+    manoObjeto.add(mano);
+
+    // Pinzas
+    let pinzaMaterial = new THREE.MeshBasicMaterial({ color: 0xaaff00, wireframe: true });
+    let pinza1 = new THREE.Mesh(new THREE.BoxGeometry(20, 19, 4), pinzaMaterial);
+    pinza1.position.set(10, 80, 15);
+    pinza1.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+
+    manoObjeto.add(pinza1);
+
+
+    // Dedo
+    let dedoGeometry = new THREE.BufferGeometry();
+
+    // Definir los vértices del dedo
+    const verticesDedo = new Float32Array([
+        // Parte trasera
+        -2, 20, 0,  // Vértice 0
+        2, 20, 0,  // Vértice 1
+        2, 0, 0,   // Vértice 2
+        -2, 0, 0,   // Vértice 3
+
+        // Parte delantera
+        -1, 15, 19, // Vértice 6
+        1, 15, 19,  // Vértice 7
+        1, 5, 19,   // Vértice 5
+        -1, 5, 19,  // Vértice 4
+    ]);
+
+    // Definir los índices para las caras
+    const indicesDedo = [
+        // Cara trasera
+        0, 1, 2,
+        0, 2, 3,
+
+        // Cara delantera
+        4, 7, 6,
+        6, 5, 4,
+
+        // Conectar trasera y delantera
+        0, 3, 7,    //izquierda
+        7, 4, 0,    //izquierda
+        0, 4, 1,    //superior
+        1, 4, 5,    //superior
+        2, 1, 6,    //derecha
+        1, 5, 6,    //derecha
+        3, 2, 7,    //inferior
+        6, 3, 2,    //inferior
+    ];
+
+    // Añadir los vértices y los índices al objeto de geometría
+    dedoGeometry.setAttribute('position', new THREE.BufferAttribute(verticesDedo, 3));
+    dedoGeometry.setIndex(indicesDedo);
+
+    // Calcular las normales para iluminación correcta
+    dedoGeometry.computeVertexNormals();
+
+    // Crear el material y el mesh del dedo
+    let dedoMaterial = new THREE.MeshNormalMaterial();
+    let dedo = new THREE.Mesh(dedoGeometry, dedoMaterial);
+
+    // Posicionar el dedo y añadirlo a la pinza
+    dedo.position.set(10, 70, 25); // Ajustar según la posición de la pinza
+    manoObjeto.add(dedo);
+
+
+    antebrazo.add(manoObjeto);
+    brazo.add(antebrazo);
     robot.add(brazo);
-    /*
-        // Antebrazo
-        let antebrazo = new THREE.Object3D();
-    
-        let disco = new THREE.Mesh(new THREE.CylinderGeometry(22, 22, 6, 32), new THREE.MeshBasicMaterial({ color: 0xffff00 }));
-        disco.position.y = 80;
-        antebrazo.add(disco);
-    
-        let nerviosMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff });
-        for (let i = 0; i < 4; i++) {
-            let nervio = new THREE.Mesh(new THREE.BoxGeometry(4, 80, 4), nerviosMaterial);
-            nervio.position.set(15 * Math.cos((i * Math.PI) / 2), 120, 15 * Math.sin((i * Math.PI) / 2));
-            antebrazo.add(nervio);
-        }
-    
-        let mano = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, 40, 32), new THREE.MeshBasicMaterial({ color: 0x00ffff }));
-        mano.position.y = 160;
-        antebrazo.add(mano);
-    
-        scene.add(antebrazo);
-    
-        // Pinza
-        let clawMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        let claw1 = new THREE.Mesh(new THREE.BoxGeometry(20, 38, 4), clawMaterial);
-        claw1.position.set(10, 195, 0);
-        scene.add(claw1);
-    
-        let claw2 = claw1.clone();
-        claw2.position.set(-10, 195, 0);
-        */
     scene.add(robot);
-    // scene.add(claw2);
 }
 
 function updateAspectRatio() {
