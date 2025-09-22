@@ -91,12 +91,11 @@ function loadScene() {
 
     // Pinzas
     let pinzaMaterial = new THREE.MeshBasicMaterial({ color: 0xaaff00, wireframe: true });
-    let pinza1 = new THREE.Mesh(new THREE.BoxGeometry(20, 19, 4), pinzaMaterial);
-    pinza1.position.set(10, 80, 15);
-    pinza1.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+    let pinzaDerecho = new THREE.Mesh(new THREE.BoxGeometry(20, 19, 4), pinzaMaterial);
+    pinzaDerecho.position.set(10, 80, 15);
+    pinzaDerecho.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 
-    manoObjeto.add(pinza1);
-
+    manoObjeto.add(pinzaDerecho);
 
     // Dedo
     let dedoGeometry = new THREE.BufferGeometry();
@@ -146,12 +145,25 @@ function loadScene() {
 
     // Crear el material y el mesh del dedo
     let dedoMaterial = new THREE.MeshNormalMaterial();
-    let dedo = new THREE.Mesh(dedoGeometry, dedoMaterial);
+    let dedoDerecho = new THREE.Mesh(dedoGeometry, dedoMaterial);
 
     // Posicionar el dedo y añadirlo a la pinza
-    dedo.position.set(10, 70, 25); // Ajustar según la posición de la pinza
-    manoObjeto.add(dedo);
+    dedoDerecho.position.set(10, 70, 25); // Ajustar según la posición de la pinza
+    manoObjeto.add(dedoDerecho);
 
+
+    let pinzaIzquierdo = new THREE.Mesh(new THREE.BoxGeometry(20, 19, 4), pinzaMaterial);
+    pinzaIzquierdo.position.set(-10, 80, 15);
+    pinzaIzquierdo.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+
+    manoObjeto.add(pinzaIzquierdo);
+
+
+    let dedoIzquierdo = new THREE.Mesh(dedoGeometry, dedoMaterial);
+
+    // Posicionar el dedo y añadirlo a la pinza
+    dedoIzquierdo.position.set(-10, 70, 25); // Ajustar según la posición de la pinza
+    manoObjeto.add(dedoIzquierdo);
 
     antebrazo.add(manoObjeto);
     brazo.add(antebrazo);
