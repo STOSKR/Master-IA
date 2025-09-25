@@ -12,15 +12,15 @@ Mejor fitness =  511.95
 
 497.94
 
-1. Museo Arqueológico Nacional de España (Puntos: 80, Tiempo: 90min)
-2. Puerta de Alcalá (Puntos: 85, Tiempo: 15min)
-3. Mirador Madrid (Palacio de Cibeles) (Puntos: 75, Tiempo: 30min)
-4. Plaza de Cibeles (Puntos: 85, Tiempo: 20min)
+1. Monumento a Alfonso XII (Parque de El Retiro) (Puntos: 85, Tiempo: 30min)
+2. Parque de El Retiro (Puntos: 100, Tiempo: 90min)
+3. Real Jardín Botánico de Madrid (Puntos: 65, Tiempo: 45min)
+4. Museo Nacional del Prado (Puntos: 100, Tiempo: 150min)
 5. Museo Nacional Thyssen-Bornemisza (Puntos: 90, Tiempo: 120min)
-6. Museo Nacional del Prado (Puntos: 100, Tiempo: 150min)
-7. Real Jardín Botánico de Madrid (Puntos: 70, Tiempo: 45min)
-8. Parque de El Retiro (Puntos: 100, Tiempo: 90min)
-9. Monumento a Alfonso XII (Parque de El Retiro) (Puntos: 80, Tiempo: 30min)
+6. Plaza de Cibeles (Puntos: 90, Tiempo: 20min)
+7. Mirador Madrid (Palacio de Cibeles) (Puntos: 70, Tiempo: 30min)
+8. Puerta de Alcalá (Puntos: 85, Tiempo: 15min)
+9. Museo Arqueológico Nacional de España (Puntos: 80, Tiempo: 90min)
 
 OPTIMIZACIÓN CON ALGORITMO GENÉTICO
 ============================================================

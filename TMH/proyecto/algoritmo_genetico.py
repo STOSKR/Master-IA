@@ -83,7 +83,7 @@ def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], t
     ranking = sorted(zip(poblacion, fitness_scores), key=lambda x: x[1], reverse=True)
 
     # Determinar el número de individuos para elitismo (10% de tamaño_seleccion)
-    num_elitismo = max(1, tamaño_seleccion // 10)  # Al menos 1 individuo
+    num_elitismo = max(1, tamaño_seleccion // 5)  # Al menos 1 individuo
     elite = [individuo[0] for individuo in ranking[:num_elitismo]]
 
     # Crear una lista acumulativa de probabilidades para el resto
@@ -408,12 +408,7 @@ if __name__ == "__main__":
     print("="*60)
     
     # Ejecutar algoritmo genético
-    resultado = algoritmo_genetico_reemplazo_mixto(200, 1000, 0.9, 0.1)
+    resultado = algoritmo_genetico_reemplazo_mixto(300, 1000, 0.9, 0.2)
     
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_ruta(resultado["mejor_ruta"], resultado["evaluacion"], tiempo_dia)
-    
-    print(f"\n📊 EVOLUCIÓN DEL FITNESS:")
-    for i, fitness in enumerate(resultado["historial_fitness"]):
-        if i % 4 == 0:  # Mostrar cada 4 generaciones
-            print(f"Generación {i:2d}: {fitness:7.2f}")
