@@ -1,20 +1,47 @@
 import math
 
 lugares_turisticos = [
-    {"nombre": "Museo del Prado", "x": 40.4138, "y": -3.6921, "puntos": 95, "tiempo_visita": 120, "apertura": "10:00", "cierre": "20:00"},
-    {"nombre": "Palacio Real", "x": 40.4179, "y": -3.7143, "puntos": 90, "tiempo_visita": 90, "apertura": "10:00", "cierre": "18:00"},
-    {"nombre": "Plaza Mayor", "x": 40.4155, "y": -3.7074, "puntos": 85, "tiempo_visita": 45, "apertura": "10:00", "cierre": "22:00"},
-    {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 80, "tiempo_visita": 30, "apertura": "10:00", "cierre": "22:00"},
-    {"nombre": "Parque del Retiro", "x": 40.4153, "y": -3.6846, "puntos": 88, "tiempo_visita": 60, "apertura": "06:00", "cierre": "22:00"},
-    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 75, "tiempo_visita": 45, "apertura": "10:00", "cierre": "23:00"},
-    {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 70, "tiempo_visita": 40, "apertura": "10:00", "cierre": "20:00"},
-    {"nombre": "Catedral de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 85, "tiempo_visita": 50, "apertura": "09:00", "cierre": "20:30"},
-    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 80, "tiempo_visita": 35, "apertura": "10:00", "cierre": "00:00"},
-    {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 120, "apertura": "10:00", "cierre": "19:00"},
-    {"nombre": "Museo Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 92, "tiempo_visita": 110, "apertura": "10:00", "cierre": "21:00"},
-    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4017, "y": -3.7611, "puntos": 85, "tiempo_visita": 150, "apertura": "10:30", "cierre": "18:00"},
-    {"nombre": "Teleférico de Madrid", "x": 40.4350, "y": -3.7278, "puntos": 75, "tiempo_visita": 60, "apertura": "11:00", "cierre": "19:00"},
-    {"nombre": "Museo Thyssen-Bornemisza", "x": 40.4167, "y": -3.6945, "puntos": 90, "tiempo_visita": 90, "apertura": "10:00", "cierre": "19:00"}
+    {"nombre": "Museo Nacional del Prado", "x": 40.4138, "y": -3.6921, "puntos": 100, "tiempo_visita": 150, "apertura": "10:00", "cierre": "20:00"},
+    {"nombre": "Museo Nacional Centro de Arte Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 95, "tiempo_visita": 120, "apertura": "10:00", "cierre": "21:00"},
+    {"nombre": "Museo Nacional Thyssen-Bornemisza", "x": 40.4167, "y": -3.6945, "puntos": 90, "tiempo_visita": 120, "apertura": "10:00", "cierre": "19:00"},
+    {"nombre": "Museo Arqueológico Nacional de España", "x": 40.4253, "y": -3.6891, "puntos": 80, "tiempo_visita": 90, "apertura": "09:30", "cierre": "20:00"},
+    {"nombre": "Museo Sorolla", "x": 40.4380, "y": -3.6921, "puntos": 70, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00"},
+
+    {"nombre": "Palacio Real de Madrid", "x": 40.4179, "y": -3.7143, "puntos": 95, "tiempo_visita": 90, "apertura": "10:00", "cierre": "18:00"},
+    {"nombre": "Catedral de Santa María la Real de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 80, "tiempo_visita": 45, "apertura": "09:00", "cierre": "20:30"},
+    {"nombre": "Plaza Mayor de Madrid", "x": 40.4155, "y": -3.7074, "puntos": 95, "tiempo_visita": 30, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 95, "tiempo_visita": 20, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Puerta de Alcalá", "x": 40.4203, "y": -3.6885, "puntos": 85, "tiempo_visita": 15, "apertura": "00:00", "cierre": "23:59"},
+
+    {"nombre": "Parque de El Retiro", "x": 40.4153, "y": -3.6846, "puntos": 100, "tiempo_visita": 90, "apertura": "06:00", "cierre": "22:00"},
+    {"nombre": "Real Jardín Botánico de Madrid", "x": 40.4118, "y": -3.6882, "puntos": 65, "tiempo_visita": 45, "apertura": "10:00", "cierre": "21:00"},
+    {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 85, "tiempo_visita": 40, "apertura": "10:00", "cierre": "20:00"},
+    {"nombre": "Casa de Campo", "x": 40.4140, "y": -3.7457, "puntos": 70, "tiempo_visita": 120, "apertura": "06:00", "cierre": "23:00"},
+
+    {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 95, "tiempo_visita": 45, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 75, "tiempo_visita": 40, "apertura": "10:00", "cierre": "00:00"},
+    {"nombre": "Mercado de San Antón", "x": 40.4233, "y": -3.6995, "puntos": 55, "tiempo_visita": 40, "apertura": "10:00", "cierre": "00:00"},
+    {"nombre": "Barrio de Malasaña", "x": 40.4272, "y": -3.7063, "puntos": 80, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Barrio de La Latina", "x": 40.4110, "y": -3.7095, "puntos": 85, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "El Rastro de Madrid", "x": 40.4094, "y": -3.7073, "puntos": 70, "tiempo_visita": 90, "apertura": "09:00", "cierre": "15:00"},
+
+    {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 85, "tiempo_visita": 90, "apertura": "10:00", "cierre": "19:00"},
+    {"nombre": "Plaza de Cibeles", "x": 40.4194, "y": -3.6934, "puntos": 90, "tiempo_visita": 20, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Plaza de España", "x": 40.4230, "y": -3.7110, "puntos": 75, "tiempo_visita": 30, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Plaza de Toros de Las Ventas", "x": 40.4322, "y": -3.6637, "puntos": 65, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00"},
+    {"nombre": "Faro de Moncloa", "x": 40.4372708, "y": -3.7216827, "puntos": 60, "tiempo_visita": 45, "apertura": "09:30", "cierre": "20:00"},
+    {"nombre": "Palacio de Liria", "x": 40.4277, "y": -3.7124, "puntos": 70, "tiempo_visita": 65, "apertura": "10:15", "cierre": "18:00"},
+    {"nombre": "Parque de El Capricho", "x": 40.4450, "y": -3.6179, "puntos": 75, "tiempo_visita": 60, "apertura": "09:00", "cierre": "21:00"},
+    {"nombre": "Azotea del Círculo de Bellas Artes", "x": 40.4208, "y": -3.7058, "puntos": 80, "tiempo_visita": 30, "apertura": "12:00", "cierre": "01:00"},
+    {"nombre": "Gourmet Experience El Corte Inglés Callao", "x": 40.4256, "y": -3.7059, "puntos": 40, "tiempo_visita": 20, "apertura": "10:00", "cierre": "23:00"},
+    {"nombre": "Mirador Madrid (Palacio de Cibeles)", "x": 40.4194, "y": -3.6920, "puntos": 70, "tiempo_visita": 30, "apertura": "10:00", "cierre": "19:00"},
+    {"nombre": "Puerta de Toledo", "x": 40.4067, "y": -3.7139, "puntos": 50, "tiempo_visita": 20, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Museo de San Isidro. Los Orígenes de Madrid", "x": 40.4118, "y": -3.7106, "puntos": 60, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:00"},
+    {"nombre": "La Tabacalera de Lavapiés", "x": 40.4123, "y": -3.7038, "puntos": 45, "tiempo_visita": 60, "apertura": "11:00", "cierre": "22:00"},
+    {"nombre": "Ciudad Universitaria de Madrid", "x": 40.4490, "y": -3.7130, "puntos": 20, "tiempo_visita": 60, "apertura": "00:00", "cierre": "23:59"},
+    {"nombre": "Palacio de la Bolsa de Madrid", "x": 40.4110, "y": -3.6930, "puntos": 50, "tiempo_visita": 30, "apertura": "09:00", "cierre": "19:00"},
+    {"nombre": "Monumento a Alfonso XII (Parque de El Retiro)", "x": 40.4153, "y": -3.6835, "puntos": 85, "tiempo_visita": 30, "apertura": "06:00", "cierre": "22:00"},
+    {"nombre": "Parque Cerro del Tío Pío (Parque de las Siete Tetas)", "x": 40.4000, "y": -3.6400, "puntos": 65, "tiempo_visita": 45, "apertura": "06:00", "cierre": "22:00"},
 ]
 
 def distancia_haversine(lugar1: dict, lugar2: dict) -> float:
