@@ -48,7 +48,9 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float 
             lugar_anterior = lugares_turisticos[ruta[i-1]]
             distancia = distancia_haversine(lugar_anterior, lugar)
             distancia_total += distancia
-            tiempo_traslado = distancia * 25
+            tiempo_traslado = distancia * 25  # 25 min/km
+            # Redondear el tiempo de traslado al múltiplo de 5 más cercano hacia arriba
+            tiempo_traslado = ((int(tiempo_traslado) + 4) // 5) * 5
             tiempo_total += tiempo_traslado
             hora_actual += tiempo_traslado
 
@@ -237,8 +239,8 @@ def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 
         # 5. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
         
-        # 6. Mostrar progreso cada 10 generaciones
-        if generacion % 10 == 0 or generacion == generaciones - 1:
+        # 6. Mostrar progreso cada 20 generaciones
+        if generacion % 20 == 0 or generacion == generaciones - 1:
             print(f"| Gen {generacion:3d} | Mejor Fitness: {mejor_fitness_gen:8.2f} | Fitness Promedio: {sum(fitness_scores)/len(fitness_scores):8.2f} | Mejor Histórico: {mejor_fitness_historico:8.2f} |")
         
         # 7. Crear nueva población
@@ -346,8 +348,8 @@ def algoritmo_genetico_estado_estacionario(generaciones: int = 100, tamaño_pobl
         # 9. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
 
-        # 10. Mostrar progreso cada 5 generaciones
-        if generacion % 5 == 0 or generacion == generaciones - 1:
+        # 10. Mostrar progreso cada 20 generaciones
+        if generacion % 20 == 0 or generacion == generaciones - 1:
             print(f"Gen {generacion:2d}: Mejor fitness = {mejor_fitness_gen:7.2f}, Promedio = {sum(fitness_scores)/len(fitness_scores):7.2f}")
 
     # Resultado final
@@ -423,8 +425,8 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
         # 9. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
 
-        # 10. Mostrar progreso cada 5 generaciones
-        if generacion % 5 == 0 or generacion == generaciones - 1:
+        # 10. Mostrar progreso cada 20 generaciones
+        if generacion % 20 == 0 or generacion == generaciones - 1:
             print(f"Gen {generacion:2d}: Mejor fitness = {mejor_fitness_gen:7.2f}, Promedio = {sum(fitness_scores)/len(fitness_scores):7.2f}")
 
     # Resultado final
@@ -469,6 +471,8 @@ def imprimir_mejor_ruta(ruta: List[int], evaluacion: dict):
             lugar_anterior = lugares_turisticos[ruta[i-1]]
             distancia = distancia_haversine(lugar_anterior, lugar)
             tiempo_traslado = distancia * 25
+            # Redondear el tiempo de traslado al múltiplo de 5 más cercano hacia arriba
+            tiempo_traslado = ((int(tiempo_traslado) + 4) // 5) * 5
             hora_actual += tiempo_traslado
             print(f"  -> Traslado: {tiempo_traslado:.0f} min")
 
