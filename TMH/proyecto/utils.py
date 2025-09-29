@@ -87,6 +87,172 @@ def distancia_haversine(lugar1: dict, lugar2: dict) -> float:
     return distancia
 
 """
+def optimizar_parametros():
+    generaciones_list = [400, 600, 800, 1000]
+    tamaño_poblacion_list = [300, 500, 700, 1000, 2000, 5000]
+    prob_cruce_list = [round(x, 2) for x in [i * 0.05 for i in range(2, 20)]]  # 0.1 to 0.95
+    prob_mutacion_list = [round(x, 2) for x in [i * 0.05 for i in range(1, 20)]]  # 0.05 to 0.95
+    iteraciones_por_combinacion = 3
+
+    mejor_fitness_global = -1
+    mejores_parametros = {}
+
+    for generaciones in generaciones_list:
+        for tamaño_poblacion in tamaño_poblacion_list:
+            for prob_cruce in prob_cruce_list:
+                for prob_mutacion in prob_mutacion_list:
+                    fitness_promedio = 0
+                    for iteracion in range(iteraciones_por_combinacion):
+                        print(f"\nIteración {iteracion + 1}/{iteraciones_por_combinacion} para parámetros: Generaciones={generaciones}, Tamaño Población={tamaño_poblacion}, Prob. Cruce={prob_cruce}, Prob. Mutación={prob_mutacion}")
+                        resultado = algoritmo_genetico_reemplazo_mixto(
+                            generaciones, tamaño_poblacion, prob_cruce, prob_mutacion
+                        )
+                        fitness_promedio += resultado["evaluacion"]["fitness"]
+
+                    fitness_promedio /= iteraciones_por_combinacion
+
+                    if fitness_promedio > mejor_fitness_global:
+                        mejor_fitness_global = fitness_promedio
+                        mejores_parametros = {
+                            "generaciones": generaciones,
+                            "tamaño_poblacion": tamaño_poblacion,
+                            "prob_cruce": prob_cruce,
+                            "prob_mutacion": prob_mutacion,
+                            "mejor_fitness_promedio": mejor_fitness_global
+                        }
+
+    print("\n================ RESULTADOS =================")
+    print("Mejores parámetros encontrados:")
+    for clave, valor in mejores_parametros.items():
+        print(f"{clave}: {valor}")
+
+    return mejores_parametros
+
+def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 1000, 
+                             prob_cruce: float = 0.8, prob_mutacion: float = 0.3, tiempo_disponible: int = t_dia) -> dict:
+    print(f"\n🧬 ALGORITMO GENÉTICO")
+    print(f"Generaciones: {generaciones}, Población: {tamaño_poblacion}")
+    print(f"Prob. cruce: {prob_cruce}, Prob. mutación: {prob_mutacion}")
+    print("="*50)
+    
+    # 1. Crear población inicial
+    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
+    mejor_fitness_historico, mejor_ruta_historica = -1, []
+    historial_fitness = []
+    
+    for generacion in range(generaciones):
+        # 2. Evaluar población
+        fitness_scores = []
+        for ruta in poblacion:
+            evaluacion = evaluar_ruta(ruta)
+            fitness_scores.append(evaluacion["fitness"])
+        
+        # 3. Encontrar el mejor de esta generación
+        mejor_idx = fitness_scores.index(max(fitness_scores))
+        mejor_ruta_gen = poblacion[mejor_idx]
+        mejor_fitness_gen = fitness_scores[mejor_idx]
+        
+        # 4. Actualizar el mejor histórico
+        if mejor_fitness_gen > mejor_fitness_historico:
+            mejor_fitness_historico = mejor_fitness_gen
+            mejor_ruta_historica = mejor_ruta_gen.copy()
+        
+        # 5. Guardar para histórico
+        historial_fitness.append(mejor_fitness_gen)
+        
+        # 6. Mostrar progreso cada 20 generaciones
+        if generacion % 20 == 0 or generacion == generaciones - 1:
+            print(f"| Gen {generacion:3d} | Mejor Fitness: {mejor_fitness_gen:8.2f} | Fitness Promedio: {sum(fitness_scores)/len(fitness_scores):8.2f} | Mejor Histórico: {mejor_fitness_historico:8.2f} |")
+        
+        # 7. Crear nueva población
+        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion)
+
+    # Resultado final
+    evaluacion_final = evaluar_ruta(mejor_ruta_historica)
+    imprimir_mejor_ruta(mejor_ruta_historica, evaluacion_final)
+    
+    return {
+        "mejor_ruta": mejor_ruta_historica,
+        "evaluacion": evaluacion_final,
+        "historial_fitness": historial_fitness,
+        "algoritmo": "Genético"
+    }
+
+def algoritmo_genetico_estado_estacionario(generaciones: int = 100, tamaño_poblacion: int = 1000, 
+                                           prob_cruce: float = 0.8, prob_mutacion: float = 0.3, 
+                                           tiempo_disponible: int = t_dia) -> dict:
+    print(f"\n🧬 ALGORITMO GENÉTICO (ESTADO ESTACIONARIO)")
+    print(f"Generaciones: {generaciones}, Población: {tamaño_poblacion}")
+    print(f"Prob. cruce: {prob_cruce}, Prob. mutación: {prob_mutacion}")
+    print("="*50)
+
+    # 1. Crear población inicial
+    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
+    mejor_fitness_historico = -1
+    mejor_ruta_historica = []
+    historial_fitness = []
+
+    for generacion in range(generaciones):
+        # 2. Evaluar población
+        fitness_scores = [evaluar_ruta(ruta)["fitness"] for ruta in poblacion]
+
+        # 3. Ordenar población por fitness (de mejor a peor)
+        poblacion_ordenada = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), key=lambda x: x[0], reverse=True)]
+        fitness_ordenado = sorted(fitness_scores, reverse=True)
+
+        # 4. Mantener el 90% de los mejores individuos
+        num_mejores = int(0.9 * tamaño_poblacion)
+        nueva_poblacion = poblacion_ordenada[:num_mejores]
+
+        # 5. Generar hijos para reemplazar el 10% de los peores
+        num_hijos = tamaño_poblacion - num_mejores
+        hijos = []
+        while len(hijos) < num_hijos:
+            padre1, padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
+            if random.random() < prob_cruce:
+                hijo1, hijo2 = cruce_ordenado(padre1, padre2)
+            else:
+                hijo1, hijo2 = padre1.copy(), padre2.copy()
+
+            hijo1 = mutacion(hijo1, prob_mutacion)
+            hijo2 = mutacion(hijo2, prob_mutacion)
+            hijos.extend([hijo1, hijo2])
+
+        # 6. Evaluar hijos y reemplazar a los peores si son mejores
+        hijos = hijos[:num_hijos]  # Asegurar que no haya más hijos de los necesarios
+        for i, hijo in enumerate(hijos):
+            evaluacion_hijo = evaluar_ruta(hijo)["fitness"]
+            if evaluacion_hijo > fitness_ordenado[-(i + 1)]:  # Comparar con los peores
+                nueva_poblacion.append(hijo)
+            else:
+                nueva_poblacion.append(poblacion_ordenada[-(i + 1)])
+
+        # 7. Actualizar población
+        poblacion = nueva_poblacion[:tamaño_poblacion]
+
+        # 8. Actualizar el mejor histórico
+        mejor_fitness_gen = max(fitness_scores)
+        mejor_ruta_gen = poblacion_ordenada[0]
+        if mejor_fitness_gen > mejor_fitness_historico:
+            mejor_fitness_historico = mejor_fitness_gen
+            mejor_ruta_historica = mejor_ruta_gen.copy()
+
+        # 9. Guardar para histórico
+        historial_fitness.append(mejor_fitness_gen)
+
+        # 10. Mostrar progreso cada 20 generaciones
+        if generacion % 20 == 0 or generacion == generaciones - 1:
+            print(f"Gen {generacion:2d}: Mejor fitness = {mejor_fitness_gen:7.2f}, Promedio = {sum(fitness_scores)/len(fitness_scores):7.2f}")
+
+    # Resultado final
+    evaluacion_final = evaluar_ruta(mejor_ruta_historica)
+    imprimir_mejor_ruta(mejor_ruta_historica, evaluacion_final)
+    return {
+        "mejor_ruta": mejor_ruta_historica,
+        "evaluacion": evaluacion_final,
+        "historial_fitness": historial_fitness,
+        "algoritmo": "Genético Estado Estacionario"
+    }
 
 
 def imprimir_ruta(ruta: List[int], evaluacion: dict, tiempo_disponible: int):
