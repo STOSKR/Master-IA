@@ -88,6 +88,21 @@ def distancia_haversine(lugar1: dict, lugar2: dict) -> float:
 
 """
 
+
+def imprimir_ruta(ruta: List[int], evaluacion: dict, tiempo_disponible: int):
+    print("\n" + "="*50)
+    print("RUTA:")
+    for i, lugar_idx in enumerate(ruta):
+        lugar = lugares_turisticos[lugar_idx]
+        print(f"{i+1}. {lugar['nombre']} (Puntos: {lugar['puntos']}, Tiempo: {lugar['tiempo_visita']}min)")
+    
+    print(f"\nRESULTADOS:")
+    print(f"Puntos totales: {evaluacion['puntos']}")
+    print(f"Distancia total: {evaluacion['distancia']}")
+    print(f"Tiempo total: {evaluacion['tiempo']} minutos (de {tiempo_disponible} disponibles)")
+    print(f"Válida: {'Sí' if evaluacion['valida'] else 'No'}")
+    print(f"Fitness: {evaluacion['fitness']}")
+
 def redondear_a_franja_15(tiempo: float) -> int:
     return math.ceil(tiempo / 15) * 15
     

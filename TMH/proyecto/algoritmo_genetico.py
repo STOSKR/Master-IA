@@ -1,9 +1,9 @@
-# Algoritmo Genético para Optimización de Rutas Turísticas
 import random
 from typing import List, Tuple
 from utils import lugares_turisticos, distancia_haversine
 
 tiempo_dia = 14 * 60  # 14 horas
+tiempo_media_visita = 70  # 70 minutos
 
 def calcular_penalizacion_comida(hora_actual: int, tipo: str, almuerzo_tomado: bool, cena_tomada: bool) -> Tuple[float, bool, bool]:
     penalizacion = 0
@@ -25,8 +25,8 @@ def calcular_fitness(puntos_total: float, distancia_total: float, tiempo_total: 
     return max(0, (puntos_total) - (distancia_total * 100) - penalizacion_tiempo - penalizacion_comida)
 
 def crear_ruta(tiempo_dia: int = tiempo_dia, num_lugares: int = len(lugares_turisticos)) -> List[int]:
-    max_lugares_dinamico = max(3, min(num_lugares, tiempo_dia // 90))
-    num_lugares = random.randint(2, max_lugares_dinamico)
+    max_lugares_dinamico = min(num_lugares, tiempo_dia // 90)
+    num_lugares = random.randint(4, max_lugares_dinamico)
     ruta = random.sample(range(len(lugares_turisticos)), num_lugares)
     # Asegurar que haya al menos un restaurante
     if not any(lugares_turisticos[i]['tipo'] == 'restaurante' for i in ruta):
@@ -378,7 +378,7 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
 
     # 1. Crear población inicial
     poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
-    mejor_fitness_historico = -999999
+    mejor_fitness_historico = 0
     mejor_ruta_historica = []
     historial_fitness = []
 
@@ -409,11 +409,6 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
 
         nueva_poblacion.extend(hijos[:num_hijos])  # Asegurar que no haya más hijos de los necesarios
 
-        # 6. Generar el 20% de la población como nuevos individuos aleatorios
-        num_aleatorios = tamaño_poblacion - len(nueva_poblacion)
-        nuevos_individuos = crear_poblacion_inicial(num_aleatorios, tiempo_disponible)
-        nueva_poblacion.extend(nuevos_individuos)
-
         # 7. Actualizar población
         poblacion = nueva_poblacion[:tamaño_poblacion]
 
@@ -440,21 +435,6 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
         "historial_fitness": historial_fitness,
         "algoritmo": "Genético Reemplazo Mixto"
     }
-
-def imprimir_ruta(ruta: List[int], evaluacion: dict, tiempo_disponible: int):
-    """Imprime los detalles de una ruta"""
-    print("\n" + "="*50)
-    print("RUTA:")
-    for i, lugar_idx in enumerate(ruta):
-        lugar = lugares_turisticos[lugar_idx]
-        print(f"{i+1}. {lugar['nombre']} (Puntos: {lugar['puntos']}, Tiempo: {lugar['tiempo_visita']}min)")
-    
-    print(f"\nRESULTADOS:")
-    print(f"Puntos totales: {evaluacion['puntos']}")
-    print(f"Distancia total: {evaluacion['distancia']}")
-    print(f"Tiempo total: {evaluacion['tiempo']} minutos (de {tiempo_disponible} disponibles)")
-    print(f"Válida: {'Sí' if evaluacion['valida'] else 'No'}")
-    print(f"Fitness: {evaluacion['fitness']}")
 
 def imprimir_mejor_ruta(ruta: List[int], evaluacion: dict):
     print("\n" + "="*50)
@@ -515,7 +495,7 @@ if __name__ == "__main__":
     print("="*60)
 
     # Ejecutar algoritmo genético
-    resultado = algoritmo_genetico_reemplazo_mixto(300, 1000, 0.9, 0.2)
+    resultado = algoritmo_genetico_reemplazo_mixto(300, 1000, 0.8, 0.3)
 
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_mejor_ruta(resultado["mejor_ruta"], resultado["evaluacion"])
