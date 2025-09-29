@@ -5,6 +5,25 @@ from utils import lugares_turisticos, distancia_haversine
 
 tiempo_dia = 14 * 60  # 14 horas
 
+def calcular_penalizacion_comida(hora_actual: int, tipo: str, almuerzo_tomado: bool, cena_tomada: bool) -> Tuple[float, bool, bool]:
+    penalizacion = 0
+    if not almuerzo_tomado and hora_actual >= 13.5 * 60:
+        if tipo == "restaurante":
+            almuerzo_tomado = True
+        else:
+            penalizacion += 50
+    elif not cena_tomada and hora_actual >= 20.5 * 60:
+        if tipo == "restaurante":
+            cena_tomada = True
+        else:
+            penalizacion += 50
+    return penalizacion, almuerzo_tomado, cena_tomada
+
+def calcular_fitness(puntos_total: float, distancia_total: float, tiempo_total: float, tiempo_max: int, penalizacion_comida: float) -> float:
+    exceso_tiempo = max(0, tiempo_total - tiempo_max)
+    penalizacion_tiempo = exceso_tiempo * 3
+    return max(0, (puntos_total) - (distancia_total * 100) - penalizacion_tiempo - penalizacion_comida)
+
 def crear_ruta(tiempo_dia: int = tiempo_dia, num_lugares: int = len(lugares_turisticos)) -> List[int]:
     max_lugares_dinamico = max(3, min(num_lugares, tiempo_dia // 90))
     num_lugares = random.randint(2, max_lugares_dinamico)
@@ -26,17 +45,13 @@ def crear_poblacion_inicial(tamaño_poblacion: int, tiempo_disponible: int) -> L
 
     return poblacion
 
-def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float = 1.0, w_distancia: float = 1.0) -> dict:
+def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia) -> dict:
     if not ruta:
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
 
-    puntos_total = 0
-    distancia_total = 0
-    tiempo_total = 0
+    puntos_total, distancia_total, tiempo_total = 0, 0, 0
     hora_actual = 9 * 60  # Empezamos a las 9:00
-
-    almuerzo_tomado = False
-    cena_tomada = False
+    almuerzo_tomado, cena_tomada = False, False
     penalizacion_comida = 0
 
     # Iterar sobre la ruta para calcular tiempo, distancia y puntos
@@ -106,12 +121,8 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float 
     if not cena_tomada:
         penalizacion_comida += 100  # Penalización reducida
 
-    # Penalización por exceso de tiempo
-    exceso_tiempo = max(0, tiempo_total - tiempo_max)
-    penalizacion_tiempo = exceso_tiempo * 3
-
     # Calcular fitness final
-    fitness = (w_puntos * puntos_total) - (w_distancia * distancia_total * 100) - penalizacion_tiempo - penalizacion_comida
+    fitness = calcular_fitness(puntos_total, distancia_total, tiempo_total, tiempo_max, penalizacion_comida)
 
     return {
         "puntos": puntos_total,
@@ -120,7 +131,7 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = tiempo_dia, w_puntos: float 
         "fitness": max(0, round(fitness, 2)),
         "valida": tiempo_total <= tiempo_max,
         "comida_penalizacion": penalizacion_comida,
-        "tiempo_penalizacion": penalizacion_tiempo,
+        "tiempo_penalizacion": 0,  # Se eliminó la penalización de tiempo individual
     }
 
 def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], tamaño_seleccion: int = 200) -> List[List[int]]:
@@ -204,6 +215,22 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
     
     return ruta_mutada
 
+def inicializar_poblacion_y_evaluar(tamaño_poblacion: int, tiempo_disponible: int):
+    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
+    fitness_scores = [evaluar_ruta(ruta)["fitness"] for ruta in poblacion]
+    return poblacion, fitness_scores
+
+def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float], tamaño_poblacion: int, prob_cruce: float, prob_mutacion: float):
+    nueva_poblacion = []
+    while len(nueva_poblacion) < tamaño_poblacion:
+        padre1, padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
+        if random.random() < prob_cruce:
+            hijo1, hijo2 = cruce_ordenado(padre1, padre2)
+        else:
+            hijo1, hijo2 = padre1.copy(), padre2.copy()
+        nueva_poblacion.extend([mutacion(hijo1, prob_mutacion), mutacion(hijo2, prob_mutacion)])
+    return nueva_poblacion[:tamaño_poblacion]
+
 def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 1000, 
                              prob_cruce: float = 0.8, prob_mutacion: float = 0.3, tiempo_disponible: int = tiempo_dia) -> dict:
     """
@@ -215,8 +242,8 @@ def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 
     print("="*50)
     
     # 1. Crear población inicial
-    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
-    mejor_fitness_historico = -1
+    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
+    mejor_fitness_historico, mejor_ruta_historica = -1, []
     historial_fitness = []
     
     for generacion in range(generaciones):
@@ -244,33 +271,8 @@ def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 
             print(f"| Gen {generacion:3d} | Mejor Fitness: {mejor_fitness_gen:8.2f} | Fitness Promedio: {sum(fitness_scores)/len(fitness_scores):8.2f} | Mejor Histórico: {mejor_fitness_historico:8.2f} |")
         
         # 7. Crear nueva población
-        nueva_poblacion = []
-        
-        # Mantener el mejor (elitismo)
-        nueva_poblacion.append(mejor_ruta_gen.copy())
-        
-        # Generar el resto
-        while len(nueva_poblacion) < tamaño_poblacion:
-            # Selección
-            padre1 = seleccion_ranking(poblacion, fitness_scores, 2)[0]  # Seleccionar un individuo
-            padre2 = seleccion_ranking(poblacion, fitness_scores, 2)[0]  # Seleccionar otro individuo
-            
-            # Cruce
-            if random.random() < prob_cruce:
-                hijo1, hijo2 = cruce_ordenado(padre1, padre2)
-            else:
-                hijo1, hijo2 = padre1.copy(), padre2.copy()
-            
-            # Mutación
-            hijo1 = mutacion(hijo1, prob_mutacion)
-            hijo2 = mutacion(hijo2, prob_mutacion)
-            
-            # Agregar a nueva población
-            nueva_poblacion.extend([hijo1, hijo2])
-        
-        # Ajustar tamaño si se pasó
-        poblacion = nueva_poblacion[:tamaño_poblacion]
-    
+        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion)
+
     # Resultado final
     evaluacion_final = evaluar_ruta(mejor_ruta_historica)
     imprimir_mejor_ruta(mejor_ruta_historica, evaluacion_final)
@@ -295,7 +297,7 @@ def algoritmo_genetico_estado_estacionario(generaciones: int = 100, tamaño_pobl
     print("="*50)
 
     # 1. Crear población inicial
-    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
+    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
     mejor_fitness_historico = -1
     mejor_ruta_historica = []
     historial_fitness = []
@@ -375,7 +377,7 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
     print("="*50)
 
     # 1. Crear población inicial
-    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
+    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
     mejor_fitness_historico = -999999
     mejor_ruta_historica = []
     historial_fitness = []
