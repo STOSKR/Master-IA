@@ -138,7 +138,7 @@ function init() {
     sphereMesh.castShadow = true;
     scene.add(sphereMesh);
     // Esfera - Física (Cannon.js)
-    const sphereShape = new CANNON.Sphere(1);
+    const sphereShape = new CANNON.Sphere(0.1);
     const sphereBody = new CANNON.Body({ mass: 1, material: sphereMaterial });
     sphereBody.addShape(sphereShape);
     sphereBody.position.copy(sphereMesh.position); // Sincronizar posición inicial
@@ -170,7 +170,7 @@ function init() {
 
     // Jugador - Física (Cannon.js)
     // Box recibe un HALF-EXTENT, es decir, la mitad de cada dimensión, 
-    const halfExtents = new CANNON.Vec3(0.25, 0.9, 0.25);
+    const halfExtents = new CANNON.Vec3(1.0, 1.5, 1.0);
     const playerShape = new CANNON.Box(halfExtents);
     playerBody = new CANNON.Body({
         mass: 0,  // como el jugador lo movemos a mano, lo dejamos estatico
