@@ -2,28 +2,30 @@ import random
 from typing import List, Tuple
 from utils import lugares_turisticos as lt, distancia_haversine
 
-t_dia = 14 * 60
+t_dia = 16 * 60
 tm_visita = 90
 hora_actual = 9 * 60
 
 def calcular_penalizacion_comida(hora_actual: int, tipo: str, almuerzo_tomado: bool, cena_tomada: bool) -> Tuple[float, bool, bool]:
     penalizacion = 0
-    if not almuerzo_tomado and hora_actual >= 13.5 * 60:
+    if not almuerzo_tomado and hora_actual >= 13.5 * 60 and hora_actual < 14.5 * 60:
         if tipo == "restaurante":
             almuerzo_tomado = True
+            penalizacion -= 100
         else:
             penalizacion += 50
-    elif not cena_tomada and hora_actual >= 20.5 * 60:
+    elif not cena_tomada and hora_actual >= 20.5 * 60 and hora_actual < 22 * 60:
         if tipo == "restaurante":
             cena_tomada = True
+            penalizacion -= 100
         else:
             penalizacion += 50
     return penalizacion, almuerzo_tomado, cena_tomada
 
-def calcular_fitness(puntos_t: float, distancia_t: float, tiempo_total: float, tiempo_max: int, penalizacion_comida: float) -> float:
+def calcular_fitness(puntos_t: float, distancia_t: float, tiempo_total: float, tiempo_max: int, penalizacion: float) -> float:
     exceso_tiempo = max(0, tiempo_total - tiempo_max)
     penalizacion_tiempo = exceso_tiempo * 3
-    return max(0, (puntos_t) - (distancia_t * 100) - penalizacion_tiempo - penalizacion_comida)
+    return max(0, (puntos_t) - (distancia_t * 100) - penalizacion_tiempo - penalizacion)
 
 def crear_ruta(t_dia: int = t_dia, n_lugares: int = len(lt)) -> List[int]:
     max_lugares_dinamico = min(n_lugares, t_dia // tm_visita)
@@ -51,21 +53,20 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
 
     puntos_t, distancia_t, tiempo_total = 0, 0, 0
-    penalizacion_comida = 0
+    penalizacion = 0
     almuerzo_tomado, cena_tomada = False, False
 
-    # Iterar sobre la ruta para calcular tiempo, distancia y puntos
     for i, lugar_idx in enumerate(ruta):
         lugar = lt[lugar_idx]
         
-        # Calcular tiempo de traslado desde el lugar anterior
         if i > 0:
             lugar_anterior = lt[ruta[i-1]]
             distancia = distancia_haversine(lugar_anterior, lugar)
             distancia_t += distancia
-            t_traslado = distancia * 25  # 25 min/km
-            # Redondear el tiempo de traslado al múltiplo de 5 más cercano hacia arriba
-            t_traslado = ((int(t_traslado) + 4) // 5) * 5
+            t_traslado = distancia * 25
+            
+            # Redondear a múltiplo de 5 más cercano superior
+            t_traslado = ((int(t_traslado)) // 5 + 1) * 5
             tiempo_total += t_traslado
             hora_actual += t_traslado
 
@@ -79,49 +80,25 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
             hora_actual += tiempo_espera
         
         if hora_actual + lugar["tiempo_visita"] > cierre:
-            penalizacion_comida += 200  # Penalización moderada por violar horarios
+            penalizacion += 200
 
-        # Lógica para comidas
-        # Comida
-        if not almuerzo_tomado and hora_actual >= 13.5 * 60:
-            if lugar["tipo"] == "restaurante":
-                puntos_lugar = lugar["puntos"]
-                if 13.5 * 60 <= hora_actual <= 14.5 * 60:
-                    puntos_t += puntos_lugar * 1.5  
-                else:
-                    puntos_t += puntos_lugar * 0.5  
-                almuerzo_tomado = True
-            else:
-                # Penalización si no es un restaurante y es hora de comer
-                penalizacion_comida += 50 
-        
-        # Cena
-        elif not cena_tomada and hora_actual >= 20.5 * 60:
-            if lugar["tipo"] == "restaurante":
-                puntos_lugar = lugar["puntos"]
-                if 20.5 * 60 <= hora_actual <= 22 * 60:
-                    puntos_t += puntos_lugar * 1.5  # Bonificación
-                else:
-                    puntos_t += puntos_lugar * 0.5  # Penalización
-                cena_tomada = True
-            else:
-                # Penalización si no es un restaurante y es hora de cenar
-                penalizacion_comida += 50
-        else:
-            puntos_t += lugar["puntos"]
+        penalizacion_comida, almuerzo_tomado, cena_tomada = calcular_penalizacion_comida(
+            hora_actual, lugar["tipo"], almuerzo_tomado, cena_tomada
+        )
+        penalizacion += penalizacion_comida
 
-        # Actualizar tiempo total y hora actual
+        # Actualizar puntos y tiempo
+        puntos_t += lugar["puntos"]
         tiempo_visita = lugar["tiempo_visita"]
         tiempo_total += tiempo_visita
         hora_actual += tiempo_visita
 
-    # Penalización si no se ha comido o cenado
     if not almuerzo_tomado:
-        penalizacion_comida += 100
+        penalizacion += 100
     if not cena_tomada:
-        penalizacion_comida += 100
+        penalizacion += 100
 
-    fitness = calcular_fitness(puntos_t, distancia_t, tiempo_total, tiempo_max, penalizacion_comida)
+    fitness = calcular_fitness(puntos_t, distancia_t, tiempo_total, tiempo_max, penalizacion)
 
     return {
         "puntos": puntos_t,
@@ -129,8 +106,8 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
         "tiempo": round(tiempo_total, 2),
         "fitness": max(0, round(fitness, 2)),
         "valida": tiempo_total <= tiempo_max,
-        "comida_penalizacion": penalizacion_comida,
-        "tiempo_penalizacion": 0,  # Se eliminó la penalización de tiempo individual
+        "comida_penalizacion": penalizacion,
+        "tiempo_penalizacion": 0, 
     }
 
 def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], tamaño_seleccion: int = 200) -> List[List[int]]:
@@ -361,7 +338,7 @@ if __name__ == "__main__":
     print("="*60)
 
     # Ejecutar algoritmo genético
-    resultado = algoritmo_genetico_reemplazo_mixto(600, 1000, 0.8, 0.1)
+    resultado = algoritmo_genetico_reemplazo_mixto(300, 1000, 0.9, 0.1)
 
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_mejor_ruta(resultado["mejor_ruta"], resultado["evaluacion"])
