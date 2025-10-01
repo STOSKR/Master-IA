@@ -2,6 +2,7 @@
 import random
 from typing import List, Tuple
 from utils import lugares_turisticos, distancia_haversine
+import json  # Add this import at the top
 
 tiempo_dia = 14 * 60  # 14 horas
 
@@ -236,15 +237,12 @@ def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 
     """
     Ejecuta el algoritmo genético simple
     """
-    print(f"\n🧬 ALGORITMO GENÉTICO")
-    print(f"Generaciones: {generaciones}, Población: {tamaño_poblacion}")
-    print(f"Prob. cruce: {prob_cruce}, Prob. mutación: {prob_mutacion}")
-    print("="*50)
+    historial_fitness = []
+    soluciones_pareto = []  # Para guardar las mejores soluciones (puntos vs distancia)
     
     # 1. Crear población inicial
     poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
     mejor_fitness_historico, mejor_ruta_historica = -1, []
-    historial_fitness = []
     
     for generacion in range(generaciones):
         # 2. Evaluar población
@@ -252,6 +250,11 @@ def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 
         for ruta in poblacion:
             evaluacion = evaluar_ruta(ruta)
             fitness_scores.append(evaluacion["fitness"])
+            if generacion == generaciones - 1:  # Guardar soluciones de la última generación
+                soluciones_pareto.append({
+                    "puntos": evaluacion["puntos"],
+                    "distancia": evaluacion["distancia"]
+                })
         
         # 3. Encontrar el mejor de esta generación
         mejor_idx = fitness_scores.index(max(fitness_scores))
@@ -272,6 +275,21 @@ def algoritmo_genetico_simple(generaciones: int = 100, tamaño_poblacion: int = 
         
         # 7. Crear nueva población
         poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion)
+
+    # Guardar resultados en un archivo JSON
+    # Asegurarse de que los resultados se guarden al final
+    if not historial_fitness or not soluciones_pareto:
+        print("Advertencia: No se generaron datos para guardar.")
+    else:
+        try:
+            with open("resultados_ag.json", "w") as f:
+                json.dump({
+                    "historial_fitness": historial_fitness,
+                    "soluciones_pareto": soluciones_pareto
+                }, f, indent=4)
+            print("\nResultados guardados en 'resultados_ag.json'.")
+        except Exception as e:
+            print(f"Error al guardar los resultados: {e}")
 
     # Resultado final
     evaluacion_final = evaluar_ruta(mejor_ruta_historica)
@@ -381,17 +399,26 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
     mejor_fitness_historico = -999999
     mejor_ruta_historica = []
     historial_fitness = []
+    historial_promedio = []
+    soluciones_pareto = []
+    fitness_final = []
 
     for generacion in range(generaciones):
         # 2. Evaluar población
-        fitness_scores = [evaluar_ruta(ruta)["fitness"] for ruta in poblacion]
+        evaluaciones = [evaluar_ruta(ruta) for ruta in poblacion]
+        fitness_scores = [ev["fitness"] for ev in evaluaciones]
+
+        if generacion == generaciones - 1:
+            soluciones_pareto = [{"puntos": ev["puntos"], "distancia": ev["distancia"]} for ev in evaluaciones]
+            fitness_final = fitness_scores
 
         # 3. Ordenar población por fitness (de mejor a peor)
-        poblacion_ordenada = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), key=lambda x: x[0], reverse=True)]
+        poblacion = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), key=lambda item: item[0], reverse=True)]
+        fitness_ordenado = sorted(fitness_scores, reverse=True)
 
         # 4. Mantener el 40% de los mejores individuos (elitismo)
         num_elitismo = int(0.4 * tamaño_poblacion)
-        nueva_poblacion = poblacion_ordenada[:num_elitismo]
+        nueva_poblacion = poblacion[:num_elitismo]
 
         # 5. Generar el 60% de la población como hijos
         num_hijos = int(0.6 * tamaño_poblacion)
@@ -419,17 +446,32 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
 
         # 8. Actualizar el mejor histórico
         mejor_fitness_gen = max(fitness_scores)
-        mejor_ruta_gen = poblacion_ordenada[0]
+        mejor_ruta_gen = poblacion[0]
         if mejor_fitness_gen > mejor_fitness_historico:
             mejor_fitness_historico = mejor_fitness_gen
             mejor_ruta_historica = mejor_ruta_gen.copy()
 
         # 9. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
+        historial_promedio.append(sum(fitness_scores) / len(fitness_scores))
 
-        # 10. Mostrar progreso cada 20 generaciones
-        if generacion % 20 == 0 or generacion == generaciones - 1:
+        # 10. Mostrar progreso cada 5 generaciones
+        if generacion % 5 == 0 or generacion == generaciones - 1:
             print(f"Gen {generacion:2d}: Mejor fitness = {mejor_fitness_gen:7.2f}, Promedio = {sum(fitness_scores)/len(fitness_scores):7.2f}")
+
+    # Guardar resultados en un archivo JSON
+    try:
+        with open("resultados_ag.json", "w") as f:
+            json.dump({
+                "historial_fitness": historial_fitness,
+                "historial_promedio": historial_promedio,
+                "soluciones_pareto": soluciones_pareto,
+                "fitness_final": fitness_final,
+                "mejor_ruta": mejor_ruta_historica
+            }, f, indent=4)
+        print("\nResultados guardados en 'resultados_ag.json'.")
+    except Exception as e:
+        print(f"Error al guardar los resultados: {e}")
 
     # Resultado final
     evaluacion_final = evaluar_ruta(mejor_ruta_historica)
