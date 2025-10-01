@@ -23,10 +23,10 @@ def calcular_penalizacion_comida(hora_actual: int, tipo: str, almuerzo_tomado: b
             penalizacion += 50
     return penalizacion, almuerzo_tomado, cena_tomada
 
-def calcular_fitness(puntos_t: float, distancia_t: float, tiempo_total: float, tiempo_max: int, penalizacion: float) -> float:
+def calcular_fitness(w_puntos, w_distancia, puntos_t: float, distancia_t: float, tiempo_total: float, tiempo_max: int, penalizacion: float) -> float:
     exceso_tiempo = max(0, tiempo_total - tiempo_max)
     penalizacion_tiempo = exceso_tiempo * 3
-    return max(0, (puntos_t) - (distancia_t * 100) - penalizacion_tiempo - penalizacion)
+    return max(0, (puntos_t * w_puntos) - (distancia_t * 100 * w_distancia) - penalizacion_tiempo - penalizacion)
 
 def crear_ruta(t_dia: int = t_dia, n_lugares: int = len(lt)) -> List[int]:
     max_lugares_dinamico = min(n_lugares, t_dia // tm_visita)
@@ -99,7 +99,7 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
     if not cena_tomada:
         penalizacion += 100
 
-    fitness = calcular_fitness(puntos_t, distancia_t, tiempo_total, tiempo_max, penalizacion)
+    fitness = calcular_fitness(1, 1, puntos_t, distancia_t, tiempo_total, tiempo_max, penalizacion)
 
     return {
         "puntos": puntos_t,
