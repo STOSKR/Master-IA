@@ -222,16 +222,20 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
 
     # 1. Crear población inicial
     poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
-    mejor_fitness_historico = 0
-    mejor_ruta_historica = []
+    
+    # Variables para la mejor solución global
+    mejor_fitness_global = 0
+    mejor_ruta_global = []
+
+    # Variables para el historial y el estancamiento de la "era" actual
+    mejor_fitness_era = 0
+    generaciones_estancadas = 0
+    umbral_estancamiento = 30
+
     historial_fitness = []
     historial_promedio = []
     soluciones_pareto = []
     fitness_final = []
-
-    # Variable to track stagnation
-    generaciones_estancadas = 0
-    umbral_estancamiento = 100
 
     for generacion in range(generaciones):
         # 2. Evaluar población
@@ -246,28 +250,33 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
         poblacion = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), key=lambda item: item[0], reverse=True)]
         fitness_ordenado = sorted(fitness_scores, reverse=True)
 
-        # Check for stagnation
-        mejor_fitness_gen = max(fitness_scores)
-        if mejor_fitness_gen > mejor_fitness_historico:
-            mejor_fitness_historico = mejor_fitness_gen
-            mejor_ruta_historica = poblacion[0]
-            generaciones_estancadas = 0  # Reset stagnation counter
+        mejor_fitness_gen = fitness_ordenado[0]
+
+        # Actualizar el mejor fitness global
+        if mejor_fitness_gen > mejor_fitness_global:
+            mejor_fitness_global = mejor_fitness_gen
+            mejor_ruta_global = poblacion[0]
+
+        # Comprobar estancamiento en la "era" actual
+        if mejor_fitness_gen > mejor_fitness_era:
+            mejor_fitness_era = mejor_fitness_gen
+            generaciones_estancadas = 0
         else:
             generaciones_estancadas += 1
 
-        # Reset population if stagnation threshold is reached
         if generaciones_estancadas >= umbral_estancamiento:
-            print(f"\n⚠️ Reiniciando población en generación {generacion} debido a estancamiento.")
-            poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
+            print(f"\nReiniciando población en generación {generacion} debido a estancamiento.")
+            poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
             generaciones_estancadas = 0
+            mejor_fitness_era = 0  # Reiniciar el fitness de la era
             continue
 
-        # 4. Mantener el 40% de los mejores individuos (elitismo)
-        num_elitismo = int(0.4 * tamaño_poblacion)
+        # 4. Mantener el 20% de los mejores individuos (elitismo)
+        num_elitismo = int(0.2 * tamaño_poblacion)
         nueva_poblacion = poblacion[:num_elitismo]
 
-        # 5. Generar el 60% de la población como hijos
-        num_hijos = int(0.6 * tamaño_poblacion)
+        # 5. Generar el 80% de la población como hijos
+        num_hijos = int(0.8 * tamaño_poblacion)
         hijos = []
         while len(hijos) < num_hijos:
             padre1, padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
@@ -301,17 +310,17 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
                 "historial_promedio": historial_promedio,
                 "soluciones_pareto": soluciones_pareto,
                 "fitness_final": fitness_final,
-                "mejor_ruta": mejor_ruta_historica
+                "mejor_ruta": mejor_ruta_global
             }, f, indent=4)
         print("\nResultados guardados en 'resultados_ag.json'.")
     except Exception as e:
         print(f"Error al guardar los resultados: {e}")
 
     # Resultado final
-    evaluacion_final = evaluar_ruta(mejor_ruta_historica)
-    imprimir_mejor_ruta(mejor_ruta_historica, evaluacion_final)
+    evaluacion_final = evaluar_ruta(mejor_ruta_global)
+    imprimir_mejor_ruta(mejor_ruta_global, evaluacion_final)
     return {
-        "mejor_ruta": mejor_ruta_historica,
+        "mejor_ruta": mejor_ruta_global,
         "evaluacion": evaluacion_final,
         "historial_fitness": historial_fitness,
         "algoritmo": "Genético Reemplazo Mixto"
@@ -375,7 +384,7 @@ if __name__ == "__main__":
     print("OPTIMIZACIÓN CON ALGORITMO GENÉTICO")
     print("="*60)
 
-    resultado = algoritmo_genetico_reemplazo_mixto(600, 2000, 0.8, 0.2)
+    resultado = algoritmo_genetico_reemplazo_mixto(600, 1000, 0.8, 0.2)
 
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_mejor_ruta(resultado["mejor_ruta"], resultado["evaluacion"])

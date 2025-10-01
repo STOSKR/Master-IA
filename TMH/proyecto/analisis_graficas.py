@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.graph_objects as go
-from utils import lugares_turisticos # Importar los datos de los lugares
+from utils import lugares_turisticos, distancia_haversine # Importar los datos de los lugares y la función distancia_haversine
 
 # Crear un diccionario para buscar coordenadas por nombre
 coordenadas_lugares = {lugar["nombre"]: (lugar["y"], lugar["x"]) for lugar in lugares_turisticos}
@@ -94,6 +94,45 @@ df_ruta = df_lugares.iloc[mejor_ruta_indices].copy()
 df_ruta['order'] = range(1, len(df_ruta) + 1)
 df_ruta['text'] = df_ruta['order'].astype(str) + '. ' + df_ruta['name']
 
+# Añadir los puntos de la ruta con tiempos de traslado y llegada
+text_values = []
+hora_actual = 9 * 60  # Empezamos a las 09:00 (en minutos)
+
+for i in range(len(df_ruta)):
+    row = df_ruta.iloc[i]
+    llegada_str = f"{hora_actual // 60:02d}:{hora_actual % 60:02d}"
+    
+    if i == 0:
+        traslado_min = 0
+    else:
+        # Accedemos a los índices correctos de la ruta original
+        idx_anterior = mejor_ruta_indices[i-1]
+        idx_actual = mejor_ruta_indices[i]
+        dist = distancia_haversine(lugares_turisticos[idx_anterior], lugares_turisticos[idx_actual])
+        traslado_min = ((int(dist * 25) + 4) // 5) * 5 # Velocidad media 25km/h, redondeo a 5 min
+
+    # La hora de llegada para el siguiente punto es la actual + visita + traslado
+    if i > 0:
+        # El traslado se calcula desde el punto anterior (i-1)
+        idx_anterior = mejor_ruta_indices[i-1]
+        idx_actual = mejor_ruta_indices[i]
+        dist_traslado = distancia_haversine(lugares_turisticos[idx_anterior], lugares_turisticos[idx_actual])
+        tiempo_traslado = ((int(dist_traslado * 25) + 4) // 5) * 5
+        
+        # El tiempo de visita es del punto anterior
+        tiempo_visita_anterior = df_ruta.iloc[i-1]['tiempo_visita']
+        
+        hora_actual += tiempo_visita_anterior + tiempo_traslado
+        llegada_str = f"{hora_actual // 60:02d}:{hora_actual % 60:02d}"
+
+
+    text = (f"{row['order']}. {row['name']}<br>"
+            f"Llegada: {llegada_str} | Visita: {row['tiempo_visita']} min | Puntos: {row['puntos']}<br>"
+            f"Traslado desde anterior: {traslado_min} min")
+    text_values.append(text)
+
+df_ruta['text'] = text_values
+
 # Crear figura de Plotly
 fig = go.Figure()
 
@@ -114,25 +153,24 @@ fig.add_trace(go.Scattergeo(
     lat = df_ruta["lat"],
     mode = "lines",
     line = dict(width = 2, color = 'blue'),
+    hoverinfo = 'none', # No mostrar info al pasar por la línea
     name = 'Mejor Ruta'
 ))
 
-# Añadir los puntos de la ruta con texto
+# Añadir los puntos de la ruta con texto en el hover
 fig.add_trace(go.Scattergeo(
     lon = df_ruta["lon"],
     lat = df_ruta["lat"],
     hoverinfo = 'text',
     text = df_ruta["text"],
-    mode = "markers+text",
+    mode = "markers", # Cambiado de "markers+text" a "markers"
     marker = dict(size=8, color='red'),
-    textfont=dict(size=10, color='black'),
-    textposition = "top right",
     name = 'Puntos de la Ruta'
 ))
 
 # Configurar layout del mapa
 fig.update_layout(
-    title_text = 'Visualización Interactiva de la Mejor Ruta Turística',
+    title_text = 'Visualización Interactiva de la Mejor Ruta Turística con Tiempos de Traslado',
     showlegend = True,
     geo = dict(
         scope = 'world',
