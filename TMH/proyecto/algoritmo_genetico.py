@@ -205,7 +205,6 @@ def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float
     num_hijos = tamaño_poblacion - num_elitismo
     hijos = []
     while len(hijos) < num_hijos:
-        # Seleccionar padres aleatoriamente del mating pool
         padre1 = random.choice(mating_pool)
         padre2 = random.choice(mating_pool)
 
