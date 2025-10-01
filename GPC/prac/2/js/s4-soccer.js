@@ -12,8 +12,8 @@ var player;         // objeto que representa el jugador
 // -------------------------------------------------------
 var angulo = -0.01;
 var speed = 0.1;
-var p_pos = new THREE.Vector3(0,0,0);
-var velocity = new THREE.Vector3(0,0,0);
+var p_pos = new THREE.Vector3(0, 0, 0);
+var velocity = new THREE.Vector3(0, 0, 0);
 
 // animaciones
 const A_IDLE = 0;
@@ -53,7 +53,7 @@ document.addEventListener('keydown', (event) => {
         case 'Space':
             // Hacer que corra hacia a la pelota y patee
             timer_patear = 1;           // segundos
-            changeAnimation(A_RUN); 
+            changeAnimation(A_RUN);
             break;
 
         // puedes agregar eventos para saltear y tirarse al piso 
@@ -97,34 +97,33 @@ const playerMaterial = new CANNON.Material("playerMaterial");
 init();
 render();
 
-function init()
-{
+function init() {
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.setClearColor( new THREE.Color(0xFFFFFF) );
-    document.getElementById('container').appendChild( renderer.domElement );
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(new THREE.Color(0xFFFFFF));
+    document.getElementById('container').appendChild(renderer.domElement);
 
     // mundo visual
     scene = new THREE.Scene();
 
     // Mundo fisico
-  	world = new CANNON.World(); 
-   	world.gravity.set(0,-9.8,0); 
+    world = new CANNON.World();
+    world.gravity.set(0, -9.8, 0);
 
     // Suelo
     // visual
-	const suelo = new THREE.Mesh( new THREE.PlaneGeometry(100,50,1,1), new THREE.MeshPhongMaterial({ color: 0x009000 }));
-	suelo.rotation.x = -Math.PI/2;
-	suelo.position.y = -0.01;
+    const suelo = new THREE.Mesh(new THREE.PlaneGeometry(100, 50, 1, 1), new THREE.MeshPhongMaterial({ color: 0x009000 }));
+    suelo.rotation.x = -Math.PI / 2;
+    suelo.position.y = -0.01;
     suelo.receiveShadow = true
-	scene.add( suelo);
+    scene.add(suelo);
     // fisico
     // en cannon un plane es un plano infinito
     const groundShape = new CANNON.Plane();
     const ground = new CANNON.Body({ mass: 0, material: groundMaterial });
     ground.addShape(groundShape);
-	ground.position.y = -0.01;
-    ground.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+    ground.position.y = -0.01;
+    ground.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
     world.addBody(ground);
     // relacion entre fisico y visual
     suelo.body = ground;
@@ -132,15 +131,15 @@ function init()
     // Pelota 
     // Esfera - Visual (Three.js)
     sphereMesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.1, 32, 32), 
+        new THREE.SphereGeometry(0.1, 32, 32),
         new THREE.MeshPhongMaterial()
     );
     sphereMesh.position.set(2, 10, 0); // Posición inicial
     sphereMesh.castShadow = true;
     scene.add(sphereMesh);
     // Esfera - Física (Cannon.js)
-    const sphereShape = new CANNON.Sphere(1); 
-    const sphereBody = new CANNON.Body({ mass: 1, material:sphereMaterial });
+    const sphereShape = new CANNON.Sphere(1);
+    const sphereBody = new CANNON.Body({ mass: 1, material: sphereMaterial });
     sphereBody.addShape(sphereShape);
     sphereBody.position.copy(sphereMesh.position); // Sincronizar posición inicial
     sphereBody.linearDamping = 0.3;   // frena el movimiento lineal
@@ -158,7 +157,7 @@ function init()
             restitution: 0.3       // Coeficiente de restitución (elasticidad)
         }
     );
-    world.addContactMaterial(sphereGroundContactMaterial);    
+    world.addContactMaterial(sphereGroundContactMaterial);
 
     // Jugador - Visual (Three.js)
     const playerMesh = new THREE.Mesh(
@@ -193,29 +192,29 @@ function init()
     );
     world.addContactMaterial(playerBallContactMaterial);
 
-  // cargo el objeto y las animaciones
-  loadModelAndAnimations();
+    // cargo el objeto y las animaciones
+    loadModelAndAnimations();
 
-  var aspectRatio = window.innerWidth / window.innerHeight;
-  camera = new THREE.PerspectiveCamera( 50, aspectRatio , 0.01, 150 );
-  camera.position.set( 0, 5, 15);
+    var aspectRatio = window.innerWidth / window.innerHeight;
+    camera = new THREE.PerspectiveCamera(50, aspectRatio, 0.01, 150);
+    camera.position.set(0, 5, 15);
 
-  cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
-  cameraControls.target.set( 0, 0, 0 );
+    cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+    cameraControls.target.set(0, 0, 0);
 
-  const light1 = new THREE.PointLight(0xffffff, 1, 10000);
-  light1.position.set(-50, 50, -50);
-  scene.add(light1);
-  const light2 = new THREE.PointLight(0xffffff, 1, 10000);
-  light2.position.set(50, 50, 50);
-  scene.add(light2);
-  
-  // Luz ambiental para afectar a todos los objetos de manera uniforme
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-  scene.add(ambientLight);
-  
+    const light1 = new THREE.PointLight(0xffffff, 1, 10000);
+    light1.position.set(-50, 50, -50);
+    scene.add(light1);
+    const light2 = new THREE.PointLight(0xffffff, 1, 10000);
+    light2.position.set(50, 50, 50);
+    scene.add(light2);
 
-  window.addEventListener('resize', updateAspectRatio );
+    // Luz ambiental para afectar a todos los objetos de manera uniforme
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+    scene.add(ambientLight);
+
+
+    window.addEventListener('resize', updateAspectRatio);
 }
 
 
@@ -230,7 +229,7 @@ function loadModelAndAnimations() {
     const loader = new THREE.FBXLoader();
 
     // Cargar modelo base
-    loader.load('models/shannon/Ch38_nonPBR.fbx', function (object) {
+    loader.load('models/soccer/Ch43_nonPBR.fbx', function (object) {
 
         player = object;
         scene.add(object);
@@ -241,7 +240,7 @@ function loadModelAndAnimations() {
         var size = new THREE.Vector3();
         box.getSize(size);
         var s = 2.0 / size.y;
-        object.scale.set(s,s,s );
+        object.scale.set(s, s, s);
 
 
         mixer = new THREE.AnimationMixer(object);
@@ -255,7 +254,7 @@ function loadModelAndAnimations() {
         });
 
         // Cargar y aplicar animaciones
-        const animations = ['models/shannon/Standing Idle.fbx', 'models/shannon/Fast Run.fbx', 'models/shannon/Soccer Pass.fbx'];
+        const animations = ['models/soccer/Hip Hop Dancing.fbx', 'models/soccer/Fast Run.fbx', 'models/soccer/Soccer Trip.fbx'];
         animations.forEach(function (animFile, index) {
             loader.load(animFile, function (animData) {
                 // Extraer el nombre del archivo sin la ruta ni la extensión .fbx
@@ -263,10 +262,10 @@ function loadModelAndAnimations() {
                 const action = mixer.clipAction(animData.animations[0]);
                 actions[name] = action; // Guardar la acción con el nombre del archivo
                 animationNames[index] = name; // Almacenar nombre de animación en el array
-                
+
                 if (index === 0) { // Iniciar la primera animación
                     action.play();
-                }                                
+                }
             });
         });
 
@@ -277,7 +276,7 @@ function loadModelAndAnimations() {
 
 function changeAnimation(index) {
 
-    if(currentAnimationIndex==index)
+    if (currentAnimationIndex == index)
         return;
     // Reproducir la nueva animación
     actions[animationNames[index]].play();
@@ -287,32 +286,28 @@ function changeAnimation(index) {
 }
 
 
-function updateAspectRatio()
-{
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+function updateAspectRatio() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 }
 
-function update()
-{
+function update() {
     // Cambios para actualizar la camara segun mvto del raton
     cameraControls.update();
     const delta = clock.getDelta();         // tiempo en segundos
-    if (mixer!=null) mixer.update(delta);
+    if (mixer != null) mixer.update(delta);
 
-    if(player==null) 
+    if (player == null)
         return;
 
 
 
-    if(timer_patear>0)
-    {
+    if (timer_patear > 0) {
         timer_patear -= delta;
-        
+
         let dist = new THREE.Vector3().subVectors(sphereMesh.position, p_pos).length();
-        if(dist>1.0) 
-        {
+        if (dist > 1.0) {
             // Vector desde el jugador hasta la pelota
             velocity = new THREE.Vector3().subVectors(sphereMesh.position, p_pos);
             velocity.y = 0;
@@ -320,7 +315,7 @@ function update()
             // Calcular ángulo en el plano XZ
             angulo = Math.atan2(velocity.x, velocity.z);
         }
-        
+
         // Actualizar el ángulo basado en los controles de izquierda y derecha
         if (controls.moveLeft) angulo += 0.05;
         if (controls.moveRight) angulo -= 0.05;
@@ -329,8 +324,7 @@ function update()
         p_pos.add(velocity.clone().multiplyScalar(controls.speed));
 
     }
-    else
-    {
+    else {
         // Calcular el vector de dirección de vista
         velocity = new THREE.Vector3(Math.sin(angulo), 0, Math.cos(angulo));
         // Actualizar el ángulo basado en los controles de izquierda y derecha
@@ -346,18 +340,18 @@ function update()
             changeAnimation(A_IDLE);
     }
 
-    player.position.set( p_pos.x, p_pos.y, p_pos.z);
+    player.position.set(p_pos.x, p_pos.y, p_pos.z);
     player.rotation.y = angulo;
 
-    playerBody.position.set(p_pos.x, p_pos.y+0.5, p_pos.z);
-    playerBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0,1,0), angulo);
+    playerBody.position.set(p_pos.x, p_pos.y + 0.5, p_pos.z);
+    playerBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), angulo);
 
     // le digo al motor de fisica que actualize el mundo
-    world.step(1/60);
- 
+    world.step(1 / 60);
+
     // Sincronizar el mesh visual con el cuerpo físico
     // Recorre todos los objetos en la escena
-    scene.traverse(function(obj) {
+    scene.traverse(function (obj) {
         // Verifica si el objeto tiene una propiedad `body` (CANNON.Body)
         if (obj.body !== undefined) {
             // Sincroniza la posición y rotación del objeto visual con el cuerpo físico
@@ -368,10 +362,9 @@ function update()
 
 }
 
-function render()
-{
-	requestAnimationFrame( render );
-	update();
-	renderer.render( scene, camera );
+function render() {
+    requestAnimationFrame(render);
+    update();
+    renderer.render(scene, camera);
 }
 
