@@ -112,10 +112,6 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
     }
 
 def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], tamaño_seleccion: int = 200) -> List[List[int]]:
-    """
-    Selección por ranking con elitismo: selecciona un porcentaje fijo de los mejores individuos
-    y el resto basándose en el ranking de fitness.
-    """
     # Ordenar población por fitness (mayor a menor)
     ranking = sorted(zip(poblacion, fitness_scores), key=lambda x: x[1], reverse=True)
 
@@ -197,40 +193,50 @@ def inicializar_poblacion_y_evaluar(tamaño_poblacion: int, tiempo_disponible: i
     fitness_scores = [evaluar_ruta(ruta)["fitness"] for ruta in poblacion]
     return poblacion, fitness_scores
 
-def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float], tamaño_poblacion: int, prob_cruce: float, prob_mutacion: float):
-    nueva_poblacion = []
-    while len(nueva_poblacion) < tamaño_poblacion:
-        padre1, padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
+def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float], tamaño_poblacion: int, prob_cruce: float, prob_mutacion: float, tamaño_seleccion: int = 200):
+    # 1. Crear el "mating pool" una sola vez
+    mating_pool = seleccion_ranking(poblacion, fitness_scores, tamaño_seleccion)
+
+    # 2. Mantener el 20% de los mejores individuos (elitismo)
+    num_elitismo = int(0.2 * tamaño_poblacion)
+    nueva_poblacion = poblacion[:num_elitismo]
+
+    # 3. Generar el 80% de la población como hijos
+    num_hijos = tamaño_poblacion - num_elitismo
+    hijos = []
+    while len(hijos) < num_hijos:
+        # Seleccionar padres aleatoriamente del mating pool
+        padre1 = random.choice(mating_pool)
+        padre2 = random.choice(mating_pool)
+
         if random.random() < prob_cruce:
             hijo1, hijo2 = cruce_ordenado(padre1, padre2)
         else:
             hijo1, hijo2 = padre1.copy(), padre2.copy()
-        nueva_poblacion.extend([mutacion(hijo1, prob_mutacion), mutacion(hijo2, prob_mutacion)])
+
+        hijos.extend([mutacion(hijo1, prob_mutacion), mutacion(hijo2, prob_mutacion)])
+
+    nueva_poblacion.extend(hijos)
     return nueva_poblacion[:tamaño_poblacion]
 
 def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacion: int = 1000, 
                                         prob_cruce: float = 0.8, prob_mutacion: float = 0.3, 
                                         tiempo_disponible: int = t_dia) -> dict:
-    """
-    Algoritmo genético con reemplazo mixto.
-    Combina elitismo, hijos generados y nuevos individuos aleatorios.
-    """
     print(f"\n🧬 ALGORITMO GENÉTICO (REEMPLAZO MIXTO)")
     print(f"Generaciones: {generaciones}, Población: {tamaño_poblacion}")
     print(f"Prob. cruce: {prob_cruce}, Prob. mutación: {prob_mutacion}")
     print("="*50)
 
-    # 1. Crear población inicial
     poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
     
-    # Variables para la mejor solución global
     mejor_fitness_global = 0
     mejor_ruta_global = []
+    mejor_generacion_fitness = []
+    mejor_generacion_pareto = []
 
-    # Variables para el historial y el estancamiento de la "era" actual
     mejor_fitness_era = 0
     generaciones_estancadas = 0
-    umbral_estancamiento = 30
+    umbral_estancamiento = 50
 
     historial_fitness = []
     historial_promedio = []
@@ -238,7 +244,6 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
     fitness_final = []
 
     for generacion in range(generaciones):
-        # 2. Evaluar población
         evaluaciones = [evaluar_ruta(ruta) for ruta in poblacion]
         fitness_scores = [ev["fitness"] for ev in evaluaciones]
 
@@ -246,16 +251,15 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
             soluciones_pareto = [{"puntos": ev["puntos"], "distancia": ev["distancia"]} for ev in evaluaciones]
             fitness_final = fitness_scores
 
-        # 3. Ordenar población por fitness (de mejor a peor)
         poblacion = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), key=lambda item: item[0], reverse=True)]
         fitness_ordenado = sorted(fitness_scores, reverse=True)
 
         mejor_fitness_gen = fitness_ordenado[0]
-
-        # Actualizar el mejor fitness global
         if mejor_fitness_gen > mejor_fitness_global:
             mejor_fitness_global = mejor_fitness_gen
             mejor_ruta_global = poblacion[0]
+            mejor_generacion_fitness = fitness_scores
+            mejor_generacion_pareto = [{"puntos": ev["puntos"], "distancia": ev["distancia"]} for ev in evaluaciones]
 
         # Comprobar estancamiento en la "era" actual
         if mejor_fitness_gen > mejor_fitness_era:
@@ -268,31 +272,11 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
             print(f"\nReiniciando población en generación {generacion} debido a estancamiento.")
             poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
             generaciones_estancadas = 0
-            mejor_fitness_era = 0  # Reiniciar el fitness de la era
+            mejor_fitness_era = 0 
             continue
 
-        # 4. Mantener el 20% de los mejores individuos (elitismo)
-        num_elitismo = int(0.2 * tamaño_poblacion)
-        nueva_poblacion = poblacion[:num_elitismo]
-
-        # 5. Generar el 80% de la población como hijos
-        num_hijos = int(0.8 * tamaño_poblacion)
-        hijos = []
-        while len(hijos) < num_hijos:
-            padre1, padre2 = seleccion_ranking(poblacion, fitness_scores, 2)
-            if random.random() < prob_cruce:
-                hijo1, hijo2 = cruce_ordenado(padre1, padre2)
-            else:
-                hijo1, hijo2 = padre1.copy(), padre2.copy()
-
-            hijo1 = mutacion(hijo1, prob_mutacion)
-            hijo2 = mutacion(hijo2, prob_mutacion)
-            hijos.extend([hijo1, hijo2])
-
-        nueva_poblacion.extend(hijos[:num_hijos])  # Asegurar que no haya más hijos de los necesarios
-
-        # 7. Actualizar población
-        poblacion = nueva_poblacion[:tamaño_poblacion]
+        # 4. Evolucionar la población usando la nueva estrategia
+        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion)
 
         # 9. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
@@ -308,8 +292,8 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
             json.dump({
                 "historial_fitness": historial_fitness,
                 "historial_promedio": historial_promedio,
-                "soluciones_pareto": soluciones_pareto,
-                "fitness_final": fitness_final,
+                "soluciones_pareto": mejor_generacion_pareto,
+                "fitness_final": mejor_generacion_fitness,
                 "mejor_ruta": mejor_ruta_global
             }, f, indent=4)
         print("\nResultados guardados en 'resultados_ag.json'.")
@@ -384,7 +368,7 @@ if __name__ == "__main__":
     print("OPTIMIZACIÓN CON ALGORITMO GENÉTICO")
     print("="*60)
 
-    resultado = algoritmo_genetico_reemplazo_mixto(600, 1000, 0.8, 0.2)
+    resultado = algoritmo_genetico_reemplazo_mixto(600, 10000, 0.8, 0.2)
 
     print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
     imprimir_mejor_ruta(resultado["mejor_ruta"], resultado["evaluacion"])
