@@ -13,35 +13,34 @@ init();
 render();
 
 
-function init()
-{
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  renderer.setClearColor( new THREE.Color(0xFFFFFF) );
-  document.getElementById('container').appendChild( renderer.domElement );
+function init() {
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(new THREE.Color(0xFFFFFF));
+    document.getElementById('container').appendChild(renderer.domElement);
 
-  scene = new THREE.Scene();
+    scene = new THREE.Scene();
 
-  // cargo el objeto y las animaciones
-  loadModelAndAnimations();
+    // cargo el objeto y las animaciones
+    loadModelAndAnimations();
 
-  var aspectRatio = window.innerWidth / window.innerHeight;
-  camera = new THREE.PerspectiveCamera( 50, aspectRatio , 5, 10000 );
-  camera.position.set( 300, 600, 700);
+    var aspectRatio = window.innerWidth / window.innerHeight;
+    camera = new THREE.PerspectiveCamera(50, aspectRatio, 5, 10000);
+    camera.position.set(300, 600, 700);
 
-  cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
-  cameraControls.target.set( 0, 0, 0 );
+    cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+    cameraControls.target.set(0, 0, 0);
 
-  const light = new THREE.PointLight(0xffffff, 1, 100);
-  light.position.set(50, 50, 50);
-  scene.add(light);
-  
-  // O también una luz ambiental para afectar a todos los objetos de manera uniforme
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-  scene.add(ambientLight);
-  
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(50, 50, 50);
+    scene.add(light);
 
-  window.addEventListener('resize', updateAspectRatio );
+    // O también una luz ambiental para afectar a todos los objetos de manera uniforme
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+
+    window.addEventListener('resize', updateAspectRatio);
 }
 
 
@@ -56,7 +55,7 @@ function loadModelAndAnimations() {
     const loader = new THREE.FBXLoader();
 
     // Cargar modelo base
-    loader.load('models/remy/remy.fbx', function (object) {
+    loader.load('models/Ch43_nonPBR.fbx', function (object) {
         scene.add(object);
         object.position.set(0, 0, 0);
 
@@ -71,7 +70,7 @@ function loadModelAndAnimations() {
         });
 
         // Cargar y aplicar animaciones
-        const animations = ['models/remy/Walking.fbx', 'models/remy/Fast Run.fbx','models/remy/Big Jump.fbx'];
+        const animations = ['models/Hip Dop Dancing.fbx', 'models/Fast Run.fbx', 'models/Big Jump.fbx'];
         animations.forEach(function (animFile, index) {
             loader.load(animFile, function (animData) {
                 // Extraer el nombre del archivo sin la ruta ni la extensión .fbx
@@ -79,10 +78,10 @@ function loadModelAndAnimations() {
                 const action = mixer.clipAction(animData.animations[0]);
                 actions[name] = action; // Guardar la acción con el nombre del archivo
                 animationNames[index] = name; // Almacenar nombre de animación en el array
-                
+
                 if (index === 0) { // Iniciar la primera animación
                     action.play();
-                }                                
+                }
             });
         });
 
@@ -106,34 +105,31 @@ function changeAnimation(direction) {
     actions[animationNames[currentAnimationIndex]].play();
 }
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'PageDown') {
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'U') {
         changeAnimation('next');
-    } else if (event.key === 'PageUp') {
+    } else if (event.key === 'I') {
         changeAnimation('prev');
     }
 });
 
-function updateAspectRatio()
-{
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+function updateAspectRatio() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 }
 
-function update()
-{
+function update() {
     // Cambios para actualizar la camara segun mvto del raton
     cameraControls.update();
     const delta = clock.getDelta();
-    if (mixer!=null) mixer.update(delta);
+    if (mixer != null) mixer.update(delta);
 
 }
 
-function render()
-{
-	requestAnimationFrame( render );
-	update();
-	renderer.render( scene, camera );
+function render() {
+    requestAnimationFrame(render);
+    update();
+    renderer.render(scene, camera);
 }
 
