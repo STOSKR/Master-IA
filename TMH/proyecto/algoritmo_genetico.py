@@ -274,8 +274,9 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
             mejor_fitness_era = 0 
             continue
 
+        tamaño_seleccion = int(tamaño_poblacion * 0.2)
         # 4. Evolucionar la población usando la nueva estrategia
-        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion)
+        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion, tamaño_seleccion)
 
         # 9. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
@@ -340,7 +341,7 @@ def imprimir_mejor_ruta(ruta: List[int], evaluacion: dict):
         # Determinar si es comida/cena
         etiqueta_comida = ""
         if not almuerzo_tomado and lugar["tipo"] == "restaurante" and hora_actual >= 13.5 * 60:
-            etiqueta_comida = " (Almuerzo)"
+            etiqueta_comida = " (Comida)"
             almuerzo_tomado = True
         elif not cena_tomada and lugar["tipo"] == "restaurante" and hora_actual >= 20.5 * 60:
             etiqueta_comida = " (Cena)"
