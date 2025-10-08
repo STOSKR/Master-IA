@@ -1,7 +1,25 @@
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Optional
 from utils import lugares_turisticos as lt, distancia_haversine
-import json  # Add this import at the top
+import json
+try:
+    from restricciones_complejas import (
+        validar_incompatibilidades,
+        calcular_bonus_sinergia,
+        calcular_bonus_eventos,
+        validar_presupuesto,
+        calcular_costo_transporte,
+        aplicar_perfil_usuario,
+        aplicar_condiciones_climaticas,
+        calcular_factor_fatiga,
+        generar_clima_dias,
+        EVENTOS_ESPECIALES,
+        calcular_complejidad
+    )
+    RESTRICCIONES_ACTIVAS = True
+except ImportError:
+    print("⚠️  Módulo 'restricciones_complejas' no encontrado. Ejecutando sin restricciones avanzadas.")
+    RESTRICCIONES_ACTIVAS = False
 
 t_dia = 14 * 60
 tm_visita = 90
@@ -28,35 +46,91 @@ def calcular_fitness(w_puntos, w_distancia, puntos_t: float, distancia_t: float,
     penalizacion_tiempo = exceso_tiempo * 3
     return max(0, (puntos_t * w_puntos) - (distancia_t * 100 * w_distancia) - penalizacion_tiempo - penalizacion)
 
-def crear_ruta(t_dia: int = t_dia, n_lugares: int = len(lt)) -> List[int]:
-    max_lugares_dinamico = min(n_lugares, t_dia // tm_visita)
-    n_lugares = random.randint(4, max_lugares_dinamico)
-    ruta = random.sample(range(len(lt)), n_lugares)
+def crear_ruta(t_dia: int = t_dia, n_lugares: int = len(lt), vetos: List[int] = None) -> List[int]:
+    if vetos is None:
+        vetos = []
     
+    # Filtrar lugares disponibles excluyendo los vetados
+    lugares_disponibles = [i for i in range(len(lt)) if i not in vetos]
+    
+    if not lugares_disponibles:
+        return []
+    
+    max_lugares_dinamico = min(len(lugares_disponibles), t_dia // tm_visita)
+    if max_lugares_dinamico < 4:
+        max_lugares_dinamico = min(len(lugares_disponibles), 4)
+    
+    n_lugares_seleccion = random.randint(min(4, len(lugares_disponibles)), max_lugares_dinamico)
+    ruta = random.sample(lugares_disponibles, n_lugares_seleccion)
+    
+    # Asegurar que hay al menos un restaurante
     if not any(lt[i]['tipo'] == 'restaurante' for i in ruta):
-        rest = [i for i, l in enumerate(lt) if l['tipo'] == 'restaurante']
+        rest = [i for i in lugares_disponibles if lt[i]['tipo'] == 'restaurante']
         if rest:
             ruta[0] = random.choice(rest)
     return ruta
 
-def crear_poblacion_inicial(tamaño_poblacion: int, tiempo_disponible: int) -> List[List[int]]:
+def crear_poblacion_inicial(tamaño_poblacion: int, tiempo_disponible: int, vetos: List[int] = None) -> List[List[int]]:
+    if vetos is None:
+        vetos = []
+    
     poblacion = []
 
     while len(poblacion) < tamaño_poblacion:
-        ruta = crear_ruta(tiempo_disponible)
-        if ruta not in poblacion:
+        ruta = crear_ruta(tiempo_disponible, vetos=vetos)
+        if ruta and ruta not in poblacion:
             poblacion.append(ruta)
 
     return poblacion
 
-def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 * 60) -> dict:
+def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 * 60, 
+                 dia: int = 1, perfil_usuario: str = "balanceado", clima: str = "soleado",
+                 usar_restricciones: bool = True) -> dict:
+    """
+    Evalúa una ruta considerando múltiples restricciones complejas.
+    
+    Args:
+        ruta: Lista de índices de lugares a visitar
+        tiempo_max: Tiempo máximo disponible en minutos
+        hora_actual: Hora de inicio en minutos desde las 00:00
+        dia: Día del viaje (para eventos especiales)
+        perfil_usuario: Perfil de preferencias del usuario
+        clima: Condiciones climáticas del día
+        usar_restricciones: Si True, aplica restricciones complejas
+        
+    Returns:
+        dict con métricas de evaluación
+    """
     if not ruta:
-        return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False}
+        return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False, 
+                "costo": 0, "bonus_sinergia": 0, "bonus_eventos": 0}
 
     puntos_t, distancia_t, tiempo_total = 0, 0, 0
     penalizacion = 0
     almuerzo_tomado, cena_tomada = False, False
+    costo_total = 0
+    bonus_sinergia = 0
+    bonus_eventos = 0
+    detalles_transporte = []
 
+    # ===== VALIDACIONES CON RESTRICCIONES COMPLEJAS =====
+    if RESTRICCIONES_ACTIVAS and usar_restricciones:
+        # 1. Validar incompatibilidades
+        es_compatible, pen_incomp = validar_incompatibilidades(ruta, lt)
+        penalizacion += pen_incomp
+        
+        # 2. Calcular bonus por sinergias
+        bonus_sinergia = calcular_bonus_sinergia(ruta, lt)
+        
+        # 3. Calcular bonus por eventos especiales
+        bonus_eventos = calcular_bonus_eventos(ruta, lt, dia)
+        
+        # 4. Validar presupuesto
+        dentro_presupuesto, costo_ruta, pen_presupuesto = validar_presupuesto(ruta, lt)
+        costo_total = costo_ruta
+        penalizacion += pen_presupuesto
+
+    # ===== EVALUACIÓN ESTÁNDAR =====
     for i, lugar_idx in enumerate(ruta):
         lugar = lt[lugar_idx]
         
@@ -64,7 +138,14 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
             lugar_anterior = lt[ruta[i-1]]
             distancia = distancia_haversine(lugar_anterior, lugar)
             distancia_t += distancia
-            t_traslado = distancia * 25
+            
+            # Usar transporte inteligente si las restricciones están activas
+            if RESTRICCIONES_ACTIVAS and usar_restricciones:
+                tipo_trans, t_traslado, costo_trans = calcular_costo_transporte(distancia, priorizar_economia=True)
+                costo_total += costo_trans
+                detalles_transporte.append({"tipo": tipo_trans, "distancia": distancia, "costo": costo_trans})
+            else:
+                t_traslado = distancia * 25
             
             # Redondear a múltiplo de 5 más cercano superior
             t_traslado = ((int(t_traslado)) // 5 + 1) * 5
@@ -83,32 +164,56 @@ def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 
         if hora_actual + lugar["tiempo_visita"] > cierre:
             penalizacion += 200
 
+        # Penalización/bonus por comidas
         penalizacion_comida, almuerzo_tomado, cena_tomada = calcular_penalizacion_comida(
             hora_actual, lugar["tipo"], almuerzo_tomado, cena_tomada
         )
         penalizacion += penalizacion_comida
 
-        # Actualizar puntos y tiempo
-        puntos_t += lugar["puntos"]
+        # Calcular puntos ajustados
+        puntos_lugar = lugar["puntos"]
+        
+        if RESTRICCIONES_ACTIVAS and usar_restricciones:
+            # Aplicar factor de fatiga
+            factor_fatiga = calcular_factor_fatiga(hora_actual)
+            puntos_lugar *= factor_fatiga
+            
+            # Aplicar perfil de usuario
+            puntos_lugar = aplicar_perfil_usuario(puntos_lugar, lugar["tipo"], perfil_usuario)
+            
+            # Aplicar condiciones climáticas
+            puntos_lugar = aplicar_condiciones_climaticas(puntos_lugar, lugar["tipo"], clima)
+        
+        puntos_t += puntos_lugar
+        
+        # Actualizar tiempo
         tiempo_visita = lugar["tiempo_visita"]
         tiempo_total += tiempo_visita
         hora_actual += tiempo_visita
 
+    # Penalizaciones finales
     if not almuerzo_tomado:
         penalizacion += 100
     if not cena_tomada:
         penalizacion += 100
 
+    # Añadir bonus
+    puntos_t += bonus_sinergia + bonus_eventos
+
     fitness = calcular_fitness(1, 1, puntos_t, distancia_t, tiempo_total, tiempo_max, penalizacion)
 
     return {
-        "puntos": puntos_t,
+        "puntos": round(puntos_t, 2),
         "distancia": round(distancia_t, 2),
         "tiempo": round(tiempo_total, 2),
         "fitness": max(0, round(fitness, 2)),
-        "valida": tiempo_total <= tiempo_max,
+        "valida": tiempo_total <= tiempo_max and (not RESTRICCIONES_ACTIVAS or costo_total <= 150),
         "comida_penalizacion": penalizacion,
-        "tiempo_penalizacion": 0, 
+        "tiempo_penalizacion": 0,
+        "costo": round(costo_total, 2) if RESTRICCIONES_ACTIVAS else 0,
+        "bonus_sinergia": round(bonus_sinergia, 2) if RESTRICCIONES_ACTIVAS else 0,
+        "bonus_eventos": round(bonus_eventos, 2) if RESTRICCIONES_ACTIVAS else 0,
+        "detalles_transporte": detalles_transporte if RESTRICCIONES_ACTIVAS else [],
     }
 
 def seleccion_ranking(poblacion: List[List[int]], fitness_scores: List[float], tamaño_seleccion: int = 200) -> List[List[int]]:
@@ -161,7 +266,10 @@ def cruce_ordenado(padre1: List[int], padre2: List[int]) -> Tuple[List[int], Lis
 
     return hijo1, hijo2
 
-def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
+def mutacion(ruta: List[int], prob_mutacion: float = 0.1, vetos: List[int] = None) -> List[int]:
+    if vetos is None:
+        vetos = []
+    
     ruta_mutada = ruta.copy()
     
     if random.random() < prob_mutacion:
@@ -178,7 +286,8 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
             ruta_mutada[start:end+1] = segmento
         
         elif tipo_mutacion == 'agregar' and len(ruta_mutada) < len(lt):
-            lugares_disponibles = [i for i in range(len(lt)) if i not in ruta_mutada]
+            # Filtrar lugares disponibles excluyendo los ya en la ruta y los vetados
+            lugares_disponibles = [i for i in range(len(lt)) if i not in ruta_mutada and i not in vetos]
             if lugares_disponibles:
                 ruta_mutada.append(random.choice(lugares_disponibles))
         
@@ -188,12 +297,22 @@ def mutacion(ruta: List[int], prob_mutacion: float = 0.1) -> List[int]:
     
     return ruta_mutada
 
-def inicializar_poblacion_y_evaluar(tamaño_poblacion: int, tiempo_disponible: int):
-    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible)
-    fitness_scores = [evaluar_ruta(ruta)["fitness"] for ruta in poblacion]
+def inicializar_poblacion_y_evaluar(tamaño_poblacion: int, tiempo_disponible: int, vetos: List[int] = None, w_puntos: float = 1, w_distancia: float = 1):
+    if vetos is None:
+        vetos = []
+    
+    poblacion = crear_poblacion_inicial(tamaño_poblacion, tiempo_disponible, vetos)
+    fitness_scores = []
+    for ruta in poblacion:
+        ev = evaluar_ruta(ruta, tiempo_disponible)
+        fitness = calcular_fitness(w_puntos, w_distancia, ev["puntos"], ev["distancia"], ev["tiempo"], tiempo_disponible, ev["comida_penalizacion"])
+        fitness_scores.append(fitness)
     return poblacion, fitness_scores
 
-def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float], tamaño_poblacion: int, prob_cruce: float, prob_mutacion: float, tamaño_seleccion: int = 200):
+def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float], tamaño_poblacion: int, prob_cruce: float, prob_mutacion: float, tamaño_seleccion: int = 200, vetos: List[int] = None):
+    if vetos is None:
+        vetos = []
+    
     # 1. Crear el "mating pool" una sola vez
     mating_pool = seleccion_ranking(poblacion, fitness_scores, tamaño_seleccion)
 
@@ -213,20 +332,25 @@ def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float
         else:
             hijo1, hijo2 = padre1.copy(), padre2.copy()
 
-        hijos.extend([mutacion(hijo1, prob_mutacion), mutacion(hijo2, prob_mutacion)])
+        hijos.extend([mutacion(hijo1, prob_mutacion, vetos), mutacion(hijo2, prob_mutacion, vetos)])
 
     nueva_poblacion.extend(hijos)
     return nueva_poblacion[:tamaño_poblacion]
 
 def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacion: int = 1000, 
                                         prob_cruce: float = 0.8, prob_mutacion: float = 0.3, 
-                                        tiempo_disponible: int = t_dia) -> dict:
+                                        tiempo_disponible: int = t_dia, w_puntos: float = 1, w_distancia: float = 1,
+                                        vetos: List[int] = None) -> dict:
+    if vetos is None:
+        vetos = []
+    
     print(f"\n🧬 ALGORITMO GENÉTICO (REEMPLAZO MIXTO)")
     print(f"Generaciones: {generaciones}, Población: {tamaño_poblacion}")
     print(f"Prob. cruce: {prob_cruce}, Prob. mutación: {prob_mutacion}")
+    print(f"Pesos: Puntos={w_puntos:.2f}, Distancia={w_distancia:.2f}")
     print("="*50)
 
-    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
+    poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible, vetos, w_puntos, w_distancia)
     
     mejor_fitness_global = 0
     mejor_ruta_global = []
@@ -243,8 +367,8 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
     fitness_final = []
 
     for generacion in range(generaciones):
-        evaluaciones = [evaluar_ruta(ruta) for ruta in poblacion]
-        fitness_scores = [ev["fitness"] for ev in evaluaciones]
+        evaluaciones = [evaluar_ruta(ruta, tiempo_disponible) for ruta in poblacion]
+        fitness_scores = [calcular_fitness(w_puntos, w_distancia, ev["puntos"], ev["distancia"], ev["tiempo"], tiempo_disponible, ev["comida_penalizacion"]) for ev in evaluaciones]
 
         if generacion == generaciones - 1:
             soluciones_pareto = [{"puntos": ev["puntos"], "distancia": ev["distancia"]} for ev in evaluaciones]
@@ -269,14 +393,14 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
 
         if generaciones_estancadas >= umbral_estancamiento:
             print(f"\nReiniciando población en generación {generacion} debido a estancamiento.")
-            poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible)
+            poblacion, fitness_scores = inicializar_poblacion_y_evaluar(tamaño_poblacion, tiempo_disponible, vetos, w_puntos, w_distancia)
             generaciones_estancadas = 0
             mejor_fitness_era = 0 
             continue
 
         tamaño_seleccion = int(tamaño_poblacion * 0.2)
         # 4. Evolucionar la población usando la nueva estrategia
-        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion, tamaño_seleccion)
+        poblacion = evolucionar_poblacion(poblacion, fitness_scores, tamaño_poblacion, prob_cruce, prob_mutacion, tamaño_seleccion, vetos)
 
         # 9. Guardar para histórico
         historial_fitness.append(mejor_fitness_gen)
@@ -301,7 +425,7 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
         print(f"Error al guardar los resultados: {e}")
 
     # Resultado final
-    evaluacion_final = evaluar_ruta(mejor_ruta_global)
+    evaluacion_final = evaluar_ruta(mejor_ruta_global, tiempo_disponible)
     imprimir_mejor_ruta(mejor_ruta_global, evaluacion_final)
     return {
         "mejor_ruta": mejor_ruta_global,
@@ -309,6 +433,252 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
         "historial_fitness": historial_fitness,
         "algoritmo": "Genético Reemplazo Mixto"
     }
+
+def algoritmo_genetico_multidias(generaciones: int = 100, tamaño_poblacion: int = 1000, 
+                                 prob_cruce: float = 0.8, prob_mutacion: float = 0.3, 
+                                 dias: int = 5, tiempo_disponible: int = t_dia,
+                                 perfil_usuario: str = "balanceado",
+                                 usar_restricciones: bool = True) -> dict:
+    """
+    Algoritmo genético para optimizar rutas de múltiples días.
+    Los lugares visitados en un día no pueden repetirse en días posteriores (lista de vetos).
+    La distancia gana más importancia con cada día, mientras que los puntos pierden relevancia.
+    
+    Args:
+        generaciones: Número de generaciones por día
+        tamaño_poblacion: Tamaño de la población
+        prob_cruce: Probabilidad de cruce
+        prob_mutacion: Probabilidad de mutación
+        dias: Número de días del viaje
+        tiempo_disponible: Tiempo disponible por día en minutos
+        perfil_usuario: Perfil de preferencias del usuario
+        usar_restricciones: Si True, aplica restricciones complejas
+    """
+    print(f"\n🧬 ALGORITMO GENÉTICO MULTIDÍAS {'CON RESTRICCIONES COMPLEJAS' if usar_restricciones and RESTRICCIONES_ACTIVAS else 'BÁSICO'}")
+    print(f"Días: {dias}, Generaciones por día: {generaciones}, Población: {tamaño_poblacion}")
+    print(f"Prob. cruce: {prob_cruce}, Prob. mutación: {prob_mutacion}")
+    print(f"Perfil de usuario: {perfil_usuario}")
+    
+    # Mostrar estadísticas de complejidad si las restricciones están activas
+    if RESTRICCIONES_ACTIVAS and usar_restricciones:
+        print("\n" + "="*70)
+        print("📊 ANÁLISIS DE COMPLEJIDAD DEL PROBLEMA")
+        print("="*70)
+        complejidad = calcular_complejidad(len(lt), dias)
+        print(f"Lugares totales disponibles: {complejidad['num_lugares_total']}")
+        print(f"Combinaciones posibles por día: {complejidad['combinaciones_por_dia']:,.0f}")
+        print(f"Espacio de búsqueda total: {complejidad['espacio_busqueda_total']:.2e}")
+        print(f"Espacio de búsqueda válido (con restricciones): {complejidad['espacio_busqueda_valido']:.2e}")
+        print(f"\n🔒 Restricciones activas:")
+        for nombre, valor in complejidad['restricciones'].items():
+            print(f"   - {nombre.replace('_', ' ').title()}: {valor}")
+    
+    print("="*70)
+
+    # Generar clima para cada día si las restricciones están activas
+    climas = generar_clima_dias(dias) if RESTRICCIONES_ACTIVAS and usar_restricciones else {d: "soleado" for d in range(1, dias+1)}
+
+    vetos = []
+    resultados_dias = []
+    historial_completo = {
+        "dias": [],
+        "mejor_fitness_total": 0,
+        "distancia_total": 0,
+        "puntos_totales": 0,
+        "tiempo_total": 0,
+        "costo_total": 0,
+        "bonus_sinergia_total": 0,
+        "bonus_eventos_total": 0,
+    }
+
+    for dia in range(1, dias + 1):
+        print(f"\n{'='*70}")
+        print(f"🌅 DÍA {dia} / {dias}")
+        if RESTRICCIONES_ACTIVAS and usar_restricciones:
+            clima_dia = climas[dia]
+            print(f"🌤️  Clima: {clima_dia.upper()}")
+        print(f"{'='*70}")
+        print(f"Lugares vetados hasta ahora: {len(vetos)}")
+        
+        # Ajustar pesos: más importancia a la distancia cada día
+        w_distancia = 1 + (dia - 1) * 0.25
+        w_puntos = 0.9 - (dia - 1) * 0.05
+        
+        print(f"Pesos del día: Puntos={w_puntos:.2f}, Distancia={w_distancia:.2f}")
+
+        # Inicializar población para este día
+        poblacion, _ = inicializar_poblacion_y_evaluar(
+            tamaño_poblacion, tiempo_disponible, vetos, w_puntos, w_distancia
+        )
+        
+        mejor_fitness_global = 0
+        mejor_ruta_global = []
+        mejor_evaluacion = None
+
+        # Evolucionar durante N generaciones
+        for generacion in range(generaciones):
+            # Evaluar con restricciones complejas
+            evaluaciones = [
+                evaluar_ruta(
+                    ruta, tiempo_disponible, 
+                    dia=dia, 
+                    perfil_usuario=perfil_usuario,
+                    clima=climas.get(dia, "soleado"),
+                    usar_restricciones=usar_restricciones
+                ) 
+                for ruta in poblacion
+            ]
+            
+            fitness_scores = [
+                calcular_fitness(w_puntos, w_distancia, ev["puntos"], ev["distancia"], 
+                               ev["tiempo"], tiempo_disponible, ev["comida_penalizacion"])
+                for ev in evaluaciones
+            ]
+
+            # Ordenar población por fitness
+            poblacion_ordenada = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), 
+                                                             key=lambda item: item[0], reverse=True)]
+            fitness_ordenado = sorted(fitness_scores, reverse=True)
+
+            mejor_fitness_gen = fitness_ordenado[0]
+            if mejor_fitness_gen > mejor_fitness_global:
+                mejor_fitness_global = mejor_fitness_gen
+                mejor_ruta_global = poblacion_ordenada[0]
+                mejor_evaluacion = evaluaciones[fitness_scores.index(mejor_fitness_gen)]
+
+            # Evolucionar población
+            poblacion = evolucionar_poblacion(
+                poblacion_ordenada, fitness_ordenado, tamaño_poblacion, 
+                prob_cruce, prob_mutacion, int(tamaño_poblacion * 0.2), vetos
+            )
+
+            # Mostrar progreso
+            if generacion % 20 == 0 or generacion == generaciones - 1:
+                print(f"   Gen {generacion:3d}: Mejor fitness = {mejor_fitness_gen:8.2f}, " +
+                      f"Promedio = {sum(fitness_ordenado)/len(fitness_ordenado):8.2f}")
+
+        # Actualizar vetos con los lugares visitados en la mejor ruta del día
+        vetos.extend(mejor_ruta_global)
+        
+        # Guardar resultados del día
+        resultado_dia = {
+            "dia": dia,
+            "mejor_ruta": mejor_ruta_global,
+            "evaluacion": mejor_evaluacion,
+            "fitness": mejor_evaluacion["fitness"],
+            "puntos": mejor_evaluacion["puntos"],
+            "distancia": mejor_evaluacion["distancia"],
+            "tiempo": mejor_evaluacion["tiempo"],
+            "costo": mejor_evaluacion.get("costo", 0),
+            "bonus_sinergia": mejor_evaluacion.get("bonus_sinergia", 0),
+            "bonus_eventos": mejor_evaluacion.get("bonus_eventos", 0),
+            "w_puntos": w_puntos,
+            "w_distancia": w_distancia,
+            "clima": climas.get(dia, "soleado") if RESTRICCIONES_ACTIVAS else "soleado",
+        }
+        resultados_dias.append(resultado_dia)
+
+        # Acumular totales
+        historial_completo["dias"].append({
+            "dia": dia,
+            "fitness": mejor_evaluacion["fitness"],
+            "puntos": mejor_evaluacion["puntos"],
+            "distancia": mejor_evaluacion["distancia"],
+            "tiempo": mejor_evaluacion["tiempo"],
+            "costo": mejor_evaluacion.get("costo", 0),
+            "clima": climas.get(dia, "soleado") if RESTRICCIONES_ACTIVAS else "soleado",
+        })
+        historial_completo["mejor_fitness_total"] += mejor_evaluacion["fitness"]
+        historial_completo["distancia_total"] += mejor_evaluacion["distancia"]
+        historial_completo["puntos_totales"] += mejor_evaluacion["puntos"]
+        historial_completo["tiempo_total"] += mejor_evaluacion["tiempo"]
+        historial_completo["costo_total"] += mejor_evaluacion.get("costo", 0)
+        historial_completo["bonus_sinergia_total"] += mejor_evaluacion.get("bonus_sinergia", 0)
+        historial_completo["bonus_eventos_total"] += mejor_evaluacion.get("bonus_eventos", 0)
+
+        # Resumen del día
+        print(f"\n✅ Día {dia} completado:")
+        print(f"   Fitness: {mejor_evaluacion['fitness']:.2f}")
+        print(f"   Puntos: {mejor_evaluacion['puntos']:.2f}")
+        print(f"   Distancia: {mejor_evaluacion['distancia']:.2f} km")
+        if RESTRICCIONES_ACTIVAS and usar_restricciones:
+            print(f"   Costo: {mejor_evaluacion.get('costo', 0):.2f} €")
+            print(f"   Bonus sinergia: {mejor_evaluacion.get('bonus_sinergia', 0):.2f}")
+            print(f"   Bonus eventos: {mejor_evaluacion.get('bonus_eventos', 0):.2f}")
+        print(f"   Lugares visitados: {len(mejor_ruta_global)}")
+        print(f"   Total lugares vetados: {len(vetos)}")
+
+    # Guardar resultados en archivo JSON
+    try:
+        nombre_archivo = f"resultados_ag_multidias_{'complejo' if usar_restricciones else 'basico'}.json"
+        with open(nombre_archivo, "w", encoding='utf-8') as f:
+            json.dump({
+                "configuracion": {
+                    "dias": dias,
+                    "generaciones": generaciones,
+                    "tamaño_poblacion": tamaño_poblacion,
+                    "prob_cruce": prob_cruce,
+                    "prob_mutacion": prob_mutacion,
+                    "perfil_usuario": perfil_usuario,
+                    "restricciones_activas": usar_restricciones and RESTRICCIONES_ACTIVAS,
+                },
+                "resultados_por_dia": resultados_dias,
+                "resumen_total": historial_completo,
+                "climas": climas if RESTRICCIONES_ACTIVAS else {},
+            }, f, indent=4, ensure_ascii=False)
+        print(f"\n✅ Resultados guardados en '{nombre_archivo}'.")
+    except Exception as e:
+        print(f"❌ Error al guardar los resultados: {e}")
+
+    # Imprimir resumen final
+    imprimir_resumen_multidias(resultados_dias, historial_completo, usar_restricciones and RESTRICCIONES_ACTIVAS)
+    
+    return {
+        "resultados_dias": resultados_dias,
+        "historial_completo": historial_completo,
+        "algoritmo": f"Genético Multidías {'con Restricciones Complejas' if usar_restricciones and RESTRICCIONES_ACTIVAS else 'Básico'}"
+    }
+
+def imprimir_resumen_multidias(resultados_dias: List[dict], historial_completo: dict, con_restricciones: bool = False):
+    """Imprime un resumen de todos los días del viaje"""
+    print("\n" + "="*70)
+    print("🎯 RESUMEN COMPLETO DEL VIAJE")
+    print("="*70)
+    
+    for resultado in resultados_dias:
+        dia = resultado["dia"]
+        print(f"\n📅 DÍA {dia}:")
+        if con_restricciones:
+            print(f"   Clima: {resultado.get('clima', 'soleado').title()}")
+        print(f"   Pesos utilizados: Puntos={resultado['w_puntos']:.2f}, Distancia={resultado['w_distancia']:.2f}")
+        print(f"   Lugares visitados: {len(resultado['mejor_ruta'])}")
+        print(f"   Puntos: {resultado['puntos']:.2f}")
+        print(f"   Distancia: {resultado['distancia']:.2f} km")
+        print(f"   Tiempo: {resultado['tiempo']:.2f} min")
+        if con_restricciones:
+            print(f"   Costo: {resultado.get('costo', 0):.2f} €")
+            print(f"   Bonus sinergia: {resultado.get('bonus_sinergia', 0):.2f}")
+            print(f"   Bonus eventos: {resultado.get('bonus_eventos', 0):.2f}")
+        print(f"   Fitness: {resultado['fitness']:.2f}")
+        
+        # Mostrar los lugares
+        print(f"   Ruta:")
+        for i, lugar_idx in enumerate(resultado['mejor_ruta']):
+            lugar = lt[lugar_idx]
+            print(f"      {i+1}. {lugar['nombre']} ({lugar['puntos']} pts)")
+    
+    print("\n" + "="*70)
+    print("📊 TOTALES DEL VIAJE:")
+    print(f"   Fitness total acumulado: {historial_completo['mejor_fitness_total']:.2f}")
+    print(f"   Puntos totales: {historial_completo['puntos_totales']:.2f}")
+    print(f"   Distancia total recorrida: {historial_completo['distancia_total']:.2f} km")
+    print(f"   Tiempo total: {historial_completo['tiempo_total']:.2f} min ({historial_completo['tiempo_total']/60:.2f} horas)")
+    if con_restricciones:
+        print(f"   Costo total: {historial_completo.get('costo_total', 0):.2f} €")
+        print(f"   Bonus sinergia total: {historial_completo.get('bonus_sinergia_total', 0):.2f}")
+        print(f"   Bonus eventos total: {historial_completo.get('bonus_eventos_total', 0):.2f}")
+    print(f"   Lugares únicos visitados: {sum(len(r['mejor_ruta']) for r in resultados_dias)}")
+    print("="*70)
 
 def imprimir_mejor_ruta(ruta: List[int], evaluacion: dict):
     print("\n" + "="*50)
@@ -367,8 +737,36 @@ def imprimir_mejor_ruta(ruta: List[int], evaluacion: dict):
 if __name__ == "__main__":
     print("OPTIMIZACIÓN CON ALGORITMO GENÉTICO")
     print("="*60)
+    
+    # Opción para elegir el modo
+    import sys
+    
+    modo = "un_dia"  # Cambiar a "multidias" para ejecutar el algoritmo de múltiples días
+    
+    if len(sys.argv) > 1:
+        modo = sys.argv[1]
+    
+    if modo == "multidias":
+        print("\n🗓️  MODO: PLANIFICACIÓN DE VIAJE DE MÚLTIPLES DÍAS")
+        print("="*60)
+        
+        resultado = algoritmo_genetico_multidias(
+            generaciones=300,      # Menos generaciones por día
+            tamaño_poblacion=5000,  # Población reducida
+            prob_cruce=0.8,
+            prob_mutacion=0.2,
+            dias=5                  # Número de días
+        )
+        
+        print(f"\n🏆 VIAJE DE {len(resultado['resultados_dias'])} DÍAS COMPLETADO")
+        print(f"Fitness total: {resultado['historial_completo']['mejor_fitness_total']:.2f}")
+        print(f"Lugares únicos visitados: {sum(len(r['mejor_ruta']) for r in resultado['resultados_dias'])}")
+        
+    else:
+        print("\n📅 MODO: PLANIFICACIÓN DE UN DÍA")
+        print("="*60)
+        
+        resultado = algoritmo_genetico_reemplazo_mixto(600, 10000, 0.8, 0.2)
 
-    resultado = algoritmo_genetico_reemplazo_mixto(600, 10000, 0.8, 0.2)
-
-    print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
-    imprimir_mejor_ruta(resultado["mejor_ruta"], resultado["evaluacion"])
+        print(f"\n🏆 MEJOR SOLUCIÓN ENCONTRADA:")
+        imprimir_mejor_ruta(resultado["mejor_ruta"], resultado["evaluacion"])
