@@ -1,11 +1,3 @@
-"""
-Dataset HÍBRIDO de lugares turísticos para España
-==================================================
-LUGARES REALES: Monumentos, museos, parques principales de cada ciudad
-LUGARES GENERADOS: Restaurantes, bares, tiendas (con semilla fija 777)
-Total: ~1,293 lugares
-"""
-
 import random
 from math import radians, sin, cos, sqrt, atan2
 
