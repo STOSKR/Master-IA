@@ -1,9 +1,9 @@
 import random
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple
 from utils import lugares_turisticos as lt, distancia_haversine
 import json
-try:
-    from restricciones_complejas import (
+
+from restricciones_complejas import (
         validar_incompatibilidades,
         calcular_bonus_sinergia,
         calcular_bonus_eventos,
@@ -16,10 +16,7 @@ try:
         EVENTOS_ESPECIALES,
         calcular_complejidad
     )
-    RESTRICCIONES_ACTIVAS = True
-except ImportError:
-    print("⚠️  Módulo 'restricciones_complejas' no encontrado. Ejecutando sin restricciones avanzadas.")
-    RESTRICCIONES_ACTIVAS = False
+RESTRICCIONES_ACTIVAS = True
 
 t_dia = 16 * 60  # 16 horas disponibles por día (960 minutos)
 tm_visita = 75   # 75 minutos promedio por lugar
@@ -86,21 +83,7 @@ def crear_poblacion_inicial(tamaño_poblacion: int, tiempo_disponible: int, veto
 def evaluar_ruta(ruta: List[int], tiempo_max: int = t_dia, hora_actual: int = 9 * 60, 
                  dia: int = 1, perfil_usuario: str = "balanceado", clima: str = "soleado",
                  usar_restricciones: bool = True) -> dict:
-    """
-    Evalúa una ruta considerando múltiples restricciones complejas.
     
-    Args:
-        ruta: Lista de índices de lugares a visitar
-        tiempo_max: Tiempo máximo disponible en minutos
-        hora_actual: Hora de inicio en minutos desde las 00:00
-        dia: Día del viaje (para eventos especiales)
-        perfil_usuario: Perfil de preferencias del usuario
-        clima: Condiciones climáticas del día
-        usar_restricciones: Si True, aplica restricciones complejas
-        
-    Returns:
-        dict con métricas de evaluación
-    """
     if not ruta:
         return {"puntos": 0, "distancia": 0, "tiempo": 0, "fitness": 0, "valida": False, 
                 "costo": 0, "bonus_sinergia": 0, "bonus_eventos": 0}
