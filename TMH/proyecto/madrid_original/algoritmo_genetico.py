@@ -3,7 +3,7 @@ from typing import List, Tuple
 from utils import lugares_turisticos as lt, distancia_haversine
 import json
 
-from restricciones_complejas import (
+from TMH.proyecto.madrid_original.restricciones_complejas import (
         validar_incompatibilidades,
         calcular_bonus_sinergia,
         calcular_bonus_eventos,

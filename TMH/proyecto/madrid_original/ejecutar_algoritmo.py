@@ -159,7 +159,7 @@ if __name__ == "__main__":
         print("\n📊 ANÁLISIS DE COMPLEJIDAD DEL PROBLEMA")
         print("="*70)
         try:
-            from restricciones_complejas import calcular_complejidad
+            from TMH.proyecto.madrid_original.restricciones_complejas import calcular_complejidad
             from utils import lugares_turisticos
             
             for dias in [3, 5, 7, 10]:
