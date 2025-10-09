@@ -122,7 +122,6 @@ EVENTOS_ESPECIALES = {
 PRESUPUESTO_DIARIO = 150
 
 COSTOS_LUGARES = {
-    # === MUSEOS (Entradas Reales 2025) ===
     "Museo Nacional del Prado": 15,
     "Museo Nacional Centro de Arte Reina Sofía": 12,
     "Museo Nacional Thyssen-Bornemisza": 13,
@@ -130,7 +129,7 @@ COSTOS_LUGARES = {
     "Museo Arqueológico Nacional de España": 3,
     "Museo Sorolla": 3,
     "Museo del Robot": 12,
-    "Museo geominero": 0,  # Gratis
+    "Museo geominero": 0,
     "Museo de San Isidro. Los Orígenes de Madrid": 0,  # Gratis
     "Sweet Space": 15,
     "CaixaForum Madrid": 6,

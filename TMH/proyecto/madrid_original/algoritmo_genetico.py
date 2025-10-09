@@ -13,7 +13,6 @@ from restricciones_complejas import (
         aplicar_condiciones_climaticas,
         calcular_factor_fatiga,
         generar_clima_dias,
-        EVENTOS_ESPECIALES,
         calcular_complejidad
     )
 RESTRICCIONES_ACTIVAS = True
