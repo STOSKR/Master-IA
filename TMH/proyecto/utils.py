@@ -1,103 +1,119 @@
 import math
 
 lugares_turisticos = [
+    # ===================================================================
+    # ESCALA DE PUNTOS (0-100):
+    # 100 = IMPRESCINDIBLE (hay que ir sí o sí)
+    # 95 = Muy altamente recomendable
+    # 90 = Altamente recomendable  
+    # 85-80 = Muy recomendable
+    # 75-70 = Recomendable
+    # 65-60 = Interesante
+    # 55-50 = Puede gustar
+    # 45-40 = Opcional
+    # 35-30 = Poco atractivo
+    # 25-20 = No muy recomendable
+    # 15-10 = Poco interés
+    # 5-0 = No apetece nada
+    # ===================================================================
+    
     # Palacios y Edificios Históricos
-    {"nombre": "Palacio Real de Madrid", "x": 40.4179, "y": -3.7143, "puntos": 200, "tiempo_visita": 150, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
-    {"nombre": "Armeria Real", "x": 40.4178, "y": -3.7146, "puntos": 80, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
-    {"nombre": "Teatro Real", "x": 40.4187, "y": -3.7103, "puntos": 85, "tiempo_visita": 20, "apertura": "10:30", "cierre": "13:30", "tipo": "turistico"},
-    {"nombre": "Congreso de los Diputados", "x": 40.4163, "y": -3.6961, "puntos": 80, "tiempo_visita": 20, "apertura": "09:00", "cierre": "14:00", "tipo": "turistico"},
-    {"nombre": "Estación de Atocha", "x": 40.4069, "y": -3.6905, "puntos": 75, "tiempo_visita": 30, "apertura": "05:00", "cierre": "01:00", "tipo": "turistico"},
-    {"nombre": "Catedral de Santa María la Real de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 50, "tiempo_visita": 45, "apertura": "09:00", "cierre": "20:30", "tipo": "turistico"},
-    {"nombre": "Palacio de la Bolsa de Madrid", "x": 40.4110, "y": -3.6930, "puntos": 50, "tiempo_visita": 30, "apertura": "09:00", "cierre": "19:00", "tipo": "turistico"},
+    {"nombre": "Palacio Real de Madrid", "x": 40.4179, "y": -3.7143, "puntos": 100, "tiempo_visita": 150, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
+    {"nombre": "Armeria Real", "x": 40.4178, "y": -3.7146, "puntos": 75, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
+    {"nombre": "Teatro Real", "x": 40.4187, "y": -3.7103, "puntos": 70, "tiempo_visita": 20, "apertura": "10:30", "cierre": "13:30", "tipo": "turistico"},
+    {"nombre": "Congreso de los Diputados", "x": 40.4163, "y": -3.6961, "puntos": 60, "tiempo_visita": 20, "apertura": "09:00", "cierre": "14:00", "tipo": "turistico"},
+    {"nombre": "Estación de Atocha", "x": 40.4069, "y": -3.6905, "puntos": 65, "tiempo_visita": 30, "apertura": "05:00", "cierre": "01:00", "tipo": "turistico"},
+    {"nombre": "Catedral de Santa María la Real de la Almudena", "x": 40.4153, "y": -3.7145, "puntos": 75, "tiempo_visita": 45, "apertura": "09:00", "cierre": "20:30", "tipo": "turistico"},
+    {"nombre": "Palacio de la Bolsa de Madrid", "x": 40.4110, "y": -3.6930, "puntos": 45, "tiempo_visita": 30, "apertura": "09:00", "cierre": "19:00", "tipo": "turistico"},
 
     # Museos
-    {"nombre": "Museo Nacional del Prado", "x": 40.4138, "y": -3.6921, "puntos": 200, "tiempo_visita": 150, "apertura": "10:00", "cierre": "20:00", "tipo": "turistico"},
-    {"nombre": "Museo Nacional Centro de Arte Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 70, "tiempo_visita": 120, "apertura": "10:00", "cierre": "21:00", "tipo": "turistico"},
-    {"nombre": "Museo Nacional Thyssen-Bornemisza", "x": 40.4167, "y": -3.6945, "puntos": 70, "tiempo_visita": 120, "apertura": "10:00", "cierre": "19:00", "tipo": "turistico"},
-    {"nombre": "Museo geominero", "x": 40.4358, "y": -3.6916, "puntos": 70, "tiempo_visita": 75, "apertura": "09:00", "cierre": "14:00", "tipo": "turistico"},
-    {"nombre": "Museo del Robot", "x": 40.4216, "y": -3.7094, "puntos": 80, "tiempo_visita": 60, "apertura": "11:00", "cierre": "20:00", "tipo": "turistico"},
-    {"nombre": "Museo Arqueológico Nacional de España", "x": 40.4253, "y": -3.6891, "puntos": 70, "tiempo_visita": 90, "apertura": "09:30", "cierre": "20:00", "tipo": "turistico"},
-    {"nombre": "Museo Sorolla", "x": 40.4380, "y": -3.6921, "puntos": 40, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
-    {"nombre": "Museo de San Isidro. Los Orígenes de Madrid", "x": 40.4118, "y": -3.7106, "puntos": 40, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:00", "tipo": "turistico"},
-    {"nombre": "Sweet Space", "x": 40.4239, "y": -3.6929, "puntos": 50, "tiempo_visita": 60, "apertura": "11:00", "cierre": "21:00", "tipo": "turistico"},
+    {"nombre": "Museo Nacional del Prado", "x": 40.4138, "y": -3.6921, "puntos": 100, "tiempo_visita": 150, "apertura": "10:00", "cierre": "20:00", "tipo": "turistico"},
+    {"nombre": "Museo Nacional Centro de Arte Reina Sofía", "x": 40.4087, "y": -3.6947, "puntos": 90, "tiempo_visita": 120, "apertura": "10:00", "cierre": "21:00", "tipo": "turistico"},
+    {"nombre": "Museo Nacional Thyssen-Bornemisza", "x": 40.4167, "y": -3.6945, "puntos": 85, "tiempo_visita": 120, "apertura": "10:00", "cierre": "19:00", "tipo": "turistico"},
+    {"nombre": "Museo geominero", "x": 40.4358, "y": -3.6916, "puntos": 55, "tiempo_visita": 75, "apertura": "09:00", "cierre": "14:00", "tipo": "turistico"},
+    {"nombre": "Museo del Robot", "x": 40.4216, "y": -3.7094, "puntos": 60, "tiempo_visita": 60, "apertura": "11:00", "cierre": "20:00", "tipo": "turistico"},
+    {"nombre": "Museo Arqueológico Nacional de España", "x": 40.4253, "y": -3.6891, "puntos": 80, "tiempo_visita": 90, "apertura": "09:30", "cierre": "20:00", "tipo": "turistico"},
+    {"nombre": "Museo Sorolla", "x": 40.4380, "y": -3.6921, "puntos": 70, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
+    {"nombre": "Museo de San Isidro. Los Orígenes de Madrid", "x": 40.4118, "y": -3.7106, "puntos": 50, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:00", "tipo": "turistico"},
+    {"nombre": "Sweet Space", "x": 40.4239, "y": -3.6929, "puntos": 55, "tiempo_visita": 60, "apertura": "11:00", "cierre": "21:00", "tipo": "turistico"},
 
-    # Plazas y Puertas
-    {"nombre": "Plaza Mayor de Madrid", "x": 40.4155, "y": -3.7074, "puntos": 100, "tiempo_visita": 30, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
+    # Plazas y Puertas (lugares emblemáticos)
+    {"nombre": "Plaza Mayor de Madrid", "x": 40.4155, "y": -3.7074, "puntos": 95, "tiempo_visita": 30, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
     {"nombre": "Puerta del Sol", "x": 40.4169, "y": -3.7038, "puntos": 100, "tiempo_visita": 20, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
     {"nombre": "Plaza de Cibeles", "x": 40.4194, "y": -3.6934, "puntos": 90, "tiempo_visita": 20, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
     {"nombre": "Plaza de España", "x": 40.4230, "y": -3.7110, "puntos": 75, "tiempo_visita": 30, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
 
     # Parques y Jardines
-    {"nombre": "Jardín del parque del Moro", "x": 40.4165, "y": -3.7171, "puntos": 75, "tiempo_visita": 90, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
+    {"nombre": "Jardín del parque del Moro", "x": 40.4165, "y": -3.7171, "puntos": 70, "tiempo_visita": 90, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
     {"nombre": "Parque de El Retiro", "x": 40.4153, "y": -3.6846, "puntos": 100, "tiempo_visita": 90, "apertura": "06:00", "cierre": "22:00", "tipo": "turistico"},
     {"nombre": "Templo de Debod", "x": 40.4240, "y": -3.7170, "puntos": 85, "tiempo_visita": 20, "apertura": "10:00", "cierre": "20:00", "tipo": "turistico"},
-    {"nombre": "Real Jardín Botánico de Madrid", "x": 40.4118, "y": -3.6882, "puntos": 70, "tiempo_visita": 90, "apertura": "10:00", "cierre": "21:00", "tipo": "turistico"},
-    {"nombre": "Casa de Campo", "x": 40.4140, "y": -3.7457, "puntos": 30, "tiempo_visita": 120, "apertura": "06:00", "cierre": "23:00", "tipo": "turistico"},
-    {"nombre": "Parque Cerro del Tío Pío (Parque de las Siete Tetas)", "x": 40.3886, "y": -3.6625, "puntos": 70, "tiempo_visita": 45, "apertura": "19:45", "cierre": "20:45", "tipo": "turistico"},
+    {"nombre": "Real Jardín Botánico de Madrid", "x": 40.4118, "y": -3.6882, "puntos": 75, "tiempo_visita": 90, "apertura": "10:00", "cierre": "21:00", "tipo": "turistico"},
+    {"nombre": "Casa de Campo", "x": 40.4140, "y": -3.7457, "puntos": 40, "tiempo_visita": 120, "apertura": "06:00", "cierre": "23:00", "tipo": "turistico"},
+    {"nombre": "Parque Cerro del Tío Pío (Parque de las Siete Tetas)", "x": 40.3886, "y": -3.6625, "puntos": 80, "tiempo_visita": 45, "apertura": "19:45", "cierre": "20:45", "tipo": "turistico"},
 
     # Monumentos y Miradores
-    {"nombre": "Fuente del Neptuno", "x": 40.4151, "y": -3.6946, "puntos": 70, "tiempo_visita": 10, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
+    {"nombre": "Fuente del Neptuno", "x": 40.4151, "y": -3.6946, "puntos": 65, "tiempo_visita": 10, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
     {"nombre": "Faro de Moncloa", "x": 40.4372708, "y": -3.7216827, "puntos": 70, "tiempo_visita": 45, "apertura": "09:30", "cierre": "20:00", "tipo": "turistico"},
 
     # Mercados, Tiendas y Barrios
-    {"nombre": "WOW Concept", "x": 40.4203, "y": -3.7058, "puntos": 80, "tiempo_visita": 60, "apertura": "11:30", "cierre": "21:00", "tipo": "turistico"},
+    {"nombre": "WOW Concept", "x": 40.4203, "y": -3.7058, "puntos": 60, "tiempo_visita": 60, "apertura": "11:30", "cierre": "21:00", "tipo": "turistico"},
     {"nombre": "Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 90, "tiempo_visita": 45, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
-    {"nombre": "Barrio de La Latina", "x": 40.4110, "y": -3.7095, "puntos": 60, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
-    {"nombre": "El Rastro de Madrid", "x": 40.4094, "y": -3.7073, "puntos": 60, "tiempo_visita": 90, "apertura": "09:00", "cierre": "15:00", "tipo": "turistico"},
+    {"nombre": "Barrio de La Latina", "x": 40.4110, "y": -3.7095, "puntos": 80, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59", "tipo": "turistico"},
+    {"nombre": "El Rastro de Madrid", "x": 40.4094, "y": -3.7073, "puntos": 85, "tiempo_visita": 90, "apertura": "09:00", "cierre": "15:00", "tipo": "turistico"},
 
     # Estadios y Otros
     {"nombre": "Estadio Santiago Bernabéu", "x": 40.4531, "y": -3.6883, "puntos": 90, "tiempo_visita": 90, "apertura": "10:00", "cierre": "19:00", "tipo": "turistico"},
     
-    # Restaurantes y Bares
-    {"nombre": "Chocolateria San Gines", "x": 40.4160, "y": -3.7074, "puntos": 90, "tiempo_visita": 30, "apertura": "08:00", "cierre": "10:00", "tipo": "restaurante"},
-    {"nombre": "Running sushi in Akihabara", "x": 40.4282, "y": -3.7041, "puntos": 70, "tiempo_visita": 90, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Secretos de Lola", "x": 40.4146, "y": -3.7023, "puntos": 90, "tiempo_visita": 90, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "Filippo Pizza", "x": 40.4259, "y": -3.7053, "puntos": 60, "tiempo_visita": 90, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Inclán brutal bar", "x": 40.4151, "y": -3.7033, "puntos": 85, "tiempo_visita": 90, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
+    # Restaurantes y Bares (ESCALA AJUSTADA)
+    {"nombre": "Chocolateria San Gines", "x": 40.4160, "y": -3.7074, "puntos": 85, "tiempo_visita": 30, "apertura": "08:00", "cierre": "10:00", "tipo": "restaurante"},
+    {"nombre": "Running sushi in Akihabara", "x": 40.4282, "y": -3.7041, "puntos": 65, "tiempo_visita": 90, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Secretos de Lola", "x": 40.4146, "y": -3.7023, "puntos": 70, "tiempo_visita": 90, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "Filippo Pizza", "x": 40.4259, "y": -3.7053, "puntos": 55, "tiempo_visita": 90, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Inclán brutal bar", "x": 40.4151, "y": -3.7033, "puntos": 75, "tiempo_visita": 90, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
     {"nombre": "Le Petit Dinsum", "x": 40.4220, "y": -3.7000, "puntos": 60, "tiempo_visita": 60, "apertura": "13:30", "cierre": "23:30", "tipo": "restaurante"},
-    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 100, "tiempo_visita": 90, "apertura": "10:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Mercado de San Miguel", "x": 40.4154, "y": -3.7089, "puntos": 95, "tiempo_visita": 90, "apertura": "10:00", "cierre": "00:00", "tipo": "restaurante"},
 
-    # --- MÁS RESTAURANTES ---
+    # --- MÁS RESTAURANTES (ESCALA 0-100) ---
     # Comida Tradicional Española
-    {"nombre": "Casa Botín", "x": 40.4147, "y": -3.7079, "puntos": 120, "tiempo_visita": 120, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "La Bola Taberna", "x": 40.4208, "y": -3.7104, "puntos": 100, "tiempo_visita": 90, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Casa Lucio", "x": 40.4117, "y": -3.7100, "puntos": 110, "tiempo_visita": 120, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Malacatín", "x": 40.4102, "y": -3.7084, "puntos": 95, "tiempo_visita": 90, "apertura": "13:45", "cierre": "15:45", "tipo": "restaurante"},
-    {"nombre": "Sobrino de Botín", "x": 40.4147, "y": -3.7079, "puntos": 120, "tiempo_visita": 120, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Casa Botín", "x": 40.4147, "y": -3.7079, "puntos": 90, "tiempo_visita": 120, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "La Bola Taberna", "x": 40.4208, "y": -3.7104, "puntos": 80, "tiempo_visita": 90, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Casa Lucio", "x": 40.4117, "y": -3.7100, "puntos": 85, "tiempo_visita": 120, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Malacatín", "x": 40.4102, "y": -3.7084, "puntos": 75, "tiempo_visita": 90, "apertura": "13:45", "cierre": "15:45", "tipo": "restaurante"},
+    {"nombre": "Sobrino de Botín", "x": 40.4147, "y": -3.7079, "puntos": 90, "tiempo_visita": 120, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
 
     # Tapas
     {"nombre": "El Tigre Sidrería", "x": 40.4215, "y": -3.6986, "puntos": 70, "tiempo_visita": 60, "apertura": "12:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "Juana La Loca", "x": 40.4115, "y": -3.7102, "puntos": 85, "tiempo_visita": 75, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Mercado de San Antón", "x": 40.4230, "y": -3.6988, "puntos": 90, "tiempo_visita": 90, "apertura": "10:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "StreetXO", "x": 40.4236, "y": -3.6911, "puntos": 150, "tiempo_visita": 90, "apertura": "13:30", "cierre": "22:30", "tipo": "restaurante"},
-    {"nombre": "Sala de Despiece", "x": 40.4322, "y": -3.7011, "puntos": 130, "tiempo_visita": 75, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Juana La Loca", "x": 40.4115, "y": -3.7102, "puntos": 75, "tiempo_visita": 75, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Mercado de San Antón", "x": 40.4230, "y": -3.6988, "puntos": 80, "tiempo_visita": 90, "apertura": "10:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "StreetXO", "x": 40.4236, "y": -3.6911, "puntos": 95, "tiempo_visita": 90, "apertura": "13:30", "cierre": "22:30", "tipo": "restaurante"},
+    {"nombre": "Sala de Despiece", "x": 40.4322, "y": -3.7011, "puntos": 85, "tiempo_visita": 75, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
 
     # Comida Internacional
-    {"nombre": "Yakitoro", "x": 40.4211, "y": -3.6968, "puntos": 100, "tiempo_visita": 90, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Ten con Ten", "x": 40.4278, "y": -3.6868, "puntos": 140, "tiempo_visita": 120, "apertura": "12:30", "cierre": "02:00", "tipo": "restaurante"},
-    {"nombre": "Amazónico", "x": 40.4275, "y": -3.6871, "puntos": 180, "tiempo_visita": 150, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "DiverXO", "x": 40.4596, "y": -3.6838, "puntos": 250, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:00", "tipo": "restaurante"},
+    {"nombre": "Yakitoro", "x": 40.4211, "y": -3.6968, "puntos": 80, "tiempo_visita": 90, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Ten con Ten", "x": 40.4278, "y": -3.6868, "puntos": 85, "tiempo_visita": 120, "apertura": "12:30", "cierre": "02:00", "tipo": "restaurante"},
+    {"nombre": "Amazónico", "x": 40.4275, "y": -3.6871, "puntos": 90, "tiempo_visita": 150, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "DiverXO", "x": 40.4596, "y": -3.6838, "puntos": 100, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:00", "tipo": "restaurante"},  # 3 estrellas Michelin = 100
 
     # --- TIENDAS Y COMPRAS ---
     # Grandes Almacenes y Centros Comerciales
-    {"nombre": "El Corte Inglés (Preciados)", "x": 40.4181, "y": -3.7054, "puntos": 100, "tiempo_visita": 120, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
-    {"nombre": "Fnac Callao", "x": 40.4193, "y": -3.7068, "puntos": 70, "tiempo_visita": 60, "apertura": "10:00", "cierre": "21:30", "tipo": "tienda"},
-    {"nombre": "Primark Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 80, "tiempo_visita": 90, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
-    {"nombre": "Zara (Plaza de España)", "x": 40.4230, "y": -3.7110, "puntos": 75, "tiempo_visita": 60, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
+    {"nombre": "El Corte Inglés (Preciados)", "x": 40.4181, "y": -3.7054, "puntos": 60, "tiempo_visita": 120, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
+    {"nombre": "Fnac Callao", "x": 40.4193, "y": -3.7068, "puntos": 45, "tiempo_visita": 60, "apertura": "10:00", "cierre": "21:30", "tipo": "tienda"},
+    {"nombre": "Primark Gran Vía", "x": 40.4203, "y": -3.7058, "puntos": 40, "tiempo_visita": 90, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
+    {"nombre": "Zara (Plaza de España)", "x": 40.4230, "y": -3.7110, "puntos": 35, "tiempo_visita": 60, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
 
     # Calles Comerciales
-    {"nombre": "Calle de Preciados", "x": 40.4185, "y": -3.7055, "puntos": 90, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "calle"},
-    {"nombre": "Calle de Serrano", "x": 40.4290, "y": -3.6850, "puntos": 120, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59", "tipo": "calle"},
-    {"nombre": "Calle Fuencarral", "x": 40.4250, "y": -3.7010, "puntos": 85, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "calle"},
+    {"nombre": "Calle de Preciados", "x": 40.4185, "y": -3.7055, "puntos": 55, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "calle"},
+    {"nombre": "Calle de Serrano", "x": 40.4290, "y": -3.6850, "puntos": 70, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59", "tipo": "calle"},
+    {"nombre": "Calle Fuencarral", "x": 40.4250, "y": -3.7010, "puntos": 65, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "calle"},
 
     # Tiendas de Regalos y Souvenirs
-    {"nombre": "La Melguiza (azafrán)", "x": 40.4172, "y": -3.7091, "puntos": 50, "tiempo_visita": 20, "apertura": "10:30", "cierre": "20:30", "tipo": "tienda"},
-    {"nombre": "Casa de Diego (abanicos)", "x": 40.4165, "y": -3.7045, "puntos": 60, "tiempo_visita": 30, "apertura": "10:00", "cierre": "20:00", "tipo": "tienda"},
+    {"nombre": "La Melguiza (azafrán)", "x": 40.4172, "y": -3.7091, "puntos": 45, "tiempo_visita": 20, "apertura": "10:30", "cierre": "20:30", "tipo": "tienda"},
+    {"nombre": "Casa de Diego (abanicos)", "x": 40.4165, "y": -3.7045, "puntos": 50, "tiempo_visita": 30, "apertura": "10:00", "cierre": "20:00", "tipo": "tienda"},
     {"nombre": "Turrones Vicens", "x": 40.4158, "y": -3.7070, "puntos": 40, "tiempo_visita": 15, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
 
     # --- MÁS LUGARES DE INTERÉS ---
     # Barrios
-    {"nombre": "Barrio de las Letras", "x": 40.4140, "y": -3.6980, "puntos": 80, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "barrio"},
+    {"nombre": "Barrio de las Letras", "x": 40.4140, "y": -3.6980, "puntos": 75, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "barrio"},
     {"nombre": "Barrio de Malasaña", "x": 40.4255, "y": -3.7045, "puntos": 85, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59", "tipo": "barrio"},
     {"nombre": "Barrio de Chueca", "x": 40.4225, "y": -3.6980, "puntos": 80, "tiempo_visita": 90, "apertura": "00:00", "cierre": "23:59", "tipo": "barrio"},
     {"nombre": "Barrio de Salamanca", "x": 40.4280, "y": -3.6820, "puntos": 90, "tiempo_visita": 120, "apertura": "00:00", "cierre": "23:59", "tipo": "barrio"},
@@ -111,19 +127,19 @@ lugares_turisticos = [
     {"nombre": "Estadio Cívitas Metropolitano", "x": 40.4363, "y": -3.5992, "puntos": 85, "tiempo_visita": 90, "apertura": "11:00", "cierre": "19:00", "tipo": "turistico"},
 
     # Ocio y Espectáculos
-    {"nombre": "Teatro Lope de Vega (El Rey León)", "x": 40.4212, "y": -3.7086, "puntos": 110, "tiempo_visita": 180, "apertura": "19:00", "cierre": "23:00", "tipo": "turistico"},
-    {"nombre": "WiZink Center", "x": 40.4232, "y": -3.6723, "puntos": 90, "tiempo_visita": 180, "apertura": "18:00", "cierre": "00:00", "tipo": "turistico"},
-    {"nombre": "Cines Callao", "x": 40.4196, "y": -3.7069, "puntos": 60, "tiempo_visita": 150, "apertura": "15:00", "cierre": "01:00", "tipo": "turistico"},
-    {"nombre": "Florida Park", "x": 40.4175, "y": -3.6855, "puntos": 80, "tiempo_visita": 120, "apertura": "20:00", "cierre": "05:00", "tipo": "restaurante"},
-    {"nombre": "Corral de la Morería (Tablao Flamenco)", "x": 40.4129, "y": -3.7133, "puntos": 100, "tiempo_visita": 120, "apertura": "18:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Teatro Lope de Vega (El Rey León)", "x": 40.4212, "y": -3.7086, "puntos": 95, "tiempo_visita": 180, "apertura": "19:00", "cierre": "23:00", "tipo": "turistico"},
+    {"nombre": "WiZink Center", "x": 40.4232, "y": -3.6723, "puntos": 75, "tiempo_visita": 180, "apertura": "18:00", "cierre": "00:00", "tipo": "turistico"},
+    {"nombre": "Cines Callao", "x": 40.4196, "y": -3.7069, "puntos": 50, "tiempo_visita": 150, "apertura": "15:00", "cierre": "01:00", "tipo": "turistico"},
+    {"nombre": "Florida Park", "x": 40.4175, "y": -3.6855, "puntos": 75, "tiempo_visita": 120, "apertura": "20:00", "cierre": "05:00", "tipo": "restaurante"},
+    {"nombre": "Corral de la Morería (Tablao Flamenco)", "x": 40.4129, "y": -3.7133, "puntos": 95, "tiempo_visita": 120, "apertura": "18:00", "cierre": "00:00", "tipo": "restaurante"},
 
     # --- MÁS RESTAURANTES (2ª TANDA) ---
-    {"nombre": "Restaurante Sacha", "x": 40.4418, "y": -3.6848, "puntos": 130, "tiempo_visita": 120, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "La Tasquita de Enfrente", "x": 40.4245, "y": -3.7065, "puntos": 125, "tiempo_visita": 120, "apertura": "14:00", "cierre": "22:30", "tipo": "restaurante"},
-    {"nombre": "DSTAgE", "x": 40.4251, "y": -3.6965, "puntos": 200, "tiempo_visita": 180, "apertura": "13:30", "cierre": "22:00", "tipo": "restaurante"},
-    {"nombre": "Punto MX", "x": 40.4295, "y": -3.6855, "puntos": 160, "tiempo_visita": 150, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Lhardy", "x": 40.4160, "y": -3.7020, "puntos": 110, "tiempo_visita": 120, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Casa Benigna", "x": 40.4580, "y": -3.6620, "puntos": 100, "tiempo_visita": 90, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Restaurante Sacha", "x": 40.4418, "y": -3.6848, "puntos": 90, "tiempo_visita": 120, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "La Tasquita de Enfrente", "x": 40.4245, "y": -3.7065, "puntos": 85, "tiempo_visita": 120, "apertura": "14:00", "cierre": "22:30", "tipo": "restaurante"},
+    {"nombre": "DSTAgE", "x": 40.4251, "y": -3.6965, "puntos": 100, "tiempo_visita": 180, "apertura": "13:30", "cierre": "22:00", "tipo": "restaurante"},  # 2 Estrellas Michelin
+    {"nombre": "Punto MX", "x": 40.4295, "y": -3.6855, "puntos": 95, "tiempo_visita": 150, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},  # 1 Estrella Michelin
+    {"nombre": "Lhardy", "x": 40.4160, "y": -3.7020, "puntos": 80, "tiempo_visita": 120, "apertura": "13:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Casa Benigna", "x": 40.4580, "y": -3.6620, "puntos": 75, "tiempo_visita": 90, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},
 
     # --- MÁS TIENDAS (2ª TANDA) ---
     {"nombre": "Mercado de la Paz", "x": 40.4300, "y": -3.6800, "puntos": 70, "tiempo_visita": 60, "apertura": "09:00", "cierre": "20:00", "tipo": "tienda"},
@@ -133,55 +149,55 @@ lugares_turisticos = [
 
     # --- MÁS OCIO Y CULTURA (2ª TANDA) ---
     {"nombre": "CaixaForum Madrid", "x": 40.4095, "y": -3.6930, "puntos": 75, "tiempo_visita": 90, "apertura": "10:00", "cierre": "20:00", "tipo": "turistico"},
-    {"nombre": "Planetario de Madrid", "x": 40.3880, "y": -3.6950, "puntos": 70, "tiempo_visita": 75, "apertura": "10:00", "cierre": "19:30", "tipo": "turistico"},
-    {"nombre": "Parque de Atracciones de Madrid", "x": 40.4110, "y": -3.7500, "puntos": 120, "tiempo_visita": 240, "apertura": "12:00", "cierre": "22:00", "tipo": "turistico"},
-    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4080, "y": -3.7600, "puntos": 110, "tiempo_visita": 210, "apertura": "10:30", "cierre": "20:00", "tipo": "turistico"},
+    {"nombre": "Planetario de Madrid", "x": 40.3880, "y": -3.6950, "puntos": 65, "tiempo_visita": 75, "apertura": "10:00", "cierre": "19:30", "tipo": "turistico"},
+    {"nombre": "Parque de Atracciones de Madrid", "x": 40.4110, "y": -3.7500, "puntos": 85, "tiempo_visita": 240, "apertura": "12:00", "cierre": "22:00", "tipo": "turistico"},
+    {"nombre": "Zoo Aquarium de Madrid", "x": 40.4080, "y": -3.7600, "puntos": 80, "tiempo_visita": 210, "apertura": "10:30", "cierre": "20:00", "tipo": "turistico"},
     {"nombre": "Teleférico de Madrid", "x": 40.4260, "y": -3.7260, "puntos": 60, "tiempo_visita": 25, "apertura": "11:00", "cierre": "19:30", "tipo": "turistico"},
-    {"nombre": "Andén 0 - Estación de Chamberí", "x": 40.4333, "y": -3.7000, "puntos": 50, "tiempo_visita": 45, "apertura": "10:00", "cierre": "19:00", "tipo": "turistico"},
-    {"nombre": "Hipódromo de la Zarzuela", "x": 40.4750, "y": -3.7800, "puntos": 80, "tiempo_visita": 180, "apertura": "11:00", "cierre": "18:00", "tipo": "turistico"},
-    {"nombre": "Mirador del Palacio de Cibeles", "x": 40.4194, "y": -3.6934, "puntos": 70, "tiempo_visita": 30, "apertura": "10:30", "cierre": "19:30", "tipo": "turistico"},
-    {"nombre": "Parque Warner Madrid", "x": 40.2333, "y": -3.5950, "puntos": 150, "tiempo_visita": 360, "apertura": "11:30", "cierre": "22:00", "tipo": "turistico"},
+    {"nombre": "Andén 0 - Estación de Chamberí", "x": 40.4333, "y": -3.7000, "puntos": 60, "tiempo_visita": 45, "apertura": "10:00", "cierre": "19:00", "tipo": "turistico"},
+    {"nombre": "Hipódromo de la Zarzuela", "x": 40.4750, "y": -3.7800, "puntos": 70, "tiempo_visita": 180, "apertura": "11:00", "cierre": "18:00", "tipo": "turistico"},
+    {"nombre": "Mirador del Palacio de Cibeles", "x": 40.4194, "y": -3.6934, "puntos": 75, "tiempo_visita": 30, "apertura": "10:30", "cierre": "19:30", "tipo": "turistico"},
+    {"nombre": "Parque Warner Madrid", "x": 40.2333, "y": -3.5950, "puntos": 90, "tiempo_visita": 360, "apertura": "11:30", "cierre": "22:00", "tipo": "turistico"},
 
-    # --- RESTAURANTES (Alta Cocina) ---
-    {"nombre": "Coque", "x": 40.4360, "y": -3.6910, "puntos": 280, "tiempo_visita": 210, "apertura": "13:30", "cierre": "22:00", "tipo": "restaurante"},
-    {"nombre": "Ramón Freixa Madrid", "x": 40.4285, "y": -3.6825, "puntos": 260, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:30", "tipo": "restaurante"},
-    {"nombre": "Paco Roncero Restaurante", "x": 40.4170, "y": -3.7030, "puntos": 250, "tiempo_visita": 180, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Kabuki Wellington", "x": 40.4220, "y": -3.6800, "puntos": 220, "tiempo_visita": 150, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Gaytán", "x": 40.4450, "y": -3.6800, "puntos": 190, "tiempo_visita": 150, "apertura": "13:45", "cierre": "22:15", "tipo": "restaurante"},
-    {"nombre": "A'Barra", "x": 40.4380, "y": -3.6890, "puntos": 180, "tiempo_visita": 150, "apertura": "13:30", "cierre": "23:30", "tipo": "restaurante"},
-    {"nombre": "CEBO", "x": 40.4148, "y": -3.6965, "puntos": 170, "tiempo_visita": 150, "apertura": "13:30", "cierre": "22:30", "tipo": "restaurante"},
-    {"nombre": "Yugo The Bunker", "x": 40.4235, "y": -3.6975, "puntos": 160, "tiempo_visita": 120, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "La Terraza del Casino", "x": 40.4170, "y": -3.7030, "puntos": 250, "tiempo_visita": 180, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "El Invernadero", "x": 40.4390, "y": -3.6930, "puntos": 210, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:00", "tipo": "restaurante"},
+    # --- RESTAURANTES (Alta Cocina - 2-3 Estrellas Michelin) ---
+    {"nombre": "Coque", "x": 40.4360, "y": -3.6910, "puntos": 100, "tiempo_visita": 210, "apertura": "13:30", "cierre": "22:00", "tipo": "restaurante"},  # 2 Estrellas Michelin
+    {"nombre": "Ramón Freixa Madrid", "x": 40.4285, "y": -3.6825, "puntos": 100, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:30", "tipo": "restaurante"},  # 2 Estrellas Michelin
+    {"nombre": "Paco Roncero Restaurante", "x": 40.4170, "y": -3.7030, "puntos": 95, "tiempo_visita": 180, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},  # 1 Estrella Michelin
+    {"nombre": "Kabuki Wellington", "x": 40.4220, "y": -3.6800, "puntos": 95, "tiempo_visita": 150, "apertura": "13:30", "cierre": "23:00", "tipo": "restaurante"},  # 1 Estrella Michelin
+    {"nombre": "Gaytán", "x": 40.4450, "y": -3.6800, "puntos": 90, "tiempo_visita": 150, "apertura": "13:45", "cierre": "22:15", "tipo": "restaurante"},  # 1 Estrella Michelin
+    {"nombre": "A'Barra", "x": 40.4380, "y": -3.6890, "puntos": 90, "tiempo_visita": 150, "apertura": "13:30", "cierre": "23:30", "tipo": "restaurante"},  # 1 Estrella Michelin
+    {"nombre": "CEBO", "x": 40.4148, "y": -3.6965, "puntos": 90, "tiempo_visita": 150, "apertura": "13:30", "cierre": "22:30", "tipo": "restaurante"},  # 1 Estrella Michelin
+    {"nombre": "Yugo The Bunker", "x": 40.4235, "y": -3.6975, "puntos": 85, "tiempo_visita": 120, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "La Terraza del Casino", "x": 40.4170, "y": -3.7030, "puntos": 95, "tiempo_visita": 180, "apertura": "14:00", "cierre": "23:00", "tipo": "restaurante"},  # 2 Estrellas Michelin
+    {"nombre": "El Invernadero", "x": 40.4390, "y": -3.6930, "puntos": 95, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:00", "tipo": "restaurante"},  # 1 Estrella Michelin
 
     # --- RESTAURANTES (Informal/Tapas) ---
-    {"nombre": "Taberna El Sur", "x": 40.4110, "y": -3.6980, "puntos": 80, "tiempo_visita": 75, "apertura": "12:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "Pez Tortilla", "x": 40.4230, "y": -3.7030, "puntos": 75, "tiempo_visita": 60, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Takos Al Pastor", "x": 40.4180, "y": -3.7080, "puntos": 85, "tiempo_visita": 45, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Federal Café", "x": 40.4220, "y": -3.7090, "puntos": 70, "tiempo_visita": 90, "apertura": "09:00", "cierre": "23:00", "tipo": "restaurante"},
-    {"nombre": "Ojalá", "x": 40.4265, "y": -3.7040, "puntos": 80, "tiempo_visita": 90, "apertura": "10:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "La Musa Latina", "x": 40.4120, "y": -3.7110, "puntos": 85, "tiempo_visita": 90, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "El Jardín Secreto", "x": 40.4215, "y": -3.7105, "puntos": 90, "tiempo_visita": 75, "apertura": "17:00", "cierre": "00:00", "tipo": "restaurante"},
-    {"nombre": "Perrachica", "x": 40.4330, "y": -3.7000, "puntos": 100, "tiempo_visita": 120, "apertura": "09:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "Habanera", "x": 40.4240, "y": -3.6910, "puntos": 110, "tiempo_visita": 120, "apertura": "12:00", "cierre": "02:00", "tipo": "restaurante"},
-    {"nombre": "Rosi La Loca", "x": 40.4160, "y": -3.7020, "puntos": 95, "tiempo_visita": 75, "apertura": "12:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "Taberna El Sur", "x": 40.4110, "y": -3.6980, "puntos": 70, "tiempo_visita": 75, "apertura": "12:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "Pez Tortilla", "x": 40.4230, "y": -3.7030, "puntos": 70, "tiempo_visita": 60, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Takos Al Pastor", "x": 40.4180, "y": -3.7080, "puntos": 75, "tiempo_visita": 45, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Federal Café", "x": 40.4220, "y": -3.7090, "puntos": 65, "tiempo_visita": 90, "apertura": "09:00", "cierre": "23:00", "tipo": "restaurante"},
+    {"nombre": "Ojalá", "x": 40.4265, "y": -3.7040, "puntos": 75, "tiempo_visita": 90, "apertura": "10:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "La Musa Latina", "x": 40.4120, "y": -3.7110, "puntos": 80, "tiempo_visita": 90, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "El Jardín Secreto", "x": 40.4215, "y": -3.7105, "puntos": 80, "tiempo_visita": 75, "apertura": "17:00", "cierre": "00:00", "tipo": "restaurante"},
+    {"nombre": "Perrachica", "x": 40.4330, "y": -3.7000, "puntos": 85, "tiempo_visita": 120, "apertura": "09:00", "cierre": "01:00", "tipo": "restaurante"},
+    {"nombre": "Habanera", "x": 40.4240, "y": -3.6910, "puntos": 85, "tiempo_visita": 120, "apertura": "12:00", "cierre": "02:00", "tipo": "restaurante"},
+    {"nombre": "Rosi La Loca", "x": 40.4160, "y": -3.7020, "puntos": 80, "tiempo_visita": 75, "apertura": "12:00", "cierre": "01:00", "tipo": "restaurante"},
 
     # --- BARES Y COCTELERÍAS ---
-    {"nombre": "Salmon Guru", "x": 40.4135, "y": -3.6995, "puntos": 100, "tiempo_visita": 90, "apertura": "17:00", "cierre": "02:00", "tipo": "restaurante"},
-    {"nombre": "1862 Dry Bar", "x": 40.4260, "y": -3.7035, "puntos": 90, "tiempo_visita": 75, "apertura": "19:00", "cierre": "02:30", "tipo": "restaurante"},
-    {"nombre": "Del Diego Cocktail Bar", "x": 40.4210, "y": -3.6990, "puntos": 85, "tiempo_visita": 75, "apertura": "19:00", "cierre": "03:00", "tipo": "restaurante"},
-    {"nombre": "Angelita Madrid", "x": 40.4205, "y": -3.7015, "puntos": 95, "tiempo_visita": 90, "apertura": "13:00", "cierre": "02:00", "tipo": "restaurante"},
+    {"nombre": "Salmon Guru", "x": 40.4135, "y": -3.6995, "puntos": 90, "tiempo_visita": 90, "apertura": "17:00", "cierre": "02:00", "tipo": "restaurante"},
+    {"nombre": "1862 Dry Bar", "x": 40.4260, "y": -3.7035, "puntos": 85, "tiempo_visita": 75, "apertura": "19:00", "cierre": "02:30", "tipo": "restaurante"},
+    {"nombre": "Del Diego Cocktail Bar", "x": 40.4210, "y": -3.6990, "puntos": 80, "tiempo_visita": 75, "apertura": "19:00", "cierre": "03:00", "tipo": "restaurante"},
+    {"nombre": "Angelita Madrid", "x": 40.4205, "y": -3.7015, "puntos": 85, "tiempo_visita": 90, "apertura": "13:00", "cierre": "02:00", "tipo": "restaurante"},
     {"nombre": "The Passenger", "x": 40.4250, "y": -3.7020, "puntos": 70, "tiempo_visita": 60, "apertura": "18:00", "cierre": "03:00", "tipo": "restaurante"},
     {"nombre": "Macera TallerBar", "x": 40.4255, "y": -3.7025, "puntos": 75, "tiempo_visita": 75, "apertura": "17:00", "cierre": "02:30", "tipo": "restaurante"},
     {"nombre": "La Vía Láctea", "x": 40.4265, "y": -3.7050, "puntos": 65, "tiempo_visita": 90, "apertura": "21:00", "cierre": "03:00", "tipo": "restaurante"},
     {"nombre": "TupperWare Club", "x": 40.4258, "y": -3.7038, "puntos": 60, "tiempo_visita": 90, "apertura": "22:00", "cierre": "03:30", "tipo": "restaurante"},
-    {"nombre": "Harvey's Cocktail Bar", "x": 40.4248, "y": -3.7018, "puntos": 80, "tiempo_visita": 75, "apertura": "19:00", "cierre": "02:30", "tipo": "restaurante"},
-    {"nombre": "Hemingway Bar (Casa Suecia)", "x": 40.4195, "y": -3.6960, "puntos": 90, "tiempo_visita": 90, "apertura": "19:00", "cierre": "02:00", "tipo": "restaurante"},
+    {"nombre": "Harvey's Cocktail Bar", "x": 40.4248, "y": -3.7018, "puntos": 75, "tiempo_visita": 75, "apertura": "19:00", "cierre": "02:30", "tipo": "restaurante"},
+    {"nombre": "Hemingway Bar (Casa Suecia)", "x": 40.4195, "y": -3.6960, "puntos": 85, "tiempo_visita": 90, "apertura": "19:00", "cierre": "02:00", "tipo": "restaurante"},
 
     # --- TIENDAS (Moda y Lujo) ---
-    {"nombre": "Loewe (Serrano)", "x": 40.4280, "y": -3.6855, "puntos": 90, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
-    {"nombre": "Prada (Serrano)", "x": 40.4275, "y": -3.6850, "puntos": 85, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
-    {"nombre": "Gucci (Serrano)", "x": 40.4270, "y": -3.6845, "puntos": 85, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
+    {"nombre": "Loewe (Serrano)", "x": 40.4280, "y": -3.6855, "puntos": 75, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
+    {"nombre": "Prada (Serrano)", "x": 40.4275, "y": -3.6850, "puntos": 70, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
+    {"nombre": "Gucci (Serrano)", "x": 40.4270, "y": -3.6845, "puntos": 70, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
     {"nombre": "Louis Vuitton (Serrano)", "x": 40.4265, "y": -3.6840, "puntos": 95, "tiempo_visita": 60, "apertura": "10:00", "cierre": "20:30", "tipo": "tienda"},
     {"nombre": "Chanel (Ortega y Gasset)", "x": 40.4290, "y": -3.6830, "puntos": 90, "tiempo_visita": 60, "apertura": "10:30", "cierre": "20:30", "tipo": "tienda"},
     {"nombre": "Dior (Ortega y Gasset)", "x": 40.4288, "y": -3.6828, "puntos": 85, "tiempo_visita": 60, "apertura": "10:30", "cierre": "20:30", "tipo": "tienda"},

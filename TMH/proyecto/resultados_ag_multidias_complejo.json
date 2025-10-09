@@ -1,0 +1,456 @@
+{
+    "configuracion": {
+        "dias": 7,
+        "generaciones": 300,
+        "tamaño_poblacion": 5000,
+        "prob_cruce": 0.8,
+        "prob_mutacion": 0.2,
+        "perfil_usuario": "balanceado",
+        "restricciones_activas": true
+    },
+    "resultados_por_dia": [
+        {
+            "dia": 1,
+            "mejor_ruta": [
+                131,
+                133,
+                189,
+                132,
+                137,
+                59,
+                190
+            ],
+            "evaluacion": {
+                "puntos": 675.48,
+                "distancia": 1.07,
+                "tiempo": 820,
+                "fitness": 768.3,
+                "valida": true,
+                "comida_penalizacion": -200,
+                "tiempo_penalizacion": 0,
+                "costo": 110.0,
+                "bonus_sinergia": 0,
+                "bonus_eventos": 0,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.27518056261792107,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.027949040162589773,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.0,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.22908702744007386,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.13450349253158353,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.40507289221663395,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 768.3,
+            "puntos": 675.48,
+            "distancia": 1.07,
+            "tiempo": 820,
+            "costo": 110.0,
+            "bonus_sinergia": 0,
+            "bonus_eventos": 0,
+            "w_puntos": 0.9,
+            "w_distancia": 1.0,
+            "clima": "lluvioso"
+        },
+        {
+            "dia": 2,
+            "mejor_ruta": [
+                191,
+                28,
+                29,
+                229,
+                201,
+                16,
+                83
+            ],
+            "evaluacion": {
+                "puntos": 546.42,
+                "distancia": 1.36,
+                "tiempo": 810,
+                "fitness": 610.56,
+                "valida": true,
+                "comida_penalizacion": -200,
+                "tiempo_penalizacion": 0,
+                "costo": 140.0,
+                "bonus_sinergia": 45.0,
+                "bonus_eventos": 55.5,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.3347886827539856,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.0,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.0581182391812634,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.05389232871777512,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.45125838089062525,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.46052899096980104,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 610.56,
+            "puntos": 546.42,
+            "distancia": 1.36,
+            "tiempo": 810,
+            "costo": 140.0,
+            "bonus_sinergia": 45.0,
+            "bonus_eventos": 55.5,
+            "w_puntos": 0.85,
+            "w_distancia": 1.25,
+            "clima": "soleado"
+        },
+        {
+            "dia": 3,
+            "mejor_ruta": [
+                187,
+                136,
+                135,
+                134,
+                67,
+                184
+            ],
+            "evaluacion": {
+                "puntos": 425.91,
+                "distancia": 1.64,
+                "tiempo": 780,
+                "fitness": 462.3,
+                "valida": true,
+                "comida_penalizacion": -200,
+                "tiempo_penalizacion": 0,
+                "costo": 70.0,
+                "bonus_sinergia": 0,
+                "bonus_eventos": 0,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.7682409002827854,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.10688302537372037,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.05589865967060989,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.3664672260544216,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.3385758689239154,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 462.3,
+            "puntos": 425.91,
+            "distancia": 1.64,
+            "tiempo": 780,
+            "costo": 70.0,
+            "bonus_sinergia": 0,
+            "bonus_eventos": 0,
+            "w_puntos": 0.8,
+            "w_distancia": 1.5,
+            "clima": "nublado"
+        },
+        {
+            "dia": 4,
+            "mejor_ruta": [
+                209,
+                86,
+                64,
+                186,
+                143
+            ],
+            "evaluacion": {
+                "puntos": 299.11,
+                "distancia": 0.31,
+                "tiempo": 365,
+                "fitness": 268.07,
+                "valida": true,
+                "comida_penalizacion": 0,
+                "tiempo_penalizacion": 0,
+                "costo": 50.0,
+                "bonus_sinergia": 0,
+                "bonus_eventos": 0,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.05559746332213443,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.10128478917734289,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.11119492664497624,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.04233142121702911,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 268.07,
+            "puntos": 299.11,
+            "distancia": 0.31,
+            "tiempo": 365,
+            "costo": 50.0,
+            "bonus_sinergia": 0,
+            "bonus_eventos": 0,
+            "w_puntos": 0.75,
+            "w_distancia": 1.75,
+            "clima": "nublado"
+        },
+        {
+            "dia": 5,
+            "mejor_ruta": [
+                220,
+                17,
+                100
+            ],
+            "evaluacion": {
+                "puntos": 216.67,
+                "distancia": 0.17,
+                "tiempo": 480,
+                "fitness": 199.8,
+                "valida": true,
+                "comida_penalizacion": 0,
+                "tiempo_penalizacion": 0,
+                "costo": 130.0,
+                "bonus_sinergia": 0,
+                "bonus_eventos": 0,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.10007543398040786,
+                        "costo": 0.0
+                    },
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.06863304277803838,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 199.8,
+            "puntos": 216.67,
+            "distancia": 0.17,
+            "tiempo": 480,
+            "costo": 130.0,
+            "bonus_sinergia": 0,
+            "bonus_eventos": 0,
+            "w_puntos": 0.7,
+            "w_distancia": 2.0,
+            "clima": "nublado"
+        },
+        {
+            "dia": 6,
+            "mejor_ruta": [
+                183,
+                107
+            ],
+            "evaluacion": {
+                "puntos": 206.95,
+                "distancia": 0.14,
+                "tiempo": 575,
+                "fitness": 192.98,
+                "valida": true,
+                "comida_penalizacion": 0,
+                "tiempo_penalizacion": 0,
+                "costo": 120.0,
+                "bonus_sinergia": 0,
+                "bonus_eventos": 0,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.13973711991478407,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 192.98,
+            "puntos": 206.95,
+            "distancia": 0.14,
+            "tiempo": 575,
+            "costo": 120.0,
+            "bonus_sinergia": 0,
+            "bonus_eventos": 0,
+            "w_puntos": 0.65,
+            "w_distancia": 2.25,
+            "clima": "soleado"
+        },
+        {
+            "dia": 7,
+            "mejor_ruta": [
+                192,
+                188
+            ],
+            "evaluacion": {
+                "puntos": 243.64,
+                "distancia": 0.14,
+                "tiempo": 455,
+                "fitness": 229.67,
+                "valida": true,
+                "comida_penalizacion": 0,
+                "tiempo_penalizacion": 0,
+                "costo": 0.0,
+                "bonus_sinergia": 0,
+                "bonus_eventos": 0,
+                "detalles_transporte": [
+                    {
+                        "tipo": "andando",
+                        "distancia": 0.1397409317775512,
+                        "costo": 0.0
+                    }
+                ]
+            },
+            "fitness": 229.67,
+            "puntos": 243.64,
+            "distancia": 0.14,
+            "tiempo": 455,
+            "costo": 0.0,
+            "bonus_sinergia": 0,
+            "bonus_eventos": 0,
+            "w_puntos": 0.6,
+            "w_distancia": 2.5,
+            "clima": "lluvioso"
+        }
+    ],
+    "resumen_total": {
+        "dias": [
+            {
+                "dia": 1,
+                "fitness": 768.3,
+                "puntos": 675.48,
+                "distancia": 1.07,
+                "tiempo": 820,
+                "costo": 110.0,
+                "clima": "lluvioso"
+            },
+            {
+                "dia": 2,
+                "fitness": 610.56,
+                "puntos": 546.42,
+                "distancia": 1.36,
+                "tiempo": 810,
+                "costo": 140.0,
+                "clima": "soleado"
+            },
+            {
+                "dia": 3,
+                "fitness": 462.3,
+                "puntos": 425.91,
+                "distancia": 1.64,
+                "tiempo": 780,
+                "costo": 70.0,
+                "clima": "nublado"
+            },
+            {
+                "dia": 4,
+                "fitness": 268.07,
+                "puntos": 299.11,
+                "distancia": 0.31,
+                "tiempo": 365,
+                "costo": 50.0,
+                "clima": "nublado"
+            },
+            {
+                "dia": 5,
+                "fitness": 199.8,
+                "puntos": 216.67,
+                "distancia": 0.17,
+                "tiempo": 480,
+                "costo": 130.0,
+                "clima": "nublado"
+            },
+            {
+                "dia": 6,
+                "fitness": 192.98,
+                "puntos": 206.95,
+                "distancia": 0.14,
+                "tiempo": 575,
+                "costo": 120.0,
+                "clima": "soleado"
+            },
+            {
+                "dia": 7,
+                "fitness": 229.67,
+                "puntos": 243.64,
+                "distancia": 0.14,
+                "tiempo": 455,
+                "costo": 0.0,
+                "clima": "lluvioso"
+            }
+        ],
+        "mejor_fitness_total": 2731.6800000000003,
+        "distancia_total": 4.829999999999999,
+        "puntos_totales": 2614.18,
+        "tiempo_total": 4285,
+        "costo_total": 620.0,
+        "bonus_sinergia_total": 45.0,
+        "bonus_eventos_total": 55.5
+    },
+    "climas": {
+        "1": "lluvioso",
+        "2": "soleado",
+        "3": "nublado",
+        "4": "nublado",
+        "5": "nublado",
+        "6": "soleado",
+        "7": "lluvioso"
+    }
+}

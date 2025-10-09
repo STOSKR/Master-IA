@@ -71,12 +71,16 @@ plt.savefig("frontera_pareto.png")
 
 # --- Histograma de la distribución del Fitness Final ---
 fitness_final = resultados["fitness_final"]
+mejor_fitness_historico = max(historial_fitness)  # Mejor fitness a lo largo de toda la evolución
 
 plt.figure(figsize=(10, 6))
 plt.hist(fitness_final, bins=20, color='skyblue', edgecolor='black')
+plt.axvline(mejor_fitness_historico, color='red', linestyle='--', linewidth=2, 
+            label=f'Mejor Fitness Histórico: {mejor_fitness_historico:.2f}')
 plt.title('Distribución del Fitness en la Última Generación')
 plt.xlabel('Fitness')
 plt.ylabel('Número de Individuos')
+plt.legend()
 plt.grid(axis='y', alpha=0.75)
 plt.savefig("histograma_fitness.png")
 

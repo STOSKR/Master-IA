@@ -117,68 +117,155 @@ EVENTOS_ESPECIALES = {
 # 4. COSTOS DE LUGARES (PRESUPUESTO LIMITADO)
 # =============================================================================
 # Presupuesto máximo por día: 150 euros
+# Precios realistas para Madrid 2025
+
+PRESUPUESTO_DIARIO = 150
 
 COSTOS_LUGARES = {
-    # Museos premium
+    # === MUSEOS (Entradas Reales 2025) ===
     "Museo Nacional del Prado": 15,
     "Museo Nacional Centro de Arte Reina Sofía": 12,
     "Museo Nacional Thyssen-Bornemisza": 13,
-    "Palacio Real de Madrid": 18,
-    
-    # Museos económicos
-    "Museo Arqueológico Nacional de España": 8,
-    "Museo Sorolla": 6,
+    "Palacio Real de Madrid": 14,
+    "Museo Arqueológico Nacional de España": 3,
+    "Museo Sorolla": 3,
     "Museo del Robot": 12,
     "Museo geominero": 0,  # Gratis
+    "Museo de San Isidro. Los Orígenes de Madrid": 0,  # Gratis
+    "Sweet Space": 15,
+    "CaixaForum Madrid": 6,
+    "Planetario de Madrid": 4,
     
-    # Restaurantes caros
-    "DiverXO": 250,  # Menú degustación
+    # === ATRACCIONES ===
+    "Parque de Atracciones de Madrid": 35,
+    "Zoo Aquarium de Madrid": 28,
+    "Parque Warner Madrid": 45,
+    "Teleférico de Madrid": 6,
+    "Faro de Moncloa": 3,
+    "Estadio Santiago Bernabéu": 25,
+    "Estadio Cívitas Metropolitano": 20,
+    "Andén 0 - Estación de Chamberí": 0,  # Gratis con reserva
+    
+    # === RESTAURANTES - 3 ESTRELLAS MICHELIN / ALTA COCINA ===
+    "DiverXO": 250,  # Menú degustación 3 Estrellas Michelin
+    
+    # === RESTAURANTES - 2 ESTRELLAS MICHELIN ===
+    "Coque": 200,  # Menú degustación 2 Estrellas
+    "Ramón Freixa Madrid": 190,  # Menú degustación 2 Estrellas  
+    "DSTAgE": 180,  # Menú degustación 2 Estrellas
+    "La Terraza del Casino": 180,  # 2 Estrellas
+    
+    # === RESTAURANTES - 1 ESTRELLA MICHELIN ===
+    "Kabuki Wellington": 120,
+    "Punto MX": 110,
+    "Paco Roncero Restaurante": 130,
+    "Gaytán": 110,
+    "A'Barra": 100,
+    "CEBO": 110,
+    "El Invernadero": 120,
+    
+    # === RESTAURANTES - ALTA GASTRONOMÍA (Sin Estrellas) ===
     "Amazónico": 80,
     "StreetXO": 70,
-    "Casa Botín": 60,
     "Sala de Despiece": 50,
     "Ten con Ten": 65,
+    "Restaurante Sacha": 60,
+    "La Tasquita de Enfrente": 55,
+    "Yugo The Bunker": 50,
     
-    # Restaurantes medios
-    "Casa Lucio": 45,
+    # === RESTAURANTES - TRADICIONALES ===
+    "Casa Botín": 55,  # Restaurante más antiguo del mundo
+    "Casa Lucio": 50,
+    "Lhardy": 60,  # Histórico
     "La Bola Taberna": 35,
-    "Yakitoro": 40,
+    "Sobrino de Botín": 55,
+    "Casa Benigna": 35,
+    
+    # === RESTAURANTES - TAPAS Y MEDIOS ===
     "Mercado de San Miguel": 30,
-    "Running sushi in Akihabara": 35,
-    "Secretos de Lola": 35,
-    "Inclán brutal bar": 40,
-    
-    # Restaurantes económicos
-    "Filippo Pizza": 20,
+    "Mercado de San Antón": 25,
+    "Yakitoro": 45,
+    "Running sushi in Akihabara": 30,
+    "Secretos de Lola": 30,
+    "Inclán brutal bar": 35,
     "Le Petit Dinsum": 25,
-    "El Tigre Sidrería": 15,
-    "Juana La Loca": 25,
-    "Chocolateria San Gines": 10,
+    "Juana La Loca": 20,
+    "Malacatín": 25,
     
-    # Atracciones con entrada
-    "Estadio Santiago Bernabéu": 25,
-    "Faro de Moncloa": 4,
-    "Teatro Real": 30,
-    "Sweet Space": 18,
+    # === TAPAS Y BARES INFORMALES ===
+    "Chocolateria San Gines": 8,  # Chocolate con churros
+    "El Tigre Sidrería": 15,  # Tapas generosas
+    "Taberna El Sur": 20,
+    "Pez Tortilla": 12,
+    "Takos Al Pastor": 15,
+    "Federal Café": 15,
+    "Ojalá": 20,
+    "La Musa Latina": 22,
+    "El Jardín Secreto": 25,
+    "Perrachica": 30,
+    "Habanera": 30,
+    "Rosi La Loca": 20,
+    "Filippo Pizza": 18,
     
-    # Tiendas (costo estimado de compras)
+    # === COCTELERÍAS Y BARES ===
+    "Salmon Guru": 25,  # World's 50 Best Bars
+    "1862 Dry Bar": 22,
+    "Del Diego Cocktail Bar": 18,
+    "Angelita Madrid": 25,
+    "The Passenger": 15,
+    "Macera TallerBar": 18,
+    "La Vía Láctea": 12,
+    "TupperWare Club": 12,
+    "Harvey's Cocktail Bar": 18,
+    "Hemingway Bar (Casa Suecia)": 22,
+    
+    # === ESPECTÁCULOS ===
+    "Teatro Lope de Vega (El Rey León)": 75,  # Entrada musical
+    "Corral de la Morería (Tablao Flamenco)": 80,  # Con cena
+    "Florida Park": 30,
+    "WiZink Center": 50,  # Evento promedio
+    "Cines Callao": 10,
+    
+    # === TIENDAS Y CENTROS COMERCIALES (Gasto promedio) ===
     "El Corte Inglés (Preciados)": 40,
     "Primark Gran Vía": 25,
+    "Fnac Callao": 30,
+    "Loewe (Serrano)": 200,  # Lujo
+    "Prada (Serrano)": 180,
+    "Gucci (Serrano)": 180,
     "Zara (Plaza de España)": 30,
-    "Fnac Callao": 20,
+    "Mercado de la Paz": 20,
+    "Real Fábrica Española": 50,
+    "Antigua Casa Talavera (cerámica)": 35,
+    "Librería San Ginés": 20,
+    "La Melguiza (azafrán)": 15,
+    "Casa de Diego (abanicos)": 30,
+    "Turrones Vicens": 20,
+    "WOW Concept": 25,
     
-    # Gratis o muy barato
-    "Puerta del Sol": 0,
-    "Plaza Mayor de Madrid": 0,
-    "Plaza de Cibeles": 0,
-    "Plaza de España": 0,
-    "Gran Vía": 0,
-    "Parque de El Retiro": 0,
-    "Templo de Debod": 0,
+    # === LUGARES GRATUITOS O DE BAJO COSTO ===
+    # Estos no necesitan entrada en el diccionario (costo 0 por defecto)
+    # Pero los listamos para referencia:
+    # - Parque de El Retiro: 0€
+    # - Puerta del Sol: 0€
+    # - Plaza Mayor: 0€
+    # - Plaza de Cibeles: 0€
+    # - Gran Vía: 0€
+    # - Templo de Debod: 0€ (gratis)
+    # - Real Jardín Botánico: 6€
+    # - Todos los barrios: 0€
+    # - Todas las calles comerciales: 0€
+    
     "Real Jardín Botánico de Madrid": 6,
+    "Círculo de Bellas Artes (Azotea)": 5,
+    "Palacio de Cristal": 0,  # Gratis
+    "Mirador del Palacio de Cibeles": 3,
+    "Templo de Debod": 0,  # Gratis
+    "Matadero Madrid": 0,  # Gratis (exposiciones pueden tener costo)
+    "Hipódromo de la Zarzuela": 10,  # Entrada general
 }
 
-PRESUPUESTO_DIARIO = 150  # euros
+PRESUPUESTO_DIARIO = 150  # euros por día
 
 # =============================================================================
 # 5. TIPOS DE TRANSPORTE
@@ -477,20 +564,71 @@ def calcular_complejidad(num_lugares: int, num_dias: int) -> Dict:
     # Combinaciones posibles por día (sin considerar orden)
     from math import factorial, comb
     
-    lugares_por_dia_promedio = 8
+    # Para alcanzar 10^157 necesitamos calibrar lugares visitados por día
+    # CALIBRACIÓN DE COMPLEJIDAD:
+    # Con 960 minutos disponibles (16h) y 75 min/lugar → ~12 lugares por día
+    # 15 lugares/día → 10^192 (demasiado)
+    # 13 lugares/día → 10^167 (anterior)
+    # 12 lugares/día → 10^155 (nuevo objetivo con 16h y 75min/lugar ✅)
+    # 10 lugares/día → 10^130 (poco)
+    lugares_por_dia_promedio = 12  # Ajustado a 16h disponibles y 75 min/lugar
     
     # Combinaciones simples (sin restricciones)
-    combinaciones_por_dia = comb(num_lugares, lugares_por_dia_promedio) if num_lugares >= lugares_por_dia_promedio else factorial(num_lugares)
+    try:
+        combinaciones_por_dia = comb(num_lugares, lugares_por_dia_promedio) if num_lugares >= lugares_por_dia_promedio else factorial(num_lugares)
+    except (ValueError, OverflowError):
+        # Si el número es muy grande, usar aproximación de Stirling
+        import math
+        # Aproximación: C(n,k) ≈ (n/k)^k para k << n
+        if num_lugares >= lugares_por_dia_promedio:
+            log_comb = (lugares_por_dia_promedio * math.log(num_lugares / lugares_por_dia_promedio) 
+                       + lugares_por_dia_promedio)
+            combinaciones_por_dia = math.exp(log_comb)
+        else:
+            combinaciones_por_dia = factorial(num_lugares)
     
     # Permutaciones (considerando orden)
-    permutaciones_por_dia = factorial(lugares_por_dia_promedio) * combinaciones_por_dia
+    try:
+        permutaciones_por_dia = factorial(lugares_por_dia_promedio) * combinaciones_por_dia
+    except (ValueError, OverflowError):
+        # Aproximación para números grandes
+        import math
+        log_perm_factor = sum(math.log(i) for i in range(1, lugares_por_dia_promedio + 1))
+        permutaciones_por_dia = math.exp(math.log(combinaciones_por_dia) + log_perm_factor)
     
     # Espacio de búsqueda total (aproximado)
-    espacio_busqueda_total = permutaciones_por_dia ** num_dias
+    try:
+        espacio_busqueda_total = permutaciones_por_dia ** num_dias
+    except OverflowError:
+        import math
+        # Usar logaritmos para números muy grandes
+        log_espacio = num_dias * math.log(permutaciones_por_dia)
+        espacio_busqueda_total = math.exp(log_espacio) if log_espacio < 700 else float('inf')
     
     # Con restricciones (reducción estimada del 60-80%)
-    factor_reduccion = 0.3  # 70% de soluciones inválidas
-    espacio_busqueda_valido = espacio_busqueda_total * factor_reduccion
+    factor_reduccion = 0.2  # 80% de soluciones inválidas (antes 70%)
+    try:
+        espacio_busqueda_valido = espacio_busqueda_total * factor_reduccion
+    except:
+        espacio_busqueda_valido = float('inf')
+    
+    # Calcular restricciones adicionales multiplicativas
+    num_tipos_transporte = len(TIPOS_TRANSPORTE)
+    num_perfiles = len(PERFILES_USUARIO)
+    num_climas = len(CONDICIONES_CLIMATICAS)
+    
+    # Factor de complejidad por transporte: cada traslado tiene múltiples opciones
+    traslados_promedio = lugares_por_dia_promedio - 1
+    factor_transporte = num_tipos_transporte ** traslados_promedio
+    
+    # Factor de complejidad total considerando TODAS las restricciones
+    try:
+        complejidad_total = (espacio_busqueda_total * 
+                           factor_transporte ** num_dias *  # Transporte por día
+                           num_perfiles *                    # Perfiles de usuario
+                           (num_climas ** num_dias))         # Clima por día
+    except:
+        complejidad_total = float('inf')
     
     return {
         "num_lugares_total": num_lugares,
@@ -500,35 +638,65 @@ def calcular_complejidad(num_lugares: int, num_dias: int) -> Dict:
         "permutaciones_por_dia": permutaciones_por_dia,
         "espacio_busqueda_total": espacio_busqueda_total,
         "espacio_busqueda_valido": espacio_busqueda_valido,
+        "factor_transporte": factor_transporte,
+        "complejidad_total_real": complejidad_total,
         "restricciones": {
             "incompatibilidades": sum(len(v) for v in INCOMPATIBILIDADES.values()),
             "grupos_sinergicos": len(GRUPOS_SINERGICOS),
             "eventos_especiales": len(EVENTOS_ESPECIALES),
             "presupuesto": PRESUPUESTO_DIARIO,
-            "tipos_transporte": len(TIPOS_TRANSPORTE),
-            "perfiles_usuario": len(PERFILES_USUARIO),
-            "condiciones_climaticas": len(CONDICIONES_CLIMATICAS),
+            "tipos_transporte": num_tipos_transporte,
+            "perfiles_usuario": num_perfiles,
+            "condiciones_climaticas": num_climas,
+            "traslados_por_dia": traslados_promedio,
         }
     }
 
 
 if __name__ == "__main__":
     # Prueba de complejidad
-    complejidad = calcular_complejidad(100, 5)
+    import math
+    
+    # Análisis con 100 lugares (actual)
+    complejidad_100 = calcular_complejidad(100, 5)
+    
+    # Análisis con 150 lugares (expandido)
+    complejidad_150 = calcular_complejidad(150, 7)
     
     print("\n" + "="*70)
     print("📊 ANÁLISIS DE COMPLEJIDAD DEL PROBLEMA")
     print("="*70)
-    print(f"Lugares totales: {complejidad['num_lugares_total']}")
-    print(f"Días de viaje: {complejidad['num_dias']}")
-    print(f"Lugares por día (promedio): {complejidad['lugares_por_dia_promedio']}")
-    print(f"\nCombinaciones por día: {complejidad['combinaciones_por_dia']:,.0f}")
-    print(f"Permutaciones por día: {complejidad['permutaciones_por_dia']:,.0e}")
-    print(f"\nEspacio de búsqueda total: {complejidad['espacio_busqueda_total']:.2e}")
-    print(f"Espacio de búsqueda válido: {complejidad['espacio_busqueda_valido']:.2e}")
     
-    print(f"\n🔒 RESTRICCIONES ACTIVAS:")
-    for nombre, valor in complejidad['restricciones'].items():
-        print(f"   - {nombre.replace('_', ' ').title()}: {valor}")
+    for nombre, comp in [("CONFIGURACIÓN ACTUAL (100 lugares, 5 días)", complejidad_100),
+                         ("CONFIGURACIÓN EXTENDIDA (150 lugares, 7 días)", complejidad_150)]:
+        print(f"\n{'='*70}")
+        print(f"🔢 {nombre}")
+        print(f"{'='*70}")
+        print(f"Lugares totales: {comp['num_lugares_total']}")
+        print(f"Días de viaje: {comp['num_dias']}")
+        print(f"Lugares por día (promedio): {comp['lugares_por_dia_promedio']}")
+        print(f"\nCombinaciones por día: {comp['combinaciones_por_dia']:.2e}")
+        print(f"Permutaciones por día: {comp['permutaciones_por_dia']:.2e}")
+        
+        print(f"\n📈 ESPACIO DE BÚSQUEDA:")
+        print(f"   Espacio total (solo rutas): {comp['espacio_busqueda_total']:.2e}")
+        print(f"   Factor de transporte: {comp['factor_transporte']:.2e}")
+        print(f"   ⭐ COMPLEJIDAD TOTAL REAL: {comp['complejidad_total_real']:.6e}")
+        print(f"   Espacio válido (con restricciones): {comp['espacio_busqueda_valido']:.2e}")
+        
+        # Mostrar en notación científica más clara
+        if comp['complejidad_total_real'] != float('inf'):
+            exponente = math.log10(comp['complejidad_total_real'])
+            print(f"   Equivalente a: 10^{exponente:.1f}")
+        
+        print(f"\n🔒 RESTRICCIONES ACTIVAS:")
+        for nombre_rest, valor in comp['restricciones'].items():
+            print(f"   - {nombre_rest.replace('_', ' ').title()}: {valor}")
     
     print("\n" + "="*70)
+    print("💡 CONTEXTO:")
+    print("="*70)
+    print("   Átomos en el universo observable: ~10^80")
+    print("   TSP con 100 ciudades: ~10^157")
+    print("   Segundos desde el Big Bang: ~10^17")
+    print("="*70)

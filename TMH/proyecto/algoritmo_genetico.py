@@ -21,8 +21,8 @@ except ImportError:
     print("⚠️  Módulo 'restricciones_complejas' no encontrado. Ejecutando sin restricciones avanzadas.")
     RESTRICCIONES_ACTIVAS = False
 
-t_dia = 14 * 60
-tm_visita = 90
+t_dia = 16 * 60  # 16 horas disponibles por día (960 minutos)
+tm_visita = 75   # 75 minutos promedio por lugar
 hora_actual = 9 * 60
 
 def calcular_penalizacion_comida(hora_actual: int, tipo: str, almuerzo_tomado: bool, cena_tomada: bool) -> Tuple[float, bool, bool]:
@@ -340,7 +340,11 @@ def evolucionar_poblacion(poblacion: List[List[int]], fitness_scores: List[float
 def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacion: int = 1000, 
                                         prob_cruce: float = 0.8, prob_mutacion: float = 0.3, 
                                         tiempo_disponible: int = t_dia, w_puntos: float = 1, w_distancia: float = 1,
-                                        vetos: List[int] = None) -> dict:
+                                        vetos: List[int] = None, 
+                                        dia: int = 1, 
+                                        perfil_usuario: str = "estandar", 
+                                        clima: str = "soleado",
+                                        usar_restricciones: bool = True) -> dict:
     if vetos is None:
         vetos = []
     
@@ -359,7 +363,7 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
 
     mejor_fitness_era = 0
     generaciones_estancadas = 0
-    umbral_estancamiento = 50
+    umbral_estancamiento = 30  # Reset tras 30 generaciones sin mejora
 
     historial_fitness = []
     historial_promedio = []
@@ -367,7 +371,10 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
     fitness_final = []
 
     for generacion in range(generaciones):
-        evaluaciones = [evaluar_ruta(ruta, tiempo_disponible) for ruta in poblacion]
+        evaluaciones = [
+            evaluar_ruta(ruta, tiempo_disponible, dia=dia, perfil_usuario=perfil_usuario, clima=clima, usar_restricciones=usar_restricciones) 
+            for ruta in poblacion
+        ]
         fitness_scores = [calcular_fitness(w_puntos, w_distancia, ev["puntos"], ev["distancia"], ev["tiempo"], tiempo_disponible, ev["comida_penalizacion"]) for ev in evaluaciones]
 
         if generacion == generaciones - 1:
@@ -425,7 +432,7 @@ def algoritmo_genetico_reemplazo_mixto(generaciones: int = 100, tamaño_poblacio
         print(f"Error al guardar los resultados: {e}")
 
     # Resultado final
-    evaluacion_final = evaluar_ruta(mejor_ruta_global, tiempo_disponible)
+    evaluacion_final = evaluar_ruta(mejor_ruta_global, tiempo_disponible, dia=dia, perfil_usuario=perfil_usuario, clima=clima, usar_restricciones=usar_restricciones)
     imprimir_mejor_ruta(mejor_ruta_global, evaluacion_final)
     return {
         "mejor_ruta": mejor_ruta_global,
@@ -441,8 +448,7 @@ def algoritmo_genetico_multidias(generaciones: int = 100, tamaño_poblacion: int
                                  usar_restricciones: bool = True) -> dict:
     """
     Algoritmo genético para optimizar rutas de múltiples días.
-    Los lugares visitados en un día no pueden repetirse en días posteriores (lista de vetos).
-    La distancia gana más importancia con cada día, mientras que los puntos pierden relevancia.
+    Ejecuta el algoritmo de UN DÍA múltiples veces, acumulando vetos de lugares visitados.
     
     Args:
         generaciones: Número de generaciones por día
@@ -501,61 +507,36 @@ def algoritmo_genetico_multidias(generaciones: int = 100, tamaño_poblacion: int
         print(f"Lugares vetados hasta ahora: {len(vetos)}")
         
         # Ajustar pesos: más importancia a la distancia cada día
-        w_distancia = 1 + (dia - 1) * 0.25
-        w_puntos = 0.9 - (dia - 1) * 0.05
+        w_distancia = 1 + (dia - 1) * 0.25 / 2
+        w_puntos = 0.9 - ((dia - 1) * 0.05) / 2
         
         print(f"Pesos del día: Puntos={w_puntos:.2f}, Distancia={w_distancia:.2f}")
 
-        # Inicializar población para este día
-        poblacion, _ = inicializar_poblacion_y_evaluar(
-            tamaño_poblacion, tiempo_disponible, vetos, w_puntos, w_distancia
+        # ✅ LLAMAR AL ALGORITMO DE UN DÍA con los vetos actuales
+        resultado_dia_ag = algoritmo_genetico_reemplazo_mixto(
+            generaciones=generaciones,
+            tamaño_poblacion=tamaño_poblacion,
+            prob_cruce=prob_cruce,
+            prob_mutacion=prob_mutacion,
+            tiempo_disponible=tiempo_disponible,
+            vetos=vetos.copy(),  # Pasar copia de vetos
+            w_puntos=w_puntos,
+            w_distancia=w_distancia,
+            dia=dia,  # Pasar el día
+            perfil_usuario=perfil_usuario,  # Pasar el perfil
+            clima=climas.get(dia, "soleado"),  # Pasar el clima del día
+            usar_restricciones=usar_restricciones  # Pasar si usar restricciones
         )
         
-        mejor_fitness_global = 0
-        mejor_ruta_global = []
-        mejor_evaluacion = None
-
-        # Evolucionar durante N generaciones
-        for generacion in range(generaciones):
-            # Evaluar con restricciones complejas
-            evaluaciones = [
-                evaluar_ruta(
-                    ruta, tiempo_disponible, 
-                    dia=dia, 
-                    perfil_usuario=perfil_usuario,
-                    clima=climas.get(dia, "soleado"),
-                    usar_restricciones=usar_restricciones
-                ) 
-                for ruta in poblacion
-            ]
-            
-            fitness_scores = [
-                calcular_fitness(w_puntos, w_distancia, ev["puntos"], ev["distancia"], 
-                               ev["tiempo"], tiempo_disponible, ev["comida_penalizacion"])
-                for ev in evaluaciones
-            ]
-
-            # Ordenar población por fitness
-            poblacion_ordenada = [ruta for _, ruta in sorted(zip(fitness_scores, poblacion), 
-                                                             key=lambda item: item[0], reverse=True)]
-            fitness_ordenado = sorted(fitness_scores, reverse=True)
-
-            mejor_fitness_gen = fitness_ordenado[0]
-            if mejor_fitness_gen > mejor_fitness_global:
-                mejor_fitness_global = mejor_fitness_gen
-                mejor_ruta_global = poblacion_ordenada[0]
-                mejor_evaluacion = evaluaciones[fitness_scores.index(mejor_fitness_gen)]
-
-            # Evolucionar población
-            poblacion = evolucionar_poblacion(
-                poblacion_ordenada, fitness_ordenado, tamaño_poblacion, 
-                prob_cruce, prob_mutacion, int(tamaño_poblacion * 0.2), vetos
-            )
-
-            # Mostrar progreso
-            if generacion % 20 == 0 or generacion == generaciones - 1:
-                print(f"   Gen {generacion:3d}: Mejor fitness = {mejor_fitness_gen:8.2f}, " +
-                      f"Promedio = {sum(fitness_ordenado)/len(fitness_ordenado):8.2f}")
+        # Extraer la mejor ruta y evaluación del resultado
+        mejor_ruta_global = resultado_dia_ag["mejor_ruta"]
+        mejor_evaluacion = evaluar_ruta(
+            mejor_ruta_global, tiempo_disponible,
+            dia=dia,
+            perfil_usuario=perfil_usuario,
+            clima=climas.get(dia, "soleado"),
+            usar_restricciones=usar_restricciones
+        )
 
         # Actualizar vetos con los lugares visitados en la mejor ruta del día
         vetos.extend(mejor_ruta_global)
@@ -752,7 +733,7 @@ if __name__ == "__main__":
         
         resultado = algoritmo_genetico_multidias(
             generaciones=300,      # Menos generaciones por día
-            tamaño_poblacion=5000,  # Población reducida
+            tamaño_poblacion=10000,  # Población reducida
             prob_cruce=0.8,
             prob_mutacion=0.2,
             dias=5                  # Número de días

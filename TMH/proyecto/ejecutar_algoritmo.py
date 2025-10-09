@@ -37,8 +37,8 @@ def ejecutar_multidias(num_dias=5, usar_restricciones=True):
     print("="*70)
     
     resultado = algoritmo_genetico_multidias(
-        generaciones=300,       # Menos generaciones por día
-        tamaño_poblacion=5000,  # Población reducida para eficiencia
+        generaciones=400,       # Menos generaciones por día
+        tamaño_poblacion=10000,  # Población reducida para eficiencia
         prob_cruce=0.8,
         prob_mutacion=0.2,
         dias=num_dias,
