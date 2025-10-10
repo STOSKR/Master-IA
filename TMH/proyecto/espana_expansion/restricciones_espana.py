@@ -5,16 +5,6 @@ MAX_DIAS_POR_CIUDAD = 4
 PRESUPUESTO_DIARIO = 150
 
 def validar_limite_ciudad(historial_ciudades: List[str], nueva_ciudad: str) -> Tuple[bool, int]:
-    """
-    Valida que no se excedan 4 días consecutivos en la misma ciudad
-    
-    Args:
-        historial_ciudades: Lista de ciudades visitadas por día
-        nueva_ciudad: Ciudad propuesta para el siguiente día
-        
-    Returns:
-        (es_valido, dias_consecutivos)
-    """
     if not historial_ciudades:
         return True, 0
     
@@ -29,10 +19,6 @@ def validar_limite_ciudad(historial_ciudades: List[str], nueva_ciudad: str) -> T
     return es_valido, dias_consecutivos
 
 def calcular_penalizacion_cambio_ciudad(historial_ciudades: List[str]) -> float:
-    """
-    Penalización leve por cambiar de ciudad (incentiva agrupar días)
-    pero no tanto como para quedarse siempre en la misma
-    """
     if len(historial_ciudades) < 2:
         return 0
     
@@ -114,17 +100,6 @@ def calcular_complejidad_espana(num_lugares: int, num_ciudades: int, num_dias: i
 
 # Restricciones simplificadas (sin todas las complejas de Madrid)
 def aplicar_restricciones_basicas(lugares_ids: List[int], tiempo_total: int) -> float:
-    """
-    Aplica solo restricciones básicas: fatiga por hora del día
-    Mantiene la lógica simple
-    
-    Args:
-        lugares_ids: IDs de lugares del día (no usado, solo para compatibilidad)
-        tiempo_total: Tiempo total acumulado en minutos
-        
-    Returns:
-        Penalización por fatiga
-    """
     hora_inicio = 9 * 60  # 9 AM
     hora_fin = 23 * 60    # 11 PM
     

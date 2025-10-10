@@ -1,4 +1,5 @@
 import random
+import copy
 from typing import List, Dict, Tuple
 from config import *
 from utils_espana import (
@@ -152,20 +153,16 @@ def evaluar_individuo(individuo: Individual) -> float:
                 if ciudad_actual in ciudades_recientes:
                     fitness -= PENALIZACION_CAMBIO_CIUDAD_INNECESARIO
         
-        # Transporte intercity con selección inteligente
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
-            # Calcular presupuesto restante: (días que quedan × 200€) - (ya gastado)
             dias_restantes = len(individuo.dias) - dia_idx
             presupuesto_restante = (PRESUPUESTO_DIARIO * dias_restantes) - gasto_acumulado
             
-            # Elegir mejor transporte según presupuesto
             tipo_elegido, tiempo_trans, costo_trans = elegir_mejor_transporte(
                 individuo.ciudades[dia_idx - 1],
                 individuo.ciudades[dia_idx],
                 presupuesto_restante
             )
             
-            # Guardar información del transporte
             individuo.transportes_intercity.append((
                 dia_idx,
                 individuo.ciudades[dia_idx - 1],
@@ -175,29 +172,24 @@ def evaluar_individuo(individuo: Individual) -> float:
                 costo_trans
             ))
             
-            # Añadir tiempo y costo del transporte
             if tiempo_trans:
                 tiempo_dia += tiempo_trans
             gasto_acumulado += costo_trans
-            
-            # NO hay penalización adicional aquí (ya se penalizó arriba si volvía)
         
         # Penalizaciones básicas (fatiga, etc.)
-        pen_fatiga = aplicar_restricciones_basicas(individuo.dias[dia_idx], tiempo_dia)
-        fitness -= pen_fatiga
-        
-        # Validar límite de días en ciudad
+        # pen_fatiga = aplicar_restricciones_basicas(individuo.dias[dia_idx], tiempo_dia)
+        # fitness -= pen_fatiga
+
         if not validar_limite_ciudad(individuo.ciudades[:dia_idx + 1], individuo.ciudades[dia_idx])[0]:
             fitness -= PENALIZACION_LIMITE_CIUDAD
         
-        # Penalización fuerte por exceso de tiempo diario
         if tiempo_dia > TIEMPO_DIA:
             exceso = tiempo_dia - TIEMPO_DIA
-            fitness -= PENALIZACION_EXCESO_TIEMPO * exceso
+            if exceso > 0 and exceso <= 120:
+                fitness -= PENALIZACION_EXCESO_TIEMPO * exceso
             if exceso > 120:
                 fitness -= 10000
         
-        # Validar horarios, comidas, presupuesto y restaurantes consecutivos
         hora_actual = HORA_INICIO
         tiene_almuerzo = False
         tiene_cena = False
@@ -205,7 +197,6 @@ def evaluar_individuo(individuo: Individual) -> float:
         restaurantes_consecutivos = 0
         max_consecutivos = 0
         
-        # Simular horarios del día (un solo bucle optimizado)
         for lugar in lugares_dia:
             tipo = lugar.get('tipo', '')
             
@@ -214,19 +205,16 @@ def evaluar_individuo(individuo: Individual) -> float:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
                 
-                # Si es bar que cierra de madrugada (2:00), ajustar
                 if tipo == "bar" and cierre < apertura:
-                    cierre = 26 * 60  # 02:00 del día siguiente = 26:00
+                    cierre = 26 * 60
                 
-                # Verificar si la visita está dentro del horario
                 if hora_actual < apertura or hora_actual > cierre:
                     fitness -= PENALIZACION_FUERA_HORARIO_APERTURA
             
-            # Calcular gasto del día
             if tipo in PRECIOS_TIPO:
                 gasto_dia += PRECIOS_TIPO[tipo]
             else:
-                gasto_dia += 10  # Precio por defecto
+                gasto_dia += 20  # Precio por defecto
             
             # Verificar si es restaurante/bar/cafetería en hora de comida
             if tipo in ['restaurante', 'bar', 'cafetería']:
@@ -413,8 +401,10 @@ def algoritmo_genetico_espana(
     for ind in poblacion:
         evaluar_individuo(ind)
     
-    mejor_global = max(poblacion, key=lambda ind: ind.fitness)
+    # IMPORTANTE: Hacer copia profunda del mejor para evitar que las mutaciones lo afecten
+    mejor_global = copy.deepcopy(max(poblacion, key=lambda ind: ind.fitness))
     historial_fitness = [mejor_global.fitness]
+    historial_mejor_gen = [mejor_global.fitness]  # Nuevo: fitness del mejor de cada gen
     
     num_elite = int(tam_poblacion * tasa_elitismo)
     
@@ -445,12 +435,14 @@ def algoritmo_genetico_espana(
         
         poblacion = nueva_poblacion[:tam_poblacion]
         
-        # Actualizar mejor
+        # Actualizar mejor - IMPORTANTE: Hacer copia profunda para evitar mutaciones
         mejor_gen = max(poblacion, key=lambda ind: ind.fitness)
-        if mejor_gen.fitness > mejor_global.fitness:
-            mejor_global = mejor_gen
+        historial_mejor_gen.append(mejor_gen.fitness)  # Guardar mejor de esta generación
         
-        historial_fitness.append(mejor_global.fitness)
+        if mejor_gen.fitness > mejor_global.fitness:
+            mejor_global = copy.deepcopy(mejor_gen)  # Copia profunda!
+        
+        historial_fitness.append(mejor_global.fitness)  # Siempre debe crecer o mantenerse
         
         # Progreso
         if (gen + 1) % 50 == 0 or gen == 0:
@@ -459,9 +451,14 @@ def algoritmo_genetico_espana(
                   f"Puntos: {mejor_global.puntos_totales:5d} | "
                   f"Tiempo: {mejor_global.tiempo_total/60:6.1f}h | "
                   f"Dist: {mejor_global.distancia_total:7.1f}km")
+    
+    print(f"\n✅ Evolución completada!")
+    print(f"🏆 Mejor fitness global: {mejor_global.fitness:.1f}")
+    
     return {
         "mejor_individuo": mejor_global,
-        "historial_fitness": historial_fitness,
+        "historial_fitness": historial_fitness,  # Mejor global (siempre crece)
+        "historial_mejor_gen": historial_mejor_gen,  # Mejor de cada gen (puede variar)
         "poblacion_final": poblacion
     }
 
@@ -678,7 +675,8 @@ def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json
             }
             for i, (dia, ciudad) in enumerate(zip(mejor.dias, mejor.ciudades))
         ],
-        "historial_fitness": resultados["historial_fitness"]
+        "historial_fitness": resultados["historial_fitness"],  # Mejor global
+        "historial_mejor_gen": resultados.get("historial_mejor_gen", resultados["historial_fitness"])  # Mejor por gen
     }
     
     with open(archivo, 'w', encoding='utf-8') as f:
