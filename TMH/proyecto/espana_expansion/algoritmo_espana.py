@@ -23,13 +23,14 @@ class Individual:
         self.tiempo_total = 0
         self.puntos_totales = 0
         self.distancia_total = 0
+        self.transportes_intercity = []  # [(dia_idx, origen, destino, tipo, tiempo, costo)]
 
 def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual:
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     dias = []
     ciudades_plan = []
     
-    if AGRUPAR_DIAS_POR_CIUDAD:
+    if AGRUPAR:
         dia_actual = 0
         
         while dia_actual < num_dias:
@@ -108,105 +109,107 @@ def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, 
         distancia_total += dist
         tiempo_total += dist / VELOCIDAD_MEDIA * 60
     
-    # Tiempo comida
-    if tiempo_total > 180:
-        tiempo_total += TIEMPO_COMIDA_MIN
-    if tiempo_total > 480:
-        tiempo_total += TIEMPO_CENA_MIN
-    
     return tiempo_total, distancia_total, puntos_total
 
+def elegir_mejor_transporte(ciudad_origen: str, ciudad_destino: str, presupuesto_restante: float) -> Tuple[str, int, float]:
+    opciones = []
+    
+    for tipo in ["avion", "tren", "bus"]:
+        tiempo, costo = calcular_transporte_intercity(ciudad_origen, ciudad_destino, tipo)
+        if tiempo is not None and costo is not None:
+            opciones.append((tipo, tiempo, costo))
+    
+    if not opciones:
+        return "tren", 0, 0
+    
+    if presupuesto_restante > 100:
+        opciones.sort(key=lambda x: x[1])
+    else:
+        opciones.sort(key=lambda x: x[2])
+    
+    mejor = opciones[0]
+    return mejor[0], mejor[1], mejor[2]
+
 def evaluar_individuo(individuo: Individual) -> float:
-    """
-    Calcula fitness con restricciones mejoradas:
-    - Penalización FUERTE por exceder tiempo diario
-    - Validación de comidas obligatorias (almuerzo y cena)
-    - Penalización por muchos restaurantes consecutivos
-    - NUEVO: Validación de horarios de apertura/cierre
-    - NUEVO: Validación de presupuesto diario
-    - NUEVO: Penalización por cambios innecesarios de ciudad
-    """
     fitness = 0
     tiempo_acum = 0
     distancia_acum = 0
     puntos_acum = 0
+    gasto_acumulado = 0
+    individuo.transportes_intercity = []
     
     for dia_idx in range(len(individuo.dias)):
         tiempo_dia, dist_dia, puntos_dia = calcular_tiempo_dia(individuo, dia_idx)
         lugares_dia = get_lugares_por_ids(individuo.dias[dia_idx])
         
-        # ============================================================
-        # VALIDACIÓN: Días consecutivos en misma ciudad
-        # ============================================================
-        if AGRUPAR_DIAS_POR_CIUDAD and dia_idx > 0:
+        if AGRUPAR and dia_idx > 0:
             ciudad_actual = individuo.ciudades[dia_idx]
             ciudad_anterior = individuo.ciudades[dia_idx - 1]
             
-            # Verificar si hay cambio de ciudad
             if ciudad_actual != ciudad_anterior:
-                # Contar cuántos días quedan
-                dias_restantes = len(individuo.dias) - dia_idx
-                
-                # Buscar si vuelve a la ciudad anterior más adelante
-                vuelve_ciudad_anterior = False
-                for futuro_idx in range(dia_idx + 1, len(individuo.dias)):
-                    if individuo.ciudades[futuro_idx] == ciudad_anterior:
-                        vuelve_ciudad_anterior = True
-                        break
-                
-                # Si vuelve a la ciudad anterior, es un cambio innecesario
-                if vuelve_ciudad_anterior:
+                # Penalizar solo si vuelve a una ciudad reciente (últimos 5 días)
+                ciudades_recientes = individuo.ciudades[max(0, dia_idx-5):dia_idx]
+                if ciudad_actual in ciudades_recientes:
                     fitness -= PENALIZACION_CAMBIO_CIUDAD_INNECESARIO
         
-        # Transporte intercity si cambia de ciudad
+        # Transporte intercity con selección inteligente
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
-            tiempo_trans, _ = calcular_transporte_intercity(
+            # Calcular presupuesto restante: (días que quedan × 200€) - (ya gastado)
+            dias_restantes = len(individuo.dias) - dia_idx
+            presupuesto_restante = (PRESUPUESTO_DIARIO * dias_restantes) - gasto_acumulado
+            
+            # Elegir mejor transporte según presupuesto
+            tipo_elegido, tiempo_trans, costo_trans = elegir_mejor_transporte(
                 individuo.ciudades[dia_idx - 1],
                 individuo.ciudades[dia_idx],
-                "tren"
+                presupuesto_restante
             )
+            
+            # Guardar información del transporte
+            individuo.transportes_intercity.append((
+                dia_idx,
+                individuo.ciudades[dia_idx - 1],
+                individuo.ciudades[dia_idx],
+                tipo_elegido,
+                tiempo_trans,
+                costo_trans
+            ))
+            
+            # Añadir tiempo y costo del transporte
             if tiempo_trans:
                 tiempo_dia += tiempo_trans
+            gasto_acumulado += costo_trans
             
-            # Penalización leve por cambio
-            pen_cambio = calcular_penalizacion_cambio_ciudad(
-                individuo.ciudades[:dia_idx + 1]
-            )
-            fitness -= pen_cambio
+            # NO hay penalización adicional aquí (ya se penalizó arriba si volvía)
         
-        # Penalizaciones básicas
+        # Penalizaciones básicas (fatiga, etc.)
         pen_fatiga = aplicar_restricciones_basicas(individuo.dias[dia_idx], tiempo_dia)
         fitness -= pen_fatiga
         
-        # Validar límite de ciudad
+        # Validar límite de días en ciudad
         if not validar_limite_ciudad(individuo.ciudades[:dia_idx + 1], individuo.ciudades[dia_idx])[0]:
             fitness -= PENALIZACION_LIMITE_CIUDAD
         
-        # ============================================================
-        # PENALIZACIÓN FUERTE POR EXCESO DE TIEMPO
-        # ============================================================
+        # Penalización fuerte por exceso de tiempo diario
         if tiempo_dia > TIEMPO_DIA:
             exceso = tiempo_dia - TIEMPO_DIA
             fitness -= PENALIZACION_EXCESO_TIEMPO * exceso
-            
             if exceso > 120:
-                fitness -= 10000  # Penalización catastrófica
+                fitness -= 10000
         
-        # ============================================================
-        # VALIDAR HORARIOS, COMIDAS Y PRESUPUESTO
-        # ============================================================
+        # Validar horarios, comidas, presupuesto y restaurantes consecutivos
         hora_actual = HORA_INICIO
         tiene_almuerzo = False
         tiene_cena = False
         gasto_dia = 0
+        restaurantes_consecutivos = 0
+        max_consecutivos = 0
         
-        # Simular horarios del día
+        # Simular horarios del día (un solo bucle optimizado)
         for lugar in lugares_dia:
             tipo = lugar.get('tipo', '')
             
-            # ============================================================
-            # NUEVO: Validar horario de apertura/cierre
-            # ============================================================
+            # Validar horario de apertura/cierre
             if tipo in HORARIOS_TIPO:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
@@ -219,9 +222,7 @@ def evaluar_individuo(individuo: Individual) -> float:
                 if hora_actual < apertura or hora_actual > cierre:
                     fitness -= PENALIZACION_FUERA_HORARIO_APERTURA
             
-            # ============================================================
-            # NUEVO: Calcular gasto del día
-            # ============================================================
+            # Calcular gasto del día
             if tipo in PRECIOS_TIPO:
                 gasto_dia += PRECIOS_TIPO[tipo]
             else:
@@ -233,12 +234,19 @@ def evaluar_individuo(individuo: Individual) -> float:
                     tiene_almuerzo = True
                 elif HORA_CENA_MIN <= hora_actual <= HORA_CENA_MAX:
                     tiene_cena = True
+                
+                # Contar restaurantes consecutivos
+                restaurantes_consecutivos += 1
+                max_consecutivos = max(max_consecutivos, restaurantes_consecutivos)
+            else:
+                restaurantes_consecutivos = 0
             
             hora_actual += lugar['tiempo_visita']
         
-        # ============================================================
-        # NUEVO: Validar presupuesto diario
-        # ============================================================
+        # Acumular gasto del día al acumulado
+        gasto_acumulado += gasto_dia
+        
+        # Validar presupuesto diario
         if gasto_dia > PRESUPUESTO_DIARIO:
             exceso_presupuesto = gasto_dia - PRESUPUESTO_DIARIO
             fitness -= PENALIZACION_EXCESO_PRESUPUESTO * exceso_presupuesto
@@ -251,20 +259,7 @@ def evaluar_individuo(individuo: Individual) -> float:
         if not tiene_cena:
             fitness -= PENALIZACION_CENA_FALTA
         
-        # ============================================================
-        # PENALIZAR MUCHOS RESTAURANTES CONSECUTIVOS
-        # ============================================================
-        restaurantes_consecutivos = 0
-        max_consecutivos = 0
-        
-        for lugar in lugares_dia:
-            tipo = lugar.get('tipo', '')
-            if tipo in ['restaurante', 'bar', 'cafetería']:
-                restaurantes_consecutivos += 1
-                max_consecutivos = max(max_consecutivos, restaurantes_consecutivos)
-            else:
-                restaurantes_consecutivos = 0
-        
+        # Penalizar muchos restaurantes consecutivos
         if max_consecutivos > 3:
             fitness -= PENALIZACION_RESTAURANTES_CONSECUTIVOS * (max_consecutivos - 3)
         
@@ -273,8 +268,11 @@ def evaluar_individuo(individuo: Individual) -> float:
         distancia_acum += dist_dia
         puntos_acum += puntos_dia
     
-    # Fitness = puntos - penalizaciones
+    # Fitness = puntos - penalizaciones - penalización por distancia
     fitness += puntos_acum
+    
+    # Penalizar distancia excesiva (0.3 puntos por km - más gradual)
+    fitness -= distancia_acum * 0.3
     
     # Guardar métricas
     individuo.tiempo_total = tiempo_acum
@@ -284,9 +282,7 @@ def evaluar_individuo(individuo: Individual) -> float:
     
     return fitness
 
-# ============================================================================
-# OPERADORES GENÉTICOS
-# ============================================================================
+# Operadores genéticos
 
 def seleccion_torneo(poblacion: List[Individual], k: int = 3) -> Individual:
     """Selección por torneo"""
@@ -374,9 +370,7 @@ def mutar(individuo: Individual):
                     random.choice(lugares_nueva)["id"] for _ in range(len(dia))
                 ]
 
-# ============================================================================
-# ALGORITMO PRINCIPAL
-# ============================================================================
+# Algoritmo genético principal
 
 def algoritmo_genetico_espana(
     num_dias: int = 20,
@@ -465,20 +459,13 @@ def algoritmo_genetico_espana(
                   f"Puntos: {mejor_global.puntos_totales:5d} | "
                   f"Tiempo: {mejor_global.tiempo_total/60:6.1f}h | "
                   f"Dist: {mejor_global.distancia_total:7.1f}km")
-    
-    print(f"\n{'='*80}")
-    print(f"✅ OPTIMIZACIÓN COMPLETADA")
-    print(f"{'='*80}\n")
-    
     return {
         "mejor_individuo": mejor_global,
         "historial_fitness": historial_fitness,
         "poblacion_final": poblacion
     }
 
-# ============================================================================
-# UTILIDADES DE ANÁLISIS
-# ============================================================================
+# Utilidades de análisis
 
 def analizar_solucion(individuo: Individual):
     """Muestra análisis detallado de una solución con itinerario completo"""
@@ -513,6 +500,16 @@ def analizar_solucion(individuo: Individual):
         print(f"{'─'*80}")
         print(f"DÍA {dia_idx} - {ciudad.upper()}")
         print(f"{'─'*80}")
+        
+        # Mostrar transporte intercity si aplica
+        transport_info = next((t for t in individuo.transportes_intercity if t[0] == dia_idx - 1), None)
+        if transport_info:
+            _, origen, destino, tipo_elegido, tiempo_trans, costo_trans = transport_info
+            tipo_icons = {"avion": "✈️", "tren": "🚄", "bus": "🚌"}
+            icon = tipo_icons.get(tipo_elegido, "🚗")
+            print(f"{icon} Transporte: {origen} → {destino} | "
+                  f"{tipo_elegido.upper()} ({tiempo_trans} min, {costo_trans}€)")
+            print(f"")
         
         # Indicador de presupuesto
         if gasto_dia > PRESUPUESTO_DIARIO:
@@ -627,6 +624,33 @@ def analizar_solucion(individuo: Individual):
         
         print(f"")
     
+    # Resumen de transportes intercity
+    if individuo.transportes_intercity:
+        print(f"{'='*80}")
+        print(f"🚊 RESUMEN DE TRANSPORTES INTERCITY")
+        print(f"{'='*80}\n")
+        
+        # Contar por tipo
+        transportes_summary = {"avion": 0, "tren": 0, "bus": 0}
+        costo_total_transporte = 0
+        tiempo_total_transporte = 0
+        
+        for t in individuo.transportes_intercity:
+            tipo = t[3]
+            costo = t[5]
+            tiempo = t[4]
+            transportes_summary[tipo] += 1
+            costo_total_transporte += costo
+            tiempo_total_transporte += tiempo
+        
+        print(f"📊 Estadísticas:")
+        print(f"  ✈️  Avión: {transportes_summary['avion']} viajes")
+        print(f"  🚄 Tren:  {transportes_summary['tren']} viajes")
+        print(f"  🚌 Bus:   {transportes_summary['bus']} viajes")
+        print(f"\n💰 Costo total transportes: {costo_total_transporte}€")
+        print(f"⏱️  Tiempo total transportes: {tiempo_total_transporte} min ({tiempo_total_transporte/60:.1f}h)")
+        print(f"")
+    
     print(f"{'='*80}")
     print(f"✅ ANÁLISIS COMPLETO")
     print(f"{'='*80}\n")
@@ -662,20 +686,72 @@ def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json
     
     print(f"💾 Resultados exportados a: {archivo}")
 
-# ============================================================================
-# EJECUCIÓN
-# ============================================================================
+# Ejecución principal
 
 if __name__ == "__main__":
-    # Ejecutar algoritmo
+    import sys
+    
+    configuraciones = {
+        "1": {
+            "nombre": "RÁPIDA (10-15 min)",
+            "num_dias": 20,
+            "lugares_por_dia": 12,
+            "tam_poblacion": 8000,
+            "num_generaciones": 500,
+            "tasa_elitismo": 0.20,
+            "descripcion": "Testing y validación rápida"
+        },
+        "2": {
+            "nombre": "INTENSIVA (45-60 min)",
+            "num_dias": 25,
+            "lugares_por_dia": 15,
+            "tam_poblacion": 15000,
+            "num_generaciones": 800,
+            "tasa_elitismo": 0.15,
+            "descripcion": "Mayor exploración y convergencia"
+        },
+        "3": {
+            "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
+            "num_dias": 30,
+            "lugares_por_dia": 15,
+            "tam_poblacion": 20000,
+            "num_generaciones": 1000,
+            "tasa_elitismo": 0.10,
+            "descripcion": "Máxima calidad de solución"
+        }
+    }
+    
+    if len(sys.argv) > 1:
+        modo = sys.argv[1]
+    else:
+        print(f"\n{'='*80}")
+        print(f"🎯 SELECCIONA MODO DE EJECUCIÓN")
+        print(f"{'='*80}\n")
+        
+        for key, config in configuraciones.items():
+            print(f"[{key}] {config['nombre']}")
+            print(f"    📊 {config['descripcion']}")
+            print(f"    ⚙️  {config['num_dias']} días | {config['lugares_por_dia']} lugares/día | "
+                  f"{config['tam_poblacion']:,} población | {config['num_generaciones']} gen")
+            print()
+        
+        print(f"{'='*80}")
+        modo = input("👉 Selecciona modo (1/2/3): ").strip()
+    
+    if modo not in configuraciones:
+        print(f"\n❌ ERROR: Modo '{modo}' no válido. Usa: 1, 2 o 3")
+        print(f"💡 Uso: python algoritmo_espana.py [1|2|3]")
+        sys.exit(1)
+    
+    config = configuraciones[modo]
+    
     resultados = algoritmo_genetico_espana(
-        num_dias=20,
-        lugares_por_dia=12,
-        tam_poblacion=8000,
-        num_generaciones=500,
-        tasa_elitismo=0.20
+        num_dias=config["num_dias"],
+        lugares_por_dia=config["lugares_por_dia"],
+        tam_poblacion=config["tam_poblacion"],
+        num_generaciones=config["num_generaciones"],
+        tasa_elitismo=config["tasa_elitismo"]
     )
     
-    # Analizar y exportar
     analizar_solucion(resultados["mejor_individuo"])
-    exportar_resultados(resultados)
+    exportar_resultados(resultados, archivo=f"resultados_espana_modo{modo}.json")

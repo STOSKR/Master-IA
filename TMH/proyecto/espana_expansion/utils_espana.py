@@ -772,7 +772,6 @@ def crear_dataset_espana():
     offset += len(lugares_madrid)
     print(f"✅ Madrid: {len(lugares_madrid)} lugares (100% reales)")
     
-    # BARCELONA - 60 reales + 140 generados
     for lugar in lugares_barcelona_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -780,9 +779,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Barcelona"
         offset += 1
     lugares_totales.extend(lugares_barcelona_reales)
-    print(f"✅ Barcelona: {len(lugares_barcelona_reales)} lugares (100% reales)")
     
-    # SEVILLA - 40 REALES (suficientes para el algoritmo)
     for lugar in lugares_sevilla_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -790,9 +787,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Sevilla"
         offset += 1
     lugares_totales.extend(lugares_sevilla_reales)
-    print(f"✅ Sevilla: {len(lugares_sevilla_reales)} lugares (100% reales)")
     
-    # VALENCIA - 40 REALES (suficientes para el algoritmo)
     for lugar in lugares_valencia_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -800,9 +795,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Valencia"
         offset += 1
     lugares_totales.extend(lugares_valencia_reales)
-    print(f"✅ Valencia: {len(lugares_valencia_reales)} lugares (100% reales)")
     
-    # GRANADA - 30 REALES (suficientes para el algoritmo)
     for lugar in lugares_granada_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -810,9 +803,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Granada"
         offset += 1
     lugares_totales.extend(lugares_granada_reales)
-    print(f"✅ Granada: {len(lugares_granada_reales)} lugares (100% reales)")
     
-    # BILBAO - 20 REALES PRINCIPALES
     lugares_bilbao_reales = [
         {"nombre": "Museo Guggenheim Bilbao", "x": 43.2687, "y": -2.9394, "puntos": 100, "tiempo_visita": 120, "tipo": "museo"},
         {"nombre": "Casco Viejo de Bilbao", "x": 43.2569, "y": -2.9234, "puntos": 95, "tiempo_visita": 120, "tipo": "turistico"},
@@ -834,7 +825,7 @@ def crear_dataset_espana():
         {"nombre": "Palacio Euskalduna", "x": 43.2650, "y": -2.9443, "puntos": 70, "tiempo_visita": 60, "tipo": "turistico"},
         {"nombre": "Parque Etxebarria", "x": 43.2673, "y": -2.9154, "puntos": 65, "tiempo_visita": 60, "tipo": "parque"},
         {"nombre": "Mirador de Artxanda", "x": 43.2828, "y": -2.9396, "puntos": 80, "tiempo_visita": 45, "tipo": "mirador"},
-        # Expansión para alcanzar 100 lugares (80 adicionales)
+        
         {"nombre": "Museo Vasco", "x": 43.2572, "y": -2.9254, "puntos": 70, "tiempo_visita": 75, "tipo": "museo"},
         {"nombre": "Museo Taurino", "x": 43.2562, "y": -2.9240, "puntos": 60, "tiempo_visita": 60, "tipo": "museo"},
         {"nombre": "Museo Reproducciones Artísticas", "x": 43.2555, "y": -2.9248, "puntos": 60, "tiempo_visita": 60, "tipo": "museo"},
@@ -910,7 +901,6 @@ def crear_dataset_espana():
         {"nombre": "Barrio Rekalde", "x": 43.2605, "y": -2.9185, "puntos": 60, "tiempo_visita": 60, "tipo": "turistico"},
     ]
     
-    # TOLEDO - 20 REALES PRINCIPALES
     lugares_toledo_reales = [
         {"nombre": "Alcázar de Toledo", "x": 39.8576, "y": -4.0206, "puntos": 100, "tiempo_visita": 120, "tipo": "palacio"},
         {"nombre": "Catedral Primada", "x": 39.8569, "y": -4.0247, "puntos": 100, "tiempo_visita": 90, "tipo": "catedral"},
@@ -932,7 +922,7 @@ def crear_dataset_espana():
         {"nombre": "Convento de Santa Clara", "x": 39.8583, "y": -4.0262, "puntos": 65, "tiempo_visita": 45, "tipo": "catedral"},
         {"nombre": "Museo Sefardí", "x": 39.8567, "y": -4.0302, "puntos": 75, "tiempo_visita": 60, "tipo": "museo"},
         {"nombre": "Casa y Museo de El Greco", "x": 39.8565, "y": -4.0305, "puntos": 80, "tiempo_visita": 60, "tipo": "museo"},
-        # Expansión para alcanzar 100 lugares (80 adicionales)
+        
         {"nombre": "Museo Santa Cruz", "x": 39.8588, "y": -4.0210, "puntos": 75, "tiempo_visita": 90, "tipo": "museo"},
         {"nombre": "Casco Histórico Toledo", "x": 39.8575, "y": -4.0255, "puntos": 85, "tiempo_visita": 180, "tipo": "turistico"},
         {"nombre": "Iglesia de San Román", "x": 39.8596, "y": -4.0268, "puntos": 70, "tiempo_visita": 45, "tipo": "catedral"},
@@ -1006,7 +996,6 @@ def crear_dataset_espana():
         {"nombre": "Plaza de los Carmelitas", "x": 39.8560, "y": -4.0295, "puntos": 55, "tiempo_visita": 15, "tipo": "plaza"},
     ]
     
-    # CÓRDOBA - 15 REALES PRINCIPALES
     lugares_cordoba_reales = [
         {"nombre": "Mezquita-Catedral de Córdoba", "x": 37.8789, "y": -4.7795, "puntos": 100, "tiempo_visita": 120, "tipo": "catedral"},
         {"nombre": "Judería de Córdoba", "x": 37.8795, "y": -4.7807, "puntos": 95, "tiempo_visita": 120, "tipo": "turistico"},
@@ -1023,7 +1012,7 @@ def crear_dataset_espana():
         {"nombre": "Baños del Alcázar Califal", "x": 37.8790, "y": -4.7821, "puntos": 70, "tiempo_visita": 45, "tipo": "museo"},
         {"nombre": "Caballerizas Reales", "x": 37.8770, "y": -4.7840, "puntos": 75, "tiempo_visita": 60, "tipo": "turistico"},
         {"nombre": "Plaza de la Corredera", "x": 37.8854, "y": -4.7756, "puntos": 70, "tiempo_visita": 30, "tipo": "plaza"},
-        # Expansión para alcanzar 100 lugares (85 adicionales)
+        
         {"nombre": "Patio de los Naranjos", "x": 37.8792, "y": -4.7795, "puntos": 80, "tiempo_visita": 30, "tipo": "turistico"},
         {"nombre": "Mihrab de la Mezquita", "x": 37.8788, "y": -4.7793, "puntos": 90, "tiempo_visita": 45, "tipo": "catedral"},
         {"nombre": "Capilla de Villaviciosa", "x": 37.8790, "y": -4.7794, "puntos": 75, "tiempo_visita": 30, "tipo": "catedral"},
@@ -1106,7 +1095,6 @@ def crear_dataset_espana():
         {"nombre": "Estación de Tren de Córdoba", "x": 37.8868, "y": -4.7680, "puntos": 55, "tiempo_visita": 30, "tipo": "turistico"},
     ]
     
-    # SAN SEBASTIÁN - 15 REALES PRINCIPALES
     lugares_san_sebastian_reales = [
         {"nombre": "Playa de la Concha", "x": 43.3184, "y": -1.9872, "puntos": 100, "tiempo_visita": 120, "tipo": "playa"},
         {"nombre": "Monte Igueldo", "x": 43.3100, "y": -2.0084, "puntos": 95, "tiempo_visita": 90, "tipo": "mirador"},
@@ -1123,7 +1111,7 @@ def crear_dataset_espana():
         {"nombre": "Plaza de la Constitución", "x": 43.3226, "y": -1.9823, "puntos": 75, "tiempo_visita": 20, "tipo": "plaza"},
         {"nombre": "San Telmo Museoa", "x": 43.3223, "y": -1.9847, "puntos": 80, "tiempo_visita": 90, "tipo": "museo"},
         {"nombre": "Paseo Nuevo", "x": 43.3260, "y": -1.9877, "puntos": 75, "tiempo_visita": 45, "tipo": "turistico"},
-        # Expansión para alcanzar 100 lugares (85 adicionales)
+        
         {"nombre": "Playa de Ondarreta", "x": 43.3133, "y": -2.0015, "puntos": 90, "tiempo_visita": 120, "tipo": "playa"},
         {"nombre": "Paseo de la Concha", "x": 43.3165, "y": -1.9925, "puntos": 85, "tiempo_visita": 60, "tipo": "turistico"},
         {"nombre": "Jardines de Miramar", "x": 43.3118, "y": -1.9955, "puntos": 80, "tiempo_visita": 45, "tipo": "parque"},
@@ -1203,7 +1191,6 @@ def crear_dataset_espana():
         {"nombre": "Ermita de Guadalupe", "x": 43.3615, "y": -1.7925, "puntos": 70, "tiempo_visita": 30, "tipo": "catedral"},
     ]
     
-    # SANTIAGO DE COMPOSTELA - 15 REALES PRINCIPALES
     lugares_santiago_reales = [
         {"nombre": "Catedral de Santiago", "x": 42.8805, "y": -8.5448, "puntos": 100, "tiempo_visita": 120, "tipo": "catedral"},
         {"nombre": "Plaza del Obradoiro", "x": 42.8803, "y": -8.5447, "puntos": 95, "tiempo_visita": 45, "tipo": "plaza"},
@@ -1220,7 +1207,7 @@ def crear_dataset_espana():
         {"nombre": "Ciudad de la Cultura", "x": 42.8654, "y": -8.5184, "puntos": 80, "tiempo_visita": 90, "tipo": "museo"},
         {"nombre": "Monte Pedroso", "x": 42.9007, "y": -8.5184, "puntos": 75, "tiempo_visita": 90, "tipo": "parque"},
         {"nombre": "Colegiata de Santa María del Sar", "x": 42.8723, "y": -8.5519, "puntos": 70, "tiempo_visita": 45, "tipo": "catedral"},
-        # Expansión para alcanzar 100 lugares (85 adicionales)
+        
         {"nombre": "Pórtico de la Gloria", "x": 42.8805, "y": -8.5450, "puntos": 95, "tiempo_visita": 60, "tipo": "catedral"},
         {"nombre": "Museo Catedral", "x": 42.8807, "y": -8.5452, "puntos": 85, "tiempo_visita": 90, "tipo": "museo"},
         {"nombre": "Cripta Catedral", "x": 42.8804, "y": -8.5448, "puntos": 80, "tiempo_visita": 45, "tipo": "catedral"},
@@ -1305,7 +1292,6 @@ def crear_dataset_espana():
         {"nombre": "Convento de Belvis", "x": 42.8773, "y": -8.5507, "puntos": 60, "tiempo_visita": 45, "tipo": "catedral"},
     ]
     
-    # Añadir Bilbao
     for lugar in lugares_bilbao_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -1313,9 +1299,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Bilbao"
         offset += 1
     lugares_totales.extend(lugares_bilbao_reales)
-    print(f"✅ Bilbao: {len(lugares_bilbao_reales)} lugares (100% reales)")
     
-    # Añadir Toledo
     for lugar in lugares_toledo_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -1323,9 +1307,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Toledo"
         offset += 1
     lugares_totales.extend(lugares_toledo_reales)
-    print(f"✅ Toledo: {len(lugares_toledo_reales)} lugares (100% reales)")
     
-    # Añadir Córdoba
     for lugar in lugares_cordoba_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -1333,9 +1315,7 @@ def crear_dataset_espana():
         lugar["ciudad"] = "Córdoba"
         offset += 1
     lugares_totales.extend(lugares_cordoba_reales)
-    print(f"✅ Córdoba: {len(lugares_cordoba_reales)} lugares (100% reales)")
     
-    # Añadir San Sebastián
     for lugar in lugares_san_sebastian_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
@@ -1343,22 +1323,14 @@ def crear_dataset_espana():
         lugar["ciudad"] = "San Sebastián"
         offset += 1
     lugares_totales.extend(lugares_san_sebastian_reales)
-    print(f"✅ San Sebastián: {len(lugares_san_sebastian_reales)} lugares (100% reales)")
     
-    # Añadir Santiago
     for lugar in lugares_santiago_reales:
         lugar["id"] = offset
         lugar["apertura"] = "09:00"
         lugar["cierre"] = "21:00"
         lugar["ciudad"] = "Santiago"
         offset += 1
-    lugares_totales.extend(lugares_santiago_reales)
-    print(f"✅ Santiago: {len(lugares_santiago_reales)} lugares (100% reales)")
-    
-    print(f"\n🎯 TOTAL: {len(lugares_totales)} lugares")
-    print(f"   📍 Todos los lugares son REALES (100%)")
-    print(f"   🏛️ Dataset completo con lugares turísticos auténticos")
-    
+    lugares_totales.extend(lugares_santiago_reales)    
     return lugares_totales
 
 lugares_turisticos_espana = crear_dataset_espana()
