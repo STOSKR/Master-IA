@@ -18,11 +18,17 @@ try:
     import matplotlib
     matplotlib.use('Agg')  # Use non-interactive backend
     import matplotlib.pyplot as plt
-    import numpy as np
     MATPLOTLIB_AVAILABLE = True
 except ImportError:
     MATPLOTLIB_AVAILABLE = False
     print("⚠️  Matplotlib no disponible - se omitirán algunas gráficas")
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    NUMPY_AVAILABLE = False
+    print("⚠️  Numpy no disponible - se usarán alternativas")
 
 # Colores por ciudad para visualización
 COLORES_CIUDADES = {
@@ -63,6 +69,10 @@ def cargar_resultados(archivo_json):
 
 def analizar_evolucion_fitness(resultados):
     """Analiza la evolución del fitness a lo largo de las generaciones"""
+    if not MATPLOTLIB_AVAILABLE:
+        print("⚠️  Matplotlib no disponible - saltando gráficas de evolución")
+        return
+    
     evolucion = resultados.get('evolucion_fitness', resultados.get('evolucion', []))
     
     if not evolucion:
@@ -139,6 +149,10 @@ def analizar_evolucion_fitness(resultados):
 
 def analizar_distribucion_por_ciudades(resultados):
     """Analiza la distribución de días y lugares por ciudad"""
+    if not MATPLOTLIB_AVAILABLE:
+        print("⚠️  Matplotlib no disponible - saltando gráficas de distribución")
+        return
+    
     # Adaptado para el formato actual del JSON
     itinerario = resultados.get('itinerario', [])
     
@@ -264,6 +278,10 @@ def analizar_distribucion_por_ciudades(resultados):
 
 def analizar_metricas_diarias(resultados):
     """Analiza métricas día por día"""
+    if not MATPLOTLIB_AVAILABLE:
+        print("⚠️  Matplotlib no disponible - saltando gráficas de métricas diarias")
+        return
+    
     # Adaptado para el formato actual del JSON
     itinerario = resultados.get('itinerario', [])
     
@@ -309,8 +327,9 @@ def analizar_metricas_diarias(resultados):
     plt.subplot(2, 2, 1)
     colores_dias = [COLORES_CIUDADES.get(c, '#808080') for c in ciudades]
     plt.bar(dias_nums, puntos_dia, color=colores_dias, edgecolor='black', linewidth=1)
-    plt.axhline(y=np.mean(puntos_dia), color='red', linestyle='--', 
-                linewidth=2, label=f'Media: {np.mean(puntos_dia):.1f}')
+    media_puntos = sum(puntos_dia) / len(puntos_dia) if puntos_dia else 0
+    plt.axhline(y=media_puntos, color='red', linestyle='--', 
+                linewidth=2, label=f'Media: {media_puntos:.1f}')
     plt.xlabel('Día', fontsize=11)
     plt.ylabel('Puntos', fontsize=11)
     plt.title('Puntos Turísticos por Día', fontsize=13, fontweight='bold')
@@ -320,8 +339,9 @@ def analizar_metricas_diarias(resultados):
     # Distancia por día
     plt.subplot(2, 2, 2)
     plt.bar(dias_nums, distancias_dia, color=colores_dias, edgecolor='black', linewidth=1)
-    plt.axhline(y=np.mean(distancias_dia), color='red', linestyle='--',
-                linewidth=2, label=f'Media: {np.mean(distancias_dia):.1f} km')
+    media_dist = sum(distancias_dia) / len(distancias_dia) if distancias_dia else 0
+    plt.axhline(y=media_dist, color='red', linestyle='--',
+                linewidth=2, label=f'Media: {media_dist:.1f} km')
     plt.xlabel('Día', fontsize=11)
     plt.ylabel('Distancia (km)', fontsize=11)
     plt.title('Distancia Recorrida por Día', fontsize=13, fontweight='bold')
@@ -331,8 +351,9 @@ def analizar_metricas_diarias(resultados):
     # Tiempo por día
     plt.subplot(2, 2, 3)
     plt.bar(dias_nums, tiempos_dia, color=colores_dias, edgecolor='black', linewidth=1)
-    plt.axhline(y=np.mean(tiempos_dia), color='red', linestyle='--',
-                linewidth=2, label=f'Media: {np.mean(tiempos_dia):.1f} h')
+    media_tiempo = sum(tiempos_dia) / len(tiempos_dia) if tiempos_dia else 0
+    plt.axhline(y=media_tiempo, color='red', linestyle='--',
+                linewidth=2, label=f'Media: {media_tiempo:.1f} h')
     plt.xlabel('Día', fontsize=11)
     plt.ylabel('Tiempo (horas)', fontsize=11)
     plt.title('Tiempo de Visitas por Día', fontsize=13, fontweight='bold')
@@ -342,8 +363,9 @@ def analizar_metricas_diarias(resultados):
     # Número de lugares por día
     plt.subplot(2, 2, 4)
     plt.bar(dias_nums, num_lugares, color=colores_dias, edgecolor='black', linewidth=1)
-    plt.axhline(y=np.mean(num_lugares), color='red', linestyle='--',
-                linewidth=2, label=f'Media: {np.mean(num_lugares):.1f}')
+    media_lugares = sum(num_lugares) / len(num_lugares) if num_lugares else 0
+    plt.axhline(y=media_lugares, color='red', linestyle='--',
+                linewidth=2, label=f'Media: {media_lugares:.1f}')
     plt.xlabel('Día', fontsize=11)
     plt.ylabel('Número de lugares', fontsize=11)
     plt.title('Lugares Visitados por Día', fontsize=13, fontweight='bold')
@@ -364,7 +386,7 @@ def analizar_metricas_diarias(resultados):
 
 
 def crear_mapa_interactivo(resultados, archivo_salida='mapa_ruta_espana.html'):
-    """Crea un mapa interactivo con la ruta completa"""
+    """Crea un mapa interactivo con la ruta completa MEJORADO"""
     # Adaptado para el formato actual del JSON
     itinerario = resultados.get('itinerario', [])
     
@@ -383,58 +405,239 @@ def crear_mapa_interactivo(resultados, archivo_salida='mapa_ruta_espana.html'):
     folium.TileLayer('CartoDB positron').add_to(mapa)
     folium.TileLayer('CartoDB dark_matter').add_to(mapa)
     
-    # Crear grupos de capas por día
-    feature_groups = {}
+    # Generar colores diferentes para misma ciudad en diferentes días
+    import colorsys
+    def generar_variaciones_color(color_base_hex, num_variaciones):
+        """Genera variaciones de un color en diferentes tonalidades"""
+        # Convertir hex a RGB
+        color_base_hex = color_base_hex.lstrip('#')
+        r, g, b = tuple(int(color_base_hex[i:i+2], 16) for i in (0, 2, 4))
+        h, s, v = colorsys.rgb_to_hsv(r/255.0, g/255.0, b/255.0)
+        
+        colores = []
+        for i in range(num_variaciones):
+            # Variar el brillo (value) y saturación
+            nuevo_v = max(0.3, min(1.0, v - 0.15 + (i * 0.3 / max(1, num_variaciones-1))))
+            nuevo_s = max(0.4, min(1.0, s - 0.1 + (i * 0.2 / max(1, num_variaciones-1))))
+            nr, ng, nb = colorsys.hsv_to_rgb(h, nuevo_s, nuevo_v)
+            hex_color = '#{:02x}{:02x}{:02x}'.format(int(nr*255), int(ng*255), int(nb*255))
+            colores.append(hex_color)
+        return colores
+    
+    # Contar cuántos días se visita cada ciudad
+    dias_por_ciudad = {}
+    for ciudad in ciudades:
+        dias_por_ciudad[ciudad] = dias_por_ciudad.get(ciudad, 0) + 1
+    
+    # Generar paleta de colores por ciudad
+    colores_por_ciudad_dia = {}
+    contador_ciudad = {}
+    for ciudad in set(ciudades):
+        num_dias = dias_por_ciudad[ciudad]
+        color_base = COLORES_CIUDADES.get(ciudad, '#808080')
+        variaciones = generar_variaciones_color(color_base, num_dias)
+        colores_por_ciudad_dia[ciudad] = variaciones
+        contador_ciudad[ciudad] = 0
+    
+    # Crear grupos de capas por día y líneas de conexión entre ciudades
+    grupo_ruta_ciudades = folium.FeatureGroup(name='🗺️ Ruta entre Ciudades', show=True)
+    
+    # Rastrear último lugar de cada día para conectar con siguiente
+    lugares_finales = []
     
     for dia_idx, (dia_lugares, ciudad) in enumerate(zip(dias, ciudades)):
         dia_num = dia_idx + 1
-        feature_group = folium.FeatureGroup(name=f'Día {dia_num} - {ciudad}')
+        
+        # Obtener color específico para este día en esta ciudad
+        idx_color = contador_ciudad[ciudad]
+        color_dia = colores_por_ciudad_dia[ciudad][idx_color]
+        contador_ciudad[ciudad] += 1
+        
+        feature_group = folium.FeatureGroup(name=f'📅 Día {dia_num} - {ciudad}', show=True)
         
         lugares_objs = [get_lugar_por_id(lid) for lid in dia_lugares if get_lugar_por_id(lid)]
         
         if not lugares_objs:
             continue
         
-        # Añadir marcadores
+        # Añadir marcadores numerados
         for idx, lugar in enumerate(lugares_objs):
-            color = COLORES_CIUDADES.get(ciudad, 'gray')
             icono = ICONOS_TIPO.get(lugar.get('tipo', 'turistico'), 'info-sign')
             
+            # HTML del popup mejorado
             popup_html = f"""
-            <div style="font-family: Arial; width: 250px;">
-                <h4 style="color: {color}; margin: 5px 0;">
-                    {idx + 1}. {lugar['nombre']}
-                </h4>
-                <hr style="margin: 5px 0;">
-                <b>Tipo:</b> {lugar.get('tipo', 'N/A')}<br>
-                <b>Ciudad:</b> {lugar.get('ciudad', 'N/A')}<br>
-                <b>Puntos:</b> {lugar['puntos']}<br>
-                <b>Tiempo visita:</b> {lugar['tiempo_visita']} min<br>
-                <b>Día:</b> {dia_num}<br>
-                <b>Orden:</b> {idx + 1} de {len(lugares_objs)}
+            <div style="font-family: Arial; width: 280px;">
+                <h3 style="color: {color_dia}; margin: 5px 0; border-bottom: 2px solid {color_dia};">
+                    📍 {lugar['nombre']}
+                </h3>
+                <div style="background: #f0f0f0; padding: 8px; border-radius: 5px; margin: 8px 0;">
+                    <p style="margin: 3px 0;"><b>🏙️ Ciudad:</b> {lugar.get('ciudad', 'N/A')}</p>
+                    <p style="margin: 3px 0;"><b>📂 Tipo:</b> {lugar.get('tipo', 'N/A')}</p>
+                    <p style="margin: 3px 0;"><b>⭐ Puntos:</b> {lugar['puntos']}</p>
+                    <p style="margin: 3px 0;"><b>⏱️ Tiempo:</b> {lugar['tiempo_visita']} min</p>
+                </div>
+                <div style="background: {color_dia}; color: white; padding: 5px; border-radius: 5px; text-align: center;">
+                    <b>Día {dia_num} • Lugar {idx + 1}/{len(lugares_objs)}</b>
+                </div>
             </div>
             """
             
+            # Crear marcador con número
             folium.Marker(
                 location=[lugar['x'], lugar['y']],
-                popup=folium.Popup(popup_html, max_width=300),
-                tooltip=f"{idx+1}. {lugar['nombre']}",
-                icon=folium.Icon(color='red' if idx == 0 else 'blue', 
-                                icon=icono, prefix='fa')
+                popup=folium.Popup(popup_html, max_width=320),
+                tooltip=f"Día {dia_num} - {idx+1}. {lugar['nombre']}",
+                icon=folium.DivIcon(html=f"""
+                    <div style="
+                        background-color: {color_dia};
+                        border: 3px solid {'#FFD700' if idx == 0 else 'white'};
+                        border-radius: 50%;
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 16px;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    ">
+                        {idx + 1}
+                    </div>
+                """)
             ).add_to(feature_group)
         
-        # Añadir líneas conectando lugares del día
+        # Añadir líneas conectando lugares dentro del mismo día
         coordenadas = [[l['x'], l['y']] for l in lugares_objs]
         folium.PolyLine(
             coordenadas,
-            color=color,
-            weight=3,
-            opacity=0.7,
-            popup=f'Día {dia_num} - {ciudad}'
+            color=color_dia,
+            weight=4,
+            opacity=0.8,
+            popup=f'Día {dia_num} - {ciudad} ({len(lugares_objs)} lugares)',
+            tooltip=f'Ruta Día {dia_num}'
         ).add_to(feature_group)
         
         feature_group.add_to(mapa)
+        
+        # Guardar último lugar del día para conectar con siguiente
+        if lugares_objs:
+            lugares_finales.append({
+                'dia': dia_num,
+                'ciudad': ciudad,
+                'lugar': lugares_objs[-1],
+                'color': color_dia
+            })
     
+    # Añadir líneas de conexión entre ciudades (último lugar de un día → primer lugar del siguiente)
+    for i in range(len(lugares_finales) - 1):
+        lugar_actual = lugares_finales[i]
+        lugar_siguiente = lugares_finales[i + 1]
+        
+        # Solo dibujar línea si cambia de ciudad
+        if lugar_actual['ciudad'] != lugar_siguiente['ciudad']:
+            # Obtener primer lugar del día siguiente
+            siguiente_dia_lugares = [get_lugar_por_id(lid) for lid in dias[i+1] 
+                                      if get_lugar_por_id(lid)]
+            
+            if siguiente_dia_lugares:
+                primer_lugar_sig = siguiente_dia_lugares[0]
+                
+                # Línea punteada entre ciudades
+                folium.PolyLine(
+                    [[lugar_actual['lugar']['x'], lugar_actual['lugar']['y']],
+                     [primer_lugar_sig['x'], primer_lugar_sig['y']]],
+                    color='#FF6B35',  # Naranja para viajes entre ciudades
+                    weight=5,
+                    opacity=0.7,
+                    dash_array='10, 10',  # Línea punteada
+                    popup=f"🚄 Viaje: {lugar_actual['ciudad']} → {lugar_siguiente['ciudad']} (Día {lugar_actual['dia']}→{lugar_siguiente['dia']})",
+                    tooltip=f"Transporte intercity"
+                ).add_to(grupo_ruta_ciudades)
+                
+                # Añadir marcador de transporte en el punto medio
+                lat_medio = (lugar_actual['lugar']['x'] + primer_lugar_sig['x']) / 2
+                lon_medio = (lugar_actual['lugar']['y'] + primer_lugar_sig['y']) / 2
+                
+                folium.Marker(
+                    location=[lat_medio, lon_medio],
+                    icon=folium.Icon(color='orange', icon='exchange', prefix='fa'),
+                    popup=f"🚄 {lugar_actual['ciudad']} → {lugar_siguiente['ciudad']}",
+                    tooltip=f"Día {lugar_actual['dia']} → Día {lugar_siguiente['dia']}"
+                ).add_to(grupo_ruta_ciudades)
+
+    # -----------------------------------------
+    # NUEVO: Dibujar orden de visita entre CIUDADES
+    # -----------------------------------------
+    # Secuencia de ciudades por primer encuentro (orden de visita único)
+    ciudad_secuencia = []
+    for c in ciudades:
+        if c not in ciudad_secuencia:
+            ciudad_secuencia.append(c)
+
+    # Obtener coordenadas del PRIMER lugar visitado para cada ciudad en la secuencia
+    coords_ciudades = []
+    for ciudad in ciudad_secuencia:
+        coord = None
+        # buscar primer día en que aparece la ciudad
+        for dia_lugares, dia_ciudad in zip(dias, ciudades):
+            if dia_ciudad == ciudad and dia_lugares:
+                primer_l = get_lugar_por_id(dia_lugares[0])
+                if primer_l:
+                    coord = (primer_l['x'], primer_l['y'])
+                    break
+        if coord:
+            coords_ciudades.append({'ciudad': ciudad, 'coord': coord})
+
+    # Generar paleta de colores para las líneas entre ciudades
+    def generar_palette(n):
+        palette = []
+        for i in range(n):
+            h = i / max(1, n)
+            s = 0.7
+            v = 0.9
+            r, g, b = colorsys.hsv_to_rgb(h, s, v)
+            palette.append('#{:02x}{:02x}{:02x}'.format(int(r*255), int(g*255), int(b*255)))
+        return palette
+
+    if len(coords_ciudades) >= 2:
+        palette = generar_palette(len(coords_ciudades)-1)
+        # Dibujar líneas conectando las ciudades según secuencia
+        for i in range(len(coords_ciudades)-1):
+            a = coords_ciudades[i]['coord']
+            b = coords_ciudades[i+1]['coord']
+            color_line = palette[i % len(palette)]
+            tooltip_text = f"Orden {i+1}: {coords_ciudades[i]['ciudad']} → {coords_ciudades[i+1]['ciudad']}"
+            folium.PolyLine(
+                [[a[0], a[1]], [b[0], b[1]]],
+                color=color_line,
+                weight=6,
+                opacity=0.8,
+                tooltip=tooltip_text
+            ).add_to(mapa)
+
+        # Añadir marcadores numerados en cada ciudad (1,2,3...)
+        for idx, item in enumerate(coords_ciudades):
+            num = idx + 1
+            ciudad = item['ciudad']
+            lat, lon = item['coord']
+            color_marker = COLORES_CIUDADES.get(ciudad, '#808080')
+            html = (f"<div style=\"background:{color_marker};color:white;"
+                    f"border-radius:50%;width:36px;height:36px;display:flex;"
+                    f"align-items:center;justify-content:center;font-weight:bold;"
+                    f"box-shadow:0 2px 4px rgba(0,0,0,0.4);\">{num}</div>")
+            folium.map.Marker(
+                [lat, lon],
+                icon=folium.DivIcon(html=html),
+                tooltip=f"{num} - {ciudad}"
+            ).add_to(mapa)
+
+    # -----------------------------------------
+    # FIN: Dibujar orden de visita entre CIUDADES
+    # -----------------------------------------
+
+    grupo_ruta_ciudades.add_to(mapa)
+
     # Añadir control de capas
     folium.LayerControl(collapsed=False).add_to(mapa)
     
@@ -449,29 +652,47 @@ def crear_mapa_interactivo(resultados, archivo_salida='mapa_ruta_espana.html'):
     # Añadir botón de pantalla completa
     plugins.Fullscreen(position='topright').add_to(mapa)
     
-    # Añadir leyenda
+    # Añadir leyenda mejorada con colores por ciudad
+    ciudades_html = ""
+    for ciudad in sorted(set(ciudades)):
+        color = COLORES_CIUDADES.get(ciudad, '#808080')
+        dias_ciudad = sum(1 for c in ciudades if c == ciudad)
+        ciudades_html += f'<p style="margin: 3px 0;"><span style="display:inline-block; width:15px; height:15px; background:{color}; border-radius:3px; margin-right:5px;"></span>{ciudad} ({dias_ciudad} días)</p>'
+    
     leyenda_html = f"""
     <div style="position: fixed; 
-                bottom: 50px; right: 50px; width: 250px; 
+                bottom: 50px; right: 50px; width: 280px; 
                 background-color: white; border:2px solid grey; z-index:9999; 
-                font-size:14px; padding: 10px; border-radius: 5px;
-                box-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
-        <h4 style="margin-top:0; text-align:center;">Leyenda</h4>
-        <p style="margin: 5px 0;"><b>Total días:</b> {len(dias)}</p>
-        <p style="margin: 5px 0;"><b>Ciudades:</b> {len(set(ciudades))}</p>
-        <p style="margin: 5px 0;"><b>Lugares:</b> {sum(len(d) for d in dias)}</p>
-        <hr>
-        <p style="margin: 5px 0; font-size: 12px;">
-            <i class="fa fa-circle" style="color:red"></i> Primer lugar del día<br>
-            <i class="fa fa-circle" style="color:blue"></i> Otros lugares<br>
-        </p>
+                font-size:13px; padding: 12px; border-radius: 8px;
+                box-shadow: 3px 3px 10px rgba(0,0,0,0.4);">
+        <h3 style="margin-top:0; text-align:center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 8px;">
+            🗺️ Leyenda del Mapa
+        </h3>
+        <div style="background: #ecf0f1; padding: 8px; border-radius: 5px; margin: 8px 0;">
+            <p style="margin: 3px 0;"><b>📅 Total días:</b> {len(dias)}</p>
+            <p style="margin: 3px 0;"><b>🏙️ Ciudades:</b> {len(set(ciudades))}</p>
+            <p style="margin: 3px 0;"><b>📍 Lugares:</b> {sum(len(d) for d in dias)}</p>
+        </div>
+        <hr style="margin: 8px 0;">
+        <h4 style="margin: 8px 0; color: #2c3e50;">Ciudades visitadas:</h4>
+        <div style="max-height: 150px; overflow-y: auto;">
+            {ciudades_html}
+        </div>
+        <hr style="margin: 8px 0;">
+        <div style="font-size: 11px;">
+            <p style="margin: 3px 0;">🟡 <b>Borde dorado:</b> Primer lugar del día</p>
+            <p style="margin: 3px 0;">➊➋➌ <b>Números:</b> Orden de visita</p>
+            <p style="margin: 3px 0;">━━ <b>Línea sólida:</b> Ruta dentro de ciudad</p>
+            <p style="margin: 3px 0;">╌╌ <b>Línea punteada:</b> Viaje entre ciudades</p>
+            <p style="margin: 3px 0;">🎨 <b>Tonos:</b> Misma ciudad, diferentes días</p>
+        </div>
     </div>
     """
     mapa.get_root().html.add_child(folium.Element(leyenda_html))
     
     # Guardar mapa
     mapa.save(archivo_salida)
-    print(f"✅ Mapa interactivo guardado: {archivo_salida}")
+    print(f"✅ Mapa interactivo MEJORADO guardado: {archivo_salida}")
 
 
 def generar_resumen_estadistico(resultados, archivo_salida='resumen_estadistico_espana.txt'):

@@ -1,22 +1,6 @@
 import math
 
 lugares_turisticos = [
-    # ===================================================================
-    # ESCALA DE PUNTOS (0-100):
-    # 100 = IMPRESCINDIBLE (hay que ir sí o sí)
-    # 95 = Muy altamente recomendable
-    # 90 = Altamente recomendable  
-    # 85-80 = Muy recomendable
-    # 75-70 = Recomendable
-    # 65-60 = Interesante
-    # 55-50 = Puede gustar
-    # 45-40 = Opcional
-    # 35-30 = Poco atractivo
-    # 25-20 = No muy recomendable
-    # 15-10 = Poco interés
-    # 5-0 = No apetece nada
-    # ===================================================================
-    
     # Palacios y Edificios Históricos
     {"nombre": "Palacio Real de Madrid", "x": 40.4179, "y": -3.7143, "puntos": 100, "tiempo_visita": 150, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
     {"nombre": "Armeria Real", "x": 40.4178, "y": -3.7146, "puntos": 75, "tiempo_visita": 60, "apertura": "10:00", "cierre": "18:00", "tipo": "turistico"},
@@ -92,9 +76,8 @@ lugares_turisticos = [
     {"nombre": "Yakitoro", "x": 40.4211, "y": -3.6968, "puntos": 80, "tiempo_visita": 90, "apertura": "13:00", "cierre": "00:00", "tipo": "restaurante"},
     {"nombre": "Ten con Ten", "x": 40.4278, "y": -3.6868, "puntos": 85, "tiempo_visita": 120, "apertura": "12:30", "cierre": "02:00", "tipo": "restaurante"},
     {"nombre": "Amazónico", "x": 40.4275, "y": -3.6871, "puntos": 90, "tiempo_visita": 150, "apertura": "13:00", "cierre": "01:00", "tipo": "restaurante"},
-    {"nombre": "DiverXO", "x": 40.4596, "y": -3.6838, "puntos": 100, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:00", "tipo": "restaurante"},  # 3 estrellas Michelin = 100
+    {"nombre": "DiverXO", "x": 40.4596, "y": -3.6838, "puntos": 100, "tiempo_visita": 180, "apertura": "14:00", "cierre": "22:00", "tipo": "restaurante"},
 
-    # --- TIENDAS Y COMPRAS ---
     # Grandes Almacenes y Centros Comerciales
     {"nombre": "El Corte Inglés (Preciados)", "x": 40.4181, "y": -3.7054, "puntos": 60, "tiempo_visita": 120, "apertura": "10:00", "cierre": "22:00", "tipo": "tienda"},
     {"nombre": "Fnac Callao", "x": 40.4193, "y": -3.7068, "puntos": 45, "tiempo_visita": 60, "apertura": "10:00", "cierre": "21:30", "tipo": "tienda"},
