@@ -18,8 +18,9 @@ from restricciones_espana import (
 
 class Individual:
     def __init__(self, dias: List[List[int]], ciudades: List[str]):
-        self.dias = dias
-        self.ciudades = ciudades
+        # COPIAS DEFENSIVAS: Evitar referencias compartidas
+        self.dias = [dia[:] if isinstance(dia, list) else dia for dia in dias]
+        self.ciudades = ciudades[:] if isinstance(ciudades, list) else ciudades
         self.fitness = 0
         self.tiempo_total = 0
         self.puntos_totales = 0
@@ -187,10 +188,19 @@ def evaluar_individuo(individuo: Individual) -> float:
             exceso = tiempo_dia - TIEMPO_DIA
             if exceso > 0 and exceso <= 120:
                 fitness -= PENALIZACION_EXCESO_TIEMPO * exceso
-            if exceso > 120:
-                fitness -= 10000
+            elif exceso > 120:
+                # Penalización más gradual en lugar de catastrófica
+                fitness -= PENALIZACION_EXCESO_TIEMPO * 120  # Máximo 120 min
+                fitness -= (exceso - 120) * 2  # 2 pts por minuto adicional
         
         hora_actual = HORA_INICIO
+        
+        # Si hay transporte intercity, añadir tiempo de transporte a hora_actual
+        if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
+            transporte_dia = next((t for t in individuo.transportes_intercity if t[0] == dia_idx), None)
+            if transporte_dia and transporte_dia[4]:  # transporte_dia[4] = tiempo_trans
+                hora_actual += transporte_dia[4]
+        
         tiene_almuerzo = False
         tiene_cena = False
         gasto_dia = 0
@@ -214,7 +224,7 @@ def evaluar_individuo(individuo: Individual) -> float:
             if tipo in PRECIOS_TIPO:
                 gasto_dia += PRECIOS_TIPO[tipo]
             else:
-                gasto_dia += 20  # Precio por defecto
+                gasto_dia += 10  # Precio por defecto (antes era 20)
             
             # Verificar si es restaurante/bar/cafetería en hora de comida
             if tipo in ['restaurante', 'bar', 'cafetería']:
@@ -280,7 +290,10 @@ def seleccion_torneo(poblacion: List[Individual], k: int = 3) -> Individual:
 def crossover_dos_puntos(padre1: Individual, padre2: Individual) -> Tuple[Individual, Individual]:
     """Cruce de dos puntos por día"""
     if random.random() > PROBABILIDAD_CRUCE:
-        return padre1, padre2
+        # ¡IMPORTANTE! Devolver COPIAS, no referencias (sino la mutación afecta a los padres)
+        hijo1 = Individual([dia[:] for dia in padre1.dias], padre1.ciudades[:])
+        hijo2 = Individual([dia[:] for dia in padre2.dias], padre2.ciudades[:])
+        return hijo1, hijo2
     
     num_dias = len(padre1.dias)
     hijo1_dias = []
@@ -335,7 +348,7 @@ def mutar(individuo: Individual):
             
             elif tipo == "reverse" and len(dia) >= 2:
                 i, j = sorted(random.sample(range(len(dia)), 2))
-                dia[i:j+1] = reversed(dia[i:j+1])
+                dia[i:j+1] = list(reversed(dia[i:j+1]))
             
             elif tipo == "replace":
                 lugares_ciudad = get_lugares_ciudad(ciudad)
@@ -415,8 +428,8 @@ def algoritmo_genetico_espana(
         # Ordenar por fitness
         poblacion.sort(key=lambda ind: ind.fitness, reverse=True)
         
-        # Elitismo
-        nueva_poblacion = poblacion[:num_elite]
+        # Elitismo - IMPORTANTE: Copiar profundamente para que no se muten
+        nueva_poblacion = [copy.deepcopy(ind) for ind in poblacion[:num_elite]]
         
         # Generar descendencia
         while len(nueva_poblacion) < tam_poblacion:
@@ -702,7 +715,7 @@ if __name__ == "__main__":
         "2": {
             "nombre": "INTENSIVA (45-60 min)",
             "num_dias": 25,
-            "lugares_por_dia": 15,
+            "lugares_por_dia": 12,  # Reducido de 15 a 12 (más realista)
             "tam_poblacion": 15000,
             "num_generaciones": 800,
             "tasa_elitismo": 0.15,
@@ -711,7 +724,7 @@ if __name__ == "__main__":
         "3": {
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
             "num_dias": 30,
-            "lugares_por_dia": 15,
+            "lugares_por_dia": 12,  # Reducido de 15 a 12 (más realista)
             "tam_poblacion": 20000,
             "num_generaciones": 1000,
             "tasa_elitismo": 0.10,
