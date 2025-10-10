@@ -1,46 +1,44 @@
-"""
-Configuración centralizada del algoritmo genético de rutas turísticas
-"""
+TIEMPO_DIA = 16 * 60
+TIEMPO_VISITA_PROMEDIO = 75
+HORA_INICIO = 9 * 60
+TIEMPO_COMIDA_MIN = 90
+TIEMPO_CENA_MIN = 90
+VELOCIDAD_MEDIA = 30
 
-# Parámetros de tiempo
-TIEMPO_DIA = 16 * 60  # 960 minutos (16 horas)
-TIEMPO_VISITA_PROMEDIO = 75  # minutos
-HORA_INICIO = 9 * 60  # 9:00 AM
-TIEMPO_COMIDA_MIN = 90  # Tiempo de comida (minutos)
-TIEMPO_CENA_MIN = 90  # Tiempo de cena (minutos)
-VELOCIDAD_MEDIA_KMH = 30  # Velocidad promedio en ciudad (km/h)
-
-# Parámetros del algoritmo genético
 POBLACION_DEFAULT = 10000
 GENERACIONES_DEFAULT = 400
 PROB_CRUCE = 0.8
 PROB_MUTACION = 0.2
-PROBABILIDAD_CRUCE = 0.8  # Alias
-PROBABILIDAD_MUTACION = 0.2  # Alias
+PROBABILIDAD_CRUCE = 0.8  
+PROBABILIDAD_MUTACION = 0.2
 ELITISMO_PORCENTAJE = 0.2
 SELECCION_PORCENTAJE = 0.2
 
-# Parámetros de reset por estancamiento
-UMBRAL_ESTANCAMIENTO = 30  # generaciones sin mejora
+UMBRAL_ESTANCAMIENTO = 50
 
-# Pesos de fitness
 PESO_PUNTOS_INICIAL = 0.9
 PESO_DISTANCIA_INICIAL = 1.0
-AJUSTE_PESO_POR_DIA = 0.025  # Reducir a la mitad el ajuste original
+AJUSTE_PESO_POR_DIA = 0.01
 
 # Penalizaciones
-PENALIZACION_COMIDA_FALTA = 100
-PENALIZACION_COMIDA_BONUS = -100
-PENALIZACION_COMIDA_MAL_HORARIO = 50
+PENALIZACION_COMIDA_FALTA = 500
+PENALIZACION_CENA_FALTA = 500
+PENALIZACION_COMIDA_MAL_HORARIO = 200
 PENALIZACION_FUERA_HORARIO = 200
-PENALIZACION_EXCESO_TIEMPO = 5  # Por minuto de exceso
-PENALIZACION_LIMITE_CIUDAD = 1000  # Si excede 4 días en misma ciudad
+PENALIZACION_EXCESO_TIEMPO = 100
+PENALIZACION_LIMITE_CIUDAD = 1000
+PENALIZACION_RESTAURANTES_CONSECUTIVOS = 300
 FACTOR_PENALIZACION_TIEMPO = 3
+PENALIZACION_FUERA_HORARIO_APERTURA = 300  
+PENALIZACION_EXCESO_PRESUPUESTO = 10
+PENALIZACION_CAMBIO_CIUDAD_INNECESARIO = 1000
 
 # Horarios de comidas
-HORA_ALMUERZO_MIN = 13.5 * 60
-HORA_ALMUERZO_MAX = 14.5 * 60
-HORA_CENA_MIN = 20.5 * 60
+HORA_DESAYUNO_MIN = 8 * 60  
+HORA_DESAYUNO_MAX = 10 * 60
+HORA_ALMUERZO_MIN = 13 * 60
+HORA_ALMUERZO_MAX = 15 * 60
+HORA_CENA_MIN = 20 * 60
 HORA_CENA_MAX = 22 * 60
 
 # Mutaciones
@@ -49,8 +47,39 @@ PESOS_MUTACION = [0.4, 0.3, 0.15, 0.15]
 
 # Restricciones
 RESTRICCIONES_ACTIVAS = True
-PRESUPUESTO_DIARIO = 150  # euros
-MAX_DIAS_POR_CIUDAD = 4  # Máximo días consecutivos en una ciudad
-
-# Lugares mínimos por ruta
+PRESUPUESTO_DIARIO = 150
+MAX_DIAS_POR_CIUDAD = 4  
+AGRUPAR_DIAS_POR_CIUDAD = True
 LUGARES_MIN = 4
+
+# Horarios predeterminados por tipo de lugar
+HORARIOS_TIPO = {
+    "museo": {"apertura": 10 * 60, "cierre": 19 * 60},  # 10:00 - 19:00
+    "catedral": {"apertura": 9 * 60, "cierre": 20 * 60},  # 9:00 - 20:00
+    "palacio": {"apertura": 10 * 60, "cierre": 18 * 60},  # 10:00 - 18:00
+    "parque": {"apertura": 8 * 60, "cierre": 22 * 60},  # 8:00 - 22:00
+    "playa": {"apertura": 7 * 60, "cierre": 23 * 60},  # 7:00 - 23:00
+    "restaurante": {"apertura": 12 * 60, "cierre": 23 * 60},  # 12:00 - 23:00
+    "bar": {"apertura": 10 * 60, "cierre": 2 * 60},  # 10:00 - 02:00 (siguiente día)
+    "cafetería": {"apertura": 8 * 60, "cierre": 22 * 60},  # 8:00 - 22:00
+    "tienda": {"apertura": 10 * 60, "cierre": 21 * 60},  # 10:00 - 21:00
+    "plaza": {"apertura": 0, "cierre": 24 * 60},  # Siempre abierto
+    "mirador": {"apertura": 8 * 60, "cierre": 21 * 60},  # 8:00 - 21:00
+    "turistico": {"apertura": 9 * 60, "cierre": 20 * 60}  # 9:00 - 20:00
+}
+
+# Precios estimados por tipo de lugar (euros)
+PRECIOS_TIPO = {
+    "museo": 15,
+    "catedral": 8,
+    "palacio": 12,
+    "parque": 0,
+    "playa": 0,
+    "restaurante": 25,
+    "bar": 8,
+    "cafetería": 5,
+    "tienda": 10,
+    "plaza": 0,
+    "mirador": 5,
+    "turistico": 10
+}

@@ -6,6 +6,18 @@ Permite ejecutar con diferentes configuraciones
 from algoritmo_espana import algoritmo_genetico_espana, analizar_solucion, exportar_resultados
 import sys
 
+# Importar módulo de gráficas (opcional)
+try:
+    from analisis_graficas_espana import (
+        graficar_evolucion_fitness,
+        graficar_distribucion_ciudades,
+        crear_mapa_interactivo
+    )
+    GRAFICAS_DISPONIBLES = True
+except ImportError:
+    GRAFICAS_DISPONIBLES = False
+    print("⚠️  Módulo de gráficas no disponible")
+
 def main():
     print("\n" + "="*80)
     print("🇪🇸 OPTIMIZACIÓN DE RUTA TURÍSTICA POR ESPAÑA")
@@ -88,6 +100,32 @@ def main():
     # Exportar
     nombre_archivo = f"resultados_espana_{modo}.json"
     exportar_resultados(resultados, nombre_archivo)
+    
+    # Generar gráficas y mapas (si están disponibles)
+    if GRAFICAS_DISPONIBLES:
+        print(f"\n{'='*80}")
+        print(f"📊 GENERANDO VISUALIZACIONES")
+        print(f"{'='*80}\n")
+        
+        try:
+            # Gráfica de evolución del fitness
+            print("📈 Generando gráfica de evolución del fitness...")
+            graficar_evolucion_fitness(resultados, f"evolucion_fitness_{modo}.png")
+            
+            # Gráfica de distribución por ciudades
+            print("📊 Generando gráfica de distribución por ciudades...")
+            graficar_distribucion_ciudades(resultados, f"distribucion_ciudades_{modo}.png")
+            
+            # Mapa interactivo
+            print("🗺️  Generando mapa interactivo de la ruta...")
+            crear_mapa_interactivo(resultados, f"mapa_ruta_{modo}.html")
+            
+            print(f"\n✅ Visualizaciones generadas:")
+            print(f"   • evolucion_fitness_{modo}.png")
+            print(f"   • distribucion_ciudades_{modo}.png")
+            print(f"   • mapa_ruta_{modo}.html")
+        except Exception as e:
+            print(f"\n⚠️  Error al generar algunas visualizaciones: {e}")
     
     print(f"\n{'='*80}")
     print(f"✅ PROCESO COMPLETADO")
