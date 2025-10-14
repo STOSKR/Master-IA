@@ -166,19 +166,6 @@ def generar_vecino(solucion_actual: Individual, iteracion: int = 0, max_iteracio
 
 
 def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int = 100) -> float:
-    """
-    Calcula la temperatura inicial basada en la varianza de vecinos.
-    
-    Estrategia: Generar varios vecinos y calcular la desviación estándar
-    de las diferencias de fitness. T0 = std(ΔE) * factor
-    
-    Args:
-        solucion_inicial: Solución de partida
-        num_muestras: Número de vecinos a generar para estimar
-    
-    Returns:
-        Temperatura inicial sugerida
-    """
     deltas = []
     
     for _ in range(num_muestras):
@@ -203,24 +190,6 @@ def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int
 
 
 def aceptar_solucion(delta_fitness: float, temperatura: float) -> bool:
-    """
-    Criterio de aceptación de Metropolis MEJORADO.
-    
-    En Simulated Annealing:
-    - Si ΔE > 0: SIEMPRE aceptar (mejor solución)
-    - Si ΔE ≤ 0: Aceptar con probabilidad P = exp(ΔE / T)
-      * Al inicio (T alta): mayor probabilidad de aceptar soluciones peores (exploración)
-      * Al final (T baja): menor probabilidad de aceptar soluciones peores (explotación)
-    
-    IMPORTANTE: Aceptar soluciones peores es NECESARIO para escapar de óptimos locales.
-    
-    Args:
-        delta_fitness: Diferencia de fitness (nuevo - actual)
-        temperatura: Temperatura actual del sistema
-    
-    Returns:
-        True si se acepta la solución, False en caso contrario
-    """
     if delta_fitness > 0:
         # Solución MEJOR: siempre aceptar
         return True
@@ -244,28 +213,6 @@ def enfriamiento_simulado(
     iteraciones_sin_mejora_max: int = 1000,
     verbose: bool = True
 ) -> Dict:
-    """
-    Algoritmo de Enfriamiento Simulado mejorado.
-    
-    Estrategia híbrida recomendada:
-    - Partir del mejor del genético (warm start) o generar solución aleatoria
-    - Temperatura inicial adaptativa o fija (1000-2000)
-    - Enfriamiento geométrico: T = T * alpha (0.95)
-    - Perturbación mixta: 70% swap, 20% reemplazo, 10% cambio ciudad
-    - Parada combinada: max_iteraciones O temperatura < T_minima O estancamiento
-    
-    Args:
-        solucion_inicial: Solución de partida (si None, se genera aleatoria)
-        T_inicial: Temperatura inicial (si None, se calcula adaptativamente)
-        T_minima: Temperatura mínima de parada
-        alpha: Factor de enfriamiento geométrico (0 < alpha < 1)
-        max_iteraciones: Número máximo de iteraciones
-        iteraciones_sin_mejora_max: Iteraciones sin mejora para parada temprana
-        verbose: Mostrar progreso
-    
-    Returns:
-        Dict con mejor solución encontrada y estadísticas
-    """
     if verbose:
         print(f"\n{'='*80}")
         print(f"🔥 ALGORITMO DE ENFRIAMIENTO SIMULADO")
@@ -277,20 +224,42 @@ def enfriamiento_simulado(
             print(f"🎲 Generando solución inicial aleatoria...")
         # Usar parámetros por defecto
         solucion_inicial = crear_individuo_aleatorio(num_dias=20, lugares_por_dia=12)
+        # Evaluar solución inicial aleatoria
+        evaluar_individuo(solucion_inicial)
     else:
         if verbose:
             print(f"🚀 Usando solución inicial proporcionada (warm start)...")
-        # Hacer copia profunda para no modificar la original
-        solucion_inicial = Individual(
-            [dia[:] for dia in solucion_inicial.dias],
-            solucion_inicial.ciudades[:]
-        )
+            print(f"  • Fitness reportado por el GA: {solucion_inicial.fitness:.1f}")
+            print(f"  • Puntos reportados por el GA: {solucion_inicial.puntos_totales}")
+        
+        # CRÍTICO: Hacer copia profunda SIN perder el fitness
+        # El módulo copy ya está importado al inicio del archivo
+        solucion_inicial = copy.deepcopy(solucion_inicial)
+        
+        if verbose:
+            print(f"  • Fitness después de copia (sin cambios): {solucion_inicial.fitness:.1f}")
     
-    # Eliminar duplicados de la solución inicial
-    solucion_inicial = eliminar_duplicados_dia(solucion_inicial)
+    # Eliminar duplicados de la solución inicial (si los hay)
+    # IMPORTANTE: Solo si realmente hay duplicados, para no re-evaluar
+    tiene_duplicados = False
+    for dia in solucion_inicial.dias:
+        if len(dia) != len(set(dia)):
+            tiene_duplicados = True
+            break
     
-    # Evaluar solución inicial
-    evaluar_individuo(solucion_inicial)
+    if tiene_duplicados:
+        if verbose:
+            print(f"\n  ⚠️  ¡ATENCIÓN! La solución del GA contiene lugares duplicados en el mismo día.")
+            print(f"      Esto infla artificialmente el fitness del GA porque no los penaliza.")
+            print(f"      Procedo a limpiar la solución y a re-evaluarla para obtener el fitness REAL.")
+        solucion_inicial = eliminar_duplicados_dia(solucion_inicial)
+        # Re-evaluar solo si modificamos
+        evaluar_individuo(solucion_inicial)
+        if verbose:
+            print(f"  • Fitness REAL después de limpiar duplicados: {solucion_inicial.fitness:.1f}")
+    else:
+        if verbose:
+            print(f"  ✅ La solución del GA es válida (sin duplicados).")
     
     # Calcular temperatura inicial si no se proporcionó
     if T_inicial is None:
@@ -299,14 +268,14 @@ def enfriamiento_simulado(
         T_inicial = calcular_temperatura_inicial(solucion_inicial)
     
     if verbose:
-        print(f"\n📊 Configuración:")
+        print(f"\n📊 Configuración para Enfriamiento Simulado:")
         print(f"  • Temperatura inicial: {T_inicial:.1f}")
         print(f"  • Temperatura mínima: {T_minima}")
         print(f"  • Factor de enfriamiento (α): {alpha}")
         print(f"  • Máx. iteraciones: {max_iteraciones:,}")
         print(f"  • Máx. iter. sin mejora: {iteraciones_sin_mejora_max:,}")
-        print(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
-        print(f"  • Puntos iniciales: {solucion_inicial.puntos_totales}")
+        print(f"  • Fitness inicial (REAL): {solucion_inicial.fitness:.1f}")
+        print(f"  • Puntos iniciales (REAL): {solucion_inicial.puntos_totales}")
         print(f"{'='*80}\n")
     
     # Inicializar variables
@@ -411,7 +380,18 @@ def enfriamiento_simulado(
                 print(f"\n⏸️  Estancamiento detectado: {iteraciones_sin_mejora} iteraciones sin mejora")
             break
     
+    # Cerrar visualización y guardar
     plt.ioff()
+    
+    # Guardar la figura antes de cerrarla
+    import os
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    fig_filename = f"evolucion_fitness_sa_{timestamp}.png"
+    plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
+    if verbose:
+        print(f"\n💾 Gráfica guardada: {fig_filename}")
+    
     plt.show()
     
     # Estadísticas finales
@@ -693,7 +673,7 @@ if __name__ == "__main__":
         resultados_ga = algoritmo_genetico_espana(
             num_dias=20,
             lugares_por_dia=12,
-            tam_poblacion=5000,
+            tam_poblacion=1000,
             num_generaciones=300,
             tasa_elitismo=0.20
         )
@@ -706,9 +686,9 @@ if __name__ == "__main__":
         resultados_sa = enfriamiento_desde_genetico(
             resultados_genetico=resultados_ga,
             usar_mejor=True,
-            T_inicial=5000,  # Temperatura alta para escapar de óptimos locales
-            alpha=0.98,  # Enfriamiento lento
-            max_iteraciones=5000
+            T_inicial=2000,  # Temperatura moderada para refinamiento
+            alpha=0.97,  # Convergencia balanceada
+            max_iteraciones=3000  # Suficiente con perturbaciones inteligentes
         )
         
         # Comparar resultados
@@ -720,7 +700,12 @@ if __name__ == "__main__":
         print(f"{'='*80}")
         analizar_solucion(resultados_sa["mejor_solucion"])
         
-        exportar_resultados_sa(resultados_sa, archivo="resultados_sa_hybrid.json")
+        # Guardar resultados automáticamente
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archivo_resultados = f"resultados_sa_hybrid_{timestamp}.json"
+        exportar_resultados_sa(resultados_sa, archivo=archivo_resultados)
+        print(f"\n💾 Resultados guardados en: {archivo_resultados}")
     
     elif modo_elegido == "custom":
         # Modo 3: Cargar desde JSON

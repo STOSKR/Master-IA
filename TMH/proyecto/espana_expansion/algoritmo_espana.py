@@ -247,6 +247,48 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
     return [crear_individuo_aleatorio(num_dias, lugares_por_dia) for _ in range(tam_poblacion)]
 
+
+def eliminar_duplicados_dia(individuo: Individual) -> Individual:
+    """
+    Elimina lugares duplicados en cada día, reemplazándolos por lugares únicos de la misma ciudad.
+    
+    Args:
+        individuo: Individuo a limpiar
+    
+    Returns:
+        Individuo sin lugares duplicados (modifica el individuo in-place y lo retorna)
+    """
+    for dia_idx in range(len(individuo.dias)):
+        dia = individuo.dias[dia_idx]
+        ciudad = individuo.ciudades[dia_idx]
+        
+        # Verificar si hay duplicados
+        if len(dia) != len(set(dia)):
+            # Hay duplicados, necesitamos reemplazarlos
+            lugares_ciudad = get_lugares_ciudad(ciudad)
+            lugares_unicos = []
+            lugares_usados = set()
+            
+            for lugar_id in dia:
+                if lugar_id not in lugares_usados:
+                    lugares_unicos.append(lugar_id)
+                    lugares_usados.add(lugar_id)
+                else:
+                    # Buscar un reemplazo que no esté usado
+                    lugares_disponibles = [l["id"] for l in lugares_ciudad 
+                                          if l["id"] not in lugares_usados]
+                    if lugares_disponibles:
+                        nuevo_lugar = random.choice(lugares_disponibles)
+                        lugares_unicos.append(nuevo_lugar)
+                        lugares_usados.add(nuevo_lugar)
+                    # Si no hay más lugares disponibles, simplemente no añadimos nada
+                    # (el día tendrá menos lugares, pero sin duplicados)
+            
+            individuo.dias[dia_idx] = lugares_unicos
+    
+    return individuo
+
+
 def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, float]:
     dia = individuo.dias[dia_idx]
     
@@ -600,6 +642,11 @@ def algoritmo_genetico_espana(
             
             mutar(hijo1)
             mutar(hijo2)
+            
+            # CRÍTICO: Eliminar duplicados ANTES de evaluar
+            # Esto garantiza que el fitness siempre refleje soluciones válidas
+            eliminar_duplicados_dia(hijo1)
+            eliminar_duplicados_dia(hijo2)
             
             evaluar_individuo(hijo1)
             evaluar_individuo(hijo2)
