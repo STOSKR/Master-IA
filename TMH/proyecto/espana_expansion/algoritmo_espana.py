@@ -11,9 +11,7 @@ from utils_espana import (
     COORDENADAS_CIUDADES
 )
 from restricciones_espana import (
-    validar_limite_ciudad,
-    calcular_penalizacion_cambio_ciudad,
-    aplicar_restricciones_basicas
+    validar_limite_ciudad
 )
 
 class Individual:
@@ -26,6 +24,61 @@ class Individual:
         self.puntos_totales = 0
         self.distancia_total = 0
         self.transportes_intercity = []  # [(dia_idx, origen, destino, tipo, tiempo, costo)]
+
+def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias_consecutivos_actual: int) -> str:
+    
+    ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
+    
+    # Verificar si debemos forzar cambio por MAX_DIAS_POR_CIUDAD
+    debe_cambiar = dias_consecutivos_actual >= MAX_DIAS_POR_CIUDAD
+    
+    # Filtrar ciudades candidatas
+    candidatas = []
+    for ciudad in ciudades_disponibles:
+        # No puede ser la misma ciudad si debe cambiar
+        if debe_cambiar and ciudad == ciudad_actual:
+            continue
+        # No puede ser una ciudad ya visitada completamente
+        if ciudad in ciudades_visitadas:
+            continue
+        candidatas.append(ciudad)
+    
+    # Si no hay candidatas sin visitar, permitir revisar ciudades visitadas
+    # (esto evita el problema de quedarse bloqueado)
+    if not candidatas:
+        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+    
+    # Si aún no hay candidatas, quedarse en la actual (caso extremo)
+    if not candidatas:
+        return ciudad_actual
+    
+    # Calcular distancias y elegir la más cercana
+    coord_actual = COORDENADAS_CIUDADES[ciudad_actual]
+    distancias = []
+    
+    from math import radians, sin, cos, sqrt, atan2
+    
+    for ciudad_candidata in candidatas:
+        coord_candidata = COORDENADAS_CIUDADES[ciudad_candidata]
+        # Calcular distancia usando fórmula de Haversine
+        lat1 = float(coord_actual["lat"])
+        lon1 = float(coord_actual["lon"])
+        lat2 = float(coord_candidata["lat"])
+        lon2 = float(coord_candidata["lon"])
+        
+        R = 6371  # Radio de la Tierra en km
+        
+        dlat = radians(lat2 - lat1)
+        dlon = radians(lon2 - lon1)
+        a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1-a))
+        distancia = R * c
+        
+        distancias.append((ciudad_candidata, distancia))
+    
+    # Ordenar por distancia y devolver la más cercana
+    distancias.sort(key=lambda x: x[1])
+    return distancias[0][0]
 
 def validar_restricciones_ciudades(individuo: Individual) -> bool:
     """
@@ -92,24 +145,19 @@ def reparar_individuo(individuo: Individual) -> Individual:
         
         # Reparar si es necesario
         if dias_consecutivos > MAX_DIAS_POR_CIUDAD or es_regreso:
-            # Buscar ciudad alternativa
-            candidatas = [c for c in ciudades_disponibles 
-                         if c != ciudad_actual and c not in ciudades_visitadas]
+            # Obtener ciudad más cercana válida
+            ciudad_anterior = individuo.ciudades[dia_idx-1] if dia_idx > 0 else ciudad_actual
+            nueva_ciudad = obtener_ciudad_mas_cercana(ciudad_anterior, ciudades_visitadas, dias_consecutivos)
             
-            if not candidatas:
-                candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+            individuo.ciudades[dia_idx] = nueva_ciudad
             
-            if candidatas:
-                nueva_ciudad = random.choice(candidatas)
-                individuo.ciudades[dia_idx] = nueva_ciudad
-                
-                # Actualizar lugares
-                lugares_nueva = get_lugares_ciudad(nueva_ciudad)
-                if lugares_nueva:
-                    num_lugares = len(individuo.dias[dia_idx])
-                    individuo.dias[dia_idx] = [
-                        random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
-                    ]
+            # Actualizar lugares
+            lugares_nueva = get_lugares_ciudad(nueva_ciudad)
+            if lugares_nueva:
+                num_lugares = len(individuo.dias[dia_idx])
+                individuo.dias[dia_idx] = [
+                    random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
+                ]
         
         # Actualizar conjunto de visitadas
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx-1]:
@@ -119,30 +167,21 @@ def reparar_individuo(individuo: Individual) -> Individual:
 
 def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual:
     """
-    Crea un individuo aleatorio respetando restricciones:
+    Crea un individuo respetando restricciones:
     - NUNCA regresar a una ciudad ya visitada
     - NUNCA más de MAX_DIAS_POR_CIUDAD días consecutivos en la misma ciudad
+    - Elegir siempre la ciudad MÁS CERCANA no visitada
     """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     dias = []
     ciudades_plan = []
-    ciudades_visitadas = set()  # Para rastrear ciudades ya visitadas
+    ciudades_visitadas = set()  # Para rastrear ciudades ya visitadas completamente
     
     if AGRUPAR:
         dia_actual = 0
+        ciudad_actual = random.choice(ciudades_disponibles)  # Primera ciudad aleatoria
         
         while dia_actual < num_dias:
-            # Filtrar ciudades: no visitadas previamente
-            ciudades_no_visitadas = [c for c in ciudades_disponibles if c not in ciudades_visitadas]
-            
-            if not ciudades_no_visitadas:
-                # Si ya visitamos todas las ciudades, reiniciar (caso extremo)
-                ciudades_visitadas.clear()
-                ciudades_no_visitadas = ciudades_disponibles
-            
-            ciudad = random.choice(ciudades_no_visitadas)
-            ciudades_visitadas.add(ciudad)
-            
             dias_restantes = num_dias - dia_actual
             
             # Limitar días en esta ciudad: máximo MAX_DIAS_POR_CIUDAD
@@ -151,7 +190,7 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
             else:
                 dias_en_ciudad = random.randint(1, min(MAX_DIAS_POR_CIUDAD, dias_restantes))
             
-            lugares_ciudad = get_lugares_ciudad(ciudad)
+            lugares_ciudad = get_lugares_ciudad(ciudad_actual)
             if len(lugares_ciudad) < lugares_por_dia:
                 lugares_ciudad = lugares_turisticos_espana
             
@@ -164,33 +203,32 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 random.shuffle(ids_dia)
                 
                 dias.append(ids_dia)
-                ciudades_plan.append(ciudad)
+                ciudades_plan.append(ciudad_actual)
                 dia_actual += 1
+            
+            # Marcar ciudad como visitada al salir de ella
+            ciudades_visitadas.add(ciudad_actual)
+            
+            # Elegir siguiente ciudad MÁS CERCANA (si quedan días)
+            if dia_actual < num_dias:
+                ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, MAX_DIAS_POR_CIUDAD)
     else:
         # Modo sin agrupar: cada día puede ser diferente
-        historial_ciudad = []
+        ciudad_actual = random.choice(ciudades_disponibles)  # Primera ciudad aleatoria
+        dias_consecutivos = 0
         
         for dia_idx in range(num_dias):
-            # Restricción 1: No regresar a ciudades visitadas
-            if ciudades_plan:
-                ciudades_visitadas_set = set(ciudades_plan)
-                ciudades_candidatas = [c for c in ciudades_disponibles if c not in ciudades_visitadas_set]
+            # Incrementar contador de días consecutivos
+            if dia_idx > 0 and ciudades_plan[-1] == ciudad_actual:
+                dias_consecutivos += 1
             else:
-                ciudades_candidatas = ciudades_disponibles
+                dias_consecutivos = 1
             
-            # Restricción 2: No más de MAX_DIAS_POR_CIUDAD días consecutivos
-            if historial_ciudad and len(historial_ciudad) >= MAX_DIAS_POR_CIUDAD:
-                ultimos = historial_ciudad[-MAX_DIAS_POR_CIUDAD:]
-                if len(set(ultimos)) == 1:
-                    # Forzar cambio de ciudad
-                    ciudad_actual_prohibida = ultimos[0]
-                    ciudades_candidatas = [c for c in ciudades_candidatas if c != ciudad_actual_prohibida]
-            
-            # Si no hay candidatas (caso extremo), reiniciar
-            if not ciudades_candidatas:
-                ciudades_candidatas = ciudades_disponibles
-            
-            ciudad_actual = random.choice(ciudades_candidatas)
+            # Si alcanzamos MAX_DIAS_POR_CIUDAD, cambiar a ciudad más cercana
+            if dias_consecutivos >= MAX_DIAS_POR_CIUDAD:
+                ciudades_visitadas.add(ciudad_actual)
+                ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, dias_consecutivos)
+                dias_consecutivos = 1
             
             lugares_ciudad = get_lugares_ciudad(ciudad_actual)
             if len(lugares_ciudad) < lugares_por_dia:
@@ -202,7 +240,7 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
             
             dias.append(ids_dia)
             ciudades_plan.append(ciudad_actual)
-            historial_ciudad.append(ciudad_actual)
+
     
     individuo = Individual(dias, ciudades_plan)
     
@@ -484,10 +522,8 @@ def mutar(individuo: Individual):
                     if nuevo not in dia:
                         dia[idx] = nuevo
         
-        # Mutación de ciudad (baja probabilidad) - RESPETANDO RESTRICCIONES
+        # Mutación de ciudad (baja probabilidad) - USANDO CIUDAD MÁS CERCANA
         if random.random() < 0.05:
-            ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
-            
             # Restricción 1: No regresar a ciudades ya visitadas
             ciudades_visitadas = set(individuo.ciudades[:dia_idx])  # Ciudades antes de este día
             
@@ -499,24 +535,11 @@ def mutar(individuo: Individual):
                 else:
                     break
             
-            # Filtrar ciudades candidatas
-            candidatas = []
-            for c in ciudades_disponibles:
-                # No puede ser la ciudad actual
-                if c == ciudad:
-                    continue
-                # No puede ser una ciudad ya visitada
-                if c in ciudades_visitadas:
-                    continue
-                candidatas.append(c)
+            # Obtener ciudad más cercana válida
+            nueva_ciudad = obtener_ciudad_mas_cercana(ciudad, ciudades_visitadas, dias_consecutivos_actual)
             
-            # Si alcanzamos MAX_DIAS_POR_CIUDAD, forzar cambio aunque sea a ciudad visitada
-            if dias_consecutivos_actual >= MAX_DIAS_POR_CIUDAD:
-                candidatas = [c for c in ciudades_disponibles if c != ciudad]
-            
-            # Si hay candidatas, mutar
-            if candidatas:
-                nueva_ciudad = random.choice(candidatas)
+            # Solo mutar si la nueva ciudad es diferente
+            if nueva_ciudad != ciudad:
                 individuo.ciudades[dia_idx] = nueva_ciudad
                 
                 # Reemplazar lugares del día con lugares de nueva ciudad
@@ -866,7 +889,7 @@ if __name__ == "__main__":
             "nombre": "RÁPIDA (10-15 min)",
             "num_dias": 20,
             "lugares_por_dia": 12,
-            "tam_poblacion": 8000,
+            "tam_poblacion": 1000,
             "num_generaciones": 500,
             "tasa_elitismo": 0.20,
             "descripcion": "Testing y validación rápida"

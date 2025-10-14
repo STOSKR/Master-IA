@@ -2,7 +2,7 @@
 RESUMEN ESTADÍSTICO - OPTIMIZACIÓN RUTA TURÍSTICA ESPAÑA
 ================================================================================
 
-Fecha de generación: 2025-10-12 01:16:15
+Fecha de generación: 2025-10-14 14:53:59
 
 CONFIGURACIÓN DEL ALGORITMO
 --------------------------------------------------------------------------------
@@ -13,28 +13,25 @@ Lugares por día: N/A
 
 RESULTADOS GLOBALES
 --------------------------------------------------------------------------------
-Fitness total: 19053.20
-Lugares visitados: 360
-Ciudades visitadas: 10 de 10
+Fitness total: 15659.53
+Lugares visitados: 240
+Ciudades visitadas: 7 de 10
 Promedio lugares/día: 12.0
 
 DISTRIBUCIÓN POR CIUDAD
 --------------------------------------------------------------------------------
 Ciudad                   Días    Lugares     Puntos    Pts/Día
 --------------------------------------------------------------------------------
-Barcelona                   2         24       1502      751.0
-Bilbao                      2         24       1587      793.5
-Córdoba                     4         48       2820      705.0
-Granada                     4         48       3621      905.2
-Madrid                      4         48       5190     1297.5
-San Sebastián               2         24       1217      608.5
-Santiago                    4         48       2549      637.2
-Sevilla                     4         48       2614      653.5
-Toledo                      1         12        641      641.0
-Valencia                    3         36       1932      644.0
+Bilbao                      3         36       2485      828.3
+Córdoba                     4         48       3444      861.0
+Granada                     4         48       4337     1084.2
+Madrid                      3         36       3460     1153.3
+San Sebastián               1         12        568      568.0
+Sevilla                     3         36       2341      780.3
+Toledo                      2         24       1404      702.0
 
 ================================================================================
-Total días: 30
-Total lugares: 360
-Total puntos: 23673
+Total días: 20
+Total lugares: 240
+Total puntos: 18039
 ================================================================================
