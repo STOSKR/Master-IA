@@ -166,12 +166,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
     return individuo
 
 def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual:
-    """
-    Crea un individuo respetando restricciones:
-    - NUNCA regresar a una ciudad ya visitada
-    - NUNCA más de MAX_DIAS_POR_CIUDAD días consecutivos en la misma ciudad
-    - Elegir siempre la ciudad MÁS CERCANA no visitada
-    """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     dias = []
     ciudades_plan = []
@@ -553,42 +547,26 @@ def mutar(individuo: Individual):
     if not validar_restricciones_ciudades(individuo):
         individuo = reparar_individuo(individuo)
 
-# Algoritmo genético principal
 
 def algoritmo_genetico_espana(
-    num_dias: int = 20,
-    lugares_por_dia: int = 12,
-    tam_poblacion: int = 8000,
-    num_generaciones: int = 500,
-    tasa_elitismo: float = 0.20
+    num_dias: int ,
+    lugares_por_dia: int,
+    tam_poblacion: int,
+    num_generaciones: int,
+    tasa_elitismo: float
 ) -> Dict:
-    """
-    Ejecuta el algoritmo genético para España
-    
-    Args:
-        num_dias: Días totales de viaje (default: 20)
-        lugares_por_dia: Lugares a visitar por día (default: 12)
-        tam_poblacion: Tamaño de la población (default: 8000)
-        num_generaciones: Generaciones a evolucionar (default: 500)
-        tasa_elitismo: % de mejores que pasan directamente (default: 0.20)
-    
-    Returns:
-        Dict con mejor solución y estadísticas
-    """
     print(f"\n{'='*80}")
-    print(f"🇪🇸 ALGORITMO GENÉTICO - RUTA POR ESPAÑA")
+    print(f"ALGORITMO GENÉTICO")
     print(f"{'='*80}")
-    print(f"📊 Configuración:")
-    print(f"  • Días de viaje: {num_dias}")
-    print(f"  • Lugares/día: {lugares_por_dia}")
-    print(f"  • Población: {tam_poblacion}")
-    print(f"  • Generaciones: {num_generaciones}")
-    print(f"  • Elitismo: {tasa_elitismo*100:.0f}%")
-    print(f"  • Dataset: {len(lugares_turisticos_espana)} lugares en 10 ciudades")
+    print(f"Días: {num_dias}")
+    print(f"Lugares/día: {lugares_por_dia}")
+    print(f"Población: {tam_poblacion}")
+    print(f"Generaciones: {num_generaciones}")
+    print(f"Elitismo: {tasa_elitismo*100:.0f}%")
+    print(f"Dataset: {len(lugares_turisticos_espana)} lugares en 10 ciudades")
     print(f"{'='*80}\n")
     
-    # Crear población inicial
-    print("🧬 Creando población inicial...")
+    print("Creando población inicial")
     poblacion = crear_poblacion_inicial(tam_poblacion, num_dias, lugares_por_dia)
     
     # Evaluar población inicial
