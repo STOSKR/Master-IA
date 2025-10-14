@@ -462,7 +462,10 @@ def mutar(individuo: Individual):
     for dia_idx in range(len(individuo.dias)):
         dia = individuo.dias[dia_idx]
         ciudad = individuo.ciudades[dia_idx]
-        
+
+        if not dia:  # Evitar mutaciones en días vacíos
+            continue
+
         if random.random() < PROBABILIDAD_MUTACION:
             tipo = random.choices(
                 ["swap", "insert", "reverse", "replace"],
