@@ -72,10 +72,12 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
 
 def generar_vecino(solucion_actual: Individual) -> Individual:
     """
-    Genera una solución vecina aplicando perturbaciones mixtas:
-    - 70% Swap de dos lugares en un día
+    Genera una solución vecina aplicando perturbaciones mixtas mejoradas:
+    - 40% Swap de dos lugares en un día
     - 20% Reemplazar un lugar por otro de la misma ciudad
-    - 10% Cambiar ciudad de un día (respetando restricciones)
+    - 15% Cambiar ciudad de un día (restricciones relajadas)
+    - 15% Swap intercity (intercambiar dos días completos)
+    - 10% 2-opt (optimizar orden dentro de un día)
     
     Args:
         solucion_actual: Solución actual
@@ -89,10 +91,10 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
         solucion_actual.ciudades[:]
     )
     
-    # Elegir tipo de perturbación según probabilidades
+    # Elegir tipo de perturbación según probabilidades mejoradas
     tipo_perturbacion = random.choices(
-        ["swap", "reemplazar", "cambiar_ciudad"],
-        weights=[0.70, 0.20, 0.10]
+        ["swap", "reemplazar", "cambiar_ciudad", "swap_intercity", "ruta_2opt"],
+        weights=[0.40, 0.20, 0.15, 0.15, 0.10]
     )[0]
     
     if tipo_perturbacion == "swap":
@@ -121,34 +123,13 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
                 vecino.dias[dia_idx][idx_lugar] = nuevo_lugar
     
     elif tipo_perturbacion == "cambiar_ciudad":
-        # Cambiar ciudad de un día respetando restricciones
+        # Cambiar ciudad de un día con restricciones relajadas
         dia_idx = random.randint(0, len(vecino.dias) - 1)
         ciudad_actual = vecino.ciudades[dia_idx]
         ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
         
-        # Restricción 1: No regresar a ciudades ya visitadas
-        ciudades_visitadas = set(vecino.ciudades[:dia_idx])
-        
-        # Restricción 2: No más de MAX_DIAS_POR_CIUDAD días consecutivos
-        dias_consecutivos_actual = 1
-        for i in range(dia_idx - 1, -1, -1):
-            if vecino.ciudades[i] == ciudad_actual:
-                dias_consecutivos_actual += 1
-            else:
-                break
-        
-        # Filtrar ciudades candidatas
-        candidatas = []
-        for c in ciudades_disponibles:
-            if c == ciudad_actual:
-                continue
-            if c in ciudades_visitadas:
-                continue
-            candidatas.append(c)
-        
-        # Si alcanzamos MAX_DIAS_POR_CIUDAD, forzar cambio
-        if dias_consecutivos_actual >= MAX_DIAS_POR_CIUDAD:
-            candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+        # Solo evitar la misma ciudad (restricciones relajadas)
+        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
         
         # Si hay candidatas, cambiar
         if candidatas:
@@ -166,6 +147,27 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
                 else:
                     # Si no hay suficientes lugares, usar todos los disponibles
                     vecino.dias[dia_idx] = [l["id"] for l in lugares_nueva]
+    
+    elif tipo_perturbacion == "swap_intercity":
+        # NUEVO: Intercambiar dos días completos (incluidas ciudades)
+        if len(vecino.dias) >= 2:
+            i, j = random.sample(range(len(vecino.dias)), 2)
+            # Intercambiar días
+            vecino.dias[i], vecino.dias[j] = vecino.dias[j], vecino.dias[i]
+            # Intercambiar ciudades
+            vecino.ciudades[i], vecino.ciudades[j] = vecino.ciudades[j], vecino.ciudades[i]
+    
+    elif tipo_perturbacion == "ruta_2opt":
+        # NUEVO: Optimización 2-opt dentro de un día (invertir segmento)
+        dia_idx = random.randint(0, len(vecino.dias) - 1)
+        dia = vecino.dias[dia_idx]
+        
+        if len(dia) >= 4:
+            # Elegir dos puntos de corte
+            i = random.randint(0, len(dia) - 3)
+            j = random.randint(i + 2, len(dia))
+            # Invertir el segmento entre i y j
+            vecino.dias[dia_idx] = dia[:i+1] + dia[i+1:j][::-1] + dia[j:]
     
     # Validar y reparar si es necesario
     if not validar_restricciones_ciudades(vecino):
@@ -442,7 +444,7 @@ def enfriamiento_simulado(
 def enfriamiento_desde_genetico(
     resultados_genetico: Dict,
     usar_mejor: bool = True,
-    T_inicial: float = 1000,
+    T_inicial: float = 5000,  # Aumentado de 1000 a 5000 para mejor exploración
     alpha: float = 0.98,
     max_iteraciones: int = 5000
 ) -> Dict:
@@ -454,7 +456,7 @@ def enfriamiento_desde_genetico(
     Args:
         resultados_genetico: Diccionario con resultados del GA
         usar_mejor: Si True, usa el mejor individuo; si False, usa uno del top 10
-        T_inicial: Temperatura inicial (más baja para refinamiento)
+        T_inicial: Temperatura inicial (5000 para permitir exploración significativa)
         alpha: Factor de enfriamiento (más alto para convergencia más lenta)
         max_iteraciones: Iteraciones máximas
     
@@ -479,10 +481,11 @@ def enfriamiento_desde_genetico(
             print(f"  ⚠️  No hay población final, usando mejor individuo")
             solucion_inicial = resultados_genetico["mejor_individuo"]
     
-    print(f"\n💡 Configuración de refinamiento:")
-    print(f"  • Temperatura inicial: {T_inicial} (baja para refinamiento local)")
+    print(f"\n💡 Configuración MEJORADA de refinamiento:")
+    print(f"  • Temperatura inicial: {T_inicial} (alta para escapar de óptimos locales)")
     print(f"  • Factor α: {alpha} (enfriamiento lento para exploración cuidadosa)")
     print(f"  • Iteraciones: {max_iteraciones:,}")
+    print(f"  • Vecindad mejorada: 5 tipos de perturbaciones (swap, reemplazar, cambiar ciudad, swap intercity, 2-opt)")
     
     # Ejecutar enfriamiento simulado
     resultados_sa = enfriamiento_simulado(
@@ -682,7 +685,7 @@ if __name__ == "__main__":
         resultados_sa = enfriamiento_desde_genetico(
             resultados_genetico=resultados_ga,
             usar_mejor=True,
-            T_inicial=1000,  # Temperatura baja para refinamiento
+            T_inicial=5000,  # Temperatura alta para escapar de óptimos locales
             alpha=0.98,  # Enfriamiento lento
             max_iteraciones=5000
         )

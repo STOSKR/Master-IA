@@ -1,0 +1,53 @@
+================================================================================
+REPORTE DE ENFRIAMIENTO SIMULADO
+================================================================================
+
+CONFIGURACIÓN Y EJECUCIÓN:
+--------------------------------------------------------------------------------
+Iteraciones realizadas:       536
+Temperatura inicial:          5000.00
+Temperatura final:            0.099117
+Total de aceptaciones:        7 (1.31%)
+Total de rechazos:            529
+Mejoras encontradas:          1
+
+RESULTADOS DE FITNESS:
+--------------------------------------------------------------------------------
+Fitness inicial:              2200.26
+Fitness final:                2213.41
+Mejora absoluta:              +13.14
+Mejora porcentual:            +0.60%
+
+MÉTRICAS DE LA SOLUCIÓN:
+--------------------------------------------------------------------------------
+Puntos iniciales:             13,990
+Puntos finales:               14,003
+Diferencia de puntos:         +13
+Tiempo total:                 242.21 horas
+Distancia total:              332.83 km
+Días totales:                 20
+Ciudades visitadas:           7
+
+CIUDADES VISITADAS:
+--------------------------------------------------------------------------------
+  • Bilbao
+  • San Sebastián
+  • Sevilla
+  • Toledo
+  • Madrid
+  • Córdoba
+  • Granada
+
+DISTRIBUCIÓN POR CIUDAD:
+--------------------------------------------------------------------------------
+  Bilbao               :  4 días ( 20.0%)
+  Toledo               :  4 días ( 20.0%)
+  Córdoba              :  4 días ( 20.0%)
+  Sevilla              :  4 días ( 20.0%)
+  Granada              :  2 días ( 10.0%)
+  San Sebastián        :  1 días (  5.0%)
+  Madrid               :  1 días (  5.0%)
+
+================================================================================
+Reporte generado: 2025-10-14 22:09:44
+================================================================================

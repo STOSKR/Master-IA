@@ -947,4 +947,4 @@ if __name__ == "__main__":
     )
     
     analizar_solucion(resultados["mejor_individuo"])
-    exportar_resultados(resultados, archivo=f"resultados_espana_modo{modo}.json")
+    exportar_resultados(resultados, archivo=f"ag_{modo}.json")

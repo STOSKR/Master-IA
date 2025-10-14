@@ -9,6 +9,7 @@ import folium
 from folium import plugins
 from datetime import datetime
 import os
+from pathlib import Path
 
 # Importar utilidades
 from utils_espana import get_lugar_por_id, distancia_haversine
@@ -61,37 +62,59 @@ ICONOS_TIPO = {
 }
 
 
+def crear_carpeta_resultados(base_nombre: str) -> Path:
+    timestamp = datetime.now().strftime("%m%d_%H%M%S")
+    carpeta = Path(f"ga_{base_nombre}_{timestamp}")
+    carpeta.mkdir(exist_ok=True)
+    return carpeta
+
+
 def cargar_resultados(archivo_json):
     """Carga resultados del algoritmo genético"""
     with open(archivo_json, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 
-def analizar_evolucion_fitness(resultados):
+def analizar_evolucion_fitness(resultados, carpeta: Path):
     """Analiza la evolución del fitness a lo largo de las generaciones"""
     if not MATPLOTLIB_AVAILABLE:
         print("⚠️  Matplotlib no disponible - saltando gráficas de evolución")
         return
     
-    evolucion = resultados.get('evolucion_fitness', resultados.get('evolucion', []))
+    # Buscar el historial de fitness en diferentes formatos posibles
+    historial_fitness = resultados.get('historial_fitness', [])
+    historial_mejor_gen = resultados.get('historial_mejor_gen', historial_fitness)
     
-    if not evolucion:
+    # Si no hay historial en el formato nuevo, intentar con el antiguo
+    evolucion_antigua = resultados.get('evolucion_fitness', resultados.get('evolucion', []))
+    
+    if historial_fitness:
+        # Formato nuevo: lista de valores de fitness
+        generaciones = list(range(len(historial_fitness)))
+        fitness_mejor = historial_fitness  # Fitness global (siempre crece)
+        fitness_mejor_gen_valores = historial_mejor_gen  # Mejor de cada generación (puede variar)
+        
+    elif evolucion_antigua:
+        # Formato antiguo: lista de diccionarios con múltiples valores
+        generaciones = [e['generacion'] for e in evolucion_antigua]
+        fitness_mejor = [e['fitness_mejor'] for e in evolucion_antigua]
+        fitness_mejor_gen_valores = fitness_mejor
+    else:
         print("⚠️  No hay datos de evolución de fitness en el archivo JSON")
-        print("💡 Para incluir evolución, modifica ejecutar_espana.py para guardar historial")
+        print("💡 El algoritmo debe guardar 'historial_fitness' en los resultados")
         return
-    
-    generaciones = [e['generacion'] for e in evolucion]
-    fitness_mejor = [e['fitness_mejor'] for e in evolucion]
-    fitness_promedio = [e['fitness_promedio'] for e in evolucion]
-    fitness_peor = [e['fitness_peor'] for e in evolucion]
     
     plt.figure(figsize=(14, 8))
     
-    # Gráfica principal
+    # Gráfica principal - Evolución del mejor fitness
     plt.subplot(2, 2, 1)
-    plt.plot(generaciones, fitness_mejor, 'g-', linewidth=2, label='Mejor')
-    plt.plot(generaciones, fitness_promedio, 'b--', linewidth=1.5, label='Promedio')
-    plt.plot(generaciones, fitness_peor, 'r:', linewidth=1, label='Peor')
+    plt.plot(generaciones, fitness_mejor, 'g-', linewidth=2, label='Mejor Global (siempre crece)')
+    
+    # Si tenemos el mejor de cada gen y es diferente, mostrarlo
+    if fitness_mejor_gen_valores != fitness_mejor:
+        plt.plot(generaciones, fitness_mejor_gen_valores, 'b--', linewidth=1.5, 
+                alpha=0.7, label='Mejor de Generación')
+    
     plt.xlabel('Generación', fontsize=11)
     plt.ylabel('Fitness', fontsize=11)
     plt.title('Evolución del Fitness', fontsize=13, fontweight='bold')
@@ -109,45 +132,60 @@ def analizar_evolucion_fitness(resultados):
     plt.title('Mejora por Generación', fontsize=13, fontweight='bold')
     plt.grid(True, alpha=0.3, axis='y')
     
-    # Diversidad (diferencia mejor-peor)
+    # Convergencia (suavizado de mejoras)
     plt.subplot(2, 2, 3)
-    diversidad = [fitness_mejor[i] - fitness_peor[i] for i in range(len(fitness_mejor))]
-    plt.fill_between(generaciones, diversidad, alpha=0.4, color='purple')
-    plt.plot(generaciones, diversidad, 'purple', linewidth=2)
+    # Calcular media móvil de las mejoras
+    ventana = min(20, len(mejoras) // 10)
+    if ventana > 1 and NUMPY_AVAILABLE:
+        mejoras_suavizadas = np.convolve(mejoras, np.ones(ventana)/ventana, mode='valid')
+        gens_suavizadas = list(range(ventana-1, len(generaciones)))
+        plt.plot(gens_suavizadas, mejoras_suavizadas, 'purple', linewidth=2, label='Tendencia')
+        plt.fill_between(gens_suavizadas, 0, mejoras_suavizadas, alpha=0.4, color='purple')
+    else:
+        plt.plot(generaciones, mejoras, 'purple', linewidth=2, label='Mejoras')
+        plt.fill_between(generaciones, 0, mejoras, alpha=0.4, color='purple')
+    
+    plt.axhline(y=0, color='black', linestyle='-', linewidth=0.5)
     plt.xlabel('Generación', fontsize=11)
-    plt.ylabel('Rango Fitness', fontsize=11)
-    plt.title('Diversidad de Población (Mejor - Peor)', fontsize=13, fontweight='bold')
+    plt.ylabel('Mejora', fontsize=11)
+    plt.title('Tendencia de Convergencia', fontsize=13, fontweight='bold')
+    plt.legend()
     plt.grid(True, alpha=0.3)
     
     # Estadísticas finales
     plt.subplot(2, 2, 4)
     plt.axis('off')
+    
+    total_mejora = fitness_mejor[-1] - fitness_mejor[0]
+    mejora_porcentual = (total_mejora / abs(fitness_mejor[0]) * 100) if fitness_mejor[0] != 0 else 0
+    num_mejoras = sum(1 for m in mejoras if m > 0)
+    mejora_maxima = max(mejoras) if mejoras else 0
+    gen_mejor_mejora = mejoras.index(mejora_maxima) if mejoras else 0
+    
     stats_text = f"""
     ESTADÍSTICAS DE EVOLUCIÓN
     {'='*35}
     
     Fitness Inicial:     {fitness_mejor[0]:.1f}
     Fitness Final:       {fitness_mejor[-1]:.1f}
-    Mejora Total:        {fitness_mejor[-1] - fitness_mejor[0]:.1f}
-    Mejora Porcentual:   {((fitness_mejor[-1] - fitness_mejor[0]) / abs(fitness_mejor[0]) * 100):.2f}%
-    
-    Promedio Inicial:    {fitness_promedio[0]:.1f}
-    Promedio Final:      {fitness_promedio[-1]:.1f}
+    Mejora Total:        {total_mejora:.1f}
+    Mejora Porcentual:   {mejora_porcentual:.2f}%
     
     Generaciones:        {len(generaciones)}
-    Mejor Generación:    {generaciones[fitness_mejor.index(max(fitness_mejor))]}
-    Mayor Mejora:        {max(mejoras):.1f} (gen {generaciones[mejoras.index(max(mejoras))]})
+    Generaciones con mejora: {num_mejoras}
+    Mayor mejora:        {mejora_maxima:.1f}
+    En generación:       {gen_mejor_mejora}
     """
     plt.text(0.1, 0.5, stats_text, fontsize=10, family='monospace',
              verticalalignment='center')
     
     plt.tight_layout()
-    plt.savefig('evolucion_fitness_espana.png', dpi=300, bbox_inches='tight')
-    print("✅ Gráfica guardada: evolucion_fitness_espana.png")
+    plt.savefig(carpeta / 'evolucion_fitness.png', dpi=300, bbox_inches='tight')
+    print("✅ Gráfica guardada: evolucion_fitness.png")
     plt.close()
 
 
-def analizar_distribucion_por_ciudades(resultados):
+def analizar_distribucion_por_ciudades(resultados, carpeta: Path):
     """Analiza la distribución de días y lugares por ciudad"""
     if not MATPLOTLIB_AVAILABLE:
         print("⚠️  Matplotlib no disponible - saltando gráficas de distribución")
@@ -271,12 +309,12 @@ def analizar_distribucion_por_ciudades(resultados):
     plt.title('Resumen por Ciudad', fontsize=13, fontweight='bold', pad=20)
     
     plt.tight_layout()
-    plt.savefig('distribucion_ciudades_espana.png', dpi=300, bbox_inches='tight')
-    print("✅ Gráfica guardada: distribucion_ciudades_espana.png")
+    plt.savefig(carpeta / 'distribucion_ciudades.png', dpi=300, bbox_inches='tight')
+    print("✅ Gráfica guardada: distribucion_ciudades.png")
     plt.close()
 
 
-def analizar_metricas_diarias(resultados):
+def analizar_metricas_diarias(resultados, carpeta: Path):
     """Analiza métricas día por día"""
     if not MATPLOTLIB_AVAILABLE:
         print("⚠️  Matplotlib no disponible - saltando gráficas de métricas diarias")
@@ -380,12 +418,12 @@ def analizar_metricas_diarias(resultados):
                   bbox_to_anchor=(0.5, -0.05), fontsize=10)
     
     plt.tight_layout()
-    plt.savefig('metricas_diarias_espana.png', dpi=300, bbox_inches='tight')
-    print("✅ Gráfica guardada: metricas_diarias_espana.png")
+    plt.savefig(carpeta / 'metricas_diarias.png', dpi=300, bbox_inches='tight')
+    print("✅ Gráfica guardada: metricas_diarias.png")
     plt.close()
 
 
-def crear_mapa_interactivo(resultados, archivo_salida='mapa_ruta_espana.html'):
+def crear_mapa_interactivo(resultados, carpeta: Path, archivo_salida='mapa_ruta.html'):
     """Crea un mapa interactivo con la ruta completa MEJORADO"""
     # Adaptado para el formato actual del JSON
     itinerario = resultados.get('itinerario', [])
@@ -691,11 +729,12 @@ def crear_mapa_interactivo(resultados, archivo_salida='mapa_ruta_espana.html'):
     mapa.get_root().html.add_child(folium.Element(leyenda_html))
     
     # Guardar mapa
-    mapa.save(archivo_salida)
+    ruta_mapa = carpeta / archivo_salida
+    mapa.save(str(ruta_mapa))
     print(f"✅ Mapa interactivo MEJORADO guardado: {archivo_salida}")
 
 
-def generar_resumen_estadistico(resultados, archivo_salida='resumen_estadistico_espana.txt'):
+def generar_resumen_estadistico(resultados, carpeta: Path, archivo_salida='resumen_estadistico.txt'):
     """Genera un resumen estadístico detallado en texto"""
     # Adaptado para el formato actual del JSON
     itinerario = resultados.get('itinerario', [])
@@ -728,7 +767,8 @@ def generar_resumen_estadistico(resultados, archivo_salida='resumen_estadistico_
                 stats_ciudades[ciudad]['puntos'] += lugar['puntos']
     
     # Generar texto
-    with open(archivo_salida, 'w', encoding='utf-8') as f:
+    ruta_resumen = carpeta / archivo_salida
+    with open(ruta_resumen, 'w', encoding='utf-8') as f:
         f.write("="*80 + "\n")
         f.write("RESUMEN ESTADÍSTICO - OPTIMIZACIÓN RUTA TURÍSTICA ESPAÑA\n")
         f.write("="*80 + "\n\n")
@@ -766,11 +806,12 @@ def generar_resumen_estadistico(resultados, archivo_salida='resumen_estadistico_
         f.write(f"Total puntos: {sum(s['puntos'] for s in stats_ciudades.values())}\n")
         f.write("="*80 + "\n")
     
+    ruta_resumen = carpeta / archivo_salida
     print(f"✅ Resumen estadístico guardado: {archivo_salida}")
 
 
 def analizar_resultados_completo(archivo_json='resultados_espana_rapido.json'):
-    """Ejecuta todos los análisis"""
+    """Ejecuta todos los análisis y los guarda en una carpeta organizada"""
     print("\n" + "="*80)
     print("🇪🇸 ANÁLISIS DE RESULTADOS - RUTA TURÍSTICA ESPAÑA")
     print("="*80 + "\n")
@@ -780,32 +821,38 @@ def analizar_resultados_completo(archivo_json='resultados_espana_rapido.json'):
     resultados = cargar_resultados(archivo_json)
     print(f"✅ Archivo cargado: {archivo_json}\n")
     
+    # Crear carpeta para resultados
+    base_nombre = Path(archivo_json).stem
+    carpeta = crear_carpeta_resultados(base_nombre)
+    print(f"📁 Carpeta de salida: {carpeta}\n")
+    
     # Generar análisis
     print("📊 Generando gráficas de evolución...")
-    analizar_evolucion_fitness(resultados)
+    analizar_evolucion_fitness(resultados, carpeta)
     
     print("\n📊 Generando análisis por ciudades...")
-    analizar_distribucion_por_ciudades(resultados)
+    analizar_distribucion_por_ciudades(resultados, carpeta)
     
     print("\n📊 Generando métricas diarias...")
-    analizar_metricas_diarias(resultados)
+    analizar_metricas_diarias(resultados, carpeta)
     
     print("\n🗺️  Generando mapa interactivo...")
-    crear_mapa_interactivo(resultados)
+    crear_mapa_interactivo(resultados, carpeta)
     
     print("\n📝 Generando resumen estadístico...")
-    generar_resumen_estadistico(resultados)
+    generar_resumen_estadistico(resultados, carpeta)
     
     print("\n" + "="*80)
     print("✅ ANÁLISIS COMPLETADO")
     print("="*80)
+    print(f"\n📁 Todos los archivos guardados en: {carpeta.absolute()}")
     print("\nArchivos generados:")
-    print("  📊 evolucion_fitness_espana.png")
-    print("  📊 distribucion_ciudades_espana.png")
-    print("  📊 metricas_diarias_espana.png")
-    print("  🗺️  mapa_ruta_espana.html")
-    print("  📝 resumen_estadistico_espana.txt")
-    print("\n💡 Abre mapa_ruta_espana.html en tu navegador para ver la ruta interactiva")
+    print("  📊 evolucion_fitness.png")
+    print("  📊 distribucion_ciudades.png")
+    print("  📊 metricas_diarias.png")
+    print("  🗺️  mapa_ruta.html")
+    print("  📝 resumen_estadistico.txt")
+    print(f"\n💡 Abre {carpeta}/mapa_ruta.html en tu navegador para ver la ruta interactiva")
     print("="*80 + "\n")
 
 

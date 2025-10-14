@@ -2,7 +2,7 @@
 RESUMEN ESTADÍSTICO - OPTIMIZACIÓN RUTA TURÍSTICA ESPAÑA
 ================================================================================
 
-Fecha de generación: 2025-10-14 21:39:18
+Fecha de generación: 2025-10-14 22:10:39
 
 CONFIGURACIÓN DEL ALGORITMO
 --------------------------------------------------------------------------------
