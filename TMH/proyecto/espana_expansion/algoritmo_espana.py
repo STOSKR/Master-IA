@@ -1,6 +1,7 @@
 import random
 import copy
 from typing import List, Dict, Tuple
+from math import radians, sin, cos, sqrt, atan2
 from config import *
 from utils_espana import (
     lugares_turisticos_espana,
@@ -16,29 +17,16 @@ from restricciones_espana import (
 
 class Individual:
     def __init__(self, dias: List[List[int]], ciudades: List[str]):
-        # COPIAS DEFENSIVAS: Evitar referencias compartidas
         self.dias = [dia[:] if isinstance(dia, list) else dia for dia in dias]
         self.ciudades = ciudades[:] if isinstance(ciudades, list) else ciudades
         self.fitness = 0
         self.tiempo_total = 0
         self.puntos_totales = 0
         self.distancia_total = 0
-        self.transportes_intercity = []  # [(dia_idx, origen, destino, tipo, tiempo, costo)]
+        self.transportes_intercity = []
 
 
 def eliminar_duplicados_globales(individuo: Individual) -> Individual:
-    """
-    Elimina lugares que aparecen repetidos en CUALQUIER día del itinerario.
-    
-    Un lugar turístico solo puede visitarse UNA VEZ en todo el viaje.
-    Si se encuentra duplicado, se reemplaza por otro lugar de la misma ciudad.
-    
-    Args:
-        individuo: Individuo a limpiar
-    
-    Returns:
-        Individuo sin lugares duplicados en todo el itinerario
-    """
     lugares_visitados_global = set()
     
     for dia_idx in range(len(individuo.dias)):
@@ -49,11 +37,9 @@ def eliminar_duplicados_globales(individuo: Individual) -> Individual:
         dia_limpio = []
         for lugar_id in dia:
             if lugar_id not in lugares_visitados_global:
-                # Lugar no visitado antes, añadir
                 dia_limpio.append(lugar_id)
                 lugares_visitados_global.add(lugar_id)
             else:
-                # Lugar YA visitado en otro día, buscar reemplazo
                 lugares_disponibles = [
                     l["id"] for l in lugares_ciudad 
                     if l["id"] not in lugares_visitados_global
@@ -63,7 +49,6 @@ def eliminar_duplicados_globales(individuo: Individual) -> Individual:
                     nuevo_lugar = random.choice(lugares_disponibles)
                     dia_limpio.append(nuevo_lugar)
                     lugares_visitados_global.add(nuevo_lugar)
-                # Si no hay lugares disponibles, simplemente no añadir (día con menos lugares)
         
         individuo.dias[dia_idx] = dia_limpio
     
@@ -74,44 +59,31 @@ def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias
     
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     
-    # Verificar si debemos forzar cambio por MAX_DIAS_POR_CIUDAD
     debe_cambiar = dias_consecutivos_actual >= MAX_DIAS_POR_CIUDAD
     
-    # Filtrar ciudades candidatas
     candidatas = []
     for ciudad in ciudades_disponibles:
-        # No puede ser la misma ciudad si debe cambiar
         if debe_cambiar and ciudad == ciudad_actual:
             continue
-        # No puede ser una ciudad ya visitada completamente
         if ciudad in ciudades_visitadas:
             continue
         candidatas.append(ciudad)
-    
-    # Si no hay candidatas sin visitar, permitir revisar ciudades visitadas
-    # (esto evita el problema de quedarse bloqueado)
     if not candidatas:
         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
-    
-    # Si aún no hay candidatas, quedarse en la actual (caso extremo)
     if not candidatas:
         return ciudad_actual
-    
-    # Calcular distancias y elegir la más cercana
+
     coord_actual = COORDENADAS_CIUDADES[ciudad_actual]
     distancias = []
     
-    from math import radians, sin, cos, sqrt, atan2
-    
     for ciudad_candidata in candidatas:
         coord_candidata = COORDENADAS_CIUDADES[ciudad_candidata]
-        # Calcular distancia usando fórmula de Haversine
         lat1 = float(coord_actual["lat"])
         lon1 = float(coord_actual["lon"])
         lat2 = float(coord_candidata["lat"])
         lon2 = float(coord_candidata["lon"])
         
-        R = 6371  # Radio de la Tierra en km
+        R = 6371
         
         dlat = radians(lat2 - lat1)
         dlon = radians(lon2 - lon1)
@@ -121,36 +93,22 @@ def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias
         
         distancias.append((ciudad_candidata, distancia))
     
-    # Ordenar por distancia y devolver la más cercana
     distancias.sort(key=lambda x: x[1])
     return distancias[0][0]
 
 def validar_restricciones_ciudades(individuo: Individual) -> bool:
-    """
-    Valida que un individuo cumple con las restricciones de ciudades:
-    1. No regresar a una ciudad ya visitada
-    2. No más de MAX_DIAS_POR_CIUDAD días consecutivos en la misma ciudad
-    
-    Returns:
-        True si cumple todas las restricciones, False en caso contrario
-    """
     ciudades = individuo.ciudades
     
-    # Restricción 1: No regresar a ciudades visitadas
     ciudades_vistas = set()
     for i, ciudad in enumerate(ciudades):
         if ciudad in ciudades_vistas:
-            # Verificar si es continuación (no hay problema)
             if i > 0 and ciudades[i-1] == ciudad:
                 continue
             else:
                 return False
-        
-        # Si cambiamos de ciudad, agregar la anterior al conjunto
         if i > 0 and ciudades[i-1] != ciudad:
             ciudades_vistas.add(ciudades[i-1])
     
-    # Restricción 2: No más de MAX_DIAS_POR_CIUDAD días consecutivos
     dias_consecutivos = 1
     ciudad_actual_check = ciudades[0]
     for i in range(1, len(ciudades)):
@@ -165,16 +123,12 @@ def validar_restricciones_ciudades(individuo: Individual) -> bool:
     return True
 
 def reparar_individuo(individuo: Individual) -> Individual:
-    """
-    Repara un individuo que viola las restricciones de ciudades.
-    """
-    ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
+    
     ciudades_visitadas = set()
     
     for dia_idx in range(len(individuo.ciudades)):
         ciudad_actual = individuo.ciudades[dia_idx]
         
-        # Verificar días consecutivos
         dias_consecutivos = 1
         for i in range(dia_idx - 1, -1, -1):
             if individuo.ciudades[i] == ciudad_actual:
@@ -182,21 +136,17 @@ def reparar_individuo(individuo: Individual) -> Individual:
             else:
                 break
         
-        # Verificar si regresa a ciudad visitada
         es_regreso = False
         if dia_idx > 0:
             if ciudad_actual in ciudades_visitadas and individuo.ciudades[dia_idx-1] != ciudad_actual:
                 es_regreso = True
         
-        # Reparar si es necesario
         if dias_consecutivos > MAX_DIAS_POR_CIUDAD or es_regreso:
-            # Obtener ciudad más cercana válida
             ciudad_anterior = individuo.ciudades[dia_idx-1] if dia_idx > 0 else ciudad_actual
             nueva_ciudad = obtener_ciudad_mas_cercana(ciudad_anterior, ciudades_visitadas, dias_consecutivos)
             
             individuo.ciudades[dia_idx] = nueva_ciudad
             
-            # Actualizar lugares
             lugares_nueva = get_lugares_ciudad(nueva_ciudad)
             if lugares_nueva:
                 num_lugares = len(individuo.dias[dia_idx])
@@ -204,7 +154,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                     random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
                 ]
         
-        # Actualizar conjunto de visitadas
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx-1]:
             ciudades_visitadas.add(individuo.ciudades[dia_idx-1])
     
@@ -214,17 +163,16 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     dias = []
     ciudades_plan = []
-    ciudades_visitadas = set()  # Para rastrear ciudades ya visitadas completamente
-    lugares_visitados_global = set()  # NUEVO: Para evitar repetir lugares en todo el itinerario
+    ciudades_visitadas = set()
+    lugares_visitados_global = set()
     
     if AGRUPAR:
         dia_actual = 0
-        ciudad_actual = random.choice(ciudades_disponibles)  # Primera ciudad aleatoria
+        ciudad_actual = random.choice(ciudades_disponibles)
         
         while dia_actual < num_dias:
             dias_restantes = num_dias - dia_actual
             
-            # Limitar días en esta ciudad: máximo MAX_DIAS_POR_CIUDAD
             if dias_restantes == 1:
                 dias_en_ciudad = 1
             else:
@@ -238,13 +186,11 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 if dia_actual >= num_dias:
                     break
                 
-                # MODIFICADO: Filtrar lugares ya visitados globalmente
                 lugares_disponibles = [
                     l for l in lugares_ciudad 
                     if l["id"] not in lugares_visitados_global
                 ]
                 
-                # Si no hay suficientes lugares únicos, usar todos los disponibles
                 if len(lugares_disponibles) < lugares_por_dia:
                     lugares_disponibles = lugares_ciudad
                 
@@ -254,7 +200,6 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 )
                 ids_dia = [l["id"] for l in lugares_dia]
                 
-                # Añadir a lugares visitados globalmente
                 lugares_visitados_global.update(ids_dia)
                 
                 random.shuffle(ids_dia)
@@ -263,25 +208,20 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 ciudades_plan.append(ciudad_actual)
                 dia_actual += 1
             
-            # Marcar ciudad como visitada al salir de ella
             ciudades_visitadas.add(ciudad_actual)
             
-            # Elegir siguiente ciudad MÁS CERCANA (si quedan días)
             if dia_actual < num_dias:
                 ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, MAX_DIAS_POR_CIUDAD)
     else:
-        # Modo sin agrupar: cada día puede ser diferente
-        ciudad_actual = random.choice(ciudades_disponibles)  # Primera ciudad aleatoria
+        ciudad_actual = random.choice(ciudades_disponibles)
         dias_consecutivos = 0
         
         for dia_idx in range(num_dias):
-            # Incrementar contador de días consecutivos
             if dia_idx > 0 and ciudades_plan[-1] == ciudad_actual:
                 dias_consecutivos += 1
             else:
                 dias_consecutivos = 1
             
-            # Si alcanzamos MAX_DIAS_POR_CIUDAD, cambiar a ciudad más cercana
             if dias_consecutivos >= MAX_DIAS_POR_CIUDAD:
                 ciudades_visitadas.add(ciudad_actual)
                 ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, dias_consecutivos)
@@ -301,7 +241,6 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
     
     individuo = Individual(dias, ciudades_plan)
     
-    # Validar y reparar si es necesario
     if not validar_restricciones_ciudades(individuo):
         individuo = reparar_individuo(individuo)
     
@@ -309,48 +248,6 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
 
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
     return [crear_individuo_aleatorio(num_dias, lugares_por_dia) for _ in range(tam_poblacion)]
-
-
-def eliminar_duplicados_dia(individuo: Individual) -> Individual:
-    """
-    Elimina lugares duplicados en cada día, reemplazándolos por lugares únicos de la misma ciudad.
-    
-    Args:
-        individuo: Individuo a limpiar
-    
-    Returns:
-        Individuo sin lugares duplicados (modifica el individuo in-place y lo retorna)
-    """
-    for dia_idx in range(len(individuo.dias)):
-        dia = individuo.dias[dia_idx]
-        ciudad = individuo.ciudades[dia_idx]
-        
-        # Verificar si hay duplicados
-        if len(dia) != len(set(dia)):
-            # Hay duplicados, necesitamos reemplazarlos
-            lugares_ciudad = get_lugares_ciudad(ciudad)
-            lugares_unicos = []
-            lugares_usados = set()
-            
-            for lugar_id in dia:
-                if lugar_id not in lugares_usados:
-                    lugares_unicos.append(lugar_id)
-                    lugares_usados.add(lugar_id)
-                else:
-                    # Buscar un reemplazo que no esté usado
-                    lugares_disponibles = [l["id"] for l in lugares_ciudad 
-                                          if l["id"] not in lugares_usados]
-                    if lugares_disponibles:
-                        nuevo_lugar = random.choice(lugares_disponibles)
-                        lugares_unicos.append(nuevo_lugar)
-                        lugares_usados.add(nuevo_lugar)
-                    # Si no hay más lugares disponibles, simplemente no añadimos nada
-                    # (el día tendrá menos lugares, pero sin duplicados)
-            
-            individuo.dias[dia_idx] = lugares_unicos
-    
-    return individuo
-
 
 def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, float]:
     dia = individuo.dias[dia_idx]
@@ -363,12 +260,10 @@ def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, 
     distancia_total = 0
     puntos_total = 0
     
-    # Tiempo de visitas
     for lugar in lugares_dia:
         tiempo_total += lugar["tiempo_visita"]
         puntos_total += lugar["puntos"]
     
-    # Distancias entre lugares
     for i in range(len(lugares_dia) - 1):
         dist = distancia_haversine(lugares_dia[i], lugares_dia[i + 1])
         distancia_total += dist
@@ -412,7 +307,6 @@ def evaluar_individuo(individuo: Individual) -> float:
             ciudad_anterior = individuo.ciudades[dia_idx - 1]
             
             if ciudad_actual != ciudad_anterior:
-                # Penalizar solo si vuelve a una ciudad reciente (últimos 5 días)
                 ciudades_recientes = individuo.ciudades[max(0, dia_idx-5):dia_idx]
                 if ciudad_actual in ciudades_recientes:
                     fitness -= PENALIZACION_CAMBIO_CIUDAD_INNECESARIO
@@ -439,10 +333,6 @@ def evaluar_individuo(individuo: Individual) -> float:
             if tiempo_trans:
                 tiempo_dia += tiempo_trans
             gasto_acumulado += costo_trans
-        
-        # Penalizaciones básicas (fatiga, etc.)
-        # pen_fatiga = aplicar_restricciones_basicas(individuo.dias[dia_idx], tiempo_dia)
-        # fitness -= pen_fatiga
 
         if not validar_limite_ciudad(individuo.ciudades[:dia_idx + 1], individuo.ciudades[dia_idx])[0]:
             fitness -= PENALIZACION_LIMITE_CIUDAD
@@ -452,16 +342,14 @@ def evaluar_individuo(individuo: Individual) -> float:
             if exceso > 0 and exceso <= 120:
                 fitness -= PENALIZACION_EXCESO_TIEMPO * exceso
             elif exceso > 120:
-                # Penalización más gradual en lugar de catastrófica
-                fitness -= PENALIZACION_EXCESO_TIEMPO * 120  # Máximo 120 min
-                fitness -= (exceso - 120) * 2  # 2 pts por minuto adicional
+                fitness -= PENALIZACION_EXCESO_TIEMPO * 120 
+                fitness -= (exceso - 120) * 2
         
         hora_actual = HORA_INICIO
         
-        # Si hay transporte intercity, añadir tiempo de transporte a hora_actual
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
             transporte_dia = next((t for t in individuo.transportes_intercity if t[0] == dia_idx), None)
-            if transporte_dia and transporte_dia[4]:  # transporte_dia[4] = tiempo_trans
+            if transporte_dia and transporte_dia[4]:
                 hora_actual += transporte_dia[4]
         
         tiene_almuerzo = False
@@ -473,7 +361,6 @@ def evaluar_individuo(individuo: Individual) -> float:
         for lugar in lugares_dia:
             tipo = lugar.get('tipo', '')
             
-            # Validar horario de apertura/cierre
             if tipo in HORARIOS_TIPO:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
@@ -487,16 +374,14 @@ def evaluar_individuo(individuo: Individual) -> float:
             if tipo in PRECIOS_TIPO:
                 gasto_dia += PRECIOS_TIPO[tipo]
             else:
-                gasto_dia += 10  # Precio por defecto (antes era 20)
+                gasto_dia += 10
             
-            # Verificar si es restaurante/bar/cafetería en hora de comida
             if tipo in ['restaurante', 'bar', 'cafetería']:
                 if HORA_ALMUERZO_MIN <= hora_actual <= HORA_ALMUERZO_MAX:
                     tiene_almuerzo = True
                 elif HORA_CENA_MIN <= hora_actual <= HORA_CENA_MAX:
                     tiene_cena = True
                 
-                # Contar restaurantes consecutivos
                 restaurantes_consecutivos += 1
                 max_consecutivos = max(max_consecutivos, restaurantes_consecutivos)
             else:
@@ -504,38 +389,28 @@ def evaluar_individuo(individuo: Individual) -> float:
             
             hora_actual += lugar['tiempo_visita']
         
-        # Acumular gasto del día al acumulado
         gasto_acumulado += gasto_dia
         
-        # Validar presupuesto diario
         if gasto_dia > PRESUPUESTO_DIARIO:
             exceso_presupuesto = gasto_dia - PRESUPUESTO_DIARIO
             fitness -= PENALIZACION_EXCESO_PRESUPUESTO * exceso_presupuesto
         
-        # Penalizar si no hay almuerzo
         if not tiene_almuerzo:
             fitness -= PENALIZACION_COMIDA_FALTA
         
-        # Penalizar si no hay cena
         if not tiene_cena:
             fitness -= PENALIZACION_CENA_FALTA
         
-        # Penalizar muchos restaurantes consecutivos
         if max_consecutivos > 3:
             fitness -= PENALIZACION_RESTAURANTES_CONSECUTIVOS * (max_consecutivos - 3)
         
-        # Acumular métricas
         tiempo_acum += tiempo_dia
         distancia_acum += dist_dia
         puntos_acum += puntos_dia
     
-    # Fitness = puntos - penalizaciones - penalización por distancia
     fitness += puntos_acum
-    
-    # Penalizar distancia excesiva (0.3 puntos por km - más gradual)
     fitness -= distancia_acum * 0.3
     
-    # Guardar métricas
     individuo.tiempo_total = tiempo_acum
     individuo.distancia_total = distancia_acum
     individuo.puntos_totales = puntos_acum
@@ -543,17 +418,12 @@ def evaluar_individuo(individuo: Individual) -> float:
     
     return fitness
 
-# Operadores genéticos
-
 def seleccion_torneo(poblacion: List[Individual], k: int = 3) -> Individual:
-    """Selección por torneo"""
     torneo = random.sample(poblacion, k)
     return max(torneo, key=lambda ind: ind.fitness)
 
 def crossover_dos_puntos(padre1: Individual, padre2: Individual) -> Tuple[Individual, Individual]:
-    """Cruce de dos puntos por día"""
     if random.random() > PROBABILIDAD_CRUCE:
-        # ¡IMPORTANTE! Devolver COPIAS, no referencias (sino la mutación afecta a los padres)
         hijo1 = Individual([dia[:] for dia in padre1.dias], padre1.ciudades[:])
         hijo2 = Individual([dia[:] for dia in padre2.dias], padre2.ciudades[:])
         return hijo1, hijo2
@@ -589,7 +459,6 @@ def crossover_dos_puntos(padre1: Individual, padre2: Individual) -> Tuple[Indivi
     return Individual(hijo1_dias, hijo1_ciudades), Individual(hijo2_dias, hijo2_ciudades)
 
 def mutar(individuo: Individual):
-    """Aplica múltiples tipos de mutación"""
     for dia_idx in range(len(individuo.dias)):
         dia = individuo.dias[dia_idx]
         ciudad = individuo.ciudades[dia_idx]
@@ -621,34 +490,22 @@ def mutar(individuo: Individual):
                     if nuevo not in dia:
                         dia[idx] = nuevo
         
-        # Mutación de ciudad (baja probabilidad) - USANDO CIUDAD MÁS CERCANA
         if random.random() < 0.05:
-            # Restricción 1: No regresar a ciudades ya visitadas
-            ciudades_visitadas = set(individuo.ciudades[:dia_idx])  # Ciudades antes de este día
-            
-            # Restricción 2: No más de MAX_DIAS_POR_CIUDAD días consecutivos
+            ciudades_visitadas = set(individuo.ciudades[:dia_idx])
             dias_consecutivos_actual = 1
             for i in range(dia_idx - 1, -1, -1):
                 if individuo.ciudades[i] == ciudad:
                     dias_consecutivos_actual += 1
                 else:
                     break
-            
-            # Obtener ciudad más cercana válida
             nueva_ciudad = obtener_ciudad_mas_cercana(ciudad, ciudades_visitadas, dias_consecutivos_actual)
-            
-            # Solo mutar si la nueva ciudad es diferente
             if nueva_ciudad != ciudad:
                 individuo.ciudades[dia_idx] = nueva_ciudad
-                
-                # Reemplazar lugares del día con lugares de nueva ciudad
                 lugares_nueva = get_lugares_ciudad(nueva_ciudad)
                 if lugares_nueva:
                     individuo.dias[dia_idx] = [
                         random.choice(lugares_nueva)["id"] for _ in range(len(dia))
                     ]
-    
-    # Validar y reparar después de mutar
     if not validar_restricciones_ciudades(individuo):
         individuo = reparar_individuo(individuo)
 
@@ -674,29 +531,22 @@ def algoritmo_genetico_espana(
     print("Creando población inicial")
     poblacion = crear_poblacion_inicial(tam_poblacion, num_dias, lugares_por_dia)
     
-    # Evaluar población inicial
-    print("📊 Evaluando población inicial...")
+    print("Evaluando población inicial")
     for ind in poblacion:
         evaluar_individuo(ind)
     
-    # IMPORTANTE: Hacer copia profunda del mejor para evitar que las mutaciones lo afecten
     mejor_global = copy.deepcopy(max(poblacion, key=lambda ind: ind.fitness))
     historial_fitness = [mejor_global.fitness]
-    historial_mejor_gen = [mejor_global.fitness]  # Nuevo: fitness del mejor de cada gen
+    historial_mejor_gen = [mejor_global.fitness]
     
     num_elite = int(tam_poblacion * tasa_elitismo)
     
-    # Evolución
-    print(f"\n🔄 Iniciando evolución ({num_generaciones} generaciones)...\n")
+    print(f"\nIniciando evolución ({num_generaciones} generaciones)...\n")
     
     for gen in range(num_generaciones):
-        # Ordenar por fitness
         poblacion.sort(key=lambda ind: ind.fitness, reverse=True)
-        
-        # Elitismo - IMPORTANTE: Copiar profundamente para que no se muten
         nueva_poblacion = [copy.deepcopy(ind) for ind in poblacion[:num_elite]]
         
-        # Generar descendencia
         while len(nueva_poblacion) < tam_poblacion:
             padre1 = seleccion_torneo(poblacion)
             padre2 = seleccion_torneo(poblacion)
@@ -705,12 +555,7 @@ def algoritmo_genetico_espana(
             
             mutar(hijo1)
             mutar(hijo2)
-            
-            # CRÍTICO: Eliminar duplicados GLOBALES ANTES de evaluar
-            # Esto garantiza que:
-            # 1. No hay lugares repetidos en el mismo día
-            # 2. No hay lugares repetidos en diferentes días (un lugar solo se visita UNA VEZ)
-            # 3. El fitness siempre refleja soluciones válidas y realistas
+
             eliminar_duplicados_globales(hijo1)
             eliminar_duplicados_globales(hijo2)
             
@@ -721,14 +566,13 @@ def algoritmo_genetico_espana(
         
         poblacion = nueva_poblacion[:tam_poblacion]
         
-        # Actualizar mejor - IMPORTANTE: Hacer copia profunda para evitar mutaciones
         mejor_gen = max(poblacion, key=lambda ind: ind.fitness)
-        historial_mejor_gen.append(mejor_gen.fitness)  # Guardar mejor de esta generación
+        historial_mejor_gen.append(mejor_gen.fitness) 
         
         if mejor_gen.fitness > mejor_global.fitness:
-            mejor_global = copy.deepcopy(mejor_gen)  # Copia profunda!
+            mejor_global = copy.deepcopy(mejor_gen)
         
-        historial_fitness.append(mejor_global.fitness)  # Siempre debe crecer o mantenerse
+        historial_fitness.append(mejor_global.fitness)
         
         # Progreso
         if (gen + 1) % 50 == 0 or gen == 0:
@@ -743,35 +587,33 @@ def algoritmo_genetico_espana(
     
     return {
         "mejor_individuo": mejor_global,
-        "historial_fitness": historial_fitness,  # Mejor global (siempre crece)
-        "historial_mejor_gen": historial_mejor_gen,  # Mejor de cada gen (puede variar)
+        "historial_fitness": historial_fitness,
+        "historial_mejor_gen": historial_mejor_gen,
         "poblacion_final": poblacion
     }
 
-# Utilidades de análisis
 
 def analizar_solucion(individuo: Individual):
     """Muestra análisis detallado de una solución con itinerario completo"""
     print(f"\n{'='*80}")
-    print(f"📋 ANÁLISIS DE LA MEJOR SOLUCIÓN")
+    print(f"ANÁLISIS DE LA MEJOR SOLUCIÓN")
     print(f"{'='*80}\n")
     
-    print(f"🎯 Métricas Globales:")
-    print(f"  • Fitness total: {individuo.fitness:.1f}")
-    print(f"  • Puntos totales: {individuo.puntos_totales}")
-    print(f"  • Tiempo total: {individuo.tiempo_total/60:.1f} horas ({individuo.tiempo_total:.0f} minutos)")
-    print(f"  • Tiempo promedio/día: {(individuo.tiempo_total/len(individuo.dias))/60:.1f} horas")
-    print(f"  • Distancia total: {individuo.distancia_total:.1f} km")
-    print(f"  • Ciudades visitadas: {len(set(individuo.ciudades))}")
+    print(f"Métricas Globales:")
+    print(f"- Fitness total: {individuo.fitness:.1f}")
+    print(f"- Puntos totales: {individuo.puntos_totales}")
+    print(f"- Tiempo total: {individuo.tiempo_total/60:.1f} horas ({individuo.tiempo_total:.0f} minutos)")
+    print(f"- Tiempo promedio/día: {(individuo.tiempo_total/len(individuo.dias))/60:.1f} horas")
+    print(f"- Distancia total: {individuo.distancia_total:.1f} km")
+    print(f"- Ciudades visitadas: {len(set(individuo.ciudades))}")
     
-    print(f"\n📅 ITINERARIO DETALLADO POR DÍAS:")
+    print(f"\nITINERARIO DETALLADO POR DÍAS:")
     print(f"{'='*80}\n")
     
     for dia_idx, (dia, ciudad) in enumerate(zip(individuo.dias, individuo.ciudades), 1):
         lugares_dia = get_lugares_por_ids(dia)
         tiempo_dia, dist_dia, puntos_dia = calcular_tiempo_dia(individuo, dia_idx - 1)
         
-        # Calcular gasto del día
         gasto_dia = 0
         for lugar in lugares_dia:
             tipo = lugar.get('tipo', '')
@@ -784,7 +626,6 @@ def analizar_solucion(individuo: Individual):
         print(f"DÍA {dia_idx} - {ciudad.upper()}")
         print(f"{'─'*80}")
         
-        # Mostrar transporte intercity si aplica
         transport_info = next((t for t in individuo.transportes_intercity if t[0] == dia_idx - 1), None)
         if transport_info:
             _, origen, destino, tipo_elegido, tiempo_trans, costo_trans = transport_info
@@ -794,7 +635,6 @@ def analizar_solucion(individuo: Individual):
                   f"{tipo_elegido.upper()} ({tiempo_trans} min, {costo_trans}€)")
             print(f"")
         
-        # Indicador de presupuesto
         if gasto_dia > PRESUPUESTO_DIARIO:
             presupuesto_str = f"💰 {gasto_dia}€ ⚠️ EXCEDE ({PRESUPUESTO_DIARIO}€)"
         else:
@@ -807,12 +647,9 @@ def analizar_solucion(individuo: Individual):
               f"{presupuesto_str}")
         print(f"")
         
-        # Simular el recorrido del día mostrando horarios
-        hora_actual = HORA_INICIO  # 9:00 AM en minutos
-        ciudad_anterior = None
+        hora_actual = HORA_INICIO
         
         for i, lugar in enumerate(lugares_dia, 1):
-            # Calcular tiempo de tránsito
             tiempo_transito = 0
             if i > 1:
                 lugar_anterior = lugares_dia[i-2]
@@ -820,31 +657,25 @@ def analizar_solucion(individuo: Individual):
                 ciudad_actual_lugar = lugar.get('ciudad', ciudad)
                 
                 if ciudad_anterior_lugar == ciudad_actual_lugar:
-                    # Mismo ciudad: calcular distancia usando haversine
                     dist = distancia_haversine(lugar_anterior, lugar)
-                    tiempo_transito = dist / VELOCIDAD_MEDIA * 60  # minutos
+                    tiempo_transito = dist / VELOCIDAD_MEDIA * 60
                 else:
-                    # Cambio de ciudad
                     tiempo_transito = calcular_transporte_intercity(ciudad_anterior_lugar, ciudad_actual_lugar)
                 
                 hora_actual += tiempo_transito
             
-            # Formatear hora de llegada
             horas_llegada = int(hora_actual // 60)
             mins_llegada = int(hora_actual % 60)
             hora_str_llegada = f"{horas_llegada:02d}:{mins_llegada:02d}"
             
-            # Calcular hora de salida
             hora_salida = hora_actual + lugar['tiempo_visita']
             horas_salida = int(hora_salida // 60)
             mins_salida = int(hora_salida % 60)
             hora_str_salida = f"{horas_salida:02d}:{mins_salida:02d}"
             
-            # Detectar si es comida
             tipo_lugar = lugar.get('tipo', '')
             es_restaurante = tipo_lugar in ['restaurante', 'bar', 'cafetería']
             
-            # Validar horario de apertura
             fuera_horario = ""
             if tipo_lugar in HORARIOS_TIPO:
                 apertura = HORARIOS_TIPO[tipo_lugar]["apertura"]
@@ -858,22 +689,17 @@ def analizar_solucion(individuo: Individual):
             
             icono_comida = ""
             if es_restaurante:
-                # Desayuno: 8:00 - 10:00
                 if HORA_DESAYUNO_MIN <= hora_actual <= HORA_DESAYUNO_MAX:
-                    icono_comida = " ☕ DESAYUNO"
-                # Almuerzo: 13:00 - 15:00
+                    icono_comida = " DESAYUNO"
                 elif HORA_ALMUERZO_MIN <= hora_actual <= HORA_ALMUERZO_MAX:
-                    icono_comida = " 🍴 ALMUERZO"
-                # Cena: 20:00 - 22:00
+                    icono_comida = " COMIDA"
                 elif HORA_CENA_MIN <= hora_actual <= HORA_CENA_MAX:
-                    icono_comida = " 🍽️  CENA"
-            
-            # Imprimir el lugar con detalles
+                    icono_comida = " CENA"
+
             nombre_corto = lugar['nombre'][:40]
             if len(lugar['nombre']) > 40:
                 nombre_corto += "..."
             
-            # Calcular precio del lugar
             if tipo_lugar in PRECIOS_TIPO:
                 precio = PRECIOS_TIPO[tipo_lugar]
             else:
@@ -881,22 +707,18 @@ def analizar_solucion(individuo: Individual):
             
             print(f"  {i:2d}. {hora_str_llegada} - {hora_str_salida} │ {nombre_corto:43s} │ {tipo_lugar:12s} │ {lugar['puntos']:3d} pts │ {precio:2d}€{icono_comida}{fuera_horario}")
             
-            # Mostrar tiempo de tránsito si existe
             if tiempo_transito > 0:
                 if tiempo_transito > 60:
                     print(f"      {'':13s} └─ Tránsito: {tiempo_transito/60:.1f}h ({tiempo_transito:.0f} min)")
                 else:
                     print(f"      {'':13s} └─ Tránsito: {tiempo_transito:.0f} min")
             
-            # Actualizar hora para el siguiente lugar
             hora_actual += lugar['tiempo_visita']
         
-        # Mostrar hora de finalización del día
         horas_fin = int(hora_actual // 60)
         mins_fin = int(hora_actual % 60)
         hora_str_fin = f"{horas_fin:02d}:{mins_fin:02d}"
         
-        # Verificar si se superó el tiempo límite
         exceso = max(0, tiempo_dia - TIEMPO_DIA)
         if exceso > 0:
             print(f"\n  ⚠️  DÍA FINALIZADO: {hora_str_fin} | EXCESO: {exceso:.0f} min ({exceso/60:.1f}h) | PENALIZACIÓN: -{PENALIZACION_EXCESO_TIEMPO * exceso:.0f} pts")
@@ -907,13 +729,11 @@ def analizar_solucion(individuo: Individual):
         
         print(f"")
     
-    # Resumen de transportes intercity
     if individuo.transportes_intercity:
         print(f"{'='*80}")
         print(f"🚊 RESUMEN DE TRANSPORTES INTERCITY")
         print(f"{'='*80}\n")
         
-        # Contar por tipo
         transportes_summary = {"avion": 0, "tren": 0, "bus": 0}
         costo_total_transporte = 0
         tiempo_total_transporte = 0

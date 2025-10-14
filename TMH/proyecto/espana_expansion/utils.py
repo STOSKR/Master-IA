@@ -593,5 +593,34 @@ def cruce_simple(padre1: List[int], padre2: List[int]) -> Tuple[List[int], List[
     hijo2 = lugares_combinados[:len_hijo2]
     
     return hijo1, hijo2
+    
+    
+def eliminar_duplicados_dia(individuo: Individual) -> Individual:
+    for dia_idx in range(len(individuo.dias)):
+        dia = individuo.dias[dia_idx]
+        ciudad = individuo.ciudades[dia_idx]
+        
+        # Verificar si hay duplicados
+        if len(dia) != len(set(dia)):
+            # Hay duplicados, necesitamos reemplazarlos
+            lugares_ciudad = get_lugares_ciudad(ciudad)
+            lugares_unicos = []
+            lugares_usados = set()
+            
+            for lugar_id in dia:
+                if lugar_id not in lugares_usados:
+                    lugares_unicos.append(lugar_id)
+                    lugares_usados.add(lugar_id)
+                else:
+                    lugares_disponibles = [l["id"] for l in lugares_ciudad 
+                                          if l["id"] not in lugares_usados]
+                    if lugares_disponibles:
+                        nuevo_lugar = random.choice(lugares_disponibles)
+                        lugares_unicos.append(nuevo_lugar)
+                        lugares_usados.add(nuevo_lugar)
+            
+            individuo.dias[dia_idx] = lugares_unicos
+    
+    return individuo
 
 """
