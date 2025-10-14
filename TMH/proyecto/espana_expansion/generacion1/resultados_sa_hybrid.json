@@ -7,12 +7,12 @@
     "distancia_total_km": 332.83146504903436,
     "num_dias": 20,
     "ciudades_visitadas": [
-      "Madrid",
-      "Toledo",
-      "Córdoba",
-      "Sevilla",
-      "San Sebastián",
       "Bilbao",
+      "San Sebastián",
+      "Sevilla",
+      "Toledo",
+      "Madrid",
+      "Córdoba",
       "Granada"
     ],
     "itinerario": [

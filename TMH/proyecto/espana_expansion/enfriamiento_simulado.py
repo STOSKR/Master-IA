@@ -70,17 +70,18 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
     return individuo
 
 
-def generar_vecino(solucion_actual: Individual) -> Individual:
+def generar_vecino(solucion_actual: Individual, iteracion: int = 0, max_iteraciones: int = 5000) -> Individual:
     """
     Genera una solución vecina aplicando perturbaciones mixtas mejoradas:
-    - 40% Swap de dos lugares en un día
+    - 40% Swap de dos lugares en un día (preserva fitness mejor)
+    - 30% 2-opt (optimizar orden dentro de un día)
     - 20% Reemplazar un lugar por otro de la misma ciudad
-    - 15% Cambiar ciudad de un día (restricciones relajadas)
-    - 15% Swap intercity (intercambiar dos días completos)
-    - 10% 2-opt (optimizar orden dentro de un día)
+    - 10% Swap intercity (intercambiar dos días completos - más disruptivo)
     
     Args:
         solucion_actual: Solución actual
+        iteracion: Iteración actual (opcional)
+        max_iteraciones: Iteraciones máximas (opcional)
     
     Returns:
         Nueva solución vecina (copia profunda)
@@ -91,14 +92,25 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
         solucion_actual.ciudades[:]
     )
     
-    # Elegir tipo de perturbación según probabilidades mejoradas
+    # Ajustar probabilidades dinámicamente (más conservadoras)
+    progreso = iteracion / max_iteraciones
+    if progreso < 0.3:
+        # Etapa inicial: más exploración
+        probabilidades = [0.30, 0.20, 0.20, 0.30]
+    elif progreso < 0.7:
+        # Etapa intermedia: balance
+        probabilidades = [0.40, 0.30, 0.20, 0.10]
+    else:
+        # Etapa final: más refinamiento local
+        probabilidades = [0.50, 0.35, 0.10, 0.05]
+    
     tipo_perturbacion = random.choices(
-        ["swap", "reemplazar", "cambiar_ciudad", "swap_intercity", "ruta_2opt"],
-        weights=[0.40, 0.20, 0.15, 0.15, 0.10]
+        ["swap", "ruta_2opt", "reemplazar", "swap_intercity"],
+        weights=probabilidades
     )[0]
     
     if tipo_perturbacion == "swap":
-        # Swap de dos lugares en un día aleatorio
+        # Swap de dos lugares en un día aleatorio (MÍNIMA PERTURBACIÓN)
         dia_idx = random.randint(0, len(vecino.dias) - 1)
         dia = vecino.dias[dia_idx]
         
@@ -106,8 +118,20 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
             i, j = random.sample(range(len(dia)), 2)
             dia[i], dia[j] = dia[j], dia[i]
     
+    elif tipo_perturbacion == "ruta_2opt":
+        # Optimización 2-opt dentro de un día (MÍNIMA PERTURBACIÓN)
+        dia_idx = random.randint(0, len(vecino.dias) - 1)
+        dia = vecino.dias[dia_idx]
+        
+        if len(dia) >= 4:
+            # Elegir dos puntos de corte
+            i = random.randint(0, len(dia) - 3)
+            j = random.randint(i + 2, len(dia))
+            # Invertir el segmento entre i y j
+            vecino.dias[dia_idx] = dia[:i+1] + dia[i+1:j][::-1] + dia[j:]
+    
     elif tipo_perturbacion == "reemplazar":
-        # Reemplazar un lugar por otro de la misma ciudad
+        # Reemplazar un lugar por otro de la misma ciudad (PERTURBACIÓN MEDIA)
         dia_idx = random.randint(0, len(vecino.dias) - 1)
         ciudad = vecino.ciudades[dia_idx]
         lugares_ciudad = get_lugares_ciudad(ciudad)
@@ -122,52 +146,14 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
                 nuevo_lugar = random.choice(lugares_disponibles)
                 vecino.dias[dia_idx][idx_lugar] = nuevo_lugar
     
-    elif tipo_perturbacion == "cambiar_ciudad":
-        # Cambiar ciudad de un día con restricciones relajadas
-        dia_idx = random.randint(0, len(vecino.dias) - 1)
-        ciudad_actual = vecino.ciudades[dia_idx]
-        ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
-        
-        # Solo evitar la misma ciudad (restricciones relajadas)
-        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
-        
-        # Si hay candidatas, cambiar
-        if candidatas:
-            nueva_ciudad = random.choice(candidatas)
-            vecino.ciudades[dia_idx] = nueva_ciudad
-            
-            # Reemplazar lugares del día con lugares de la nueva ciudad (sin repetir)
-            lugares_nueva = get_lugares_ciudad(nueva_ciudad)
-            if lugares_nueva:
-                num_lugares = len(vecino.dias[dia_idx])
-                # Usar sample para garantizar lugares únicos
-                if len(lugares_nueva) >= num_lugares:
-                    lugares_seleccionados = random.sample(lugares_nueva, num_lugares)
-                    vecino.dias[dia_idx] = [l["id"] for l in lugares_seleccionados]
-                else:
-                    # Si no hay suficientes lugares, usar todos los disponibles
-                    vecino.dias[dia_idx] = [l["id"] for l in lugares_nueva]
-    
     elif tipo_perturbacion == "swap_intercity":
-        # NUEVO: Intercambiar dos días completos (incluidas ciudades)
+        # Intercambiar dos días completos (PERTURBACIÓN FUERTE - solo al inicio)
         if len(vecino.dias) >= 2:
             i, j = random.sample(range(len(vecino.dias)), 2)
             # Intercambiar días
             vecino.dias[i], vecino.dias[j] = vecino.dias[j], vecino.dias[i]
             # Intercambiar ciudades
             vecino.ciudades[i], vecino.ciudades[j] = vecino.ciudades[j], vecino.ciudades[i]
-    
-    elif tipo_perturbacion == "ruta_2opt":
-        # NUEVO: Optimización 2-opt dentro de un día (invertir segmento)
-        dia_idx = random.randint(0, len(vecino.dias) - 1)
-        dia = vecino.dias[dia_idx]
-        
-        if len(dia) >= 4:
-            # Elegir dos puntos de corte
-            i = random.randint(0, len(dia) - 3)
-            j = random.randint(i + 2, len(dia))
-            # Invertir el segmento entre i y j
-            vecino.dias[dia_idx] = dia[:i+1] + dia[i+1:j][::-1] + dia[j:]
     
     # Validar y reparar si es necesario
     if not validar_restricciones_ciudades(vecino):
@@ -218,10 +204,15 @@ def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int
 
 def aceptar_solucion(delta_fitness: float, temperatura: float) -> bool:
     """
-    Criterio de aceptación de Metropolis.
+    Criterio de aceptación de Metropolis MEJORADO.
     
-    - Si ΔE > 0: Aceptar (mejor solución)
+    En Simulated Annealing:
+    - Si ΔE > 0: SIEMPRE aceptar (mejor solución)
     - Si ΔE ≤ 0: Aceptar con probabilidad P = exp(ΔE / T)
+      * Al inicio (T alta): mayor probabilidad de aceptar soluciones peores (exploración)
+      * Al final (T baja): menor probabilidad de aceptar soluciones peores (explotación)
+    
+    IMPORTANTE: Aceptar soluciones peores es NECESARIO para escapar de óptimos locales.
     
     Args:
         delta_fitness: Diferencia de fitness (nuevo - actual)
@@ -231,14 +222,16 @@ def aceptar_solucion(delta_fitness: float, temperatura: float) -> bool:
         True si se acepta la solución, False en caso contrario
     """
     if delta_fitness > 0:
-        # Solución mejor: siempre aceptar
+        # Solución MEJOR: siempre aceptar
         return True
     else:
-        # Solución peor: aceptar con probabilidad exponencial
+        # Solución PEOR: aceptar con probabilidad exponencial
+        # Cuanto mayor sea T, mayor probabilidad de aceptar
         if temperatura > 0:
             probabilidad = math.exp(delta_fitness / temperatura)
             return random.random() < probabilidad
         else:
+            # Si T=0, nunca aceptar soluciones peores (comportamiento greedy)
             return False
 
 
@@ -252,7 +245,7 @@ def enfriamiento_simulado(
     verbose: bool = True
 ) -> Dict:
     """
-    Algoritmo de Enfriamiento Simulado (Simulated Annealing) para optimización de rutas.
+    Algoritmo de Enfriamiento Simulado mejorado.
     
     Estrategia híbrida recomendada:
     - Partir del mejor del genético (warm start) o generar solución aleatoria
@@ -330,13 +323,24 @@ def enfriamiento_simulado(
     historial_mejor_fitness = [mejor_solucion.fitness]
     historial_temperatura = [temperatura]
     
+    # Configuración de visualización en tiempo real
+    import matplotlib.pyplot as plt
+    plt.ion()
+    fig, ax = plt.subplots()
+    ax.set_title("Evolución del Fitness")
+    ax.set_xlabel("Iteración")
+    ax.set_ylabel("Fitness")
+    line_actual, = ax.plot([], [], label="Fitness actual")
+    line_mejor, = ax.plot([], [], label="Mejor fitness global")
+    ax.legend()
+    
     if verbose:
         print(f"🔄 Iniciando búsqueda...\n")
     
     # Bucle principal
     for iteracion in range(max_iteraciones):
         # Generar solución vecina
-        vecino = generar_vecino(solucion_actual)
+        vecino = generar_vecino(solucion_actual, iteracion, max_iteraciones)
         
         # Evaluar vecino
         evaluar_individuo(vecino)
@@ -345,24 +349,28 @@ def enfriamiento_simulado(
         delta_fitness = vecino.fitness - solucion_actual.fitness
         
         # Decidir si aceptar
-        if aceptar_solucion(delta_fitness, temperatura):
+        aceptado = aceptar_solucion(delta_fitness, temperatura)
+        
+        if aceptado:
+            # Actualizar solución actual (puede ser peor que la anterior)
             solucion_actual = vecino
             total_aceptaciones += 1
             
-            # Actualizar mejor global si es necesario
+            # Verificar si es la MEJOR GLOBAL encontrada hasta ahora
             if solucion_actual.fitness > mejor_solucion.fitness:
                 mejor_solucion = copy.deepcopy(solucion_actual)
                 iteraciones_sin_mejora = 0
                 mejoras_encontradas += 1
                 
-                if verbose and (iteracion + 1) % 100 == 0:
-                    print(f"  ✨ Nueva mejor solución en iteración {iteracion+1}: "
+                if verbose and mejoras_encontradas % 5 == 0:
+                    print(f"  ✨ Mejora #{mejoras_encontradas} en iteración {iteracion+1}: "
                           f"Fitness = {mejor_solucion.fitness:.1f} | "
                           f"Puntos = {mejor_solucion.puntos_totales} | "
                           f"T = {temperatura:.2f}")
             else:
                 iteraciones_sin_mejora += 1
         else:
+            # Solución rechazada, mantener la actual
             total_rechazos += 1
             iteraciones_sin_mejora += 1
         
@@ -370,6 +378,15 @@ def enfriamiento_simulado(
         historial_fitness.append(solucion_actual.fitness)
         historial_mejor_fitness.append(mejor_solucion.fitness)
         historial_temperatura.append(temperatura)
+        
+        # Actualizar visualización en tiempo real
+        line_actual.set_xdata(range(len(historial_fitness)))
+        line_actual.set_ydata(historial_fitness)
+        line_mejor.set_xdata(range(len(historial_mejor_fitness)))
+        line_mejor.set_ydata(historial_mejor_fitness)
+        ax.relim()
+        ax.autoscale_view()
+        plt.pause(0.01)
         
         # Enfriar sistema (enfriamiento geométrico)
         temperatura = temperatura * alpha
@@ -393,6 +410,9 @@ def enfriamiento_simulado(
             if verbose:
                 print(f"\n⏸️  Estancamiento detectado: {iteraciones_sin_mejora} iteraciones sin mejora")
             break
+    
+    plt.ioff()
+    plt.show()
     
     # Estadísticas finales
     iteraciones_realizadas = iteracion + 1
@@ -444,9 +464,9 @@ def enfriamiento_simulado(
 def enfriamiento_desde_genetico(
     resultados_genetico: Dict,
     usar_mejor: bool = True,
-    T_inicial: float = 5000,  # Aumentado de 1000 a 5000 para mejor exploración
-    alpha: float = 0.98,
-    max_iteraciones: int = 5000
+    T_inicial: float = 2000,  # Temperatura moderada para refinamiento
+    alpha: float = 0.97,  # Enfriamiento más rápido para convergencia
+    max_iteraciones: int = 3000  # Menos iteraciones, perturbaciones más inteligentes
 ) -> Dict:
     """
     Ejecuta enfriamiento simulado usando la salida del algoritmo genético.
@@ -481,11 +501,12 @@ def enfriamiento_desde_genetico(
             print(f"  ⚠️  No hay población final, usando mejor individuo")
             solucion_inicial = resultados_genetico["mejor_individuo"]
     
-    print(f"\n💡 Configuración MEJORADA de refinamiento:")
-    print(f"  • Temperatura inicial: {T_inicial} (alta para escapar de óptimos locales)")
-    print(f"  • Factor α: {alpha} (enfriamiento lento para exploración cuidadosa)")
+    print(f"\n💡 Configuración OPTIMIZADA de refinamiento:")
+    print(f"  • Temperatura inicial: {T_inicial} (moderada para refinamiento inteligente)")
+    print(f"  • Factor α: {alpha} (convergencia balanceada)")
     print(f"  • Iteraciones: {max_iteraciones:,}")
-    print(f"  • Vecindad mejorada: 5 tipos de perturbaciones (swap, reemplazar, cambiar ciudad, swap intercity, 2-opt)")
+    print(f"  • Vecindad adaptativa: 4 tipos de perturbaciones con probabilidades dinámicas")
+    print(f"  • Estrategia: Perturbaciones conservadoras que preservan calidad")
     
     # Ejecutar enfriamiento simulado
     resultados_sa = enfriamiento_simulado(
