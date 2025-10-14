@@ -688,7 +688,7 @@ if __name__ == "__main__":
             usar_mejor=True,
             T_inicial=2000,  # Temperatura moderada para refinamiento
             alpha=0.97,  # Convergencia balanceada
-            max_iteraciones=3000  # Suficiente con perturbaciones inteligentes
+            max_iteraciones=10000  # Suficiente con perturbaciones inteligentes
         )
         
         # Comparar resultados
