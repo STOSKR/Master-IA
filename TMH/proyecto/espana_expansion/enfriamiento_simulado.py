@@ -28,6 +28,48 @@ from algoritmo_espana import (
 )
 
 
+def eliminar_duplicados_dia(individuo: Individual) -> Individual:
+    """
+    Elimina lugares duplicados en cada día, reemplazándolos por lugares únicos de la misma ciudad.
+    
+    Args:
+        individuo: Individuo a limpiar
+    
+    Returns:
+        Individuo sin lugares duplicados
+    """
+    for dia_idx in range(len(individuo.dias)):
+        dia = individuo.dias[dia_idx]
+        ciudad = individuo.ciudades[dia_idx]
+        
+        # Verificar si hay duplicados
+        if len(dia) != len(set(dia)):
+            # Hay duplicados, necesitamos reemplazarlos
+            lugares_ciudad = get_lugares_ciudad(ciudad)
+            lugares_unicos = []
+            lugares_usados = set()
+            
+            for lugar_id in dia:
+                if lugar_id not in lugares_usados:
+                    lugares_unicos.append(lugar_id)
+                    lugares_usados.add(lugar_id)
+                else:
+                    # Buscar un reemplazo que no esté usado
+                    lugares_disponibles = [l["id"] for l in lugares_ciudad 
+                                          if l["id"] not in lugares_usados]
+                    if lugares_disponibles:
+                        nuevo_lugar = random.choice(lugares_disponibles)
+                        lugares_unicos.append(nuevo_lugar)
+                        lugares_usados.add(nuevo_lugar)
+                    else:
+                        # Si no hay más lugares, mantener el duplicado (caso extremo)
+                        lugares_unicos.append(lugar_id)
+            
+            individuo.dias[dia_idx] = lugares_unicos
+    
+    return individuo
+
+
 def generar_vecino(solucion_actual: Individual) -> Individual:
     """
     Genera una solución vecina aplicando perturbaciones mixtas:
@@ -70,10 +112,12 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
         
         if lugares_ciudad and len(vecino.dias[dia_idx]) > 0:
             idx_lugar = random.randint(0, len(vecino.dias[dia_idx]) - 1)
-            nuevo_lugar = random.choice(lugares_ciudad)["id"]
             
-            # Solo reemplazar si el nuevo lugar no está ya en el día
-            if nuevo_lugar not in vecino.dias[dia_idx]:
+            # Buscar un lugar que no esté ya en el día
+            lugares_disponibles = [l["id"] for l in lugares_ciudad if l["id"] not in vecino.dias[dia_idx]]
+            
+            if lugares_disponibles:
+                nuevo_lugar = random.choice(lugares_disponibles)
                 vecino.dias[dia_idx][idx_lugar] = nuevo_lugar
     
     elif tipo_perturbacion == "cambiar_ciudad":
@@ -111,17 +155,24 @@ def generar_vecino(solucion_actual: Individual) -> Individual:
             nueva_ciudad = random.choice(candidatas)
             vecino.ciudades[dia_idx] = nueva_ciudad
             
-            # Reemplazar lugares del día con lugares de la nueva ciudad
+            # Reemplazar lugares del día con lugares de la nueva ciudad (sin repetir)
             lugares_nueva = get_lugares_ciudad(nueva_ciudad)
             if lugares_nueva:
                 num_lugares = len(vecino.dias[dia_idx])
-                vecino.dias[dia_idx] = [
-                    random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
-                ]
+                # Usar sample para garantizar lugares únicos
+                if len(lugares_nueva) >= num_lugares:
+                    lugares_seleccionados = random.sample(lugares_nueva, num_lugares)
+                    vecino.dias[dia_idx] = [l["id"] for l in lugares_seleccionados]
+                else:
+                    # Si no hay suficientes lugares, usar todos los disponibles
+                    vecino.dias[dia_idx] = [l["id"] for l in lugares_nueva]
     
     # Validar y reparar si es necesario
     if not validar_restricciones_ciudades(vecino):
         vecino = reparar_individuo(vecino)
+    
+    # Eliminar duplicados en cada día
+    vecino = eliminar_duplicados_dia(vecino)
     
     return vecino
 
@@ -239,6 +290,9 @@ def enfriamiento_simulado(
             [dia[:] for dia in solucion_inicial.dias],
             solucion_inicial.ciudades[:]
         )
+    
+    # Eliminar duplicados de la solución inicial
+    solucion_inicial = eliminar_duplicados_dia(solucion_inicial)
     
     # Evaluar solución inicial
     evaluar_individuo(solucion_inicial)
