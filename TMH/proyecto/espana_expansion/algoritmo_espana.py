@@ -25,6 +25,51 @@ class Individual:
         self.distancia_total = 0
         self.transportes_intercity = []  # [(dia_idx, origen, destino, tipo, tiempo, costo)]
 
+
+def eliminar_duplicados_globales(individuo: Individual) -> Individual:
+    """
+    Elimina lugares que aparecen repetidos en CUALQUIER día del itinerario.
+    
+    Un lugar turístico solo puede visitarse UNA VEZ en todo el viaje.
+    Si se encuentra duplicado, se reemplaza por otro lugar de la misma ciudad.
+    
+    Args:
+        individuo: Individuo a limpiar
+    
+    Returns:
+        Individuo sin lugares duplicados en todo el itinerario
+    """
+    lugares_visitados_global = set()
+    
+    for dia_idx in range(len(individuo.dias)):
+        dia = individuo.dias[dia_idx]
+        ciudad = individuo.ciudades[dia_idx]
+        lugares_ciudad = get_lugares_ciudad(ciudad)
+        
+        dia_limpio = []
+        for lugar_id in dia:
+            if lugar_id not in lugares_visitados_global:
+                # Lugar no visitado antes, añadir
+                dia_limpio.append(lugar_id)
+                lugares_visitados_global.add(lugar_id)
+            else:
+                # Lugar YA visitado en otro día, buscar reemplazo
+                lugares_disponibles = [
+                    l["id"] for l in lugares_ciudad 
+                    if l["id"] not in lugares_visitados_global
+                ]
+                
+                if lugares_disponibles:
+                    nuevo_lugar = random.choice(lugares_disponibles)
+                    dia_limpio.append(nuevo_lugar)
+                    lugares_visitados_global.add(nuevo_lugar)
+                # Si no hay lugares disponibles, simplemente no añadir (día con menos lugares)
+        
+        individuo.dias[dia_idx] = dia_limpio
+    
+    return individuo
+
+
 def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias_consecutivos_actual: int) -> str:
     
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
@@ -170,6 +215,7 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
     dias = []
     ciudades_plan = []
     ciudades_visitadas = set()  # Para rastrear ciudades ya visitadas completamente
+    lugares_visitados_global = set()  # NUEVO: Para evitar repetir lugares en todo el itinerario
     
     if AGRUPAR:
         dia_actual = 0
@@ -192,8 +238,25 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 if dia_actual >= num_dias:
                     break
                 
-                lugares_dia = random.sample(lugares_ciudad, min(lugares_por_dia, len(lugares_ciudad)))
+                # MODIFICADO: Filtrar lugares ya visitados globalmente
+                lugares_disponibles = [
+                    l for l in lugares_ciudad 
+                    if l["id"] not in lugares_visitados_global
+                ]
+                
+                # Si no hay suficientes lugares únicos, usar todos los disponibles
+                if len(lugares_disponibles) < lugares_por_dia:
+                    lugares_disponibles = lugares_ciudad
+                
+                lugares_dia = random.sample(
+                    lugares_disponibles, 
+                    min(lugares_por_dia, len(lugares_disponibles))
+                )
                 ids_dia = [l["id"] for l in lugares_dia]
+                
+                # Añadir a lugares visitados globalmente
+                lugares_visitados_global.update(ids_dia)
+                
                 random.shuffle(ids_dia)
                 
                 dias.append(ids_dia)
@@ -643,10 +706,13 @@ def algoritmo_genetico_espana(
             mutar(hijo1)
             mutar(hijo2)
             
-            # CRÍTICO: Eliminar duplicados ANTES de evaluar
-            # Esto garantiza que el fitness siempre refleje soluciones válidas
-            eliminar_duplicados_dia(hijo1)
-            eliminar_duplicados_dia(hijo2)
+            # CRÍTICO: Eliminar duplicados GLOBALES ANTES de evaluar
+            # Esto garantiza que:
+            # 1. No hay lugares repetidos en el mismo día
+            # 2. No hay lugares repetidos en diferentes días (un lugar solo se visita UNA VEZ)
+            # 3. El fitness siempre refleja soluciones válidas y realistas
+            eliminar_duplicados_globales(hijo1)
+            eliminar_duplicados_globales(hijo2)
             
             evaluar_individuo(hijo1)
             evaluar_individuo(hijo2)
