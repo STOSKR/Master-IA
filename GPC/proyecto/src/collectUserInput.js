@@ -1,22 +1,33 @@
 import { queueMove } from "./components/Player";
+import { gameState } from "./gameState";
 
 document
     .getElementById("forward")
-    ?.addEventListener("click", () => queueMove("forward"));
+    ?.addEventListener("click", () => {
+        if (gameState.isActive) queueMove("forward");
+    });
 
 document
     .getElementById("backward")
-    ?.addEventListener("click", () => queueMove("backward"));
+    ?.addEventListener("click", () => {
+        if (gameState.isActive) queueMove("backward");
+    });
 
 document
     .getElementById("left")
-    ?.addEventListener("click", () => queueMove("left"));
+    ?.addEventListener("click", () => {
+        if (gameState.isActive) queueMove("left");
+    });
 
 document
     .getElementById("right")
-    ?.addEventListener("click", () => queueMove("right"));
+    ?.addEventListener("click", () => {
+        if (gameState.isActive) queueMove("right");
+    });
 
 window.addEventListener("keydown", (event) => {
+    if (!gameState.isActive) return; // Ignorar eventos del teclado si el juego no está activo
+
     if (event.key === "ArrowUp") {
         event.preventDefault(); // Avoid scrolling the page
         queueMove("forward");

@@ -7,6 +7,7 @@ import { map, initializeMap } from "./components/Map";
 import { animateVehicles } from "./animateVehicles";
 import { animatePlayer } from "./animatePlayer";
 import { hitTest } from "./hitTest";
+import { setGameActive } from "./gameState";
 import "./style.css";
 import "./collectUserInput";
 
@@ -32,7 +33,11 @@ document.querySelector("#retry")?.addEventListener("click", initializeGame);
 // Reiniciar el juego al presionar la tecla "r"
 window.addEventListener("keydown", (event) => {
   if (event.key.toLowerCase() === "r") {
-    initializeGame();
+    const resultDOM = document.getElementById("result-container");
+    // Solo reiniciar si el menú de game over está visible
+    if (resultDOM && resultDOM.style.visibility === "visible") {
+      initializeGame();
+    }
   }
 });
 
@@ -41,6 +46,7 @@ initializeGame();
 function initializeGame() {
   initializePlayer();
   initializeMap();
+  setGameActive(true); // Reactivar el juego al reiniciar
 
   if (scoreDOM) scoreDOM.innerText = "0";
   if (resultDOM) resultDOM.style.visibility = "hidden";
