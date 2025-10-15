@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import { endsUpInValidPosition } from "../utilities/endsUpInValidPosition";
 import { metadata as rows, addRows } from "./Map";
+import { gameState } from "../gameState";
 
 export const player = Player();
 
 function Player() {
-
     const player = new THREE.Group();
     const body = new THREE.Mesh(
         new THREE.BoxGeometry(15, 15, 20),
@@ -44,9 +44,12 @@ export const position = {
 
 export const movesQueue = [];
 
+export function clearMoveQueue() {
+    movesQueue.length = 0; // Establece la longitud del array a 0 para vaciarlo
+}
+
 export function initializePlayer() {
     // Initialize the Three.js player object
-
     player.position.x = 0;
     player.position.y = 0;
     player.children[0].position.z = 0;
@@ -56,10 +59,16 @@ export function initializePlayer() {
     position.currentTile = 0;
 
     // Clear the moves queue
-    movesQueue.length = 0;
+    clearMoveQueue(); // Usa la nueva función para vaciar la cola
 }
 
 export function queueMove(direction) {
+    // Si el juego no está activo, vacía la cola y no añadas nuevos movimientos
+    if (!gameState.isActive) {
+        clearMoveQueue();
+        return;
+    }
+
     const isValidMove = endsUpInValidPosition(
         {
             rowIndex: position.currentRow,
@@ -67,15 +76,15 @@ export function queueMove(direction) {
         },
         [...movesQueue, direction]
     );
-
-    if (!isValidMove) {
-        movesQueue.push("jump");
-        return;
-    }
     movesQueue.push(direction);
 }
 
 export function stepCompleted() {
+    if (!gameState.isActive) {
+        clearMoveQueue();
+        return;
+    }
+
     const direction = movesQueue.shift();
 
     if (direction === "forward") position.currentRow += 1;
@@ -86,5 +95,7 @@ export function stepCompleted() {
     if (position.currentRow > rows.length - 10) addRows();
 
     const scoreDOM = document.getElementById("score");
-    if (position.currentRow > parseInt(scoreDOM.innerText)) scoreDOM.innerText = position.currentRow.toString();
+    if (gameState.isActive && position.currentRow > parseInt(scoreDOM.innerText)) {
+        scoreDOM.innerText = position.currentRow.toString();
+    }
 }

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { metadata as rows } from "./components/Map";
-import { player, position } from "./components/Player";
+import { player, position, clearMoveQueue } from "./components/Player";
 import { setGameActive } from "./gameState";
 
 const resultDOM = document.getElementById("result-container");
@@ -23,7 +23,8 @@ export function hitTest() {
             if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
                 if (!resultDOM || !finalScoreDOM) return;
 
-                setGameActive(false);
+                setGameActive(false); // Primero desactiva el juego
+                clearMoveQueue();    // <-- Luego vacía la cola de movimientos
                 resultDOM.style.visibility = "visible";
                 finalScoreDOM.innerText = position.currentRow.toString();
             }
