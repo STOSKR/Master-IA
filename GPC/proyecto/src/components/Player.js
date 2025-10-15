@@ -45,11 +45,10 @@ export const position = {
 export const movesQueue = [];
 
 export function clearMoveQueue() {
-    movesQueue.length = 0; // Establece la longitud del array a 0 para vaciarlo
+    movesQueue.length = 0;
 }
 
 export function initializePlayer() {
-    // Initialize the Three.js player object
     player.position.x = 0;
     player.position.y = 0;
     player.children[0].position.z = 0;
@@ -59,7 +58,7 @@ export function initializePlayer() {
     position.currentTile = 0;
 
     // Clear the moves queue
-    clearMoveQueue(); // Usa la nueva función para vaciar la cola
+    clearMoveQueue();
 }
 
 export function queueMove(direction) {
@@ -76,6 +75,12 @@ export function queueMove(direction) {
         },
         [...movesQueue, direction]
     );
+
+    if (!isValidMove) {
+        movesQueue.push("jump");
+        return;
+    }
+
     movesQueue.push(direction);
 }
 
