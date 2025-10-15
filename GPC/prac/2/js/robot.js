@@ -50,16 +50,16 @@ function loadScene() {
     materiales.push(baseMaterial);
     base = new THREE.Mesh(new THREE.CylinderGeometry(50, 50, 15, 32), baseMaterial);
     base.position.y = 0;
-    robot.add(base);
 
     // Brazo
     brazo = new THREE.Object3D();
-
     let esparragoMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
     materiales.push(esparragoMaterial);
     let esparrago = new THREE.Mesh(new THREE.CylinderGeometry(20, 20, 18, 32), esparragoMaterial);
     esparrago.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
     brazo.add(esparrago);
+    base.add(brazo);
+    robot.add(base);
 
     let ejeMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
     materiales.push(ejeMaterial);
@@ -139,7 +139,8 @@ function loadScene() {
     antebrazo.add(manoObjeto);
     brazo.add(antebrazo);
     robot.add(brazo);
-    scene.add(robot);
+    base.add(robot);
+    scene.add(base);
 }
 
 function setupEventListeners() {
@@ -153,7 +154,7 @@ function setupEventListeners() {
 
     // 3. Giro del brazo
     document.getElementById('giroBrazo').addEventListener('input', (event) => {
-        brazo.rotation.z = THREE.MathUtils.degToRad(event.target.value);
+        brazo.rotation.x = THREE.MathUtils.degToRad(event.target.value);
     });
 
     // 4. Giro del antebrazo en Y
@@ -161,14 +162,14 @@ function setupEventListeners() {
         antebrazo.rotation.y = THREE.MathUtils.degToRad(event.target.value);
     });
 
-    // 5. Giro del antebrazo en Z
+    // 5. Giro del antebrazo en X
     document.getElementById('giroAntebrazoZ').addEventListener('input', (event) => {
-        antebrazo.rotation.z = THREE.MathUtils.degToRad(event.target.value);
+        antebrazo.rotation.x = THREE.MathUtils.degToRad(event.target.value);
     });
 
     // 6. Rotación de la pinza
     document.getElementById('rotacionPinza').addEventListener('input', (event) => {
-        manoObjeto.rotation.z = THREE.MathUtils.degToRad(event.target.value);
+        manoObjeto.rotation.x = - THREE.MathUtils.degToRad(event.target.value);
     });
 
     // 7. Apertura/Cierre de la pinza
