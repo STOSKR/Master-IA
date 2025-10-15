@@ -77,7 +77,8 @@ export function queueMove(direction) {
     );
 
     if (!isValidMove) {
-        movesQueue.push("jump");
+        // Guardar la dirección intentada junto con el salto
+        movesQueue.push({ type: "jump", direction });
         return;
     }
 
@@ -90,7 +91,14 @@ export function stepCompleted() {
         return;
     }
 
-    const direction = movesQueue.shift();
+    const move = movesQueue.shift();
+
+    // Si es un salto, no actualizar la posición
+    if (typeof move === 'object' && move.type === 'jump') {
+        return;
+    }
+
+    const direction = move;
 
     if (direction === "forward") position.currentRow += 1;
     if (direction === "backward") position.currentRow -= 1;

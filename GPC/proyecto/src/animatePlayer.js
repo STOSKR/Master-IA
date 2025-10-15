@@ -33,10 +33,19 @@ function setPosition(progress) {
     let endX = startX;
     let endY = startY;
 
-    if (movesQueue[0] === "left") endX -= tileSize;
-    if (movesQueue[0] === "right") endX += tileSize;
-    if (movesQueue[0] === "forward") endY += tileSize;
-    if (movesQueue[0] === "backward") endY -= tileSize;
+    const currentMove = movesQueue[0];
+    const direction = typeof currentMove === 'object' ? currentMove.direction : currentMove;
+
+    if (direction === "left") endX -= tileSize;
+    if (direction === "right") endX += tileSize;
+    if (direction === "forward") endY += tileSize;
+    if (direction === "backward") endY -= tileSize;
+
+    // Si es un salto, mantener la posición inicial
+    if (typeof currentMove === 'object' && currentMove.type === 'jump') {
+        endX = startX;
+        endY = startY;
+    }
 
     player.position.x = THREE.MathUtils.lerp(startX, endX, progress);
     player.position.y = THREE.MathUtils.lerp(startY, endY, progress);
@@ -44,11 +53,14 @@ function setPosition(progress) {
 }
 
 function setRotation(progress) {
+    const currentMove = movesQueue[0];
+    const direction = typeof currentMove === 'object' ? currentMove.direction : currentMove;
+
     let endRotation = 0;
-    if (movesQueue[0] === "forward") endRotation = 0;
-    if (movesQueue[0] === "left") endRotation = Math.PI / 2;
-    if (movesQueue[0] === "right") endRotation = -Math.PI / 2;
-    if (movesQueue[0] === "backward") endRotation = Math.PI;
+    if (direction === "forward") endRotation = 0;
+    if (direction === "left") endRotation = Math.PI / 2;
+    if (direction === "right") endRotation = -Math.PI / 2;
+    if (direction === "backward") endRotation = Math.PI;
 
     player.children[0].rotation.z = THREE.MathUtils.lerp(
         player.children[0].rotation.z,
