@@ -1,17 +1,46 @@
 <!doctype html>
-<!-- 
-Seminario 2 ejemplo basico
--->
 <html lang="es">
 
 <head>
     <meta charset='utf-8'>
-    <title>Threejs App</title>
+    <title>Robot Interactivo</title>
     <style>
         body {
             background-color: #000;
             margin: 0px;
             overflow: hidden;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
+            border-radius: 5px;
+            font-family: sans-serif;
+        }
+
+        label,
+        input,
+        button {
+            display: block;
+            margin-top: 8px;
+        }
+
+        input[type="range"] {
+            width: 180px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 5px 10px;
         }
     </style>
 </head>
@@ -20,9 +49,40 @@ Seminario 2 ejemplo basico
     <!-- Contenedor del app -->
     <div id="container"></div>
 
-    <!-- Scripts de biblioteca -->
+    <!-- Interfaz de Usuario -->
+    <div id="controls">
+        <h5>1. Mover Robot: Flechas Teclado</h5>
+
+        <label for="giroBase">2. Giro Base [-180, 180]</label>
+        <input type="range" id="giroBase" min="-180" max="180" value="0" step="1">
+
+        <label for="giroBrazo">3. Giro Brazo [-45, 45]</label>
+        <input type="range" id="giroBrazo" min="-45" max="45" value="0" step="1">
+
+        <label for="giroAntebrazoY">4. Giro Antebrazo Y [-180, 180]</label>
+        <input type="range" id="giroAntebrazoY" min="-180" max="180" value="0" step="1">
+
+        <label for="giroAntebrazoZ">5. Giro Antebrazo Z [-90, 90]</label>
+        <input type="range" id="giroAntebrazoZ" min="-90" max="90" value="0" step="1">
+
+        <label for="rotacionPinza">6. Rotación Pinza [-40, 220]</label>
+        <input type="range" id="rotacionPinza" min="-40" max="220" value="0" step="1">
+
+        <label for="aperturaPinza">7. Apertura Pinza [0, 15]</label>
+        <input type="range" id="aperturaPinza" min="0" max="15" value="10" step="0.5">
+
+        <label for="wireframe">8. Alámbrico / Sólido</label>
+        <input type="checkbox" id="wireframe" checked>
+
+        <button id="animacionBtn">9. Iniciar Animación</button>
+    </div>
+
+
+    <!-- Scripts de biblioteca (asegúrate que las rutas sean correctas) -->
     <script src="lib/three.min_r140.js"></script>
     <script src="lib/OrbitControls.js"></script>
+    <!-- LÍNEA CORREGIDA: Cambiado 'tween.umd.js' por 'tween_18.js' para que coincida con tu archivo -->
+    <script src="lib/tween_18.js"></script>
 
     <!-- Mi codigo -->
     <script src="js/robot.js"></script>

@@ -674,7 +674,7 @@ if __name__ == "__main__":
             num_dias=20,
             lugares_por_dia=12,
             tam_poblacion=1000,
-            num_generaciones=300,
+            num_generaciones=600,
             tasa_elitismo=0.20
         )
         
@@ -686,8 +686,8 @@ if __name__ == "__main__":
         resultados_sa = enfriamiento_desde_genetico(
             resultados_genetico=resultados_ga,
             usar_mejor=True,
-            T_inicial=2000,  # Temperatura moderada para refinamiento
-            alpha=0.97,  # Convergencia balanceada
+            T_inicial=20,  # Temperatura moderada para refinamiento
+            alpha=0.999,  # Convergencia balanceada
             max_iteraciones=10000  # Suficiente con perturbaciones inteligentes
         )
         
