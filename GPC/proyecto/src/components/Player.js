@@ -44,6 +44,21 @@ export const position = {
 
 export const movesQueue = [];
 
+export function initializePlayer() {
+    // Initialize the Three.js player object
+
+    player.position.x = 0;
+    player.position.y = 0;
+    player.children[0].position.z = 0;
+
+    // Initialize metadata
+    position.currentRow = 0;
+    position.currentTile = 0;
+
+    // Clear the moves queue
+    movesQueue.length = 0;
+}
+
 export function queueMove(direction) {
     const isValidMove = endsUpInValidPosition(
         {
@@ -69,4 +84,7 @@ export function stepCompleted() {
     if (direction === "right") position.currentTile += 1;
 
     if (position.currentRow > rows.length - 10) addRows();
+
+    const scoreDOM = document.getElementById("score");
+    if (position.currentRow > parseInt(scoreDOM.innerText)) scoreDOM.innerText = position.currentRow.toString();
 }
