@@ -613,8 +613,15 @@ def evaluar_individuo(individuo: Individual) -> float:
         if not validar_limite_ciudad(individuo.ciudades[:dia_idx + 1], individuo.ciudades[dia_idx])[0]:
             fitness -= PENALIZACION_LIMITE_CIUDAD
         
-        if tiempo_dia > TIEMPO_DIA:
-            exceso = tiempo_dia - TIEMPO_DIA
+        # Calcular tiempo sin transporte para verificar límite del día
+        tiempo_dia_sin_transporte = tiempo_dia
+        if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
+            transporte_dia = next((t for t in individuo.transportes_intercity if t[0] == dia_idx), None)
+            if transporte_dia and transporte_dia[4]:
+                tiempo_dia_sin_transporte -= transporte_dia[4]
+        
+        if tiempo_dia_sin_transporte > TIEMPO_DIA:
+            exceso = tiempo_dia_sin_transporte - TIEMPO_DIA
             if exceso > 0 and exceso <= 120:
                 fitness -= PENALIZACION_EXCESO_TIEMPO * exceso
             elif exceso > 120:
@@ -807,6 +814,23 @@ def mutar(individuo: Individual):
         individuo.ciudades = individuo_reparado.ciudades
 
 
+def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int, mejor_individuo: Individual) -> List[Individual]:
+    """
+    Reinicia la población manteniendo el mejor individuo y generando nuevos individuos.
+    Se usa cuando el algoritmo está estancado (sin mejora por muchas generaciones).
+    """
+    log(f"\n   🔄 REINICIANDO POBLACIÓN (manteniendo mejor individuo)...")
+    
+    nueva_poblacion = [copy.deepcopy(mejor_individuo)]
+    
+    for _ in range(tam_poblacion - 1):
+        nuevo_ind = crear_individuo_aleatorio(num_dias, lugares_por_dia)
+        evaluar_individuo(nuevo_ind)
+        nueva_poblacion.append(nuevo_ind)
+    
+    log(f"   ✅ Nueva población creada ({tam_poblacion} individuos)\n")
+    return nueva_poblacion
+
 
 def algoritmo_genetico_espana(
     num_dias: int ,
@@ -860,6 +884,11 @@ def algoritmo_genetico_espana(
     
     num_elite = int(tam_poblacion * tasa_elitismo)
     
+    # Variables para control de estancamiento
+    mejor_fitness_era = mejor_global.fitness
+    generaciones_estancadas = 0
+    umbral_estancamiento = 20
+    
     if modo_tiempo:
         log(f"\nIniciando evolución (hasta {tiempo_limite_segundos}s)...\n")
     else:
@@ -909,6 +938,21 @@ def algoritmo_genetico_espana(
         
         historial_fitness.append(mejor_global.fitness)
         historial_tiempos.append(tiempo_transcurrido)
+        
+        # Comprobar estancamiento
+        if mejor_gen.fitness > mejor_fitness_era:
+            mejor_fitness_era = mejor_gen.fitness
+            generaciones_estancadas = 0
+        else:
+            generaciones_estancadas += 1
+        
+        # Reiniciar población si hay estancamiento prolongado
+        if generaciones_estancadas >= umbral_estancamiento:
+            log(f"\n⚠️  ESTANCAMIENTO DETECTADO: {generaciones_estancadas} generaciones sin mejora")
+            log(f"   Mejor fitness actual: {mejor_fitness_era:.1f}")
+            poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia, mejor_global)
+            generaciones_estancadas = 0
+            mejor_fitness_era = mejor_global.fitness
         
         gen += 1
         
@@ -1186,7 +1230,7 @@ if __name__ == "__main__":
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
             "num_dias": 20,
             "lugares_por_dia": 12,
-            "tam_poblacion": 500,
+            "tam_poblacion": 50,
             "num_generaciones": 500,
             "tasa_elitismo": 0.10,
             "descripcion": "Máxima calidad de solución"
