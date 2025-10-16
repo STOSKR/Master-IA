@@ -1,5 +1,8 @@
 import random
 import copy
+import logging
+import os
+from datetime import datetime
 from typing import List, Dict, Tuple
 from math import radians, sin, cos, sqrt, atan2
 from config import *
@@ -14,6 +17,33 @@ from utils_espana import (
 from restricciones_espana import (
     validar_limite_ciudad
 )
+def configurar_logging(output_dir="logs", prefijo="ag_espana"):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    log_filename = os.path.join(output_dir, f"{prefijo}_{timestamp}.log")
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        handlers=[
+            logging.FileHandler(log_filename, encoding='utf-8'),
+            logging.StreamHandler() 
+        ]
+    )
+    
+    logger = logging.getLogger(__name__)
+    logger.info(f"{'='*80}")
+    logger.info(f"INICIO DE EJECUCIÓN - Algoritmo Genético España")
+    logger.info(f"Log guardado en: {log_filename}")
+    logger.info(f"{'='*80}")
+    
+    return log_filename
+
+def log(mensaje):
+    logging.info(mensaje)
 
 class Individual:
     def __init__(self, dias: List[List[int]], ciudades: List[str]):
@@ -517,36 +547,74 @@ def algoritmo_genetico_espana(
     num_dias: int ,
     lugares_por_dia: int,
     tam_poblacion: int,
-    num_generaciones: int,
-    tasa_elitismo: float
+    num_generaciones: int = None,
+    tasa_elitismo: float = 0.15,
+    tiempo_limite_horas: float = None
 ) -> Dict:
-    print(f"\n{'='*80}")
-    print(f"ALGORITMO GENÉTICO")
-    print(f"{'='*80}")
-    print(f"Días: {num_dias}")
-    print(f"Lugares/día: {lugares_por_dia}")
-    print(f"Población: {tam_poblacion}")
-    print(f"Generaciones: {num_generaciones}")
-    print(f"Elitismo: {tasa_elitismo*100:.0f}%")
-    print(f"Dataset: {len(lugares_turisticos_espana)} lugares en 10 ciudades")
-    print(f"{'='*80}\n")
+    import time as time_module
     
-    print("Creando población inicial")
+    # Convertir horas a segundos si se especificó
+    tiempo_limite_segundos = None
+    if tiempo_limite_horas is not None:
+        tiempo_limite_segundos = int(tiempo_limite_horas * 3600)
+    
+    if num_generaciones is None and tiempo_limite_horas is None:
+        raise ValueError("Debe especificar num_generaciones o tiempo_limite_horas")
+    
+    modo_tiempo = tiempo_limite_segundos is not None
+    
+    log(f"\n{'='*80}")
+    log(f"ALGORITMO GENÉTICO")
+    log(f"{'='*80}")
+    log(f"Días: {num_dias}")
+    log(f"Lugares/día: {lugares_por_dia}")
+    log(f"Población: {tam_poblacion}")
+    if modo_tiempo:
+        horas = int(tiempo_limite_horas)
+        minutos = int((tiempo_limite_horas - horas) * 60)
+        log(f"Tiempo límite: {horas}h {minutos}m ({tiempo_limite_horas:.2f}h)")
+    else:
+        log(f"Generaciones: {num_generaciones}")
+    log(f"Elitismo: {tasa_elitismo*100:.0f}%")
+    log(f"Dataset: {len(lugares_turisticos_espana)} lugares en 10 ciudades")
+    log(f"{'='*80}\n")
+    
+    tiempo_inicio_total = time_module.time()
+    
+    log("Creando población inicial")
     poblacion = crear_poblacion_inicial(tam_poblacion, num_dias, lugares_por_dia)
     
-    print("Evaluando población inicial")
+    log("Evaluando población inicial")
     for ind in poblacion:
         evaluar_individuo(ind)
     
     mejor_global = copy.deepcopy(max(poblacion, key=lambda ind: ind.fitness))
     historial_fitness = [mejor_global.fitness]
     historial_mejor_gen = [mejor_global.fitness]
+    historial_tiempos = [0]  # Tiempo acumulado
     
     num_elite = int(tam_poblacion * tasa_elitismo)
     
-    print(f"\nIniciando evolución ({num_generaciones} generaciones)...\n")
+    if modo_tiempo:
+        log(f"\nIniciando evolución (hasta {tiempo_limite_segundos}s)...\n")
+    else:
+        log(f"\nIniciando evolución ({num_generaciones} generaciones)...\n")
     
-    for gen in range(num_generaciones):
+    gen = 0
+    ultimo_reporte = time_module.time()
+    
+    while True:
+        # Verificar criterio de parada
+        tiempo_transcurrido = time_module.time() - tiempo_inicio_total
+        
+        if modo_tiempo:
+            if tiempo_transcurrido >= tiempo_limite_segundos:
+                log(f"\n⏱️  Tiempo límite alcanzado: {tiempo_transcurrido:.1f}s")
+                break
+        else:
+            if gen >= num_generaciones:
+                break
+        
         poblacion.sort(key=lambda ind: ind.fitness, reverse=True)
         nueva_poblacion = [copy.deepcopy(ind) for ind in poblacion[:num_elite]]
         
@@ -576,42 +644,61 @@ def algoritmo_genetico_espana(
             mejor_global = copy.deepcopy(mejor_gen)
         
         historial_fitness.append(mejor_global.fitness)
+        historial_tiempos.append(tiempo_transcurrido)
         
-        # Progreso
-        if (gen + 1) % 50 == 0 or gen == 0:
-            print(f"  Gen {gen+1:4d}/{num_generaciones} | "
-                  f"Mejor fitness: {mejor_global.fitness:8.1f} | "
-                  f"Puntos: {mejor_global.puntos_totales:5d} | "
-                  f"Tiempo: {mejor_global.tiempo_total/60:6.1f}h | "
-                  f"Dist: {mejor_global.distancia_total:7.1f}km")
+        gen += 1
+        
+        tiempo_desde_reporte = time_module.time() - ultimo_reporte
+        if (gen % 50 == 0) or (tiempo_desde_reporte >= 300):
+            if modo_tiempo:
+                tiempo_restante = tiempo_limite_segundos - tiempo_transcurrido
+                mins_restantes = int(tiempo_restante // 60)
+                log(f"  Gen {gen:4d} | Tiempo: {tiempo_transcurrido/60:6.1f}m (resta: {mins_restantes}m) | "
+                      f"Fitness: {mejor_global.fitness:8.1f} | "
+                      f"Puntos: {mejor_global.puntos_totales:5d} | "
+                      f"Dist: {mejor_global.distancia_total:7.1f}km")
+            else:
+                log(f"  Gen {gen:4d}/{num_generaciones} | "
+                      f"Mejor fitness: {mejor_global.fitness:8.1f} | "
+                      f"Puntos: {mejor_global.puntos_totales:5d} | "
+                      f"Tiempo: {mejor_global.tiempo_total/60:6.1f}h | "
+                      f"Dist: {mejor_global.distancia_total:7.1f}km")
+            ultimo_reporte = time_module.time()
     
-    print(f"\n✅ Evolución completada!")
-    print(f"🏆 Mejor fitness global: {mejor_global.fitness:.1f}")
+    tiempo_total_ejecucion = time_module.time() - tiempo_inicio_total
+    
+    log(f"\n✅ Evolución completada!")
+    log(f"🏆 Mejor fitness global: {mejor_global.fitness:.1f}")
+    log(f"📊 Generaciones ejecutadas: {gen}")
+    log(f"⏱️  Tiempo total: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
     
     return {
         "mejor_individuo": mejor_global,
         "historial_fitness": historial_fitness,
         "historial_mejor_gen": historial_mejor_gen,
-        "poblacion_final": poblacion
+        "historial_tiempos": historial_tiempos,
+        "poblacion_final": poblacion,
+        "generaciones_ejecutadas": gen,
+        "tiempo_ejecucion": tiempo_total_ejecucion
     }
 
 
 def analizar_solucion(individuo: Individual):
     """Muestra análisis detallado de una solución con itinerario completo"""
-    print(f"\n{'='*80}")
-    print(f"ANÁLISIS DE LA MEJOR SOLUCIÓN")
-    print(f"{'='*80}\n")
+    log(f"\n{'='*80}")
+    log(f"ANÁLISIS DE LA MEJOR SOLUCIÓN")
+    log(f"{'='*80}\n")
     
-    print(f"Métricas Globales:")
-    print(f"- Fitness total: {individuo.fitness:.1f}")
-    print(f"- Puntos totales: {individuo.puntos_totales}")
-    print(f"- Tiempo total: {individuo.tiempo_total/60:.1f} horas ({individuo.tiempo_total:.0f} minutos)")
-    print(f"- Tiempo promedio/día: {(individuo.tiempo_total/len(individuo.dias))/60:.1f} horas")
-    print(f"- Distancia total: {individuo.distancia_total:.1f} km")
-    print(f"- Ciudades visitadas: {len(set(individuo.ciudades))}")
+    log(f"Métricas Globales:")
+    log(f"- Fitness total: {individuo.fitness:.1f}")
+    log(f"- Puntos totales: {individuo.puntos_totales}")
+    log(f"- Tiempo total: {individuo.tiempo_total/60:.1f} horas ({individuo.tiempo_total:.0f} minutos)")
+    log(f"- Tiempo promedio/día: {(individuo.tiempo_total/len(individuo.dias))/60:.1f} horas")
+    log(f"- Distancia total: {individuo.distancia_total:.1f} km")
+    log(f"- Ciudades visitadas: {len(set(individuo.ciudades))}")
     
-    print(f"\nITINERARIO DETALLADO POR DÍAS:")
-    print(f"{'='*80}\n")
+    log(f"\nITINERARIO DETALLADO POR DÍAS:")
+    log(f"{'='*80}\n")
     
     for dia_idx, (dia, ciudad) in enumerate(zip(individuo.dias, individuo.ciudades), 1):
         lugares_dia = get_lugares_por_ids(dia)
@@ -625,30 +712,30 @@ def analizar_solucion(individuo: Individual):
             else:
                 gasto_dia += 10
         
-        print(f"{'─'*80}")
-        print(f"DÍA {dia_idx} - {ciudad.upper()}")
-        print(f"{'─'*80}")
+        log(f"{'─'*80}")
+        log(f"DÍA {dia_idx} - {ciudad.upper()}")
+        log(f"{'─'*80}")
         
         transport_info = next((t for t in individuo.transportes_intercity if t[0] == dia_idx - 1), None)
         if transport_info:
             _, origen, destino, tipo_elegido, tiempo_trans, costo_trans = transport_info
             tipo_icons = {"avion": "✈️", "tren": "🚄", "bus": "🚌"}
             icon = tipo_icons.get(tipo_elegido, "🚗")
-            print(f"{icon} Transporte: {origen} → {destino} | "
+            log(f"{icon} Transporte: {origen} → {destino} | "
                   f"{tipo_elegido.upper()} ({tiempo_trans} min, {costo_trans}€)")
-            print(f"")
+            log(f"")
         
         if gasto_dia > PRESUPUESTO_DIARIO:
             presupuesto_str = f"💰 {gasto_dia}€ ⚠️ EXCEDE ({PRESUPUESTO_DIARIO}€)"
         else:
             presupuesto_str = f"💰 {gasto_dia}€ / {PRESUPUESTO_DIARIO}€"
         
-        print(f"📊 Resumen: {len(lugares_dia)} lugares | "
+        log(f"📊 Resumen: {len(lugares_dia)} lugares | "
               f"{puntos_dia} puntos | "
               f"{tiempo_dia/60:.2f}h ({tiempo_dia:.0f} min) | "
               f"{dist_dia:.1f} km | "
               f"{presupuesto_str}")
-        print(f"")
+        log(f"")
         
         hora_actual = HORA_INICIO
         
@@ -663,7 +750,9 @@ def analizar_solucion(individuo: Individual):
                     dist = distancia_haversine(lugar_anterior, lugar)
                     tiempo_transito = dist / VELOCIDAD_MEDIA * 60
                 else:
-                    tiempo_transito = calcular_transporte_intercity(ciudad_anterior_lugar, ciudad_actual_lugar)
+                    # calcular_transporte_intercity devuelve (tiempo, costo), necesitamos solo tiempo
+                    tiempo_trans, _ = calcular_transporte_intercity(ciudad_anterior_lugar, ciudad_actual_lugar, "tren")
+                    tiempo_transito = tiempo_trans if tiempo_trans is not None else 60
                 
                 hora_actual += tiempo_transito
             
@@ -708,13 +797,13 @@ def analizar_solucion(individuo: Individual):
             else:
                 precio = 10
             
-            print(f"  {i:2d}. {hora_str_llegada} - {hora_str_salida} │ {nombre_corto:43s} │ {tipo_lugar:12s} │ {lugar['puntos']:3d} pts │ {precio:2d}€{icono_comida}{fuera_horario}")
+            log(f"  {i:2d}. {hora_str_llegada} - {hora_str_salida} │ {nombre_corto:43s} │ {tipo_lugar:12s} │ {lugar['puntos']:3d} pts │ {precio:2d}€{icono_comida}{fuera_horario}")
             
             if tiempo_transito > 0:
                 if tiempo_transito > 60:
-                    print(f"      {'':13s} └─ Tránsito: {tiempo_transito/60:.1f}h ({tiempo_transito:.0f} min)")
+                    log(f"      {'':13s} └─ Tránsito: {tiempo_transito/60:.1f}h ({tiempo_transito:.0f} min)")
                 else:
-                    print(f"      {'':13s} └─ Tránsito: {tiempo_transito:.0f} min")
+                    log(f"      {'':13s} └─ Tránsito: {tiempo_transito:.0f} min")
             
             hora_actual += lugar['tiempo_visita']
         
@@ -724,18 +813,18 @@ def analizar_solucion(individuo: Individual):
         
         exceso = max(0, tiempo_dia - TIEMPO_DIA)
         if exceso > 0:
-            print(f"\n  ⚠️  DÍA FINALIZADO: {hora_str_fin} | EXCESO: {exceso:.0f} min ({exceso/60:.1f}h) | PENALIZACIÓN: -{PENALIZACION_EXCESO_TIEMPO * exceso:.0f} pts")
+            log(f"\n  ⚠️  DÍA FINALIZADO: {hora_str_fin} | EXCESO: {exceso:.0f} min ({exceso/60:.1f}h) | PENALIZACIÓN: -{PENALIZACION_EXCESO_TIEMPO * exceso:.0f} pts")
             if exceso > 120:
-                print(f"      ❌ EXCESO CRÍTICO (>2h): Penalización adicional de -10,000 pts")
+                log(f"      ❌ EXCESO CRÍTICO (>2h): Penalización adicional de -10,000 pts")
         else:
-            print(f"\n  ✅ DÍA FINALIZADO: {hora_str_fin} | Dentro del límite ({TIEMPO_DIA/60:.0f}h)")
+            log(f"\n  ✅ DÍA FINALIZADO: {hora_str_fin} | Dentro del límite ({TIEMPO_DIA/60:.0f}h)")
         
-        print(f"")
+        log(f"")
     
     if individuo.transportes_intercity:
-        print(f"{'='*80}")
-        print(f"🚊 RESUMEN DE TRANSPORTES INTERCITY")
-        print(f"{'='*80}\n")
+        log(f"{'='*80}")
+        log(f"🚊 RESUMEN DE TRANSPORTES INTERCITY")
+        log(f"{'='*80}\n")
         
         transportes_summary = {"avion": 0, "tren": 0, "bus": 0}
         costo_total_transporte = 0
@@ -749,17 +838,17 @@ def analizar_solucion(individuo: Individual):
             costo_total_transporte += costo
             tiempo_total_transporte += tiempo
         
-        print(f"📊 Estadísticas:")
-        print(f"  ✈️  Avión: {transportes_summary['avion']} viajes")
-        print(f"  🚄 Tren:  {transportes_summary['tren']} viajes")
-        print(f"  🚌 Bus:   {transportes_summary['bus']} viajes")
-        print(f"\n💰 Costo total transportes: {costo_total_transporte}€")
-        print(f"⏱️  Tiempo total transportes: {tiempo_total_transporte} min ({tiempo_total_transporte/60:.1f}h)")
-        print(f"")
+        log(f"📊 Estadísticas:")
+        log(f"  ✈️  Avión: {transportes_summary['avion']} viajes")
+        log(f"  🚄 Tren:  {transportes_summary['tren']} viajes")
+        log(f"  🚌 Bus:   {transportes_summary['bus']} viajes")
+        log(f"\n💰 Costo total transportes: {costo_total_transporte}€")
+        log(f"⏱️  Tiempo total transportes: {tiempo_total_transporte} min ({tiempo_total_transporte/60:.1f}h)")
+        log(f"")
     
-    print(f"{'='*80}")
-    print(f"✅ ANÁLISIS COMPLETO")
-    print(f"{'='*80}\n")
+    log(f"{'='*80}")
+    log(f"✅ ANÁLISIS COMPLETO")
+    log(f"{'='*80}\n")
 
 
 def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json"):
@@ -791,12 +880,15 @@ def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json
     with open(archivo, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     
-    print(f"💾 Resultados exportados a: {archivo}")
+    log(f"💾 Resultados exportados a: {archivo}")
 
 # Ejecución principal
 
 if __name__ == "__main__":
     import sys
+    
+    # CONFIGURAR LOGGING AL INICIO
+    log_file = configurar_logging(output_dir="logs", prefijo="ag_espana")
     
     configuraciones = {
         "1": {
@@ -811,7 +903,7 @@ if __name__ == "__main__":
         "2": {
             "nombre": "INTENSIVA (45-60 min)",
             "num_dias": 25,
-            "lugares_por_dia": 12,  # Reducido de 15 a 12 (más realista)
+            "lugares_por_dia": 12,
             "tam_poblacion": 15000,
             "num_generaciones": 800,
             "tasa_elitismo": 0.15,
@@ -820,8 +912,8 @@ if __name__ == "__main__":
         "3": {
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
             "num_dias": 30,
-            "lugares_por_dia": 12,  # Reducido de 15 a 12 (más realista)
-            "tam_poblacion": 20000,
+            "lugares_por_dia": 12,
+            "tam_poblacion": 500,
             "num_generaciones": 1000,
             "tasa_elitismo": 0.10,
             "descripcion": "Máxima calidad de solución"
@@ -831,6 +923,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         modo = sys.argv[1]
     else:
+        # Estos prints SÍ van a consola para interacción del usuario
         print(f"\n{'='*80}")
         print(f"🎯 SELECCIONA MODO DE EJECUCIÓN")
         print(f"{'='*80}\n")
@@ -852,13 +945,25 @@ if __name__ == "__main__":
     
     config = configuraciones[modo]
     
+    # Registrar configuración elegida en el log
+    log(f"\n{'='*80}")
+    log(f"CONFIGURACIÓN SELECCIONADA: Modo {modo}")
+    log(f"Nombre: {config['nombre']}")
+    log(f"Descripción: {config['descripcion']}")
+    log(f"{'='*80}\n")
+    
     resultados = algoritmo_genetico_espana(
         num_dias=config["num_dias"],
         lugares_por_dia=config["lugares_por_dia"],
         tam_poblacion=config["tam_poblacion"],
         num_generaciones=config["num_generaciones"],
-        tasa_elitismo=config["tasa_elitismo"]
+        tasa_elitismo=config["tasa_elitismo"],
+        tiempo_limite_horas=None
     )
     
     analizar_solucion(resultados["mejor_individuo"])
     exportar_resultados(resultados, archivo=f"ag_{modo}.json")
+    
+    log(f"\n{'='*80}")
+    log(f"EJECUCIÓN COMPLETADA - Log guardado en: {log_file}")
+    log(f"{'='*80}")
