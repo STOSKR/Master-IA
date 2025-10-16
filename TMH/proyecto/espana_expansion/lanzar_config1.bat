@@ -8,7 +8,7 @@ echo Iniciando...
 echo Hora inicio: %time%
 echo.
 
-python ejecutar_config_individual.py --nombre "Poblacion_500_8h" --poblacion 500 --guardar-json --guardar-grafica --output-dir resultados_8h
+python ejecutar_config_individual.py --nombre "Pob_100" --poblacion 100 --guardar-json --guardar-grafica --output-dir resultados_8h
 
 echo.
 echo ============================================================================

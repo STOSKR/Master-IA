@@ -1,6 +1,7 @@
 import argparse
 import json
 import time
+import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 
@@ -56,7 +57,7 @@ def ejecutar_con_config(args):
         args.horas = 0.01
         print("⚠️  No se especificó --generaciones ni --horas, usando --horas 1.0 por defecto\n")
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%d_%H_%M")
     nombre_archivo = args.nombre.replace(' ', '_').replace('/', '-')
     
     print("\n" + "="*100)
@@ -138,6 +139,9 @@ def ejecutar_con_config(args):
             'historial_tiempos': resultado['historial_tiempos']
         }
         
+        # Crear directorio si no existe
+        os.makedirs(os.path.dirname(archivo_json), exist_ok=True)
+        
         with open(archivo_json, 'w', encoding='utf-8') as f:
             json.dump(datos, f, indent=2, ensure_ascii=False)
         
@@ -188,12 +192,11 @@ def main():
     """Función principal"""
     args = parsear_argumentos()
     
-    # Configurar logging al inicio con nombre específico según configuración
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    timestamp = datetime.now().strftime("%d_%H_%M")
     nombre_archivo = args.nombre.replace(' ', '_').replace('/', '-')
     log_file = configurar_logging(
         output_dir="logs", 
-        prefijo=f"config_{nombre_archivo}"
+        prefijo=f"{nombre_archivo}"
     )
     
     print(f"\n📝 Log guardado en: {log_file}\n")

@@ -63,7 +63,7 @@ ICONOS_TIPO = {
 
 
 def crear_carpeta_resultados(base_nombre: str) -> Path:
-    timestamp = datetime.now().strftime("%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%d_%H_%M")
     carpeta = Path(f"ga_{base_nombre}_{timestamp}")
     carpeta.mkdir(exist_ok=True)
     return carpeta

@@ -21,7 +21,7 @@ def configurar_logging(output_dir="logs", prefijo="ag_espana"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    timestamp = datetime.now().strftime("%d_%H_%M")
     log_filename = os.path.join(output_dir, f"{prefijo}_{timestamp}.log")
     
     logging.basicConfig(
@@ -86,11 +86,15 @@ def eliminar_duplicados_globales(individuo: Individual) -> Individual:
 
 
 def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias_consecutivos_actual: int) -> str:
-    
+    """
+    Obtiene la ciudad más cercana respetando MAX_DIAS_POR_CIUDAD.
+    NUNCA debe quedarse más de MAX_DIAS_POR_CIUDAD días en una misma ciudad.
+    """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     
     debe_cambiar = dias_consecutivos_actual >= MAX_DIAS_POR_CIUDAD
     
+    # PRIORIDAD 1: Buscar ciudades no visitadas (excluyendo actual si debe_cambiar)
     candidatas = []
     for ciudad in ciudades_disponibles:
         if debe_cambiar and ciudad == ciudad_actual:
@@ -98,10 +102,17 @@ def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias
         if ciudad in ciudades_visitadas:
             continue
         candidatas.append(ciudad)
+    
+    # PRIORIDAD 2: Si no hay ciudades nuevas, revisar ciudades YA visitadas (excepto la actual si debe cambiar)
     if not candidatas:
         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+    
+    # PRIORIDAD 3: Si aún no hay candidatas (caso extremo), forzar cualquier ciudad diferente
     if not candidatas:
-        return ciudad_actual
+        # Esto fuerza cambiar a CUALQUIER otra ciudad
+        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+        if not candidatas:  # Solo si hay UNA ciudad (imposible con 10 ciudades)
+            return random.choice(ciudades_disponibles)
 
     coord_actual = COORDENADAS_CIUDADES[ciudad_actual]
     distancias = []
@@ -127,65 +138,123 @@ def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias
     return distancias[0][0]
 
 def validar_restricciones_ciudades(individuo: Individual) -> bool:
+    """
+    Valida que un individuo respete las restricciones de ciudades:
+    1. No regresar a una ciudad ya visitada (sin agrupar días consecutivos)
+    2. NO quedarse más de MAX_DIAS_POR_CIUDAD días consecutivos en una ciudad
+    """
     ciudades = individuo.ciudades
     
+    # Validar que no se repitan ciudades sin agrupar (no regresar)
     ciudades_vistas = set()
     for i, ciudad in enumerate(ciudades):
         if ciudad in ciudades_vistas:
+            # Si ya se visitó, debe ser consecutiva
             if i > 0 and ciudades[i-1] == ciudad:
-                continue
+                continue  # OK: Días consecutivos en la misma ciudad
             else:
-                return False
+                return False  # ERROR: Regreso a ciudad ya visitada
         if i > 0 and ciudades[i-1] != ciudad:
             ciudades_vistas.add(ciudades[i-1])
     
+    # VALIDACIÓN CRÍTICA: Verificar que NUNCA se quede más de MAX_DIAS_POR_CIUDAD días consecutivos
     dias_consecutivos = 1
     ciudad_actual_check = ciudades[0]
     for i in range(1, len(ciudades)):
         if ciudades[i] == ciudad_actual_check:
             dias_consecutivos += 1
             if dias_consecutivos > MAX_DIAS_POR_CIUDAD:
-                return False
+                return False  # PROHIBIDO: Más de MAX_DIAS_POR_CIUDAD días en una ciudad
         else:
+            # Cambió de ciudad, resetear contador
             ciudad_actual_check = ciudades[i]
             dias_consecutivos = 1
     
     return True
 
 def reparar_individuo(individuo: Individual) -> Individual:
+    """
+    Repara un individuo que viola restricciones.
+    ESTRATEGIA: Eliminar TODOS los regresos iterativamente
+    """
+    ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     
-    ciudades_visitadas = set()
+    # Paso 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD
+    i = 0
+    while i < len(individuo.ciudades):
+        ciudad_actual = individuo.ciudades[i]
+        inicio_bloque = i
+        
+        while i < len(individuo.ciudades) and individuo.ciudades[i] == ciudad_actual:
+            i += 1
+        
+        dias_consecutivos = i - inicio_bloque
+        
+        if dias_consecutivos > MAX_DIAS_POR_CIUDAD:
+            ciudades_previas = set(individuo.ciudades[:inicio_bloque])
+            
+            for dia_idx in range(inicio_bloque + MAX_DIAS_POR_CIUDAD, i):
+                candidatas = [c for c in ciudades_disponibles 
+                             if c != ciudad_actual and c not in ciudades_previas]
+                
+                if not candidatas:
+                    candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                
+                if candidatas:
+                    nueva_ciudad = random.choice(candidatas)
+                    individuo.ciudades[dia_idx] = nueva_ciudad
+                    ciudades_previas.add(nueva_ciudad)
+                    
+                    lugares_nueva = get_lugares_ciudad(nueva_ciudad)
+                    if lugares_nueva:
+                        individuo.dias[dia_idx] = [
+                            random.choice(lugares_nueva)["id"] 
+                            for _ in range(len(individuo.dias[dia_idx]))
+                        ]
     
-    for dia_idx in range(len(individuo.ciudades)):
-        ciudad_actual = individuo.ciudades[dia_idx]
+    # Paso 2: Eliminar TODOS los regresos (intentar múltiples veces)
+    for intento in range(3):
+        ciudades_vistas = set()
+        cambios = False
         
-        dias_consecutivos = 1
-        for i in range(dia_idx - 1, -1, -1):
-            if individuo.ciudades[i] == ciudad_actual:
-                dias_consecutivos += 1
-            else:
-                break
-        
-        es_regreso = False
-        if dia_idx > 0:
-            if ciudad_actual in ciudades_visitadas and individuo.ciudades[dia_idx-1] != ciudad_actual:
-                es_regreso = True
-        
-        if dias_consecutivos > MAX_DIAS_POR_CIUDAD or es_regreso:
-            ciudad_anterior = individuo.ciudades[dia_idx-1] if dia_idx > 0 else ciudad_actual
-            nueva_ciudad = obtener_ciudad_mas_cercana(ciudad_anterior, ciudades_visitadas, dias_consecutivos)
+        i = 0
+        while i < len(individuo.ciudades):
+            ciudad_actual = individuo.ciudades[i]
             
-            individuo.ciudades[dia_idx] = nueva_ciudad
+            # Detectar regreso
+            es_regreso = (ciudad_actual in ciudades_vistas and 
+                         (i == 0 or individuo.ciudades[i-1] != ciudad_actual))
             
-            lugares_nueva = get_lugares_ciudad(nueva_ciudad)
-            if lugares_nueva:
-                num_lugares = len(individuo.dias[dia_idx])
-                individuo.dias[dia_idx] = [
-                    random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
-                ]
+            if es_regreso:
+                # Buscar ciudad NO visitada
+                candidatas = [c for c in ciudades_disponibles 
+                             if c not in ciudades_vistas]
+                
+                if not candidatas and i > 0:
+                    candidatas = [c for c in ciudades_disponibles 
+                                 if c != individuo.ciudades[i-1]]
+                
+                if candidatas:
+                    nueva_ciudad = random.choice(candidatas)
+                    individuo.ciudades[i] = nueva_ciudad
+                    cambios = True
+                    
+                    lugares_nueva = get_lugares_ciudad(nueva_ciudad)
+                    if lugares_nueva:
+                        individuo.dias[i] = [
+                            random.choice(lugares_nueva)["id"] 
+                            for _ in range(len(individuo.dias[i]))
+                        ]
+                    
+                    ciudad_actual = nueva_ciudad
+            
+            if i > 0 and individuo.ciudades[i] != individuo.ciudades[i-1]:
+                ciudades_vistas.add(individuo.ciudades[i-1])
+            
+            i += 1
         
-        if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx-1]:
-            ciudades_visitadas.add(individuo.ciudades[dia_idx-1])
+        if not cambios:
+            break
     
     return individuo
 
@@ -199,15 +268,32 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
     if AGRUPAR:
         dia_actual = 0
         ciudad_actual = random.choice(ciudades_disponibles)
+        dias_consecutivos_ciudad = 0
+        ciudades_usadas = []  # Lista ordenada de ciudades ya visitadas
         
         while dia_actual < num_dias:
             dias_restantes = num_dias - dia_actual
             
-            if dias_restantes == 1:
-                dias_en_ciudad = 1
-            else:
-                dias_en_ciudad = random.randint(1, min(MAX_DIAS_POR_CIUDAD, dias_restantes))
+            # Calcular cuántos días PUEDE quedarse en esta ciudad (máximo MAX_DIAS_POR_CIUDAD)
+            max_permitido = MAX_DIAS_POR_CIUDAD - dias_consecutivos_ciudad
             
+            # Si llegó al límite, DEBE cambiar de ciudad
+            if max_permitido <= 0:
+                ciudades_usadas.append(ciudad_actual)
+                # Buscar ciudad NO visitada
+                candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
+                if not candidatas:
+                    # Si todas fueron visitadas, reiniciar (permitir reutilizar ciudades)
+                    candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                
+                ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
+                dias_consecutivos_ciudad = 0
+                max_permitido = MAX_DIAS_POR_CIUDAD
+            
+            # Calcular días a asignar: mínimo entre max_permitido y días_restantes
+            dias_en_ciudad = random.randint(1, min(max_permitido, dias_restantes))
+            
+            # Asignar días
             lugares_ciudad = get_lugares_ciudad(ciudad_actual)
             if len(lugares_ciudad) < lugares_por_dia:
                 lugares_ciudad = lugares_turisticos_espana
@@ -231,17 +317,30 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 ids_dia = [l["id"] for l in lugares_dia]
                 
                 lugares_visitados_global.update(ids_dia)
-                
                 random.shuffle(ids_dia)
                 
                 dias.append(ids_dia)
                 ciudades_plan.append(ciudad_actual)
                 dia_actual += 1
+                dias_consecutivos_ciudad += 1
             
-            ciudades_visitadas.add(ciudad_actual)
-            
-            if dia_actual < num_dias:
-                ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, MAX_DIAS_POR_CIUDAD)
+            # Si quedan días y estamos cerca del límite o terminamos los días de esta ciudad
+            # cambiar proactivamente
+            if dia_actual < num_dias and dias_consecutivos_ciudad >= MAX_DIAS_POR_CIUDAD:
+                ciudades_usadas.append(ciudad_actual)
+                # Buscar ciudad NO visitada
+                candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
+                if not candidatas:
+                    candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                
+                ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
+                dias_consecutivos_ciudad = 0
+            elif dia_actual < num_dias and random.random() < 0.5:  # 50% probabilidad de cambiar voluntariamente
+                ciudades_usadas.append(ciudad_actual)
+                candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
+                if candidatas:
+                    ciudad_actual = random.choice(candidatas)
+                    dias_consecutivos_ciudad = 0
     else:
         ciudad_actual = random.choice(ciudades_disponibles)
         dias_consecutivos = 0
@@ -390,16 +489,28 @@ def evaluar_individuo(individuo: Individual) -> float:
         
         for lugar in lugares_dia:
             tipo = lugar.get('tipo', '')
+            tiempo_visita = lugar['tiempo_visita']
+            hora_fin_visita = hora_actual + tiempo_visita
             
+            # VERIFICACIÓN CRÍTICA: Horario de apertura
             if tipo in HORARIOS_TIPO:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
                 
+                # Caso especial: bares abiertos después de medianoche
                 if tipo == "bar" and cierre < apertura:
                     cierre = 26 * 60
                 
-                if hora_actual < apertura or hora_actual > cierre:
+                # PROHIBIDO: Comenzar visita antes de apertura O terminar después de cierre
+                if hora_actual < apertura or hora_fin_visita > cierre:
                     fitness -= PENALIZACION_FUERA_HORARIO_APERTURA
+                    # Penalización adicional proporcional al tiempo fuera de horario
+                    if hora_actual < apertura:
+                        minutos_fuera = apertura - hora_actual
+                        fitness -= minutos_fuera * 2  # 2 puntos por minuto fuera
+                    if hora_fin_visita > cierre:
+                        minutos_fuera = hora_fin_visita - cierre
+                        fitness -= minutos_fuera * 2
             
             if tipo in PRECIOS_TIPO:
                 gasto_dia += PRECIOS_TIPO[tipo]
@@ -417,7 +528,7 @@ def evaluar_individuo(individuo: Individual) -> float:
             else:
                 restaurantes_consecutivos = 0
             
-            hora_actual += lugar['tiempo_visita']
+            hora_actual += tiempo_visita  # Usar la variable local
         
         gasto_acumulado += gasto_dia
         
@@ -851,8 +962,8 @@ def analizar_solucion(individuo: Individual):
     log(f"{'='*80}\n")
 
 
-def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json"):
-    """Exporta resultados a JSON"""
+def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json", config: Dict = None):
+    """Exporta resultados a JSON incluyendo configuración del algoritmo"""
     import json
     
     mejor = resultados["mejor_individuo"]
@@ -864,6 +975,15 @@ def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json
         "distancia_total_km": mejor.distancia_total,
         "num_dias": len(mejor.dias),
         "ciudades_visitadas": list(set(mejor.ciudades)),
+        "configuracion": {
+            "poblacion": config.get("tam_poblacion") if config else None,
+            "generaciones": config.get("num_generaciones") if config else resultados.get("generaciones_ejecutadas"),
+            "num_dias": config.get("num_dias") if config else len(mejor.dias),
+            "lugares_por_dia": config.get("lugares_por_dia") if config else None,
+            "tasa_elitismo": config.get("tasa_elitismo") if config else None,
+            "max_dias_por_ciudad": MAX_DIAS_POR_CIUDAD,
+            "agrupar": AGRUPAR
+        },
         "itinerario": [
             {
                 "dia": i + 1,
@@ -902,7 +1022,7 @@ if __name__ == "__main__":
         },
         "2": {
             "nombre": "INTENSIVA (45-60 min)",
-            "num_dias": 25,
+            "num_dias": 20,
             "lugares_por_dia": 12,
             "tam_poblacion": 15000,
             "num_generaciones": 800,
@@ -911,7 +1031,7 @@ if __name__ == "__main__":
         },
         "3": {
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
-            "num_dias": 30,
+            "num_dias": 20,
             "lugares_por_dia": 12,
             "tam_poblacion": 500,
             "num_generaciones": 1000,
@@ -962,7 +1082,7 @@ if __name__ == "__main__":
     )
     
     analizar_solucion(resultados["mejor_individuo"])
-    exportar_resultados(resultados, archivo=f"ag_{modo}.json")
+    exportar_resultados(resultados, archivo=f"ag_{modo}.json", config=config)
     
     log(f"\n{'='*80}")
     log(f"EJECUCIÓN COMPLETADA - Log guardado en: {log_file}")

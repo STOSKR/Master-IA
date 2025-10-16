@@ -386,7 +386,7 @@ def enfriamiento_simulado(
     # Guardar la figura antes de cerrarla
     import os
     from datetime import datetime
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%d_%H_%M")
     fig_filename = f"evolucion_fitness_sa_{timestamp}.png"
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
     if verbose:
@@ -702,7 +702,7 @@ if __name__ == "__main__":
         
         # Guardar resultados automáticamente
         from datetime import datetime
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%d_%H_%M")
         archivo_resultados = f"resultados_sa_hybrid_{timestamp}.json"
         exportar_resultados_sa(resultados_sa, archivo=archivo_resultados)
         print(f"\n💾 Resultados guardados en: {archivo_resultados}")

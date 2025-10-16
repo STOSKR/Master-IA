@@ -28,7 +28,7 @@ def crear_carpeta_resultados(base_nombre: str) -> Path:
     Returns:
         Path de la carpeta creada
     """
-    timestamp = datetime.now().strftime("%m%d_%H%M%S")
+    timestamp = datetime.now().strftime("%d_%H_%M")
     carpeta = Path(f"es_{base_nombre}_{timestamp}")
     carpeta.mkdir(exist_ok=True)
     return carpeta
