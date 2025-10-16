@@ -5,16 +5,16 @@
   "distancia_total_km": 203.57638138523882,
   "num_dias": 20,
   "ciudades_visitadas": [
-    "Valencia",
-    "Sevilla",
-    "Toledo",
-    "Granada",
-    "San Sebastián",
-    "Barcelona",
-    "Madrid",
     "Córdoba",
+    "Barcelona",
+    "San Sebastián",
+    "Bilbao",
+    "Madrid",
+    "Toledo",
+    "Valencia",
+    "Granada",
     "Santiago",
-    "Bilbao"
+    "Sevilla"
   ],
   "configuracion": {
     "poblacion": 500,
