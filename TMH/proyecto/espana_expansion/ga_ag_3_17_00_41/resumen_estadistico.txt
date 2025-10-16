@@ -2,39 +2,37 @@
 RESUMEN ESTADÍSTICO - OPTIMIZACIÓN RUTA TURÍSTICA ESPAÑA
 ================================================================================
 
-Fecha de generación: 2025-10-16 23:59:37
+Fecha de generación: 2025-10-17 00:41:38
 
 CONFIGURACIÓN DEL ALGORITMO
 --------------------------------------------------------------------------------
 Población: 500
-Generaciones: 1000
+Generaciones: 500
 Días de viaje: 20
 Lugares por día: 12
 
 RESULTADOS GLOBALES
 --------------------------------------------------------------------------------
-Fitness total: 6792.93
-Lugares visitados: 205
-Ciudades visitadas: 10 de 10
-Promedio lugares/día: 10.2
+Fitness total: 2031.58
+Lugares visitados: 240
+Ciudades visitadas: 8 de 10
+Promedio lugares/día: 12.0
 
 DISTRIBUCIÓN POR CIUDAD
 --------------------------------------------------------------------------------
 Ciudad                   Días    Lugares     Puntos    Pts/Día
 --------------------------------------------------------------------------------
-Barcelona                   1         12        564      564.0
-Bilbao                      1         12        571      571.0
-Córdoba                     1         12        598      598.0
-Granada                     1         12        687      687.0
-Madrid                      1         12        785      785.0
-San Sebastián               1         12        476      476.0
-Santiago                   11         97       4787      435.2
-Sevilla                     1         12        554      554.0
-Toledo                      1         12        615      615.0
-Valencia                    1         12        517      517.0
+Bilbao                      2         24       1138      569.0
+Córdoba                     3         36       1838      612.7
+Granada                     4         48       2727      681.8
+Madrid                      2         24       1630      815.0
+San Sebastián               1         12        488      488.0
+Santiago                    2         24       1270      635.0
+Sevilla                     5         60       3009      601.8
+Toledo                      1         12        637      637.0
 
 ================================================================================
 Total días: 20
-Total lugares: 205
-Total puntos: 10154
+Total lugares: 240
+Total puntos: 12737
 ================================================================================

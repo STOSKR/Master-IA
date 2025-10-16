@@ -1,0 +1,721 @@
+2025-10-17 00:34:56 - INFO - ================================================================================
+2025-10-17 00:34:56 - INFO - INICIO DE EJECUCIÓN - Algoritmo Genético España
+2025-10-17 00:34:56 - INFO - Log guardado en: logs\ag_espana_17_00_34.log
+2025-10-17 00:34:56 - INFO - ================================================================================
+2025-10-17 00:34:56 - INFO - 
+================================================================================
+2025-10-17 00:34:56 - INFO - CONFIGURACIÓN SELECCIONADA: Modo 3
+2025-10-17 00:34:56 - INFO - Nombre: ULTRA-COMPLEJA (1.5-2 horas)
+2025-10-17 00:34:56 - INFO - Descripción: Máxima calidad de solución
+2025-10-17 00:34:56 - INFO - ================================================================================
+
+2025-10-17 00:34:56 - INFO - 
+================================================================================
+2025-10-17 00:34:56 - INFO - ALGORITMO GENÉTICO
+2025-10-17 00:34:56 - INFO - ================================================================================
+2025-10-17 00:34:56 - INFO - Días: 20
+2025-10-17 00:34:56 - INFO - Lugares/día: 12
+2025-10-17 00:34:56 - INFO - Población: 500
+2025-10-17 00:34:56 - INFO - Generaciones: 500
+2025-10-17 00:34:56 - INFO - Elitismo: 10%
+2025-10-17 00:34:56 - INFO - Dataset: 1367 lugares en 10 ciudades
+2025-10-17 00:34:56 - INFO - ================================================================================
+
+2025-10-17 00:34:56 - INFO - Creando población inicial
+2025-10-17 00:34:56 - INFO - Evaluando población inicial
+2025-10-17 00:34:56 - INFO - 
+Iniciando evolución (500 generaciones)...
+
+2025-10-17 00:35:36 - INFO -   Gen   50/500 | Mejor fitness: -85691.1 | Puntos: 12196 | Tiempo:  280.3h | Dist:   301.5km
+2025-10-17 00:36:15 - INFO -   Gen  100/500 | Mejor fitness: -26544.8 | Puntos: 12353 | Tiempo:  334.1h | Dist:   598.2km
+2025-10-17 00:36:54 - INFO -   Gen  150/500 | Mejor fitness:  -1050.7 | Puntos: 12595 | Tiempo:  290.2h | Dist:   414.8km
+2025-10-17 00:37:33 - INFO -   Gen  200/500 | Mejor fitness:    934.1 | Puntos: 12587 | Tiempo:  280.0h | Dist:   348.5km
+2025-10-17 00:38:12 - INFO -   Gen  250/500 | Mejor fitness:   1198.2 | Puntos: 12520 | Tiempo:  281.1h | Dist:   348.4km
+2025-10-17 00:38:51 - INFO -   Gen  300/500 | Mejor fitness:   1453.3 | Puntos: 12666 | Tiempo:  279.8h | Dist:   346.8km
+2025-10-17 00:39:33 - INFO -   Gen  350/500 | Mejor fitness:   1602.3 | Puntos: 12653 | Tiempo:  280.5h | Dist:   341.6km
+2025-10-17 00:40:13 - INFO -   Gen  400/500 | Mejor fitness:   1777.2 | Puntos: 12664 | Tiempo:  278.1h | Dist:   329.5km
+2025-10-17 00:40:52 - INFO -   Gen  450/500 | Mejor fitness:   1891.3 | Puntos: 12895 | Tiempo:  278.6h | Dist:   334.6km
+2025-10-17 00:41:33 - INFO -   Gen  500/500 | Mejor fitness:   2031.6 | Puntos: 12737 | Tiempo:  278.5h | Dist:   323.3km
+2025-10-17 00:41:33 - INFO - 
+✅ Evolución completada!
+2025-10-17 00:41:33 - INFO - 🏆 Mejor fitness global: 2031.6
+2025-10-17 00:41:33 - INFO - 📊 Generaciones ejecutadas: 500
+2025-10-17 00:41:33 - INFO - ⏱️  Tiempo total: 396.89s (6.61m)
+2025-10-17 00:41:33 - INFO - 
+================================================================================
+2025-10-17 00:41:33 - INFO - ANÁLISIS DE LA MEJOR SOLUCIÓN
+2025-10-17 00:41:33 - INFO - ================================================================================
+
+2025-10-17 00:41:33 - INFO - Métricas Globales:
+2025-10-17 00:41:33 - INFO - - Fitness total: 2031.6
+2025-10-17 00:41:33 - INFO - - Puntos totales: 12737
+2025-10-17 00:41:33 - INFO - - Tiempo total: 278.5 horas (16710 minutos)
+2025-10-17 00:41:33 - INFO - - Tiempo promedio/día: 13.9 horas
+2025-10-17 00:41:33 - INFO - - Distancia total: 323.3 km
+2025-10-17 00:41:33 - INFO - - Ciudades visitadas: 8
+2025-10-17 00:41:33 - INFO - 
+ITINERARIO DETALLADO POR DÍAS:
+2025-10-17 00:41:33 - INFO - ================================================================================
+
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 1 - TOLEDO
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 637 puntos | 11.40h (684 min) | 4.9 km | 💰 125€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 12:00 │ Casco Histórico Toledo                      │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 12:02 - 12:32 │ Iglesia de San Andrés                       │ catedral     │  59 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    3. 12:34 - 13:04 │ Capilla de los Reyes Nuevos                 │ catedral     │  51 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -    4. 13:06 - 13:51 │ Convento de Santa Clara                     │ catedral     │  51 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    5. 13:57 - 14:42 │ Biblioteca Regional                         │ museo        │  53 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    6. 14:44 - 14:59 │ Arco de la Sangre                           │ turistico    │  57 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    7. 15:02 - 16:17 │ Taberna El Botero                           │ bar          │  56 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -    8. 16:20 - 16:40 │ Callejón de Menores                         │ turistico    │  50 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -    9. 16:55 - 17:55 │ Fábrica de Armas                            │ museo        │  53 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 15 min
+2025-10-17 00:41:33 - INFO -   10. 18:09 - 18:29 │ Cobertizo de Santo Domingo                  │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -   11. 18:33 - 19:48 │ Museo del Greco                             │ museo        │  54 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -   12. 19:53 - 20:23 │ Transparente Catedral                       │ catedral     │  67 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 20:23 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 2 - BILBAO
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Toledo → Bilbao | AVION (215 min, 108€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 563 puntos | 11.38h (683 min) | 11.5 km | 💰 86€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:20 │ Plaza Indautxu                              │ plaza        │  30 pts │  0€
+2025-10-17 00:41:33 - INFO -    2. 09:30 - 10:30 │ Ribera de Bilbao                            │ turistico    │  48 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    3. 10:39 - 10:59 │ Zubizuri (Puente Calatrava)                 │ turistico    │  58 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    4. 11:07 - 12:07 │ Funicular de Artxanda                       │ turistico    │  52 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    5. 12:20 - 12:50 │ Jardines de Albia                           │ parque       │  54 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 13 min
+2025-10-17 00:41:33 - INFO -    6. 12:58 - 13:18 │ Puente de La Salve                          │ turistico    │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    7. 13:24 - 14:24 │ Barrio Indautxu                             │ turistico    │  29 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    8. 14:34 - 14:54 │ Puente de Deusto                            │ turistico    │  49 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    9. 14:56 - 15:41 │ Deusto Universidad                          │ turistico    │  41 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -   10. 16:11 - 16:41 │ Convento de la Encarnación                  │ catedral     │  58 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 30 min
+2025-10-17 00:41:33 - INFO -   11. 16:56 - 18:26 │ La Viña del Ensanche                        │ bar          │  53 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 15 min
+2025-10-17 00:41:33 - INFO -   12. 18:52 - 20:22 │ Monte Artxanda Parque                       │ parque       │  46 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 26 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 20:22 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 3 - SAN SEBASTIÁN
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Bilbao → San Sebastián | AVION (90 min, 10€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 488 puntos | 26.57h (1594 min) | 91.2 km | 💰 90€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:20 │ Plaza Zabalburu                             │ plaza        │  33 pts │  0€
+2025-10-17 00:41:33 - INFO -    2. 11:50 - 12:50 │ Getaria Puerto                              │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2.5h (150 min)
+2025-10-17 00:41:33 - INFO -    3. 16:22 - 16:52 │ Ayuntamiento San Sebastián                  │ palacio      │  52 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3.5h (212 min)
+2025-10-17 00:41:33 - INFO -    4. 17:02 - 17:17 │ Puente de Zurriola                          │ turistico    │  51 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    5. 17:24 - 18:09 │ Barrio de Egia                              │ turistico    │  35 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    6. 18:30 - 19:00 │ Ermita de Santa Clara                       │ catedral     │  50 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 21 min
+2025-10-17 00:41:33 - INFO -    7. 19:21 - 20:06 │ Barrio de Antiguo                           │ turistico    │  26 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 21 min
+2025-10-17 00:41:33 - INFO -    8. 20:20 - 21:20 │ Café de la Concha                           │ cafetería    │  53 pts │  5€ CENA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    9. 21:44 - 22:14 │ Torre del Monte Igueldo                     │ mirador      │  41 pts │  5€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 23 min
+2025-10-17 00:41:33 - INFO -   10. 22:21 - 23:51 │ Playa de la Isla                            │ playa        │  36 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -   11. 24:14 - 24:59 │ Mercado de San Martín                       │ turistico    │  30 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 22 min
+2025-10-17 00:41:33 - INFO -   12. 25:30 - 26:00 │ Peine del Viento                            │ turistico    │  41 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 32 min
+2025-10-17 00:41:33 - INFO - 
+  ⚠️  DÍA FINALIZADO: 26:00 | EXCESO: 634 min (10.6h) | PENALIZACIÓN: -31711 pts
+2025-10-17 00:41:33 - INFO -       ❌ EXCESO CRÍTICO (>2h): Penalización adicional de -10,000 pts
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 4 - BILBAO
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: San Sebastián → Bilbao | AVION (90 min, 10€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 575 puntos | 13.69h (821 min) | 9.7 km | 💰 149€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:45 │ Paseo Abandoibarra                          │ turistico    │  33 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 09:54 - 10:54 │ Gran Vía Bilbao                             │ turistico    │  89 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    3. 11:04 - 11:49 │ Teatro Arriaga                              │ turistico    │  50 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -    4. 12:01 - 13:31 │ Casa Rufo                                   │ restaurante  │  44 pts │ 25€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 12 min
+2025-10-17 00:41:33 - INFO -    5. 13:47 - 15:17 │ Estadio San Mamés Tour                      │ turistico    │  55 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 16 min
+2025-10-17 00:41:33 - INFO -    6. 15:41 - 16:11 │ Paseo del Arenal                            │ turistico    │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 24 min
+2025-10-17 00:41:33 - INFO -    7. 16:14 - 17:14 │ Museo Taurino                               │ museo        │  59 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -    8. 17:28 - 18:13 │ Basílica de Begoña                          │ catedral     │  71 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    9. 18:27 - 19:42 │ Bar Gure Toki                               │ bar          │  32 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -   10. 19:42 - 20:12 │ Calle Barrenkalea                           │ turistico    │  20 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 0 min
+2025-10-17 00:41:33 - INFO -   11. 20:24 - 21:24 │ New York Burguer                            │ restaurante  │  57 pts │ 25€ CENA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 12 min
+2025-10-17 00:41:33 - INFO -   12. 21:26 - 22:41 │ Bar El Globo                                │ bar          │  20 pts │  8€ CENA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 22:41 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 5 - MADRID
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Bilbao → Madrid | AVION (100 min, 75€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 835 puntos | 13.85h (831 min) | 25.9 km | 💰 135€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:30 │ Mantequerías Bravo                          │ tienda       │  55 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -    2. 09:35 - 10:35 │ Dior (Ortega y Gasset)                      │ tienda       │  85 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    3. 11:01 - 12:01 │ Chuka Ramen Bar                             │ restaurante  │ 110 pts │ 25€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 26 min
+2025-10-17 00:41:33 - INFO -    4. 12:30 - 13:00 │ Rosaleda del Parque del Oeste               │ turistico    │  50 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 29 min
+2025-10-17 00:41:33 - INFO -    5. 13:17 - 13:37 │ La Melguiza (azafrán)                       │ tienda       │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 17 min
+2025-10-17 00:41:33 - INFO -    6. 14:05 - 15:05 │ Gucci (Serrano)                             │ tienda       │  70 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 28 min
+2025-10-17 00:41:33 - INFO -    7. 15:58 - 17:13 │ Planetario de Madrid                        │ turistico    │  65 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 53 min
+2025-10-17 00:41:33 - INFO -    8. 17:57 - 18:12 │ Puerta de Alcalá                            │ turistico    │  95 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 44 min
+2025-10-17 00:41:33 - INFO -    9. 18:32 - 18:52 │ Iglesia de San Ginés                        │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 20 min
+2025-10-17 00:41:33 - INFO -   10. 19:23 - 20:08 │ Faro de Moncloa                             │ turistico    │  70 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 31 min
+2025-10-17 00:41:33 - INFO -   11. 20:48 - 21:48 │ Fundación Juan March                        │ turistico    │  65 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 40 min
+2025-10-17 00:41:33 - INFO -   12. 22:06 - 22:51 │ Azotea del Círculo de Bellas Artes          │ turistico    │  85 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 22:51 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 6 - SANTIAGO
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Madrid → Santiago | AVION (105 min, 85€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 638 puntos | 9.48h (569 min) | 9.1 km | 💰 93€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:00 │ Camino Francés entrada                      │ turistico    │  49 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 10:52 - 11:07 │ Alameda Estatua Dos Marías                  │ turistico    │  47 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 52 min
+2025-10-17 00:41:33 - INFO -    3. 11:16 - 11:46 │ Casa del Cabildo                            │ palacio      │  54 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    4. 11:56 - 12:26 │ Alameda Mirador                             │ mirador      │  60 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    5. 12:34 - 13:19 │ Convento de San Francisco                   │ catedral     │  41 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO -    6. 13:24 - 13:44 │ Plaza de la Inmaculada                      │ plaza        │  44 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    7. 13:48 - 14:08 │ Mirador de Bonaval                          │ mirador      │  68 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -    8. 14:14 - 14:59 │ Café Derby                                  │ cafetería    │  45 pts │  5€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    9. 15:00 - 15:30 │ Casa das Crechas                            │ museo        │  42 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 0 min
+2025-10-17 00:41:33 - INFO -   10. 15:31 - 16:16 │ Claustro Catedral                           │ catedral     │  78 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -   11. 16:19 - 17:49 │ Teatro Principal                            │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -   12. 17:59 - 18:29 │ Mirador de la Alameda                       │ mirador      │  70 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 18:29 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 7 - SANTIAGO
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 632 puntos | 14.00h (840 min) | 15.0 km | 💰 94€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 11:00 │ Catedral de Santiago                        │ catedral     │  95 pts │  8€
+2025-10-17 00:41:33 - INFO -    2. 11:02 - 11:47 │ Colegio de Fonseca                          │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    3. 11:52 - 12:37 │ Barrio de Belvis                            │ turistico    │  30 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    4. 12:42 - 13:42 │ Bar O Gato Negro                            │ bar          │  25 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    5. 14:14 - 15:14 │ Parque de la Música                         │ parque       │  53 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 33 min
+2025-10-17 00:41:33 - INFO -    6. 15:47 - 17:02 │ O Dezaseis                                  │ restaurante  │  43 pts │ 25€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 33 min
+2025-10-17 00:41:33 - INFO -    7. 17:05 - 17:50 │ Plaza del Obradoiro                         │ plaza        │  99 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    8. 17:55 - 18:40 │ Plaza de Abastos                            │ plaza        │  38 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    9. 19:15 - 20:00 │ Biblioteca de Galicia                       │ museo        │  46 pts │ 15€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 34 min
+2025-10-17 00:41:33 - INFO -   10. 20:30 - 21:00 │ Carballeira de Santa Susana                 │ parque       │  55 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 30 min
+2025-10-17 00:41:33 - INFO -   11. 21:10 - 22:10 │ Camino Portugués entrada                    │ turistico    │  50 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -   12. 22:29 - 22:59 │ Botafumeiro                                 │ catedral     │  52 pts │  8€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 20 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 22:59 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 8 - CÓRDOBA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Santiago → Córdoba | AVION (316 min, 146€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 618 puntos | 6.91h (415 min) | 9.2 km | 💰 96€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:15 │ Estatua de Averroes                         │ turistico    │  43 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 09:17 - 10:02 │ Baños del Alcázar Califal                   │ museo        │  99 pts │ 15€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -    3. 10:06 - 10:21 │ Plaza de las Doblas                         │ plaza        │  32 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -    4. 10:47 - 11:17 │ Avenida del Brillante                       │ turistico    │  53 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 26 min
+2025-10-17 00:41:33 - INFO -    5. 11:41 - 11:56 │ Puerta del Perdón                           │ turistico    │  55 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 24 min
+2025-10-17 00:41:33 - INFO -    6. 12:01 - 12:21 │ Plaza de Capuchinos                         │ plaza        │  42 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    7. 12:29 - 13:14 │ Jardines de la Agricultura                  │ parque       │  49 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    8. 13:21 - 13:51 │ Iglesia de la Marina                        │ catedral     │  47 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO -    9. 14:04 - 14:34 │ Posada del Potro                            │ museo        │  51 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 13 min
+2025-10-17 00:41:33 - INFO -   10. 14:39 - 14:54 │ Puerta de Almodóvar                         │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -   11. 15:01 - 15:31 │ Iglesia de San Pedro                        │ catedral     │  59 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO -   12. 15:39 - 15:54 │ Puerta del Puente                           │ turistico    │  42 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 15:54 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 9 - CÓRDOBA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 680 puntos | 11.08h (665 min) | 4.1 km | 💰 115€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:00 │ Barrio de Santa Marina                      │ turistico    │  31 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 10:06 - 10:36 │ Patio de los Naranjos                       │ turistico    │  58 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    3. 10:40 - 11:10 │ Torre de los Leones                         │ palacio      │  45 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    4. 11:15 - 11:30 │ Calleja del Pañuelo                         │ turistico    │  54 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -    5. 11:31 - 12:16 │ Café Bar Sociedad de Plateros               │ cafetería    │  29 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO -    6. 12:17 - 13:02 │ Tetería El Zoco                             │ cafetería    │  41 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO -    7. 13:04 - 13:34 │ Palacio de Orive                            │ palacio      │  72 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    8. 13:36 - 15:06 │ Casa Pepe de la Judería                     │ restaurante  │  58 pts │ 25€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO -    9. 15:17 - 16:32 │ Taberna San Miguel Casa El Pisto            │ bar          │  46 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -   10. 16:42 - 16:57 │ Estatua de Maimónides                       │ turistico    │  48 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -   11. 16:59 - 18:59 │ Mezquita-Catedral de Córdoba                │ catedral     │ 100 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -   12. 19:04 - 20:04 │ Jardines del Alcázar                        │ parque       │  98 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 20:04 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 10 - CÓRDOBA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 540 puntos | 10.53h (632 min) | 8.5 km | 💰 81€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:00 │ Barrio de San Basilio                       │ turistico    │  29 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 10:14 - 10:29 │ Puente de San Rafael                        │ turistico    │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    3. 10:41 - 11:41 │ Caballerizas Reales                         │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 12 min
+2025-10-17 00:41:33 - INFO -    4. 11:57 - 12:42 │ Universidad de Córdoba                      │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 16 min
+2025-10-17 00:41:33 - INFO -    5. 12:54 - 13:14 │ Plaza del Triunfo                           │ plaza        │  44 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 12 min
+2025-10-17 00:41:33 - INFO -    6. 13:24 - 13:44 │ Plaza de las Tendillas                      │ plaza        │  35 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -    7. 13:59 - 14:59 │ Sotos de la Albolafia                       │ parque       │  49 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    8. 14:59 - 15:19 │ Mirador del Puente Romano                   │ mirador      │  70 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO -    9. 15:31 - 16:16 │ Iglesia de San Lorenzo                      │ catedral     │  53 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 12 min
+2025-10-17 00:41:33 - INFO -   10. 16:18 - 17:33 │ Regadera Gastrobar                          │ bar          │  27 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -   11. 17:35 - 17:55 │ Templo Romano                               │ turistico    │  53 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -   12. 18:01 - 19:31 │ Hammam Al Ándalus                           │ turistico    │  43 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 19:31 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 11 - SEVILLA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 🚄 Transporte: Córdoba → Sevilla | TREN (45 min, 20€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 585 puntos | 12.70h (762 min) | 16.4 km | 💰 113€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:20 │ Puerta Carmona                              │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 09:26 - 09:46 │ Puerta de Jerez                             │ plaza        │  53 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO -    3. 10:22 - 11:52 │ Estadio Benito Villamarín                   │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 35 min
+2025-10-17 00:41:33 - INFO -    4. 12:39 - 13:39 │ Museo Palacio Condesa Lebrija               │ museo        │  55 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 47 min
+2025-10-17 00:41:33 - INFO -    5. 13:47 - 14:32 │ Iglesia de San Lorenzo                      │ catedral     │  41 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    6. 14:42 - 15:02 │ Plaza Ponce de León                         │ plaza        │  33 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -    7. 15:15 - 16:30 │ La Cacharrería                              │ bar          │  43 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 13 min
+2025-10-17 00:41:33 - INFO -    8. 16:49 - 17:34 │ Palacio de Yanduri                          │ palacio      │  67 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO -    9. 17:55 - 18:15 │ Puente del Cachorro                         │ turistico    │  52 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 21 min
+2025-10-17 00:41:33 - INFO -   10. 18:34 - 18:54 │ Plaza del Triunfo                           │ plaza        │  34 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 19 min
+2025-10-17 00:41:33 - INFO -   11. 18:54 - 19:54 │ Archivo de Indias                           │ museo        │  87 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO -   12. 20:11 - 21:41 │ La Brunilda Tapas                           │ restaurante  │  40 pts │ 25€ CENA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 17 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 21:41 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 12 - MADRID
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Sevilla → Madrid | AVION (100 min, 70€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 795 puntos | 13.06h (784 min) | 19.9 km | 💰 150€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:00 │ WOW Concept                                 │ turistico    │  60 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 10:06 - 11:06 │ Zara (Plaza de España)                      │ tienda       │  35 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    3. 11:21 - 11:51 │ Galería Elvira González                     │ turistico    │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 15 min
+2025-10-17 00:41:33 - INFO -    4. 11:59 - 12:09 │ Banco de España                             │ turistico    │  50 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    5. 12:24 - 13:54 │ StreetXO                                    │ restaurante  │ 180 pts │ 25€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 15 min
+2025-10-17 00:41:33 - INFO -    6. 14:12 - 15:27 │ 1862 Dry Bar                                │ restaurante  │  85 pts │ 25€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO -    7. 15:31 - 16:31 │ Museo de Historia de Madrid                 │ turistico    │  50 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -    8. 16:35 - 17:20 │ El Moderno Concept Store                    │ tienda       │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -    9. 18:28 - 18:58 │ Cuatro Torres Business Area                 │ turistico    │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1.1h (68 min)
+2025-10-17 00:41:33 - INFO -   10. 20:17 - 20:37 │ Teatro Real                                 │ turistico    │  70 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1.3h (78 min)
+2025-10-17 00:41:33 - INFO -   11. 20:50 - 21:35 │ Real Fábrica Española                       │ tienda       │  65 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 13 min
+2025-10-17 00:41:33 - INFO -   12. 21:43 - 22:03 │ Chocolatería San Ginés (Tienda)             │ tienda       │  70 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 22:03 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 13 - SEVILLA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 🚌 Transporte: Madrid → Sevilla | BUS (300 min, 20€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 624 puntos | 10.45h (627 min) | 12.7 km | 💰 84€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:30 │ El Rinconcillo                              │ bar          │  44 pts │  8€ DESAYUNO ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -    2. 10:44 - 11:14 │ Callejón del Agua                           │ turistico    │  55 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    3. 11:17 - 11:47 │ Casa de las Sirenas                         │ palacio      │  51 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 3 min
+2025-10-17 00:41:33 - INFO -    4. 11:52 - 12:22 │ Capilla de San José                         │ catedral     │  51 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    5. 12:30 - 13:15 │ Teatro de la Maestranza                     │ turistico    │  51 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    6. 13:23 - 13:53 │ Capilla de los Marineros                    │ catedral     │  50 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    7. 14:05 - 14:35 │ Jardines de Cristina                        │ parque       │  50 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -    8. 14:56 - 15:16 │ Arco de la Macarena                         │ turistico    │  54 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 22 min
+2025-10-17 00:41:33 - INFO -    9. 15:45 - 16:05 │ Plaza de Cuba                               │ plaza        │  41 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 29 min
+2025-10-17 00:41:33 - INFO -   10. 16:15 - 16:45 │ Parroquia Santa Catalina                    │ catedral     │  42 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -   11. 17:05 - 17:50 │ Mercado Feria                               │ tienda       │  38 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 20 min
+2025-10-17 00:41:33 - INFO -   12. 18:12 - 19:27 │ Jardines del Alcázar                        │ parque       │  97 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 21 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 19:27 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 14 - SEVILLA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 598 puntos | 12.96h (778 min) | 11.5 km | 💰 61€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:20 │ Plaza Virgen de los Reyes                   │ plaza        │  32 pts │  0€
+2025-10-17 00:41:33 - INFO -    2. 09:24 - 09:44 │ Plaza de Santa Cruz                         │ plaza        │  34 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    3. 09:54 - 10:54 │ Plaza de España                             │ plaza        │  35 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    4. 10:55 - 11:40 │ Jardines del Valle                          │ parque       │  56 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 1 min
+2025-10-17 00:41:33 - INFO -    5. 11:58 - 12:58 │ Barrio del Arenal                           │ turistico    │  24 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO -    6. 13:06 - 13:51 │ Convento Santa Clara                        │ catedral     │  56 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    7. 14:21 - 15:51 │ Centro Andaluz Arte Contemporáneo           │ museo        │  44 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 30 min
+2025-10-17 00:41:33 - INFO -    8. 16:14 - 17:14 │ Palacio de las Dueñas                       │ palacio      │  60 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 23 min
+2025-10-17 00:41:33 - INFO -    9. 17:21 - 18:06 │ Alameda de Hércules                         │ plaza        │  50 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -   10. 18:26 - 18:41 │ Plazoleta de Santa Marta                    │ plaza        │  53 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 19 min
+2025-10-17 00:41:33 - INFO -   11. 18:45 - 20:45 │ Catedral de Sevilla y Giralda               │ catedral     │  95 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -   12. 20:57 - 21:57 │ Convento de Santa Paula                     │ catedral     │  59 pts │  8€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 13 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 21:57 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 15 - SEVILLA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 591 puntos | 15.57h (934 min) | 19.9 km | 💰 119€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:45 │ Iglesia de Santa Ana                        │ catedral     │  55 pts │  8€
+2025-10-17 00:41:33 - INFO -    2. 10:05 - 10:50 │ Iglesia de San Marcos                       │ catedral     │  49 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 21 min
+2025-10-17 00:41:33 - INFO -    3. 11:05 - 11:50 │ Palacio Bucarelli                           │ palacio      │  61 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    4. 12:04 - 13:04 │ Mercado de Triana                           │ tienda       │  40 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    5. 13:27 - 14:57 │ Acuario de Sevilla                          │ museo        │  52 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 23 min
+2025-10-17 00:41:33 - INFO -    6. 15:28 - 16:58 │ Vinería San Telmo                           │ bar          │  55 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 31 min
+2025-10-17 00:41:33 - INFO -    7. 17:48 - 19:03 │ Parque del Tamarguillo                      │ parque       │  45 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 50 min
+2025-10-17 00:41:33 - INFO -    8. 19:58 - 20:43 │ Hospital de la Caridad                      │ museo        │  45 pts │ 15€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 55 min
+2025-10-17 00:41:33 - INFO -    9. 20:56 - 21:41 │ Iglesia de San Pedro                        │ catedral     │  59 pts │  8€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 13 min
+2025-10-17 00:41:33 - INFO -   10. 21:45 - 22:30 │ Murallas de Sevilla                         │ turistico    │  45 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -   11. 22:38 - 24:08 │ La Azotea                                   │ restaurante  │  53 pts │ 25€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -   12. 24:13 - 24:33 │ Plaza del Duque                             │ plaza        │  32 pts │  0€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 24:33 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 16 - SEVILLA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 611 puntos | 11.80h (708 min) | 13.6 km | 💰 94€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:30 │ Corrala del Agua                            │ turistico    │  44 pts │ 10€
+2025-10-17 00:41:33 - INFO -    2. 09:47 - 10:17 │ Capilla del Carmen (Triana)                 │ catedral     │  59 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 17 min
+2025-10-17 00:41:33 - INFO -    3. 10:34 - 11:19 │ Iglesia de la Magdalena                     │ catedral     │  44 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO -    4. 11:26 - 11:56 │ Torre de Don Fadrique                       │ turistico    │  51 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    5. 12:18 - 12:48 │ Isla de los Patos                           │ parque       │  54 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 22 min
+2025-10-17 00:41:33 - INFO -    6. 12:59 - 13:19 │ Patio de Banderas                           │ plaza        │  47 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    7. 13:20 - 14:05 │ Café de Indias                              │ cafetería    │  54 pts │  5€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    8. 14:20 - 15:20 │ Calle Betis                                 │ turistico    │  45 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    9. 15:44 - 16:14 │ Estanque de los Lotos                       │ parque       │  52 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 25 min
+2025-10-17 00:41:33 - INFO -   10. 16:43 - 18:13 │ Contenedor                                  │ restaurante  │  57 pts │ 25€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 29 min
+2025-10-17 00:41:33 - INFO -   11. 18:22 - 19:07 │ Iglesia de San Luis                         │ catedral     │  55 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -   12. 19:18 - 20:48 │ Casa del Flamenco                           │ turistico    │  49 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 20:48 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 17 - GRANADA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - ✈️ Transporte: Sevilla → Granada | AVION (180 min, 18€)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 702 puntos | 10.48h (629 min) | 10.7 km | 💰 77€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:00 │ Casa Museo Max Moreau                       │ museo        │  46 pts │ 15€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -    2. 10:14 - 10:44 │ Campo del Príncipe                          │ plaza        │  53 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    3. 10:55 - 12:10 │ Hicuri Art Vegan                            │ restaurante  │  56 pts │ 25€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -    4. 12:19 - 12:39 │ Puerta de las Granadas                      │ turistico    │  42 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    5. 12:41 - 13:01 │ Puerta de la Justicia                       │ turistico    │  56 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 2 min
+2025-10-17 00:41:33 - INFO -    6. 13:11 - 13:31 │ Plaza de las Pasiegas                       │ plaza        │  44 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    7. 13:45 - 15:15 │ Generalife                                  │ parque       │  98 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 14 min
+2025-10-17 00:41:33 - INFO -    8. 15:26 - 16:11 │ Palacio de Dar al-Horra                     │ palacio      │  65 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -    9. 16:20 - 16:50 │ Plaza Bib-Rambla                            │ plaza        │  31 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -   10. 17:09 - 17:39 │ Mirador de la Lona                          │ mirador      │  69 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 19 min
+2025-10-17 00:41:33 - INFO -   11. 17:57 - 18:17 │ Plaza del Carmen                            │ plaza        │  42 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO -   12. 18:28 - 19:28 │ Partal Alhambra                             │ parque       │ 100 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 19:28 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 18 - GRANADA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 744 puntos | 11.44h (686 min) | 8.0 km | 💰 114€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:45 │ Carmen de la Victoria                       │ parque       │  58 pts │  0€
+2025-10-17 00:41:33 - INFO -    2. 09:51 - 10:36 │ Bañuelo (Baños Árabes)                      │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    3. 10:46 - 12:01 │ Abadía del Sacromonte                       │ catedral     │  90 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    4. 12:19 - 13:04 │ Madraza                                     │ palacio      │  56 pts │ 12€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 18 min
+2025-10-17 00:41:33 - INFO -    5. 13:13 - 13:43 │ Iglesia San Pedro y San Pablo               │ catedral     │  52 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    6. 13:51 - 15:06 │ Bodegas Castañeda                           │ bar          │  42 pts │  8€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    7. 15:14 - 15:59 │ Cármenes del Albaicín                       │ turistico    │  98 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 8 min
+2025-10-17 00:41:33 - INFO -    8. 16:03 - 16:48 │ Casa de Zafra                               │ museo        │  48 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 4 min
+2025-10-17 00:41:33 - INFO -    9. 16:56 - 17:56 │ Catedral de Granada                         │ catedral     │  93 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO -   10. 18:05 - 19:05 │ Palacio de los Olvidados                    │ museo        │  63 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -   11. 19:11 - 19:31 │ Puerta de Fajalauza                         │ turistico    │  41 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -   12. 19:41 - 20:26 │ Calle Calderería Nueva                      │ turistico    │  57 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 20:26 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 19 - GRANADA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 596 puntos | 13.10h (786 min) | 9.2 km | 💰 166€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 09:30 │ Basílica Nuestra Señora Angustias           │ catedral     │  68 pts │  8€
+2025-10-17 00:41:33 - INFO -    2. 09:40 - 10:25 │ Paseo de los Tristes                        │ turistico    │  46 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    3. 10:30 - 11:00 │ Mirador del Rey Chico                       │ mirador      │  65 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    4. 11:05 - 11:50 │ Museo Ángel Barrios                         │ museo        │  52 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 5 min
+2025-10-17 00:41:33 - INFO -    5. 12:00 - 13:00 │ Centro José Guerrero                        │ museo        │  45 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    6. 13:21 - 13:51 │ Vereda de Enmedio                           │ turistico    │  57 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 21 min
+2025-10-17 00:41:33 - INFO -    7. 14:09 - 14:39 │ Corral del Carbón                           │ turistico    │  50 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 19 min
+2025-10-17 00:41:33 - INFO -    8. 14:48 - 16:18 │ Restaurante Mirador de Morayma              │ restaurante  │  61 pts │ 25€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    9. 16:28 - 17:28 │ Capilla Real                                │ catedral     │  48 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -   10. 17:39 - 19:09 │ Carmen de San Miguel                        │ restaurante  │  42 pts │ 25€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 11 min
+2025-10-17 00:41:33 - INFO -   11. 19:15 - 20:30 │ Realejo (Barrio)                            │ turistico    │  29 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -   12. 20:35 - 22:05 │ Restaurante Ruta del Azafrán                │ restaurante  │  33 pts │ 25€ CENA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 22:05 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - DÍA 20 - GRANADA
+2025-10-17 00:41:33 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-17 00:41:33 - INFO - 📊 Resumen: 12 lugares | 685 puntos | 12.37h (742 min) | 12.3 km | 💰 94€ / 200€
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO -    1. 09:00 - 10:00 │ Carmen de los Mártires                      │ parque       │  52 pts │  0€
+2025-10-17 00:41:33 - INFO -    2. 10:05 - 11:05 │ Casa de los Tiros                           │ museo        │  48 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    3. 11:11 - 11:56 │ Casa Horno de Oro                           │ museo        │  48 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    4. 12:04 - 13:19 │ Jardines del Generalife                     │ parque       │  97 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO -    5. 13:31 - 14:46 │ Los Diamantes                               │ bar          │  48 pts │  8€ COMIDA
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 12 min
+2025-10-17 00:41:33 - INFO -    6. 14:52 - 15:12 │ Puerta Monaita                              │ turistico    │  43 pts │ 10€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 6 min
+2025-10-17 00:41:33 - INFO -    7. 15:20 - 16:05 │ Basílica San Juan de Dios                   │ catedral     │  76 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 9 min
+2025-10-17 00:41:33 - INFO -    8. 16:16 - 17:01 │ Mirador de San Nicolás                      │ mirador      │  94 pts │  5€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 10 min
+2025-10-17 00:41:33 - INFO -    9. 17:28 - 18:28 │ Huerta de San Vicente                       │ museo        │  51 pts │ 15€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 27 min
+2025-10-17 00:41:33 - INFO -   10. 19:02 - 20:02 │ Monasterio de la Cartuja                    │ catedral     │  47 pts │  8€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 34 min
+2025-10-17 00:41:33 - INFO -   11. 20:25 - 20:55 │ Plaza Nueva                                 │ plaza        │  40 pts │  0€
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 23 min
+2025-10-17 00:41:33 - INFO -   12. 21:02 - 21:22 │ Puerta de Elvira                            │ turistico    │  41 pts │ 10€ ⚠️ FUERA HORARIO
+2025-10-17 00:41:33 - INFO -                     └─ Tránsito: 7 min
+2025-10-17 00:41:33 - INFO - 
+  ✅ DÍA FINALIZADO: 21:22 | Dentro del límite (16h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ================================================================================
+2025-10-17 00:41:33 - INFO - 🚊 RESUMEN DE TRANSPORTES INTERCITY
+2025-10-17 00:41:33 - INFO - ================================================================================
+
+2025-10-17 00:41:33 - INFO - 📊 Estadísticas:
+2025-10-17 00:41:33 - INFO -   ✈️  Avión: 8 viajes
+2025-10-17 00:41:33 - INFO -   🚄 Tren:  1 viajes
+2025-10-17 00:41:33 - INFO -   🚌 Bus:   1 viajes
+2025-10-17 00:41:33 - INFO - 
+💰 Costo total transportes: 562€
+2025-10-17 00:41:33 - INFO - ⏱️  Tiempo total transportes: 1541 min (25.7h)
+2025-10-17 00:41:33 - INFO - 
+2025-10-17 00:41:33 - INFO - ================================================================================
+2025-10-17 00:41:33 - INFO - ✅ ANÁLISIS COMPLETO
+2025-10-17 00:41:33 - INFO - ================================================================================
+
+2025-10-17 00:41:33 - INFO - 💾 Resultados exportados a: ag_3.json
+2025-10-17 00:41:33 - INFO - 
+================================================================================
+2025-10-17 00:41:33 - INFO - EJECUCIÓN COMPLETADA - Log guardado en: logs\ag_espana_17_00_34.log
+2025-10-17 00:41:33 - INFO - ================================================================================

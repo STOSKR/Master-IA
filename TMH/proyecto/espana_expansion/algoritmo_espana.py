@@ -173,11 +173,13 @@ def validar_restricciones_ciudades(individuo: Individual) -> bool:
     return True
 
 def reparar_individuo(individuo: Individual) -> Individual:
-    """
-    Repara un individuo que viola restricciones.
-    ESTRATEGIA: Eliminar TODOS los regresos iterativamente
-    """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
+    
+    DEBUG_REPARAR = False  # ⚠️ DEBUG DESACTIVADO
+    
+    if DEBUG_REPARAR:
+        print(f"\n🔧 [DEBUG] INICIANDO REPARACIÓN")
+        print(f"   Total días: {len(individuo.ciudades)}")
     
     # Paso 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD
     i = 0
@@ -190,71 +192,208 @@ def reparar_individuo(individuo: Individual) -> Individual:
         
         dias_consecutivos = i - inicio_bloque
         
+        if DEBUG_REPARAR:
+            simbolo = "✅" if dias_consecutivos <= MAX_DIAS_POR_CIUDAD else "❌"
+            print(f"   {simbolo} Bloque: {ciudad_actual} (días {inicio_bloque+1}-{i}, {dias_consecutivos} días)")
+        
         if dias_consecutivos > MAX_DIAS_POR_CIUDAD:
-            ciudades_previas = set(individuo.ciudades[:inicio_bloque])
+            if DEBUG_REPARAR:
+                print(f"      ⚠️  EXCEDE LÍMITE! Reparando...")
             
-            for dia_idx in range(inicio_bloque + MAX_DIAS_POR_CIUDAD, i):
-                candidatas = [c for c in ciudades_disponibles 
-                             if c != ciudad_actual and c not in ciudades_previas]
+            # ⚠️ IMPORTANTE: Analizar cuántos días tiene cada ciudad hasta este punto
+            contador_dias_ciudad = {}
+            for idx in range(inicio_bloque):
+                c = individuo.ciudades[idx]
+                contador_dias_ciudad[c] = contador_dias_ciudad.get(c, 0) + 1
+            
+            ciudades_previas = set(contador_dias_ciudad.keys())
+            
+            # ⚠️ CORRECCIÓN: Dividir en pedazos, cada pedazo de ciudad diferente
+            pedazos_necesarios = (dias_consecutivos + MAX_DIAS_POR_CIUDAD - 1) // MAX_DIAS_POR_CIUDAD
+            
+            if DEBUG_REPARAR:
+                print(f"      🔪 Dividiendo en {pedazos_necesarios} pedazos")
+                print(f"      � Días por ciudad hasta ahora: {contador_dias_ciudad}")
+            
+            for pedazo_idx in range(1, pedazos_necesarios):
+                dia_inicio_pedazo = inicio_bloque + (pedazo_idx * MAX_DIAS_POR_CIUDAD)
+                dia_fin_pedazo = min(dia_inicio_pedazo + MAX_DIAS_POR_CIUDAD, i)
+                dias_pedazo = dia_fin_pedazo - dia_inicio_pedazo
                 
-                if not candidatas:
-                    candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                if DEBUG_REPARAR:
+                    print(f"      🔄 Pedazo {pedazo_idx+1}: días {dia_inicio_pedazo+1}-{dia_fin_pedazo} ({dias_pedazo} días a repartir)")
                 
-                if candidatas:
-                    nueva_ciudad = random.choice(candidatas)
-                    individuo.ciudades[dia_idx] = nueva_ciudad
-                    ciudades_previas.add(nueva_ciudad)
+                # 📊 ESTRATEGIA DE REPARTO CON INSERCIÓN:
+                # 1. Identificar ciudades incompletas y su última posición
+                ciudades_incompletas = []
+                for c in ciudades_disponibles:
+                    if c != ciudad_actual:
+                        dias_actuales = contador_dias_ciudad.get(c, 0)
+                        if dias_actuales < MAX_DIAS_POR_CIUDAD:
+                            # Buscar la última posición donde aparece esta ciudad
+                            ultima_pos = -1
+                            for idx in range(inicio_bloque - 1, -1, -1):
+                                if individuo.ciudades[idx] == c:
+                                    ultima_pos = idx
+                                    break
+                            
+                            espacio = MAX_DIAS_POR_CIUDAD - dias_actuales
+                            ciudades_incompletas.append({
+                                'ciudad': c,
+                                'dias_actuales': dias_actuales,
+                                'espacio': espacio,
+                                'ultima_posicion': ultima_pos
+                            })
+                
+                # Ordenar por última posición (para insertar en orden)
+                ciudades_incompletas.sort(key=lambda x: x['ultima_posicion'])
+                
+                if DEBUG_REPARAR:
+                    print(f"         📋 Ciudades incompletas disponibles:")
+                    for info in ciudades_incompletas:
+                        pos_str = f"posición {info['ultima_posicion']+1}" if info['ultima_posicion'] >= 0 else "nueva"
+                        print(f"            - {info['ciudad']}: {info['dias_actuales']} días (espacio: {info['espacio']}, {pos_str})")
+                
+                # 2. Reemplazar los días del pedazo con ciudades incompletas (reparto cíclico)
+                dias_a_repartir = []
+                idx_ciudad = 0
+                
+                for _ in range(dias_pedazo):
+                    if not ciudades_incompletas:
+                        break
                     
-                    lugares_nueva = get_lugares_ciudad(nueva_ciudad)
-                    if lugares_nueva:
+                    info_ciudad = ciudades_incompletas[idx_ciudad % len(ciudades_incompletas)]
+                    dias_a_repartir.append({
+                        'ciudad': info_ciudad['ciudad'],
+                        'insertar_despues': info_ciudad['ultima_posicion']
+                    })
+                    
+                    # Actualizar contadores
+                    info_ciudad['dias_actuales'] += 1
+                    info_ciudad['espacio'] -= 1
+                    
+                    # Actualizar última posición (se desplaza por las inserciones previas)
+                    info_ciudad['ultima_posicion'] += 1
+                    
+                    # Si se completó, quitar de la lista
+                    if info_ciudad['dias_actuales'] >= MAX_DIAS_POR_CIUDAD:
+                        ciudades_incompletas.pop(idx_ciudad % len(ciudades_incompletas))
+                    else:
+                        idx_ciudad += 1
+                
+                # 3. Reemplazar los días en el pedazo con las ciudades elegidas
+                for idx_pedazo, info_dia in enumerate(dias_a_repartir):
+                    dia_idx = dia_inicio_pedazo + idx_pedazo
+                    ciudad_elegida = info_dia['ciudad']
+                    
+                    individuo.ciudades[dia_idx] = ciudad_elegida
+                    contador_dias_ciudad[ciudad_elegida] = contador_dias_ciudad.get(ciudad_elegida, 0) + 1
+                    ciudades_previas.add(ciudad_elegida)
+                    
+                    # Actualizar lugares del día
+                    lugares_nueva = get_lugares_ciudad(ciudad_elegida)
+                    if lugares_nueva and individuo.dias[dia_idx]:
                         individuo.dias[dia_idx] = [
                             random.choice(lugares_nueva)["id"] 
                             for _ in range(len(individuo.dias[dia_idx]))
                         ]
+                    
+                    if DEBUG_REPARAR:
+                        print(f"            Día {dia_idx+1} → {ciudad_elegida}")
+                
+                # Si faltan días por asignar, crear regresos
+                if len(dias_a_repartir) < dias_pedazo:
+                    if DEBUG_REPARAR:
+                        print(f"         ⚠️  Faltan {dias_pedazo - len(dias_a_repartir)} días, creando regresos...")
+                    
+                    for idx_pedazo in range(len(dias_a_repartir), dias_pedazo):
+                        dia_idx = dia_inicio_pedazo + idx_pedazo
+                        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                        if candidatas:
+                            ciudad_regreso = random.choice(candidatas)
+                            individuo.ciudades[dia_idx] = ciudad_regreso
+                            contador_dias_ciudad[ciudad_regreso] = contador_dias_ciudad.get(ciudad_regreso, 0) + 1
+                            
+                            lugares_nueva = get_lugares_ciudad(ciudad_regreso)
+                            if lugares_nueva and individuo.dias[dia_idx]:
+                                individuo.dias[dia_idx] = [
+                                    random.choice(lugares_nueva)["id"] 
+                                    for _ in range(len(individuo.dias[dia_idx]))
+                                ]
+                            
+                            if DEBUG_REPARAR:
+                                print(f"            Día {dia_idx+1} → {ciudad_regreso} (REGRESO)")
+                    for dia_idx in range(dia_inicio_pedazo, dia_fin_pedazo):
+                        individuo.ciudades[dia_idx] = nueva_ciudad
+                        
+                        lugares_nueva = get_lugares_ciudad(nueva_ciudad)
+                        if lugares_nueva and individuo.dias[dia_idx]:
+                            individuo.dias[dia_idx] = [
+                                random.choice(lugares_nueva)["id"] 
+                                for _ in range(len(individuo.dias[dia_idx]))
+                            ]
     
     # Paso 2: Eliminar TODOS los regresos (intentar múltiples veces)
-    for intento in range(3):
-        ciudades_vistas = set()
-        cambios = False
+    # ⚠️ IMPORTANTE: Solo si AGRUPAR=False, porque con AGRUPAR=True 
+    # el Paso 1 ya garantiza que no hay bloques > MAX_DIAS_POR_CIUDAD
+    if not AGRUPAR:
+        if DEBUG_REPARAR:
+            print(f"\n🔄 [DEBUG] PASO 2: Eliminar regresos...")
         
-        i = 0
-        while i < len(individuo.ciudades):
-            ciudad_actual = individuo.ciudades[i]
+        for intento in range(3):
+            ciudades_vistas = set()
+            cambios = False
             
-            # Detectar regreso
-            es_regreso = (ciudad_actual in ciudades_vistas and 
-                         (i == 0 or individuo.ciudades[i-1] != ciudad_actual))
+            if DEBUG_REPARAR:
+                print(f"\n   Intento {intento+1}/3")
             
-            if es_regreso:
-                # Buscar ciudad NO visitada
-                candidatas = [c for c in ciudades_disponibles 
-                             if c not in ciudades_vistas]
+            i = 0
+            while i < len(individuo.ciudades):
+                ciudad_actual = individuo.ciudades[i]
                 
-                if not candidatas and i > 0:
+                # Detectar regreso
+                es_regreso = (ciudad_actual in ciudades_vistas and 
+                             (i == 0 or individuo.ciudades[i-1] != ciudad_actual))
+                
+                if es_regreso:
+                    if DEBUG_REPARAR:
+                        print(f"      ⚠️  Día {i+1}: {ciudad_actual} es REGRESO (ya visitada)")
+                    
+                    # Buscar ciudad NO visitada
                     candidatas = [c for c in ciudades_disponibles 
-                                 if c != individuo.ciudades[i-1]]
+                                 if c not in ciudades_vistas]
+                    
+                    if not candidatas and i > 0:
+                        candidatas = [c for c in ciudades_disponibles 
+                                     if c != individuo.ciudades[i-1]]
+                    
+                    if candidatas:
+                        nueva_ciudad = random.choice(candidatas)
+                        individuo.ciudades[i] = nueva_ciudad
+                        cambios = True
+                        
+                        if DEBUG_REPARAR:
+                            print(f"         🔄 Cambiando a {nueva_ciudad}")
+                        
+                        lugares_nueva = get_lugares_ciudad(nueva_ciudad)
+                        if lugares_nueva:
+                            individuo.dias[i] = [
+                                random.choice(lugares_nueva)["id"] 
+                                for _ in range(len(individuo.dias[i]))
+                            ]
+                        
+                        ciudad_actual = nueva_ciudad
                 
-                if candidatas:
-                    nueva_ciudad = random.choice(candidatas)
-                    individuo.ciudades[i] = nueva_ciudad
-                    cambios = True
-                    
-                    lugares_nueva = get_lugares_ciudad(nueva_ciudad)
-                    if lugares_nueva:
-                        individuo.dias[i] = [
-                            random.choice(lugares_nueva)["id"] 
-                            for _ in range(len(individuo.dias[i]))
-                        ]
-                    
-                    ciudad_actual = nueva_ciudad
+                if i > 0 and individuo.ciudades[i] != individuo.ciudades[i-1]:
+                    ciudades_vistas.add(individuo.ciudades[i-1])
+                
+                i += 1
             
-            if i > 0 and individuo.ciudades[i] != individuo.ciudades[i-1]:
-                ciudades_vistas.add(individuo.ciudades[i-1])
-            
-            i += 1
-        
-        if not cambios:
-            break
+            if not cambios:
+                break
+    else:
+        if DEBUG_REPARAR:
+            print(f"\n🔄 [DEBUG] PASO 2: OMITIDO (AGRUPAR=True, Paso 1 suficiente)")
     
     return individuo
 
@@ -427,6 +566,14 @@ def evaluar_individuo(individuo: Individual) -> float:
     gasto_acumulado = 0
     individuo.transportes_intercity = []
     
+    # ⚠️ CONTADOR DE VIOLACIONES CRÍTICAS
+    violaciones_ciudades = 0
+    violaciones_horarios = 0
+    
+    # ⚠️ VALIDACIÓN: Si el individuo viola restricciones de ciudades
+    if not validar_restricciones_ciudades(individuo):
+        violaciones_ciudades += 1
+    
     for dia_idx in range(len(individuo.dias)):
         tiempo_dia, dist_dia, puntos_dia = calcular_tiempo_dia(individuo, dia_idx)
         lugares_dia = get_lugares_por_ids(individuo.dias[dia_idx])
@@ -492,7 +639,6 @@ def evaluar_individuo(individuo: Individual) -> float:
             tiempo_visita = lugar['tiempo_visita']
             hora_fin_visita = hora_actual + tiempo_visita
             
-            # VERIFICACIÓN CRÍTICA: Horario de apertura
             if tipo in HORARIOS_TIPO:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
@@ -501,16 +647,10 @@ def evaluar_individuo(individuo: Individual) -> float:
                 if tipo == "bar" and cierre < apertura:
                     cierre = 26 * 60
                 
-                # PROHIBIDO: Comenzar visita antes de apertura O terminar después de cierre
                 if hora_actual < apertura or hora_fin_visita > cierre:
+                    # Contar violación en lugar de retornar inmediatamente
+                    violaciones_horarios += 1
                     fitness -= PENALIZACION_FUERA_HORARIO_APERTURA
-                    # Penalización adicional proporcional al tiempo fuera de horario
-                    if hora_actual < apertura:
-                        minutos_fuera = apertura - hora_actual
-                        fitness -= minutos_fuera * 2  # 2 puntos por minuto fuera
-                    if hora_fin_visita > cierre:
-                        minutos_fuera = hora_fin_visita - cierre
-                        fitness -= minutos_fuera * 2
             
             if tipo in PRECIOS_TIPO:
                 gasto_dia += PRECIOS_TIPO[tipo]
@@ -597,7 +737,15 @@ def crossover_dos_puntos(padre1: Individual, padre2: Individual) -> Tuple[Indivi
         hijo1_ciudades.append(padre1.ciudades[dia_idx])
         hijo2_ciudades.append(padre2.ciudades[dia_idx])
     
-    return Individual(hijo1_dias, hijo1_ciudades), Individual(hijo2_dias, hijo2_ciudades)
+    hijo1 = Individual(hijo1_dias, hijo1_ciudades)
+    hijo2 = Individual(hijo2_dias, hijo2_ciudades)
+    
+    if not validar_restricciones_ciudades(hijo1):
+        hijo1 = reparar_individuo(hijo1)
+    if not validar_restricciones_ciudades(hijo2):
+        hijo2 = reparar_individuo(hijo2)
+    
+    return hijo1, hijo2
 
 def mutar(individuo: Individual):
     for dia_idx in range(len(individuo.dias)):
@@ -650,8 +798,14 @@ def mutar(individuo: Individual):
                     individuo.dias[dia_idx] = [
                         random.choice(lugares_nueva)["id"] for _ in range(len(dia))
                     ]
+    
+    # ⚠️ CRÍTICO: Validar y reparar después de mutar
     if not validar_restricciones_ciudades(individuo):
-        individuo = reparar_individuo(individuo)
+        # La reparación devuelve un nuevo individuo, hay que copiarlo
+        individuo_reparado = reparar_individuo(individuo)
+        individuo.dias = individuo_reparado.dias
+        individuo.ciudades = individuo_reparado.ciudades
+
 
 
 def algoritmo_genetico_espana(
@@ -734,7 +888,6 @@ def algoritmo_genetico_espana(
             padre2 = seleccion_torneo(poblacion)
             
             hijo1, hijo2 = crossover_dos_puntos(padre1, padre2)
-            
             mutar(hijo1)
             mutar(hijo2)
 
@@ -760,7 +913,7 @@ def algoritmo_genetico_espana(
         gen += 1
         
         tiempo_desde_reporte = time_module.time() - ultimo_reporte
-        if (gen % 50 == 0) or (tiempo_desde_reporte >= 300):
+        if (gen % 50 == 0) or (tiempo_desde_reporte >= 60):
             if modo_tiempo:
                 tiempo_restante = tiempo_limite_segundos - tiempo_transcurrido
                 mins_restantes = int(tiempo_restante // 60)
@@ -1034,7 +1187,7 @@ if __name__ == "__main__":
             "num_dias": 20,
             "lugares_por_dia": 12,
             "tam_poblacion": 500,
-            "num_generaciones": 1000,
+            "num_generaciones": 500,
             "tasa_elitismo": 0.10,
             "descripcion": "Máxima calidad de solución"
         }

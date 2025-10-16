@@ -42,4 +42,3 @@ echo   - ag_3.json (resultados del algoritmo)
 echo   - Carpeta con graficas y analisis
 echo.
 echo ============================================================================
-pause
