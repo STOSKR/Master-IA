@@ -8,7 +8,7 @@ echo ===========================================================================
 echo Hora inicio: %time%
 echo.
 
-python ejecutar_config_individual.py --nombre "Exploracion_5000_8h" --poblacion 5000 --elitismo 0.10 --horas 8 --guardar-json --guardar-grafica --output-dir resultados_8h
+python ejecutar_config_individual.py --nombre "Exploracion_5000_8h" --poblacion 5000 --elitismo 0.10 --guardar-json --guardar-grafica --output-dir resultados_8h
 
 echo.
 echo COMPLETADO - Hora fin: %time%

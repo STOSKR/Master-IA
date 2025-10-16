@@ -29,12 +29,11 @@ def parsear_argumentos():
     parser.add_argument('--elitismo', type=float, default=0.15,
                         help='Tasa de elitismo 0.05-0.35 (default: 0.15)')
     
-    # Criterio de parada (uno de los dos)
-    grupo_parada = parser.add_mutually_exclusive_group(required=True)
-    grupo_parada.add_argument('--generaciones', type=int,
-                              help='Número de generaciones a ejecutar')
-    grupo_parada.add_argument('--horas', type=float,
-                              help='Tiempo límite en HORAS (puede ser decimal: 0.5 = 30min, 8 = 8 horas)')
+    # Criterio de parada (uno de los dos, si no se especifica ninguno usa --horas 1.0 por defecto)
+    parser.add_argument('--generaciones', type=int, default=None,
+                        help='Número de generaciones a ejecutar')
+    parser.add_argument('--horas', type=float, default=None,
+                        help='Tiempo límite en HORAS (puede ser decimal: 0.5 = 30min, 8 = 8 horas) (default: 1.0)')
     
     # Opciones adicionales
     parser.add_argument('--guardar-json', action='store_true',
@@ -51,6 +50,11 @@ def parsear_argumentos():
 
 def ejecutar_con_config(args):
     """Ejecuta el algoritmo con la configuración especificada"""
+    
+    # Si no se especificó ni generaciones ni horas, usar 1 hora por defecto
+    if args.generaciones is None and args.horas is None:
+        args.horas = 0.01
+        print("⚠️  No se especificó --generaciones ni --horas, usando --horas 1.0 por defecto\n")
     
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     nombre_archivo = args.nombre.replace(' ', '_').replace('/', '-')
