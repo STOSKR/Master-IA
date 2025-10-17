@@ -1411,7 +1411,7 @@ def algoritmo_genetico_espana(
         if generaciones_estancadas >= umbral_estancamiento:
             log(f"\n⚠️  ESTANCAMIENTO DETECTADO: {generaciones_estancadas} generaciones sin mejora")
             log(f"   Mejor fitness actual: {mejor_fitness_era:.1f}")
-            poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia, mejor_global)
+            poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia)
             generaciones_estancadas = 0
             mejor_fitness_era = mejor_global.fitness
         

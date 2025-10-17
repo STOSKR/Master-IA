@@ -70,3 +70,11 @@ Iniciando evolución (hasta 21600s)...
 2025-10-17 19:28:41 - INFO -   Gen  133 | Tiempo:   94.7m (resta: 265m) | Fitness:    142.5 | Puntos: 16982 | Dist:   122.4km
 2025-10-17 19:30:01 - INFO -   Gen  136 | Tiempo:   96.0m (resta: 264m) | Fitness:    142.5 | Puntos: 16982 | Dist:   122.4km
 2025-10-17 19:31:20 - INFO -   Gen  139 | Tiempo:   97.3m (resta: 262m) | Fitness:    142.5 | Puntos: 16982 | Dist:   122.4km
+2025-10-17 19:32:42 - INFO -   Gen  142 | Tiempo:   98.7m (resta: 261m) | Fitness:    143.0 | Puntos: 16942 | Dist:   135.7km
+2025-10-17 19:34:03 - INFO -   Gen  145 | Tiempo:  100.0m (resta: 260m) | Fitness:    143.0 | Puntos: 16942 | Dist:   135.7km
+2025-10-17 19:35:22 - INFO -   Gen  148 | Tiempo:  101.4m (resta: 258m) | Fitness:    143.0 | Puntos: 16942 | Dist:   135.7km
+2025-10-17 19:36:16 - INFO -   Gen  150 | Tiempo:  102.2m (resta: 257m) | Fitness:    143.3 | Puntos: 16875 | Dist:   136.2km
+2025-10-17 19:37:34 - INFO -   Gen  153 | Tiempo:  103.6m (resta: 256m) | Fitness:    143.3 | Puntos: 16875 | Dist:   136.2km
+2025-10-17 19:38:53 - INFO -   Gen  156 | Tiempo:  104.9m (resta: 255m) | Fitness:    143.3 | Puntos: 16875 | Dist:   136.2km
+2025-10-17 19:40:11 - INFO -   Gen  159 | Tiempo:  106.2m (resta: 253m) | Fitness:    143.8 | Puntos: 17018 | Dist:   121.5km
+2025-10-17 19:41:25 - INFO -   Gen  162 | Tiempo:  107.4m (resta: 252m) | Fitness:    143.8 | Puntos: 17018 | Dist:   121.5km
