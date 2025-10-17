@@ -15,3 +15,22 @@
 2025-10-17 17:53:34 - INFO - ================================================================================
 
 2025-10-17 17:53:34 - INFO - Creando población inicial
+2025-10-17 18:24:39 - INFO - Evaluando población inicial
+2025-10-17 18:25:08 - INFO - 
+Iniciando evolución (hasta 21600s)...
+
+2025-10-17 18:26:28 - INFO -   Gen    1 | Tiempo:   31.6m (resta: 328m) | Fitness:    121.1 | Puntos: 16256 | Dist:   162.1km
+2025-10-17 18:27:31 - INFO -   Gen    2 | Tiempo:   32.9m (resta: 327m) | Fitness:    121.1 | Puntos: 16256 | Dist:   162.1km
+2025-10-17 18:28:56 - INFO -   Gen    4 | Tiempo:   34.7m (resta: 325m) | Fitness:    125.6 | Puntos: 16502 | Dist:   143.5km
+2025-10-17 18:30:13 - INFO -   Gen    6 | Tiempo:   36.0m (resta: 323m) | Fitness:    125.6 | Puntos: 16502 | Dist:   143.5km
+2025-10-17 18:31:24 - INFO -   Gen    8 | Tiempo:   37.3m (resta: 322m) | Fitness:    128.0 | Puntos: 16651 | Dist:   181.0km
+2025-10-17 18:32:32 - INFO -   Gen   10 | Tiempo:   38.4m (resta: 321m) | Fitness:    128.0 | Puntos: 16651 | Dist:   181.0km
+2025-10-17 18:33:37 - INFO -   Gen   12 | Tiempo:   39.5m (resta: 320m) | Fitness:    128.0 | Puntos: 16651 | Dist:   181.0km
+2025-10-17 18:34:40 - INFO -   Gen   14 | Tiempo:   40.6m (resta: 319m) | Fitness:    128.0 | Puntos: 16651 | Dist:   181.0km
+2025-10-17 18:35:40 - INFO -   Gen   16 | Tiempo:   41.6m (resta: 318m) | Fitness:    128.0 | Puntos: 16651 | Dist:   179.4km
+2025-10-17 18:37:07 - INFO -   Gen   19 | Tiempo:   43.1m (resta: 316m) | Fitness:    130.5 | Puntos: 16805 | Dist:   176.7km
+2025-10-17 18:38:31 - INFO -   Gen   22 | Tiempo:   44.5m (resta: 315m) | Fitness:    130.6 | Puntos: 16811 | Dist:   175.2km
+2025-10-17 18:39:56 - INFO -   Gen   25 | Tiempo:   45.9m (resta: 314m) | Fitness:    131.6 | Puntos: 16815 | Dist:   178.7km
+2025-10-17 18:41:22 - INFO -   Gen   28 | Tiempo:   47.4m (resta: 312m) | Fitness:    132.6 | Puntos: 16811 | Dist:   177.7km
+2025-10-17 18:42:43 - INFO -   Gen   31 | Tiempo:   48.7m (resta: 311m) | Fitness:    132.6 | Puntos: 16811 | Dist:   177.7km
+2025-10-17 18:44:04 - INFO -   Gen   34 | Tiempo:   50.1m (resta: 309m) | Fitness:    133.6 | Puntos: 16809 | Dist:   173.7km

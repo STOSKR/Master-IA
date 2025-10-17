@@ -1,12 +1,29 @@
 import * as THREE from "three";
 import { endsUpInValidPosition } from "../utilities/endsUpInValidPosition";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { metadata as rows, addRows } from "./Map";
 import { gameState } from "../gameState";
 
-export const player = Player();
+export let player;
 
-function Player() {
-    const player = new THREE.Group();
+export async function createPlayer() {
+    const playerContainer = new THREE.Group();
+
+    const loader = new GLTFLoader();
+    const gltf = await loader.loadAsync("/models/vaquero.glb");
+    const playerModel = gltf.scene;
+
+    playerModel.scale.set(8, 8, 8);
+    playerModel.traverse(function (node) {
+        if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+        }
+    });
+
+    playerContainer.add(playerModel);
+    player = playerContainer;
+    /*
     const body = new THREE.Mesh(
         new THREE.BoxGeometry(15, 15, 20),
         new THREE.MeshLambertMaterial({
@@ -33,8 +50,8 @@ function Player() {
 
     const playerContainer = new THREE.Group();
     playerContainer.add(player);
-
-    return playerContainer;
+    */
+    return player;
 }
 
 export const position = {
@@ -53,16 +70,13 @@ export function initializePlayer() {
     player.position.y = 0;
     player.children[0].position.z = 0;
 
-    // Initialize metadata
     position.currentRow = 0;
     position.currentTile = 0;
 
-    // Clear the moves queue
     clearMoveQueue();
 }
 
 export function queueMove(direction) {
-    // Si el juego no está activo, vacía la cola y no añadas nuevos movimientos
     if (!gameState.isActive) {
         clearMoveQueue();
         return;
@@ -77,7 +91,6 @@ export function queueMove(direction) {
     );
 
     if (!isValidMove) {
-        // Guardar la dirección intentada junto con el salto
         movesQueue.push({ type: "jump", direction });
         return;
     }
@@ -93,7 +106,6 @@ export function stepCompleted() {
 
     const move = movesQueue.shift();
 
-    // Si es un salto, no actualizar la posición
     if (typeof move === 'object' && move.type === 'jump') {
         return;
     }
