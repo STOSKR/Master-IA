@@ -434,8 +434,10 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
             
             # Asignar días
             lugares_ciudad = get_lugares_ciudad(ciudad_actual)
-            if len(lugares_ciudad) < lugares_por_dia:
-                lugares_ciudad = lugares_turisticos_espana
+            
+            # ⚠️ CRÍTICO: Si no hay suficientes lugares, permitir repeticiones
+            # NO usar lugares de otras ciudades (causaría distancias intercity enormes)
+            permitir_repeticiones = len(lugares_ciudad) < lugares_por_dia
             
             for _ in range(dias_en_ciudad):
                 if dia_actual >= num_dias:
@@ -449,10 +451,14 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
                 if len(lugares_disponibles) < lugares_por_dia:
                     lugares_disponibles = lugares_ciudad
                 
-                lugares_dia = random.sample(
-                    lugares_disponibles, 
-                    min(lugares_por_dia, len(lugares_disponibles))
-                )
+                # Si hay suficientes lugares, usar sample (sin repetición)
+                # Si no, usar choices (con repetición permitida)
+                if len(lugares_disponibles) >= lugares_por_dia:
+                    lugares_dia = random.sample(lugares_disponibles, lugares_por_dia)
+                else:
+                    # Con repetición: podemos elegir el mismo lugar varias veces si es necesario
+                    lugares_dia = random.choices(lugares_disponibles, k=lugares_por_dia)
+                
                 ids_dia = [l["id"] for l in lugares_dia]
                 
                 lugares_visitados_global.update(ids_dia)
@@ -1230,8 +1236,8 @@ if __name__ == "__main__":
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
             "num_dias": 20,
             "lugares_por_dia": 12,
-            "tam_poblacion": 50,
-            "num_generaciones": 500,
+            "tam_poblacion": 1000,
+            "num_generaciones": 600,
             "tasa_elitismo": 0.10,
             "descripcion": "Máxima calidad de solución"
         }

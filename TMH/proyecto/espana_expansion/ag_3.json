@@ -6,15 +6,15 @@
   "num_dias": 20,
   "ciudades_visitadas": [
     "Toledo",
-    "Córdoba",
-    "Madrid",
-    "Barcelona",
-    "Bilbao",
-    "Santiago",
-    "San Sebastián",
     "Sevilla",
+    "Granada",
+    "San Sebastián",
+    "Santiago",
+    "Córdoba",
+    "Bilbao",
     "Valencia",
-    "Granada"
+    "Madrid",
+    "Barcelona"
   ],
   "configuracion": {
     "poblacion": 50,

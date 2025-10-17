@@ -1,0 +1,63 @@
+2025-10-17 01:59:50 - INFO - ================================================================================
+2025-10-17 01:59:50 - INFO - INICIO DE EJECUCIÓN - Algoritmo Genético España
+2025-10-17 01:59:50 - INFO - Log guardado en: logs\ag_espana_17_01_59.log
+2025-10-17 01:59:50 - INFO - ================================================================================
+2025-10-17 01:59:50 - INFO - 
+================================================================================
+2025-10-17 01:59:50 - INFO - CONFIGURACIÓN SELECCIONADA: Modo 3
+2025-10-17 01:59:50 - INFO - Nombre: ULTRA-COMPLEJA (1.5-2 horas)
+2025-10-17 01:59:50 - INFO - Descripción: Máxima calidad de solución
+2025-10-17 01:59:50 - INFO - ================================================================================
+
+2025-10-17 01:59:50 - INFO - 
+================================================================================
+2025-10-17 01:59:50 - INFO - ALGORITMO GENÉTICO
+2025-10-17 01:59:50 - INFO - ================================================================================
+2025-10-17 01:59:50 - INFO - Días: 20
+2025-10-17 01:59:50 - INFO - Lugares/día: 12
+2025-10-17 01:59:50 - INFO - Población: 1000
+2025-10-17 01:59:50 - INFO - Generaciones: 600
+2025-10-17 01:59:50 - INFO - Elitismo: 10%
+2025-10-17 01:59:50 - INFO - Dataset: 1367 lugares en 10 ciudades
+2025-10-17 01:59:50 - INFO - ================================================================================
+
+2025-10-17 01:59:50 - INFO - Creando población inicial
+2025-10-17 01:59:51 - INFO - Evaluando población inicial
+2025-10-17 01:59:52 - INFO - 
+Iniciando evolución (600 generaciones)...
+
+2025-10-17 02:00:52 - INFO -   Gen   39/600 | Mejor fitness: -188227.8 | Puntos: 12454 | Tiempo:  540.6h | Dist:  1610.4km
+2025-10-17 02:01:09 - INFO -   Gen   50/600 | Mejor fitness: -138402.7 | Puntos: 12350 | Tiempo:  459.6h | Dist:  1206.9km
+2025-10-17 02:02:10 - INFO -   Gen   89/600 | Mejor fitness: -69700.2 | Puntos: 12264 | Tiempo:  446.6h | Dist:  1149.5km
+2025-10-17 02:02:27 - INFO -   Gen  100/600 | Mejor fitness: -65340.4 | Puntos: 12187 | Tiempo:  411.9h | Dist:   987.7km
+2025-10-17 02:03:28 - INFO -   Gen  139/600 | Mejor fitness: -20704.4 | Puntos: 12052 | Tiempo:  290.6h | Dist:   404.6km
+2025-10-17 02:03:43 - INFO - 
+⚠️  ESTANCAMIENTO DETECTADO: 20 generaciones sin mejora
+2025-10-17 02:03:43 - INFO -    Mejor fitness actual: -20704.4
+2025-10-17 02:03:43 - INFO - 
+   🔄 REINICIANDO POBLACIÓN (manteniendo mejor individuo)...
+2025-10-17 02:03:44 - INFO -    ✅ Nueva población creada (1000 individuos)
+
+2025-10-17 02:03:47 - INFO -   Gen  150/600 | Mejor fitness: -20704.4 | Puntos: 12052 | Tiempo:  290.6h | Dist:   404.6km
+2025-10-17 02:04:48 - INFO - 
+⚠️  ESTANCAMIENTO DETECTADO: 20 generaciones sin mejora
+2025-10-17 02:04:48 - INFO -    Mejor fitness actual: -10192.9
+2025-10-17 02:04:48 - INFO - 
+   🔄 REINICIANDO POBLACIÓN (manteniendo mejor individuo)...
+2025-10-17 02:04:49 - INFO -    ✅ Nueva población creada (1000 individuos)
+
+2025-10-17 02:04:49 - INFO -   Gen  189/600 | Mejor fitness: -10192.9 | Puntos: 12217 | Tiempo:  287.2h | Dist:   390.4km
+2025-10-17 02:05:06 - INFO -   Gen  200/600 | Mejor fitness: -10192.6 | Puntos: 12217 | Tiempo:  287.0h | Dist:   389.6km
+2025-10-17 02:06:07 - INFO -   Gen  239/600 | Mejor fitness:   -162.1 | Puntos: 12308 | Tiempo:  284.7h | Dist:   383.1km
+2025-10-17 02:06:24 - INFO -   Gen  250/600 | Mejor fitness:   -162.1 | Puntos: 12308 | Tiempo:  284.7h | Dist:   383.1km
+2025-10-17 02:06:38 - INFO - 
+⚠️  ESTANCAMIENTO DETECTADO: 20 generaciones sin mejora
+2025-10-17 02:06:38 - INFO -    Mejor fitness actual: -162.1
+2025-10-17 02:06:38 - INFO - 
+   🔄 REINICIANDO POBLACIÓN (manteniendo mejor individuo)...
+2025-10-17 02:06:39 - INFO -    ✅ Nueva población creada (1000 individuos)
+
+2025-10-17 02:07:25 - INFO -   Gen  289/600 | Mejor fitness:   -102.7 | Puntos: 12297 | Tiempo:  286.1h | Dist:   378.7km
+2025-10-17 02:07:42 - INFO -   Gen  300/600 | Mejor fitness:   8229.1 | Puntos: 12201 | Tiempo:  261.3h | Dist:   239.6km
+2025-10-17 02:08:42 - INFO -   Gen  339/600 | Mejor fitness:   8489.9 | Puntos: 12556 | Tiempo:  253.1h | Dist:   220.3km
+2025-10-17 02:08:59 - INFO -   Gen  350/600 | Mejor fitness:   8575.9 | Puntos: 12450 | Tiempo:  260.4h | Dist:   247.1km
