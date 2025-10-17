@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { metadata as rows } from "./components/Map";
-import { player, position, clearMoveQueue } from "./components/Player";
+// 1. Importa movesQueue para saber si el jugador está saltando
+import { player, position, clearMoveQueue, movesQueue } from "./components/Player";
 import { setGameActive } from "./gameState";
 
 const resultDOM = document.getElementById("result-container");
@@ -15,14 +16,10 @@ export function hitTest() {
     playerBoundingBox.setFromObject(player, true);
 
     if (row.type === "car" || row.type === "truck") {
-        const playerBoundingBox = new THREE.Box3();
-        playerBoundingBox.setFromObject(player);
-
         row.vehicles.forEach(({ ref }) => {
             if (!ref) throw Error("Vehicle reference is missing");
 
-            const vehicleBoundingBox = new THREE.Box3();
-            vehicleBoundingBox.setFromObject(ref);
+            const vehicleBoundingBox = new THREE.Box3().setFromObject(ref);
 
             if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
                 if (!resultDOM || !finalScoreDOM) return;
@@ -35,7 +32,7 @@ export function hitTest() {
         });
     }
 
-    if (row.type === "water") {
+    if (row.type === "water" && movesQueue.length === 0) {
         const isOnLog = row.vehicles.some(({ ref }) => {
             if (!ref) return false;
             const logBoundingBox = new THREE.Box3().setFromObject(ref);
