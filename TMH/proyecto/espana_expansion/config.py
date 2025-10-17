@@ -16,6 +16,11 @@ SELECCION_PORCENTAJE = 0.2
 
 UMBRAL_ESTANCAMIENTO = 50
 
+# Factor de escalado para fitness (divide el fitness por este valor)
+# Esto hace que los números sean más manejables en logs y gráficas
+# Ejemplo: fitness_raw = 15000 → fitness_escalado = 15000/100 = 150
+FITNESS_SCALE_FACTOR = 100.0  # Dividir fitness entre 100
+
 PESO_PUNTOS_INICIAL = 0.9
 PESO_DISTANCIA_INICIAL = 1.0
 AJUSTE_PESO_POR_DIA = 0.01

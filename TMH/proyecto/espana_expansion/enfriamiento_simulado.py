@@ -345,10 +345,12 @@ def enfriamiento_simulado(
     fig, ax = plt.subplots()
     ax.set_title("Evolución del Fitness")
     ax.set_xlabel("Iteración")
-    ax.set_ylabel("Fitness")
+    ax.set_ylabel("Fitness (escala logarítmica)")
+    ax.set_yscale('log')  # Escala logarítmica en eje Y
     line_actual, = ax.plot([], [], label="Fitness actual")
     line_mejor, = ax.plot([], [], label="Mejor fitness global")
     ax.legend()
+    ax.grid(True, alpha=0.3, which='both', linestyle='--')  # Grid para ambas escalas
     
     sa_logger.info("🔄 Iniciando búsqueda...")
     
@@ -387,8 +389,8 @@ def enfriamiento_simulado(
         # Calcular diferencia de fitness
         delta_fitness = vecino.fitness - solucion_actual.fitness
         
-        # DETECCIÓN DE SALTOS ANORMALES
-        if debug_saltos and abs(delta_fitness) > 5000:
+        # DETECCIÓN DE SALTOS GRANDES (más de 20 en fitness escalado ~ 2000 en fitness original)
+        if debug_saltos and abs(delta_fitness) > 20:
             sa_logger.warning("="*80)
             sa_logger.warning(f"⚠️  SALTO ANORMAL DETECTADO en iteración {iteracion}")
             sa_logger.warning(f"   Fitness actual: {solucion_actual.fitness:.1f}")
@@ -435,16 +437,83 @@ def enfriamiento_simulado(
         if aceptado:
             # Actualizar solución actual (puede ser peor que la anterior)
             fitness_antes_actualizar = solucion_actual.fitness
+            puntos_antes = solucion_actual.puntos_totales
+            tiempo_antes = solucion_actual.tiempo_total
+            distancia_antes = solucion_actual.distancia_total
+            
             solucion_actual = vecino
             total_aceptaciones += 1
             
-            # Log si hubo un cambio significativo
-            if debug_saltos and abs(delta_fitness) > 1000:
+            # Log si hubo un cambio significativo (>10 en fitness escalado ~ 1000 original)
+            if debug_saltos and abs(delta_fitness) > 10:
                 sa_logger.info(f"Iter {iteracion}: Aceptada solución con delta={delta_fitness:+.1f} (T={temperatura:.2f})")
+                
+                # Detalles del cambio
+                delta_puntos_cambio = solucion_actual.puntos_totales - puntos_antes
+                delta_tiempo_cambio = solucion_actual.tiempo_total - tiempo_antes
+                delta_distancia_cambio = solucion_actual.distancia_total - distancia_antes
+                
+                sa_logger.info(f"  📊 Desglose del cambio:")
+                sa_logger.info(f"     Puntos: {delta_puntos_cambio:+d} → {solucion_actual.puntos_totales} total")
+                sa_logger.info(f"     Tiempo: {delta_tiempo_cambio:+.1f}min → {solucion_actual.tiempo_total:.1f}min total")
+                sa_logger.info(f"     Distancia: {delta_distancia_cambio:+.1f}km → {solucion_actual.distancia_total:.1f}km total")
+                
+                # Verificar duplicados
+                duplicados_despues = sum(1 for dia in solucion_actual.dias if len(dia) != len(set(dia)))
+                if duplicados_despues > 0:
+                    sa_logger.warning(f"     ⚠️ Nueva solución tiene duplicados en {duplicados_despues} día(s)")
             
             # Verificar si es la MEJOR GLOBAL encontrada hasta ahora
             if solucion_actual.fitness > mejor_solucion.fitness:
                 mejora_sobre_mejor = solucion_actual.fitness - mejor_solucion.fitness
+                
+                # Log detallado para mejoras grandes (>10 en fitness escalado ~ 1000 original)
+                if mejora_sobre_mejor > 10:
+                    sa_logger.info(f"="*80)
+                    sa_logger.info(f"🎯 GRAN MEJORA DETECTADA: +{mejora_sobre_mejor:.1f} puntos de fitness")
+                    sa_logger.info(f"  ANTES (mejor anterior):")
+                    sa_logger.info(f"    • Fitness: {mejor_solucion.fitness:.1f}")
+                    sa_logger.info(f"    • Puntos: {mejor_solucion.puntos_totales}")
+                    sa_logger.info(f"    • Tiempo: {mejor_solucion.tiempo_total:.1f}min")
+                    sa_logger.info(f"    • Distancia: {mejor_solucion.distancia_total:.1f}km")
+                    
+                    sa_logger.info(f"  DESPUÉS (nueva mejor):")
+                    sa_logger.info(f"    • Fitness: {solucion_actual.fitness:.1f}")
+                    sa_logger.info(f"    • Puntos: {solucion_actual.puntos_totales}")
+                    sa_logger.info(f"    • Tiempo: {solucion_actual.tiempo_total:.1f}min")
+                    sa_logger.info(f"    • Distancia: {solucion_actual.distancia_total:.1f}km")
+                    
+                    sa_logger.info(f"  DIFERENCIAS:")
+                    delta_puntos = solucion_actual.puntos_totales - mejor_solucion.puntos_totales
+                    delta_tiempo = solucion_actual.tiempo_total - mejor_solucion.tiempo_total
+                    delta_distancia = solucion_actual.distancia_total - mejor_solucion.distancia_total
+                    
+                    sa_logger.info(f"    • Δ Puntos: {delta_puntos:+d}")
+                    sa_logger.info(f"    • Δ Tiempo: {delta_tiempo:+.1f}min")
+                    sa_logger.info(f"    • Δ Distancia: {delta_distancia:+.1f}km")
+                    
+                    # Calcular contribución de cada componente al fitness
+                    # Fitness = (puntos - distancia * 0.3) / FITNESS_SCALE_FACTOR
+                    contrib_puntos = delta_puntos / FITNESS_SCALE_FACTOR
+                    contrib_distancia = -delta_distancia * 0.3 / FITNESS_SCALE_FACTOR
+                    
+                    sa_logger.info(f"  CONTRIBUCIÓN AL FITNESS:")
+                    sa_logger.info(f"    • Puntos: {contrib_puntos:+.1f} (Δ{delta_puntos:+d} × 1.0 ÷ {FITNESS_SCALE_FACTOR})")
+                    sa_logger.info(f"    • Distancia: {contrib_distancia:+.1f} (Δ{delta_distancia:+.1f}km × 0.3 ÷ {FITNESS_SCALE_FACTOR})")
+                    sa_logger.info(f"    • TOTAL calculado: {contrib_puntos + contrib_distancia:+.2f}")
+                    sa_logger.info(f"    • TOTAL real: {mejora_sobre_mejor:+.2f}")
+                    diferencia_calc = abs((contrib_puntos + contrib_distancia) - mejora_sobre_mejor)
+                    if diferencia_calc > 1:  # Ajustado a escala (era 10)
+                        sa_logger.warning(f"    ⚠️ Discrepancia de {diferencia_calc:.2f} (probablemente por penalizaciones)")
+                    
+                    # Verificar duplicados
+                    for dia_idx, dia in enumerate(solucion_actual.dias):
+                        if len(dia) != len(set(dia)):
+                            duplicados = [x for x in dia if dia.count(x) > 1]
+                            sa_logger.warning(f"    ⚠️ Día {dia_idx+1} tiene duplicados: {set(duplicados)}")
+                    
+                    sa_logger.info(f"="*80)
+                
                 mejor_solucion = copy.deepcopy(solucion_actual)
                 iteraciones_sin_mejora = 0
                 mejoras_encontradas += 1
@@ -463,8 +532,8 @@ def enfriamiento_simulado(
             total_rechazos += 1
             iteraciones_sin_mejora += 1
             
-            # Log rechazos significativos
-            if debug_saltos and delta_fitness > 2000:
+            # Log rechazos significativos (>20 en fitness escalado ~ 2000 original)
+            if debug_saltos and delta_fitness > 20:
                 probabilidad = math.exp(delta_fitness / temperatura) if temperatura > 0 else 0
                 sa_logger.debug(f"Iter {iteracion}: Rechazada mejora de {delta_fitness:+.1f} (prob={probabilidad:.4f}, T={temperatura:.2f})")
         
@@ -892,16 +961,18 @@ def comparar_con_sin_2opt(
     axes[0, 0].plot(resultados_sin["historial_mejor_fitness"], label='Sin 2-opt', linewidth=2, color='red')
     axes[0, 0].set_title('Evolución del Mejor Fitness')
     axes[0, 0].set_xlabel('Iteración')
-    axes[0, 0].set_ylabel('Fitness')
+    axes[0, 0].set_ylabel('Fitness (escala logarítmica)')
+    axes[0, 0].set_yscale('log')  # Escala logarítmica
     axes[0, 0].legend()
-    axes[0, 0].grid(alpha=0.3)
+    axes[0, 0].grid(alpha=0.3, which='both', linestyle='--')
     
     # Gráfica 2: Fitness final
     axes[0, 1].bar(['Con 2-opt', 'Sin 2-opt'], [mejor_con.fitness, mejor_sin.fitness], 
                    color=['green', 'red'], alpha=0.7)
     axes[0, 1].set_title('Fitness Final')
-    axes[0, 1].set_ylabel('Fitness')
-    axes[0, 1].grid(axis='y', alpha=0.3)
+    axes[0, 1].set_ylabel('Fitness (escala logarítmica)')
+    axes[0, 1].set_yscale('log')  # Escala logarítmica
+    axes[0, 1].grid(axis='y', alpha=0.3, which='both', linestyle='--')
     for i, v in enumerate([mejor_con.fitness, mejor_sin.fitness]):
         axes[0, 1].text(i, v, f'{v:.1f}', ha='center', va='bottom', fontweight='bold')
     
@@ -1020,8 +1091,9 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     # Gráfica 1: Fitness
     axes[0, 0].bar(['GA', 'SA'], [mejor_ga.fitness, mejor_sa.fitness], color=['#3498db', '#e74c3c'])
     axes[0, 0].set_title('Fitness Final')
-    axes[0, 0].set_ylabel('Fitness')
-    axes[0, 0].grid(axis='y', alpha=0.3)
+    axes[0, 0].set_ylabel('Fitness (escala logarítmica)')
+    axes[0, 0].set_yscale('log')  # Escala logarítmica
+    axes[0, 0].grid(axis='y', alpha=0.3, which='both', linestyle='--')
     for i, v in enumerate([mejor_ga.fitness, mejor_sa.fitness]):
         axes[0, 0].text(i, v, f'{v:.1f}', ha='center', va='bottom', fontweight='bold')
     

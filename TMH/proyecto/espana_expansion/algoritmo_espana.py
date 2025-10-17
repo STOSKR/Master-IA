@@ -173,12 +173,113 @@ def validar_restricciones_ciudades(individuo: Individual) -> bool:
     return True
 
 def reparar_individuo(individuo: Individual) -> Individual:
+    """
+    Repara un individuo para que cumpla TODAS las restricciones:
+    1. Tiempo por día ≤ TIEMPO_DIA (14 horas = 840 min)
+    2. Máximo MAX_DIAS_POR_CIUDAD consecutivos por ciudad
+    3. Elimina regresos innecesarios si AGRUPAR=False
+    
+    ESTRATEGIA DE REPARACIÓN:
+    - Paso 0: Ajustar tiempo de cada día (CRÍTICO - evita fitness negativo)
+    - Paso 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD
+    - Paso 2: Eliminar regresos innecesarios
+    
+    Returns:
+        Individual reparado y válido
+    """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     
     DEBUG_REPARAR = False  # ⚠️ DEBUG DESACTIVADO
     
     if DEBUG_REPARAR:
         print(f"\n🔧 [DEBUG] INICIANDO REPARACIÓN")
+        print(f"   Total días: {len(individuo.ciudades)}")
+    
+    if DEBUG_REPARAR:
+        print(f"\n🔧 [DEBUG] PASO 0: Ajustar tiempo por día")
+        print(f"   Límite: TIEMPO_DIA = {TIEMPO_DIA} min ({TIEMPO_DIA/60:.1f} horas)")
+    
+    for dia_idx in range(len(individuo.dias)):
+        dia = individuo.dias[dia_idx]
+        ciudad = individuo.ciudades[dia_idx]
+        
+        if not dia:  # Día vacío, skip
+            continue
+        
+        # Calcular tiempo total del día (sin penalizaciones, solo tiempo real)
+        tiempo_dia, dist_dia, puntos_dia = calcular_tiempo_dia(individuo, dia_idx)
+        
+        # Si el día excede el límite, REDUCIR lugares
+        if tiempo_dia > TIEMPO_DIA:
+            exceso = tiempo_dia - TIEMPO_DIA
+            
+            if DEBUG_REPARAR:
+                print(f"   ⚠️ Día {dia_idx+1} ({ciudad}): {tiempo_dia:.0f} min > {TIEMPO_DIA} min (exceso: {exceso:.0f} min)")
+            
+            # Obtener información de lugares con puntuaciones
+            lugares_info = get_lugares_por_ids(dia)
+            
+            # Crear lista de (índice, puntos, tiempo) para ordenar
+            lugares_con_info = [
+                (i, lugar['puntos'], lugar['tiempo_visita'], lugar['id']) 
+                for i, lugar in enumerate(lugares_info)
+            ]
+            
+            # Ordenar por puntos ASCENDENTE (peores primero)
+            lugares_con_info.sort(key=lambda x: x[1])
+            
+            # Eliminar lugares de menor puntuación hasta cumplir el límite
+            lugares_eliminados = 0
+            indices_a_eliminar = []
+            
+            for idx, puntos, tiempo, lugar_id in lugares_con_info:
+                if tiempo_dia <= TIEMPO_DIA:
+                    break  # Ya cumple el límite
+                
+                # Marcar para eliminar
+                indices_a_eliminar.append(idx)
+                
+                # Recalcular tiempo si quitamos este lugar
+                # (aproximación: restar tiempo_visita + tiempo_desplazamiento promedio)
+                tiempo_dia -= tiempo
+                if len(dia) > 1:  # Si hay más de un lugar, restar desplazamiento estimado
+                    tiempo_dia -= 15  # ~3km a 5km/h
+                
+                lugares_eliminados += 1
+                
+                if DEBUG_REPARAR:
+                    print(f"      🗑️  Eliminando lugar #{idx+1} (puntos={puntos}, tiempo={tiempo} min)")
+            
+            # Eliminar lugares (de mayor índice a menor para no afectar índices)
+            for idx in sorted(indices_a_eliminar, reverse=True):
+                dia.pop(idx)
+            
+            # Verificar que quede al menos 1 lugar
+            if not dia:
+                # Si eliminamos todo, poner al menos el mejor lugar de la ciudad
+                lugares_ciudad = get_lugares_ciudad(ciudad)
+                if lugares_ciudad:
+                    mejor_lugar = max(lugares_ciudad, key=lambda x: x['puntos'])
+                    dia.append(mejor_lugar['id'])
+                    if DEBUG_REPARAR:
+                        print(f"      ℹ️  Día quedó vacío, añadiendo mejor lugar: {mejor_lugar['nombre']}")
+            
+            # Actualizar el día en el individuo
+            individuo.dias[dia_idx] = dia
+            
+            # Recalcular tiempo final
+            tiempo_final, _, _ = calcular_tiempo_dia(individuo, dia_idx)
+            
+            if DEBUG_REPARAR:
+                simbolo = "✅" if tiempo_final <= TIEMPO_DIA else "❌"
+                print(f"      {simbolo} Tiempo final: {tiempo_final:.0f} min (eliminados {lugares_eliminados} lugares)")
+    
+    # ========================================================================
+    # PASO 1: CORREGIR BLOQUES QUE EXCEDEN MAX_DIAS_POR_CIUDAD
+    # ========================================================================
+    
+    if DEBUG_REPARAR:
+        print(f"\n🔧 [DEBUG] PASO 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD")
         print(f"   Total días: {len(individuo.ciudades)}")
     
     # Paso 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD
@@ -323,15 +424,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                             
                             if DEBUG_REPARAR:
                                 print(f"            Día {dia_idx+1} → {ciudad_regreso} (REGRESO)")
-                    for dia_idx in range(dia_inicio_pedazo, dia_fin_pedazo):
-                        individuo.ciudades[dia_idx] = nueva_ciudad
-                        
-                        lugares_nueva = get_lugares_ciudad(nueva_ciudad)
-                        if lugares_nueva and individuo.dias[dia_idx]:
-                            individuo.dias[dia_idx] = [
-                                random.choice(lugares_nueva)["id"] 
-                                for _ in range(len(individuo.dias[dia_idx]))
-                            ]
     
     # Paso 2: Eliminar TODOS los regresos (intentar múltiples veces)
     # ⚠️ IMPORTANTE: Solo si AGRUPAR=False, porque con AGRUPAR=True 
@@ -557,7 +649,18 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos:
     return mejor_individuo
 
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
-    return [crear_individuo_aleatorio(num_dias, lugares_por_dia) for _ in range(tam_poblacion)]
+    """
+    Crea la población inicial y REPARA cada individuo para garantizar validez.
+    
+    CRÍTICO: Sin reparación, la población inicial tiene fitness negativo!
+    """
+    poblacion = []
+    for _ in range(tam_poblacion):
+        individuo = crear_individuo_aleatorio(num_dias, lugares_por_dia)
+        # CRÍTICO: Reparar ANTES de evaluar para evitar fitness negativo
+        individuo = reparar_individuo(individuo)
+        poblacion.append(individuo)
+    return poblacion
 
 def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, float]:
     dia = individuo.dias[dia_idx]
@@ -1035,6 +1138,10 @@ def evaluar_individuo(individuo: Individual) -> float:
     
     fitness += puntos_acum
     fitness -= distancia_acum * 0.3
+    
+    # Escalar fitness para trabajar con números más manejables
+    # Esto hace que los logs y gráficas sean más legibles
+    fitness = fitness / FITNESS_SCALE_FACTOR
     
     individuo.tiempo_total = tiempo_acum
     individuo.distancia_total = distancia_acum

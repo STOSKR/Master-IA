@@ -1,0 +1,1611 @@
+2025-10-17 16:30:02,676 - INFO - 📝 Log iniciado: logs\sa_log_17_16_30.txt
+2025-10-17 16:30:02,678 - INFO - 🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria
+2025-10-17 16:30:02,678 - INFO - ================================================================================
+2025-10-17 16:30:02,678 - INFO - 🔥 INICIANDO ENFRIAMIENTO SIMULADO
+2025-10-17 16:30:02,679 - INFO - ================================================================================
+2025-10-17 16:30:02,679 - INFO - 🎲 Generando solución inicial aleatoria...
+2025-10-17 16:30:03,037 - INFO - Solución inicial creada - Fitness: -13358.3, Puntos: 15233
+2025-10-17 16:30:03,037 - INFO -   ✅ La solución del GA es válida (sin duplicados).
+2025-10-17 16:30:03,038 - INFO - 📊 Configuración para Enfriamiento Simulado:
+2025-10-17 16:30:03,038 - INFO -   • Temperatura inicial: 20.0
+2025-10-17 16:30:03,038 - INFO -   • Temperatura mínima: 0.1
+2025-10-17 16:30:03,038 - INFO -   • Factor de enfriamiento (α): 0.999
+2025-10-17 16:30:03,038 - INFO -   • Máx. tiempo: 1.8 minutos (0.0 horas)
+2025-10-17 16:30:03,039 - INFO -   • Máx. iter. sin mejora: 1,000
+2025-10-17 16:30:03,039 - INFO -   • Usar optimización 2-opt: ✅ SÍ
+2025-10-17 16:30:03,039 - INFO -   • Fitness inicial (REAL): -13358.3
+2025-10-17 16:30:03,039 - INFO -   • Puntos iniciales (REAL): 15233
+2025-10-17 16:30:03,039 - INFO - ================================================================================
+2025-10-17 16:30:03,598 - INFO - 🔄 Iniciando búsqueda...
+2025-10-17 16:30:03,599 - INFO - Iniciando búsqueda por vecindario
+2025-10-17 16:30:03,599 - INFO - Configuración: T_inicial=20, alpha=0.999, max_tiempo=108.0s, usar_2opt=True
+2025-10-17 16:30:03,603 - DEBUG - Iter 0: T=20.00, Fitness_actual=-13358.3, Mejor=-13358.3
+2025-10-17 16:30:03,603 - INFO - 🌟 MEJORA #1 en iter 0: Fitness=-13358.1 (+0.3), Puntos=15233
+2025-10-17 16:30:03,927 - INFO - 🌟 MEJORA #2 en iter 3: Fitness=-13261.0 (+97.0), Puntos=15231
+2025-10-17 16:30:04,435 - INFO - 🌟 MEJORA #3 en iter 15: Fitness=-13250.7 (+10.4), Puntos=15242
+2025-10-17 16:30:04,482 - INFO - 🌟 MEJORA #4 en iter 16: Fitness=-13250.6 (+0.1), Puntos=15242
+2025-10-17 16:30:04,530 - INFO - 🌟 MEJORA #5 en iter 17: Fitness=-13250.5 (+0.0), Puntos=15242
+2025-10-17 16:30:04,530 - INFO -   ✨ Mejora #5 en iteración 18: Fitness = -13250.5 | Puntos = 15242 | T = 19.66
+2025-10-17 16:30:04,707 - INFO - Iter 21: Aceptada solución con delta=+2922.8 (T=19.58)
+2025-10-17 16:30:04,707 - INFO - 🌟 MEJORA #6 en iter 21: Fitness=-10327.7 (+2922.8), Puntos=15242
+2025-10-17 16:30:05,518 - INFO - 🌟 MEJORA #7 en iter 39: Fitness=-9971.3 (+356.4), Puntos=15242
+2025-10-17 16:30:05,564 - INFO - 🌟 MEJORA #8 en iter 40: Fitness=-9971.2 (+0.0), Puntos=15242
+2025-10-17 16:30:05,689 - INFO - 🌟 MEJORA #9 en iter 43: Fitness=-9971.1 (+0.2), Puntos=15242
+2025-10-17 16:30:05,731 - INFO - 🌟 MEJORA #10 en iter 44: Fitness=-9864.8 (+106.2), Puntos=15248
+2025-10-17 16:30:05,732 - INFO -   ✨ Mejora #10 en iteración 45: Fitness = -9864.8 | Puntos = 15248 | T = 19.14
+2025-10-17 16:30:05,942 - INFO - 🌟 MEJORA #11 en iter 49: Fitness=-9831.9 (+32.9), Puntos=15281
+2025-10-17 16:30:06,225 - INFO - 🌟 MEJORA #12 en iter 56: Fitness=-9782.9 (+49.0), Puntos=15329
+2025-10-17 16:30:06,267 - INFO - 🌟 MEJORA #13 en iter 57: Fitness=-9782.9 (+0.0), Puntos=15329
+2025-10-17 16:30:07,429 - WARNING - ================================================================================
+2025-10-17 16:30:07,429 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 84
+2025-10-17 16:30:07,429 - WARNING -    Fitness actual: -9803.9
+2025-10-17 16:30:07,430 - WARNING -    Fitness vecino: -16104.4
+2025-10-17 16:30:07,430 - WARNING -    Delta: -6300.5
+2025-10-17 16:30:07,430 - WARNING -    Temperatura: 18.39
+2025-10-17 16:30:07,430 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:07,431 - WARNING -    Vecino - Puntos: 15329, Tiempo: 15566.1min, Distancia: 237.2km
+2025-10-17 16:30:07,431 - WARNING -    Actual - Puntos: 15329, Tiempo: 14632.3min, Distancia: 235.6km
+2025-10-17 16:30:07,431 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:07,431 - WARNING - ================================================================================
+2025-10-17 16:30:07,432 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 84
+2025-10-17 16:30:07,432 - WARNING -    Fitness: -9803.9 → -16104.4 (Δ=-6300.5)
+2025-10-17 16:30:07,432 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:07,599 - WARNING - ================================================================================
+2025-10-17 16:30:07,599 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 88
+2025-10-17 16:30:07,599 - WARNING -    Fitness actual: -9786.9
+2025-10-17 16:30:07,599 - WARNING -    Fitness vecino: -17186.5
+2025-10-17 16:30:07,599 - WARNING -    Delta: -7399.6
+2025-10-17 16:30:07,600 - WARNING -    Temperatura: 18.31
+2025-10-17 16:30:07,600 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:07,600 - WARNING -    Vecino - Puntos: 15346, Tiempo: 15761.0min, Distancia: 234.3km
+2025-10-17 16:30:07,600 - WARNING -    Actual - Puntos: 15346, Tiempo: 14632.1min, Distancia: 235.6km
+2025-10-17 16:30:07,600 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:07,601 - WARNING - ================================================================================
+2025-10-17 16:30:07,601 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 88
+2025-10-17 16:30:07,601 - WARNING -    Fitness: -9786.9 → -17186.5 (Δ=-7399.6)
+2025-10-17 16:30:07,601 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:08,102 - DEBUG - Iter 100: T=18.10, Fitness_actual=-9787.5, Mejor=-9782.9
+2025-10-17 16:30:08,103 - INFO - 🌟 MEJORA #14 en iter 100: Fitness=-9323.9 (+459.1), Puntos=15346
+2025-10-17 16:30:08,146 - INFO - 🌟 MEJORA #15 en iter 101: Fitness=-9223.7 (+100.2), Puntos=15346
+2025-10-17 16:30:08,146 - INFO -   ✨ Mejora #15 en iteración 102: Fitness = -9223.7 | Puntos = 15346 | T = 18.08
+2025-10-17 16:30:08,188 - INFO - 🌟 MEJORA #16 en iter 102: Fitness=-9220.3 (+3.4), Puntos=15349
+2025-10-17 16:30:08,635 - INFO - 🌟 MEJORA #17 en iter 113: Fitness=-9138.2 (+82.0), Puntos=15331
+2025-10-17 16:30:08,816 - WARNING - ================================================================================
+2025-10-17 16:30:08,817 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 117
+2025-10-17 16:30:08,817 - WARNING -    Fitness actual: -9138.5
+2025-10-17 16:30:08,817 - WARNING -    Fitness vecino: -17043.3
+2025-10-17 16:30:08,817 - WARNING -    Delta: -7904.8
+2025-10-17 16:30:08,817 - WARNING -    Temperatura: 17.79
+2025-10-17 16:30:08,818 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:08,818 - WARNING -    Vecino - Puntos: 15326, Tiempo: 15767.7min, Distancia: 235.3km
+2025-10-17 16:30:08,818 - WARNING -    Actual - Puntos: 15331, Tiempo: 14630.2min, Distancia: 235.9km
+2025-10-17 16:30:08,818 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:08,818 - WARNING - ================================================================================
+2025-10-17 16:30:08,819 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 117
+2025-10-17 16:30:08,819 - WARNING -    Fitness: -9138.5 → -17043.3 (Δ=-7904.8)
+2025-10-17 16:30:08,819 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:09,080 - INFO - 🌟 MEJORA #18 en iter 123: Fitness=-9127.5 (+10.7), Puntos=15340
+2025-10-17 16:30:09,124 - INFO - 🌟 MEJORA #19 en iter 124: Fitness=-8927.5 (+200.0), Puntos=15340
+2025-10-17 16:30:09,249 - INFO - 🌟 MEJORA #20 en iter 127: Fitness=-8911.5 (+16.0), Puntos=15356
+2025-10-17 16:30:09,249 - INFO -   ✨ Mejora #20 en iteración 128: Fitness = -8911.5 | Puntos = 15356 | T = 17.61
+2025-10-17 16:30:09,375 - INFO - 🌟 MEJORA #21 en iter 130: Fitness=-8911.5 (+0.0), Puntos=15356
+2025-10-17 16:30:09,462 - INFO - 🌟 MEJORA #22 en iter 132: Fitness=-8812.2 (+99.2), Puntos=15356
+2025-10-17 16:30:09,685 - INFO - 🌟 MEJORA #23 en iter 137: Fitness=-8805.4 (+6.8), Puntos=15363
+2025-10-17 16:30:09,731 - INFO - 🌟 MEJORA #24 en iter 138: Fitness=-8805.4 (+0.0), Puntos=15363
+2025-10-17 16:30:09,923 - INFO - 🌟 MEJORA #25 en iter 142: Fitness=-8805.0 (+0.4), Puntos=15363
+2025-10-17 16:30:09,923 - INFO -   ✨ Mejora #25 en iteración 143: Fitness = -8805.0 | Puntos = 15363 | T = 17.35
+2025-10-17 16:30:10,141 - INFO - 🌟 MEJORA #26 en iter 147: Fitness=-8775.6 (+29.4), Puntos=15393
+2025-10-17 16:30:10,317 - INFO - 🌟 MEJORA #27 en iter 151: Fitness=-8775.3 (+0.3), Puntos=15393
+2025-10-17 16:30:10,363 - INFO - 🌟 MEJORA #28 en iter 152: Fitness=-8775.3 (+0.0), Puntos=15393
+2025-10-17 16:30:10,461 - INFO - 🌟 MEJORA #29 en iter 154: Fitness=-8761.7 (+13.6), Puntos=15407
+2025-10-17 16:30:11,602 - INFO - 🌟 MEJORA #30 en iter 179: Fitness=-8682.6 (+79.1), Puntos=15386
+2025-10-17 16:30:11,603 - INFO -   ✨ Mejora #30 en iteración 180: Fitness = -8682.6 | Puntos = 15386 | T = 16.72
+2025-10-17 16:30:11,789 - INFO - 🌟 MEJORA #31 en iter 183: Fitness=-8682.6 (+0.0), Puntos=15386
+2025-10-17 16:30:11,835 - INFO - 🌟 MEJORA #32 en iter 184: Fitness=-8682.1 (+0.5), Puntos=15386
+2025-10-17 16:30:12,211 - WARNING - ================================================================================
+2025-10-17 16:30:12,211 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 192
+2025-10-17 16:30:12,212 - WARNING -    Fitness actual: -8682.1
+2025-10-17 16:30:12,212 - WARNING -    Fitness vecino: -19482.4
+2025-10-17 16:30:12,212 - WARNING -    Delta: -10800.3
+2025-10-17 16:30:12,212 - WARNING -    Temperatura: 16.50
+2025-10-17 16:30:12,213 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:12,213 - WARNING -    Vecino - Puntos: 15386, Tiempo: 16134.3min, Distancia: 232.3km
+2025-10-17 16:30:12,213 - WARNING -    Actual - Puntos: 15386, Tiempo: 14666.6min, Distancia: 231.4km
+2025-10-17 16:30:12,214 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:12,214 - WARNING - ================================================================================
+2025-10-17 16:30:12,214 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 192
+2025-10-17 16:30:12,214 - WARNING -    Fitness: -8682.1 → -19482.4 (Δ=-10800.3)
+2025-10-17 16:30:12,215 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:12,402 - INFO - 🌟 MEJORA #33 en iter 196: Fitness=-8681.9 (+0.2), Puntos=15386
+2025-10-17 16:30:12,588 - DEBUG - Iter 200: T=16.37, Fitness_actual=-8681.9, Mejor=-8681.9
+2025-10-17 16:30:12,675 - INFO - 🌟 MEJORA #34 en iter 202: Fitness=-8681.8 (+0.1), Puntos=15386
+2025-10-17 16:30:12,850 - INFO - 🌟 MEJORA #35 en iter 206: Fitness=-8681.7 (+0.0), Puntos=15386
+2025-10-17 16:30:12,850 - INFO -   ✨ Mejora #35 en iteración 207: Fitness = -8681.7 | Puntos = 15386 | T = 16.27
+2025-10-17 16:30:13,142 - INFO - 🌟 MEJORA #36 en iter 213: Fitness=-8680.8 (+0.9), Puntos=15386
+2025-10-17 16:30:13,347 - INFO - 🌟 MEJORA #37 en iter 218: Fitness=-8680.5 (+0.3), Puntos=15386
+2025-10-17 16:30:13,427 - INFO - 🌟 MEJORA #38 en iter 220: Fitness=-8680.5 (+0.0), Puntos=15386
+2025-10-17 16:30:13,628 - INFO - 🌟 MEJORA #39 en iter 225: Fitness=-8677.7 (+2.8), Puntos=15389
+2025-10-17 16:30:13,791 - INFO - 🌟 MEJORA #40 en iter 229: Fitness=-8660.7 (+17.0), Puntos=15406
+2025-10-17 16:30:13,791 - INFO -   ✨ Mejora #40 en iteración 230: Fitness = -8660.7 | Puntos = 15406 | T = 15.90
+2025-10-17 16:30:13,914 - INFO - 🌟 MEJORA #41 en iter 232: Fitness=-8560.7 (+100.0), Puntos=15406
+2025-10-17 16:30:16,694 - DEBUG - Iter 300: T=14.81, Fitness_actual=-8570.2, Mejor=-8560.7
+2025-10-17 16:30:16,986 - INFO - 🌟 MEJORA #42 en iter 307: Fitness=-8482.2 (+78.5), Puntos=15385
+2025-10-17 16:30:17,157 - INFO - Iter 311: Aceptada solución con delta=+1159.6 (T=14.65)
+2025-10-17 16:30:17,158 - INFO - 🌟 MEJORA #43 en iter 311: Fitness=-7337.2 (+1145.0), Puntos=15372
+2025-10-17 16:30:17,203 - INFO - 🌟 MEJORA #44 en iter 312: Fitness=-7337.0 (+0.2), Puntos=15372
+2025-10-17 16:30:17,290 - INFO - Iter 314: Aceptada solución con delta=+1009.8 (T=14.61)
+2025-10-17 16:30:17,291 - INFO - 🌟 MEJORA #45 en iter 314: Fitness=-6327.3 (+1009.8), Puntos=15377
+2025-10-17 16:30:17,291 - INFO -   ✨ Mejora #45 en iteración 315: Fitness = -6327.3 | Puntos = 15377 | T = 14.61
+2025-10-17 16:30:17,675 - INFO - 🌟 MEJORA #46 en iter 323: Fitness=-6320.6 (+6.7), Puntos=15377
+2025-10-17 16:30:17,719 - INFO - Iter 324: Aceptada solución con delta=+4977.1 (T=14.46)
+2025-10-17 16:30:17,719 - INFO - 🌟 MEJORA #47 en iter 324: Fitness=-1343.5 (+4977.1), Puntos=15375
+2025-10-17 16:30:17,764 - INFO - 🌟 MEJORA #48 en iter 325: Fitness=-1336.6 (+6.9), Puntos=15383
+2025-10-17 16:30:17,851 - INFO - 🌟 MEJORA #49 en iter 327: Fitness=-1333.3 (+3.3), Puntos=15386
+2025-10-17 16:30:17,894 - INFO - 🌟 MEJORA #50 en iter 328: Fitness=-1331.8 (+1.5), Puntos=15387
+2025-10-17 16:30:17,909 - INFO -   ✨ Mejora #50 en iteración 329: Fitness = -1331.8 | Puntos = 15387 | T = 14.40
+2025-10-17 16:30:17,956 - WARNING - ================================================================================
+2025-10-17 16:30:17,956 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 329
+2025-10-17 16:30:17,956 - WARNING -    Fitness actual: -1331.8
+2025-10-17 16:30:17,956 - WARNING -    Fitness vecino: -7131.7
+2025-10-17 16:30:17,956 - WARNING -    Delta: -5799.9
+2025-10-17 16:30:17,957 - WARNING -    Temperatura: 14.39
+2025-10-17 16:30:17,957 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:17,957 - WARNING -    Vecino - Puntos: 15387, Tiempo: 15428.5min, Distancia: 227.8km
+2025-10-17 16:30:17,957 - WARNING -    Actual - Puntos: 15387, Tiempo: 14546.9min, Distancia: 228.1km
+2025-10-17 16:30:17,958 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:17,958 - WARNING - ================================================================================
+2025-10-17 16:30:17,958 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 329
+2025-10-17 16:30:17,958 - WARNING -    Fitness: -1331.8 → -7131.7 (Δ=-5799.9)
+2025-10-17 16:30:17,958 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:18,088 - INFO - 🌟 MEJORA #51 en iter 332: Fitness=-1330.8 (+1.0), Puntos=15388
+2025-10-17 16:30:18,131 - INFO - 🌟 MEJORA #52 en iter 333: Fitness=-1330.6 (+0.2), Puntos=15388
+2025-10-17 16:30:18,346 - INFO - 🌟 MEJORA #53 en iter 338: Fitness=-1330.2 (+0.4), Puntos=15388
+2025-10-17 16:30:18,433 - INFO - 🌟 MEJORA #54 en iter 340: Fitness=-1330.2 (+0.0), Puntos=15388
+2025-10-17 16:30:19,122 - INFO - 🌟 MEJORA #55 en iter 356: Fitness=-1327.6 (+2.5), Puntos=15391
+2025-10-17 16:30:19,122 - INFO -   ✨ Mejora #55 en iteración 357: Fitness = -1327.6 | Puntos = 15391 | T = 14.01
+2025-10-17 16:30:19,168 - INFO - 🌟 MEJORA #56 en iter 357: Fitness=-1327.2 (+0.4), Puntos=15391
+2025-10-17 16:30:19,260 - INFO - 🌟 MEJORA #57 en iter 359: Fitness=-1238.8 (+88.3), Puntos=15391
+2025-10-17 16:30:20,782 - INFO - 🌟 MEJORA #58 en iter 394: Fitness=-1235.6 (+3.3), Puntos=15395
+2025-10-17 16:30:20,828 - INFO - 🌟 MEJORA #59 en iter 395: Fitness=-1235.6 (+0.0), Puntos=15395
+2025-10-17 16:30:21,007 - INFO - 🌟 MEJORA #60 en iter 399: Fitness=-1235.4 (+0.1), Puntos=15395
+2025-10-17 16:30:21,007 - INFO -   ✨ Mejora #60 en iteración 400: Fitness = -1235.4 | Puntos = 15395 | T = 13.42
+2025-10-17 16:30:21,054 - DEBUG - Iter 400: T=13.40, Fitness_actual=-1235.4, Mejor=-1235.4
+2025-10-17 16:30:21,276 - INFO - 🌟 MEJORA #61 en iter 405: Fitness=-1233.6 (+1.8), Puntos=15397
+2025-10-17 16:30:21,533 - INFO - 🌟 MEJORA #62 en iter 411: Fitness=-1233.5 (+0.2), Puntos=15397
+2025-10-17 16:30:21,575 - INFO - 🌟 MEJORA #63 en iter 412: Fitness=-1233.4 (+0.0), Puntos=15397
+2025-10-17 16:30:21,815 - INFO - 🌟 MEJORA #64 en iter 418: Fitness=-1230.5 (+3.0), Puntos=15400
+2025-10-17 16:30:21,897 - INFO - 🌟 MEJORA #65 en iter 420: Fitness=-1230.4 (+0.1), Puntos=15400
+2025-10-17 16:30:21,919 - INFO -   ✨ Mejora #65 en iteración 421: Fitness = -1230.4 | Puntos = 15400 | T = 13.14
+2025-10-17 16:30:22,012 - WARNING - ================================================================================
+2025-10-17 16:30:22,012 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 422
+2025-10-17 16:30:22,013 - WARNING -    Fitness actual: -1230.4
+2025-10-17 16:30:22,013 - WARNING -    Fitness vecino: -11172.5
+2025-10-17 16:30:22,013 - WARNING -    Delta: -9942.2
+2025-10-17 16:30:22,013 - WARNING -    Temperatura: 13.11
+2025-10-17 16:30:22,013 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:22,014 - WARNING -    Vecino - Puntos: 15399, Tiempo: 15898.2min, Distancia: 235.0km
+2025-10-17 16:30:22,014 - WARNING -    Actual - Puntos: 15400, Tiempo: 14515.0min, Distancia: 228.3km
+2025-10-17 16:30:22,014 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:22,014 - WARNING - ================================================================================
+2025-10-17 16:30:22,015 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 422
+2025-10-17 16:30:22,015 - WARNING -    Fitness: -1230.4 → -11172.5 (Δ=-9942.2)
+2025-10-17 16:30:22,015 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:22,097 - INFO - 🌟 MEJORA #66 en iter 424: Fitness=-1230.1 (+0.3), Puntos=15400
+2025-10-17 16:30:22,182 - INFO - 🌟 MEJORA #67 en iter 426: Fitness=-1229.8 (+0.4), Puntos=15400
+2025-10-17 16:30:22,758 - WARNING - ================================================================================
+2025-10-17 16:30:22,759 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 440
+2025-10-17 16:30:22,759 - WARNING -    Fitness actual: -1231.9
+2025-10-17 16:30:22,759 - WARNING -    Fitness vecino: -11174.0
+2025-10-17 16:30:22,759 - WARNING -    Delta: -9942.2
+2025-10-17 16:30:22,759 - WARNING -    Temperatura: 12.88
+2025-10-17 16:30:22,759 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:22,760 - WARNING -    Vecino - Puntos: 15397, Tiempo: 15877.1min, Distancia: 233.3km
+2025-10-17 16:30:22,760 - WARNING -    Actual - Puntos: 15398, Tiempo: 14493.9min, Distancia: 226.6km
+2025-10-17 16:30:22,760 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:22,760 - WARNING - ================================================================================
+2025-10-17 16:30:22,760 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 440
+2025-10-17 16:30:22,760 - WARNING -    Fitness: -1231.9 → -11174.0 (Δ=-9942.2)
+2025-10-17 16:30:22,761 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:22,883 - INFO - 🌟 MEJORA #68 en iter 443: Fitness=-1131.9 (+97.9), Puntos=15398
+2025-10-17 16:30:22,963 - INFO - Iter 445: Aceptada solución con delta=+1116.2 (T=12.81)
+2025-10-17 16:30:22,963 - INFO - 🌟 MEJORA #69 en iter 445: Fitness=-15.7 (+1116.2), Puntos=15392
+2025-10-17 16:30:23,080 - INFO - 🌟 MEJORA #70 en iter 448: Fitness=184.3 (+200.0), Puntos=15392
+2025-10-17 16:30:23,080 - INFO -   ✨ Mejora #70 en iteración 449: Fitness = 184.3 | Puntos = 15392 | T = 12.78
+2025-10-17 16:30:23,125 - INFO - 🌟 MEJORA #71 en iter 449: Fitness=191.0 (+6.7), Puntos=15399
+2025-10-17 16:30:23,310 - INFO - 🌟 MEJORA #72 en iter 453: Fitness=191.6 (+0.6), Puntos=15399
+2025-10-17 16:30:23,456 - INFO - 🌟 MEJORA #73 en iter 457: Fitness=196.6 (+5.0), Puntos=15404
+2025-10-17 16:30:23,643 - INFO - 🌟 MEJORA #74 en iter 462: Fitness=196.7 (+0.0), Puntos=15404
+2025-10-17 16:30:23,715 - INFO - 🌟 MEJORA #75 en iter 464: Fitness=196.7 (+0.0), Puntos=15404
+2025-10-17 16:30:23,716 - INFO -   ✨ Mejora #75 en iteración 465: Fitness = 196.7 | Puntos = 15404 | T = 12.57
+2025-10-17 16:30:23,896 - INFO - 🌟 MEJORA #76 en iter 469: Fitness=196.9 (+0.2), Puntos=15404
+2025-10-17 16:30:23,933 - INFO - 🌟 MEJORA #77 en iter 470: Fitness=196.9 (+0.0), Puntos=15404
+2025-10-17 16:30:24,182 - INFO - 🌟 MEJORA #78 en iter 477: Fitness=228.7 (+31.8), Puntos=15435
+2025-10-17 16:30:24,467 - INFO - 🌟 MEJORA #79 en iter 485: Fitness=244.1 (+15.4), Puntos=15451
+2025-10-17 16:30:24,506 - INFO - 🌟 MEJORA #80 en iter 486: Fitness=244.2 (+0.1), Puntos=15451
+2025-10-17 16:30:24,507 - INFO -   ✨ Mejora #80 en iteración 487: Fitness = 244.2 | Puntos = 15451 | T = 12.30
+2025-10-17 16:30:24,749 - INFO - 🌟 MEJORA #81 en iter 493: Fitness=250.0 (+5.8), Puntos=15457
+2025-10-17 16:30:24,860 - INFO - 🌟 MEJORA #82 en iter 496: Fitness=251.9 (+1.9), Puntos=15459
+2025-10-17 16:30:24,934 - INFO - 🌟 MEJORA #83 en iter 498: Fitness=251.9 (+0.0), Puntos=15459
+2025-10-17 16:30:24,973 - INFO - 🌟 MEJORA #84 en iter 499: Fitness=251.9 (+0.0), Puntos=15459
+2025-10-17 16:30:25,011 - INFO -   Iter   500 | Tiempo:    0.4min | T =    12.13 | Fitness =    251.9 | Mejor =    251.9 | Aceptación =  58.8%
+2025-10-17 16:30:25,011 - INFO - Progreso iter 500: T=12.13, Fitness=251.9, Mejor=251.9, Tasa_acept=58.8%
+2025-10-17 16:30:25,012 - DEBUG - Iter 500: T=12.13, Fitness_actual=251.9, Mejor=251.9
+2025-10-17 16:30:25,123 - INFO - 🌟 MEJORA #85 en iter 503: Fitness=251.9 (+0.0), Puntos=15459
+2025-10-17 16:30:25,123 - INFO -   ✨ Mejora #85 en iteración 504: Fitness = 251.9 | Puntos = 15459 | T = 12.09
+2025-10-17 16:30:25,270 - INFO - 🌟 MEJORA #86 en iter 507: Fitness=254.9 (+3.0), Puntos=15462
+2025-10-17 16:30:26,604 - WARNING - ================================================================================
+2025-10-17 16:30:26,605 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 544
+2025-10-17 16:30:26,605 - WARNING -    Fitness actual: 248.9
+2025-10-17 16:30:26,605 - WARNING -    Fitness vecino: -12687.2
+2025-10-17 16:30:26,605 - WARNING -    Delta: -12936.2
+2025-10-17 16:30:26,605 - WARNING -    Temperatura: 11.61
+2025-10-17 16:30:26,605 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:26,606 - WARNING -    Vecino - Puntos: 15451, Tiempo: 15302.4min, Distancia: 214.4km
+2025-10-17 16:30:26,606 - WARNING -    Actual - Puntos: 15456, Tiempo: 14202.4min, Distancia: 204.0km
+2025-10-17 16:30:26,606 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:26,606 - WARNING - ================================================================================
+2025-10-17 16:30:26,606 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 544
+2025-10-17 16:30:26,606 - WARNING -    Fitness: 248.9 → -12687.2 (Δ=-12936.2)
+2025-10-17 16:30:26,607 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:27,055 - WARNING - ================================================================================
+2025-10-17 16:30:27,055 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 556
+2025-10-17 16:30:27,056 - WARNING -    Fitness actual: 243.9
+2025-10-17 16:30:27,056 - WARNING -    Fitness vecino: -5156.6
+2025-10-17 16:30:27,056 - WARNING -    Delta: -5400.5
+2025-10-17 16:30:27,056 - WARNING -    Temperatura: 11.47
+2025-10-17 16:30:27,057 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:27,057 - WARNING -    Vecino - Puntos: 15451, Tiempo: 14825.9min, Distancia: 205.7km
+2025-10-17 16:30:27,057 - WARNING -    Actual - Puntos: 15451, Tiempo: 14235.6min, Distancia: 204.2km
+2025-10-17 16:30:27,057 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:27,058 - WARNING - ================================================================================
+2025-10-17 16:30:27,058 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 556
+2025-10-17 16:30:27,058 - WARNING -    Fitness: 243.9 → -5156.6 (Δ=-5400.5)
+2025-10-17 16:30:27,058 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:27,938 - WARNING - ================================================================================
+2025-10-17 16:30:27,938 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 580
+2025-10-17 16:30:27,939 - WARNING -    Fitness actual: 235.1
+2025-10-17 16:30:27,939 - WARNING -    Fitness vecino: -9065.3
+2025-10-17 16:30:27,939 - WARNING -    Delta: -9300.4
+2025-10-17 16:30:27,939 - WARNING -    Temperatura: 11.19
+2025-10-17 16:30:27,939 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:27,940 - WARNING -    Vecino - Puntos: 15443, Tiempo: 15426.0min, Distancia: 208.1km
+2025-10-17 16:30:27,940 - WARNING -    Actual - Puntos: 15443, Tiempo: 14265.6min, Distancia: 206.7km
+2025-10-17 16:30:27,940 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:27,940 - WARNING - ================================================================================
+2025-10-17 16:30:27,940 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 580
+2025-10-17 16:30:27,940 - WARNING -    Fitness: 235.1 → -9065.3 (Δ=-9300.4)
+2025-10-17 16:30:27,941 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:28,686 - DEBUG - Iter 600: T=10.97, Fitness_actual=247.5, Mejor=254.9
+2025-10-17 16:30:28,835 - INFO - 🌟 MEJORA #87 en iter 604: Fitness=264.2 (+9.4), Puntos=15473
+2025-10-17 16:30:28,880 - INFO - 🌟 MEJORA #88 en iter 605: Fitness=293.5 (+29.2), Puntos=15502
+2025-10-17 16:30:28,988 - INFO - 🌟 MEJORA #89 en iter 608: Fitness=297.3 (+3.9), Puntos=15507
+2025-10-17 16:30:29,058 - INFO - 🌟 MEJORA #90 en iter 610: Fitness=297.3 (+0.0), Puntos=15507
+2025-10-17 16:30:29,059 - INFO -   ✨ Mejora #90 en iteración 611: Fitness = 297.3 | Puntos = 15507 | T = 10.86
+2025-10-17 16:30:29,198 - INFO - 🌟 MEJORA #91 en iter 614: Fitness=299.6 (+2.2), Puntos=15509
+2025-10-17 16:30:29,268 - INFO - 🌟 MEJORA #92 en iter 616: Fitness=305.6 (+6.0), Puntos=15515
+2025-10-17 16:30:29,304 - INFO - 🌟 MEJORA #93 en iter 617: Fitness=315.2 (+9.6), Puntos=15525
+2025-10-17 16:30:29,339 - INFO - 🌟 MEJORA #94 en iter 618: Fitness=330.6 (+15.5), Puntos=15540
+2025-10-17 16:30:29,683 - INFO - 🌟 MEJORA #95 en iter 628: Fitness=330.8 (+0.1), Puntos=15540
+2025-10-17 16:30:29,683 - INFO -   ✨ Mejora #95 en iteración 629: Fitness = 330.8 | Puntos = 15540 | T = 10.67
+2025-10-17 16:30:29,789 - INFO - 🌟 MEJORA #96 en iter 631: Fitness=330.8 (+0.0), Puntos=15540
+2025-10-17 16:30:29,824 - INFO - 🌟 MEJORA #97 en iter 632: Fitness=337.8 (+7.1), Puntos=15545
+2025-10-17 16:30:29,859 - INFO - 🌟 MEJORA #98 en iter 633: Fitness=338.2 (+0.4), Puntos=15545
+2025-10-17 16:30:30,032 - INFO - 🌟 MEJORA #99 en iter 638: Fitness=352.5 (+14.3), Puntos=15559
+2025-10-17 16:30:30,611 - INFO - 🌟 MEJORA #100 en iter 655: Fitness=355.9 (+3.4), Puntos=15564
+2025-10-17 16:30:30,611 - INFO -   ✨ Mejora #100 en iteración 656: Fitness = 355.9 | Puntos = 15564 | T = 10.39
+2025-10-17 16:30:30,684 - INFO - 🌟 MEJORA #101 en iter 657: Fitness=356.1 (+0.1), Puntos=15564
+2025-10-17 16:30:30,758 - INFO - 🌟 MEJORA #102 en iter 659: Fitness=356.1 (+0.0), Puntos=15564
+2025-10-17 16:30:31,109 - INFO - 🌟 MEJORA #103 en iter 669: Fitness=356.2 (+0.2), Puntos=15564
+2025-10-17 16:30:31,146 - INFO - 🌟 MEJORA #104 en iter 670: Fitness=356.2 (+0.0), Puntos=15564
+2025-10-17 16:30:31,358 - INFO - 🌟 MEJORA #105 en iter 676: Fitness=357.3 (+1.1), Puntos=15564
+2025-10-17 16:30:31,358 - INFO -   ✨ Mejora #105 en iteración 677: Fitness = 357.3 | Puntos = 15564 | T = 10.17
+2025-10-17 16:30:31,396 - INFO - 🌟 MEJORA #106 en iter 677: Fitness=358.0 (+0.7), Puntos=15565
+2025-10-17 16:30:31,469 - INFO - 🌟 MEJORA #107 en iter 679: Fitness=465.7 (+107.7), Puntos=15572
+2025-10-17 16:30:31,588 - WARNING - ================================================================================
+2025-10-17 16:30:31,588 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 682
+2025-10-17 16:30:31,589 - WARNING -    Fitness actual: 465.7
+2025-10-17 16:30:31,589 - WARNING -    Fitness vecino: -11604.7
+2025-10-17 16:30:31,589 - WARNING -    Delta: -12070.3
+2025-10-17 16:30:31,589 - WARNING -    Temperatura: 10.11
+2025-10-17 16:30:31,589 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:31,590 - WARNING -    Vecino - Puntos: 15572, Tiempo: 14249.3min, Distancia: 216.6km
+2025-10-17 16:30:31,590 - WARNING -    Actual - Puntos: 15572, Tiempo: 14068.5min, Distancia: 201.5km
+2025-10-17 16:30:31,590 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:31,590 - WARNING - ================================================================================
+2025-10-17 16:30:31,590 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 682
+2025-10-17 16:30:31,590 - WARNING -    Fitness: 465.7 → -11604.7 (Δ=-12070.3)
+2025-10-17 16:30:31,590 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:31,629 - WARNING - ================================================================================
+2025-10-17 16:30:31,629 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 683
+2025-10-17 16:30:31,629 - WARNING -    Fitness actual: 465.7
+2025-10-17 16:30:31,629 - WARNING -    Fitness vecino: -11589.9
+2025-10-17 16:30:31,630 - WARNING -    Delta: -12055.6
+2025-10-17 16:30:31,630 - WARNING -    Temperatura: 10.10
+2025-10-17 16:30:31,630 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:31,630 - WARNING -    Vecino - Puntos: 15572, Tiempo: 14242.0min, Distancia: 216.0km
+2025-10-17 16:30:31,630 - WARNING -    Actual - Puntos: 15572, Tiempo: 14068.5min, Distancia: 201.5km
+2025-10-17 16:30:31,630 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:31,631 - WARNING - ================================================================================
+2025-10-17 16:30:31,631 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 683
+2025-10-17 16:30:31,631 - WARNING -    Fitness: 465.7 → -11589.9 (Δ=-12055.6)
+2025-10-17 16:30:31,631 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:31,822 - INFO - 🌟 MEJORA #108 en iter 688: Fitness=466.1 (+0.4), Puntos=15573
+2025-10-17 16:30:31,861 - INFO - 🌟 MEJORA #109 en iter 689: Fitness=467.8 (+1.7), Puntos=15573
+2025-10-17 16:30:31,900 - INFO - 🌟 MEJORA #110 en iter 690: Fitness=468.0 (+0.2), Puntos=15573
+2025-10-17 16:30:31,901 - INFO -   ✨ Mejora #110 en iteración 691: Fitness = 468.0 | Puntos = 15573 | T = 10.03
+2025-10-17 16:30:32,286 - DEBUG - Iter 700: T=9.93, Fitness_actual=467.8, Mejor=468.0
+2025-10-17 16:30:32,286 - INFO - 🌟 MEJORA #111 en iter 700: Fitness=471.9 (+4.0), Puntos=15577
+2025-10-17 16:30:32,401 - INFO - 🌟 MEJORA #112 en iter 703: Fitness=472.5 (+0.6), Puntos=15577
+2025-10-17 16:30:32,479 - INFO - 🌟 MEJORA #113 en iter 705: Fitness=472.6 (+0.0), Puntos=15577
+2025-10-17 16:30:32,634 - WARNING - ================================================================================
+2025-10-17 16:30:32,634 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 709
+2025-10-17 16:30:32,634 - WARNING -    Fitness actual: 472.6
+2025-10-17 16:30:32,635 - WARNING -    Fitness vecino: -4727.5
+2025-10-17 16:30:32,635 - WARNING -    Delta: -5200.0
+2025-10-17 16:30:32,635 - WARNING -    Temperatura: 9.84
+2025-10-17 16:30:32,635 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:32,635 - WARNING -    Vecino - Puntos: 15577, Tiempo: 14693.8min, Distancia: 201.0km
+2025-10-17 16:30:32,635 - WARNING -    Actual - Puntos: 15577, Tiempo: 14121.5min, Distancia: 201.0km
+2025-10-17 16:30:32,636 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:32,636 - WARNING - ================================================================================
+2025-10-17 16:30:32,636 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 709
+2025-10-17 16:30:32,636 - WARNING -    Fitness: 472.6 → -4727.5 (Δ=-5200.0)
+2025-10-17 16:30:32,637 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:32,676 - INFO - 🌟 MEJORA #114 en iter 710: Fitness=477.6 (+5.0), Puntos=15582
+2025-10-17 16:30:32,753 - INFO - 🌟 MEJORA #115 en iter 712: Fitness=477.8 (+0.2), Puntos=15582
+2025-10-17 16:30:32,754 - INFO -   ✨ Mejora #115 en iteración 713: Fitness = 477.8 | Puntos = 15582 | T = 9.81
+2025-10-17 16:30:33,218 - INFO - 🌟 MEJORA #116 en iter 724: Fitness=477.8 (+0.0), Puntos=15582
+2025-10-17 16:30:33,366 - INFO - 🌟 MEJORA #117 en iter 728: Fitness=480.8 (+3.0), Puntos=15585
+2025-10-17 16:30:33,904 - WARNING - ================================================================================
+2025-10-17 16:30:33,904 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 742
+2025-10-17 16:30:33,905 - WARNING -    Fitness actual: 457.6
+2025-10-17 16:30:33,905 - WARNING -    Fitness vecino: -11599.1
+2025-10-17 16:30:33,905 - WARNING -    Delta: -12056.7
+2025-10-17 16:30:33,905 - WARNING -    Temperatura: 9.52
+2025-10-17 16:30:33,905 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:33,906 - WARNING -    Vecino - Puntos: 15582, Tiempo: 14275.1min, Distancia: 214.2km
+2025-10-17 16:30:33,906 - WARNING -    Actual - Puntos: 15582, Tiempo: 14101.0min, Distancia: 199.7km
+2025-10-17 16:30:33,906 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:33,906 - WARNING - ================================================================================
+2025-10-17 16:30:33,906 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 742
+2025-10-17 16:30:33,907 - WARNING -    Fitness: 457.6 → -11599.1 (Δ=-12056.7)
+2025-10-17 16:30:33,907 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:34,135 - INFO - 🌟 MEJORA #118 en iter 748: Fitness=550.3 (+69.5), Puntos=15574
+2025-10-17 16:30:34,898 - INFO - 🌟 MEJORA #119 en iter 768: Fitness=556.0 (+5.7), Puntos=15580
+2025-10-17 16:30:35,093 - INFO - 🌟 MEJORA #120 en iter 773: Fitness=556.1 (+0.1), Puntos=15580
+2025-10-17 16:30:35,094 - INFO -   ✨ Mejora #120 en iteración 774: Fitness = 556.1 | Puntos = 15580 | T = 9.23
+2025-10-17 16:30:36,148 - DEBUG - Iter 800: T=8.98, Fitness_actual=553.1, Mejor=556.1
+2025-10-17 16:30:36,199 - WARNING - ================================================================================
+2025-10-17 16:30:36,199 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 801
+2025-10-17 16:30:36,200 - WARNING -    Fitness actual: 553.1
+2025-10-17 16:30:36,200 - WARNING -    Fitness vecino: -5168.5
+2025-10-17 16:30:36,200 - WARNING -    Delta: -5721.6
+2025-10-17 16:30:36,200 - WARNING -    Temperatura: 8.97
+2025-10-17 16:30:36,200 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:36,200 - WARNING -    Vecino - Puntos: 15543, Tiempo: 15037.6min, Distancia: 197.1km
+2025-10-17 16:30:36,201 - WARNING -    Actual - Puntos: 15578, Tiempo: 14195.9min, Distancia: 201.3km
+2025-10-17 16:30:36,201 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:36,201 - WARNING - ================================================================================
+2025-10-17 16:30:36,201 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 801
+2025-10-17 16:30:36,201 - WARNING -    Fitness: 553.1 → -5168.5 (Δ=-5721.6)
+2025-10-17 16:30:36,202 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:38,362 - WARNING - ================================================================================
+2025-10-17 16:30:38,362 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 811
+2025-10-17 16:30:38,362 - WARNING -    Fitness actual: 553.1
+2025-10-17 16:30:38,362 - WARNING -    Fitness vecino: -10540.7
+2025-10-17 16:30:38,363 - WARNING -    Delta: -11093.9
+2025-10-17 16:30:38,363 - WARNING -    Temperatura: 8.88
+2025-10-17 16:30:38,363 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:38,363 - WARNING -    Vecino - Puntos: 15571, Tiempo: 15655.3min, Distancia: 197.8km
+2025-10-17 16:30:38,364 - WARNING -    Actual - Puntos: 15578, Tiempo: 14179.5min, Distancia: 201.2km
+2025-10-17 16:30:38,364 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:38,364 - WARNING - ================================================================================
+2025-10-17 16:30:38,364 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 811
+2025-10-17 16:30:38,364 - WARNING -    Fitness: 553.1 → -10540.7 (Δ=-11093.9)
+2025-10-17 16:30:38,365 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:40,190 - WARNING - ================================================================================
+2025-10-17 16:30:40,190 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 862
+2025-10-17 16:30:40,191 - WARNING -    Fitness actual: 526.3
+2025-10-17 16:30:40,191 - WARNING -    Fitness vecino: -5767.7
+2025-10-17 16:30:40,191 - WARNING -    Delta: -6294.0
+2025-10-17 16:30:40,191 - WARNING -    Temperatura: 8.44
+2025-10-17 16:30:40,191 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:40,192 - WARNING -    Vecino - Puntos: 15545, Tiempo: 14795.5min, Distancia: 201.1km
+2025-10-17 16:30:40,192 - WARNING -    Actual - Puntos: 15552, Tiempo: 14229.6min, Distancia: 204.1km
+2025-10-17 16:30:40,192 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:40,192 - WARNING - ================================================================================
+2025-10-17 16:30:40,192 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 862
+2025-10-17 16:30:40,193 - WARNING -    Fitness: 526.3 → -5767.7 (Δ=-6294.0)
+2025-10-17 16:30:40,193 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:40,581 - WARNING - ================================================================================
+2025-10-17 16:30:40,582 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 873
+2025-10-17 16:30:40,582 - WARNING -    Fitness actual: 526.3
+2025-10-17 16:30:40,582 - WARNING -    Fitness vecino: -4968.3
+2025-10-17 16:30:40,582 - WARNING -    Delta: -5494.6
+2025-10-17 16:30:40,582 - WARNING -    Temperatura: 8.35
+2025-10-17 16:30:40,583 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:40,583 - WARNING -    Vecino - Puntos: 15545, Tiempo: 15160.2min, Distancia: 202.9km
+2025-10-17 16:30:40,583 - WARNING -    Actual - Puntos: 15552, Tiempo: 14228.1min, Distancia: 204.0km
+2025-10-17 16:30:40,583 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:40,583 - WARNING - ================================================================================
+2025-10-17 16:30:40,584 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 873
+2025-10-17 16:30:40,584 - WARNING -    Fitness: 526.3 → -4968.3 (Δ=-5494.6)
+2025-10-17 16:30:40,584 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:41,519 - DEBUG - Iter 900: T=8.13, Fitness_actual=522.8, Mejor=556.1
+2025-10-17 16:30:42,298 - WARNING - ================================================================================
+2025-10-17 16:30:42,298 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 922
+2025-10-17 16:30:42,298 - WARNING -    Fitness actual: 530.0
+2025-10-17 16:30:42,298 - WARNING -    Fitness vecino: -5093.0
+2025-10-17 16:30:42,299 - WARNING -    Delta: -5623.1
+2025-10-17 16:30:42,299 - WARNING -    Temperatura: 7.95
+2025-10-17 16:30:42,299 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:42,299 - WARNING -    Vecino - Puntos: 15546, Tiempo: 14792.9min, Distancia: 197.2km
+2025-10-17 16:30:42,299 - WARNING -    Actual - Puntos: 15553, Tiempo: 14164.5min, Distancia: 195.0km
+2025-10-17 16:30:42,300 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:42,300 - WARNING - ================================================================================
+2025-10-17 16:30:42,300 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 922
+2025-10-17 16:30:42,300 - WARNING -    Fitness: 530.0 → -5093.0 (Δ=-5623.1)
+2025-10-17 16:30:42,300 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:42,590 - WARNING - ================================================================================
+2025-10-17 16:30:42,590 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 930
+2025-10-17 16:30:42,591 - WARNING -    Fitness actual: 530.8
+2025-10-17 16:30:42,591 - WARNING -    Fitness vecino: -8191.2
+2025-10-17 16:30:42,591 - WARNING -    Delta: -8722.0
+2025-10-17 16:30:42,591 - WARNING -    Temperatura: 7.89
+2025-10-17 16:30:42,591 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:42,591 - WARNING -    Vecino - Puntos: 15548, Tiempo: 15700.1min, Distancia: 197.8km
+2025-10-17 16:30:42,592 - WARNING -    Actual - Puntos: 15555, Tiempo: 14198.1min, Distancia: 199.0km
+2025-10-17 16:30:42,592 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:42,592 - WARNING - ================================================================================
+2025-10-17 16:30:42,592 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 930
+2025-10-17 16:30:42,592 - WARNING -    Fitness: 530.8 → -8191.2 (Δ=-8722.0)
+2025-10-17 16:30:42,592 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:42,849 - WARNING - ================================================================================
+2025-10-17 16:30:42,849 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 937
+2025-10-17 16:30:42,850 - WARNING -    Fitness actual: 530.8
+2025-10-17 16:30:42,850 - WARNING -    Fitness vecino: -5019.3
+2025-10-17 16:30:42,850 - WARNING -    Delta: -5550.1
+2025-10-17 16:30:42,850 - WARNING -    Temperatura: 7.83
+2025-10-17 16:30:42,850 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:42,851 - WARNING -    Vecino - Puntos: 15520, Tiempo: 14954.3min, Distancia: 198.1km
+2025-10-17 16:30:42,851 - WARNING -    Actual - Puntos: 15555, Tiempo: 14197.7min, Distancia: 199.0km
+2025-10-17 16:30:42,851 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:42,851 - WARNING - ================================================================================
+2025-10-17 16:30:42,851 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 937
+2025-10-17 16:30:42,852 - WARNING -    Fitness: 530.8 → -5019.3 (Δ=-5550.1)
+2025-10-17 16:30:42,852 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:42,974 - WARNING - ================================================================================
+2025-10-17 16:30:42,974 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 940
+2025-10-17 16:30:42,974 - WARNING -    Fitness actual: 530.8
+2025-10-17 16:30:42,974 - WARNING -    Fitness vecino: -6804.1
+2025-10-17 16:30:42,975 - WARNING -    Delta: -7334.9
+2025-10-17 16:30:42,975 - WARNING -    Temperatura: 7.81
+2025-10-17 16:30:42,975 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:42,975 - WARNING -    Vecino - Puntos: 15536, Tiempo: 15177.0min, Distancia: 200.6km
+2025-10-17 16:30:42,975 - WARNING -    Actual - Puntos: 15555, Tiempo: 14197.7min, Distancia: 199.0km
+2025-10-17 16:30:42,975 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:42,976 - WARNING - ================================================================================
+2025-10-17 16:30:42,976 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 940
+2025-10-17 16:30:42,976 - WARNING -    Fitness: 530.8 → -6804.1 (Δ=-7334.9)
+2025-10-17 16:30:42,976 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:43,510 - WARNING - ================================================================================
+2025-10-17 16:30:43,510 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 955
+2025-10-17 16:30:43,511 - WARNING -    Fitness actual: 530.6
+2025-10-17 16:30:43,511 - WARNING -    Fitness vecino: -6175.5
+2025-10-17 16:30:43,511 - WARNING -    Delta: -6706.0
+2025-10-17 16:30:43,511 - WARNING -    Temperatura: 7.69
+2025-10-17 16:30:43,511 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:43,511 - WARNING -    Vecino - Puntos: 15548, Tiempo: 14820.7min, Distancia: 200.7km
+2025-10-17 16:30:43,512 - WARNING -    Actual - Puntos: 15555, Tiempo: 14207.7min, Distancia: 199.8km
+2025-10-17 16:30:43,512 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:43,512 - WARNING - ================================================================================
+2025-10-17 16:30:43,512 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 955
+2025-10-17 16:30:43,512 - WARNING -    Fitness: 530.6 → -6175.5 (Δ=-6706.0)
+2025-10-17 16:30:43,513 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:43,990 - INFO - 🌟 MEJORA #121 en iter 968: Fitness=646.8 (+90.7), Puntos=15571
+2025-10-17 16:30:44,069 - INFO - 🌟 MEJORA #122 en iter 970: Fitness=746.7 (+100.0), Puntos=15571
+2025-10-17 16:30:44,183 - INFO - 🌟 MEJORA #123 en iter 973: Fitness=747.1 (+0.4), Puntos=15571
+2025-10-17 16:30:44,260 - INFO - 🌟 MEJORA #124 en iter 975: Fitness=747.1 (+0.0), Puntos=15571
+2025-10-17 16:30:44,451 - WARNING - ================================================================================
+2025-10-17 16:30:44,452 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 980
+2025-10-17 16:30:44,452 - WARNING -    Fitness actual: 746.9
+2025-10-17 16:30:44,452 - WARNING -    Fitness vecino: -5200.8
+2025-10-17 16:30:44,452 - WARNING -    Delta: -5947.7
+2025-10-17 16:30:44,452 - WARNING -    Temperatura: 7.50
+2025-10-17 16:30:44,453 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:44,453 - WARNING -    Vecino - Puntos: 15571, Tiempo: 14326.4min, Distancia: 205.9km
+2025-10-17 16:30:44,453 - WARNING -    Actual - Puntos: 15571, Tiempo: 14237.8min, Distancia: 198.6km
+2025-10-17 16:30:44,453 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:44,453 - WARNING - ================================================================================
+2025-10-17 16:30:44,454 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 980
+2025-10-17 16:30:44,454 - WARNING -    Fitness: 746.9 → -5200.8 (Δ=-5947.7)
+2025-10-17 16:30:44,454 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:44,502 - WARNING - ================================================================================
+2025-10-17 16:30:44,502 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 981
+2025-10-17 16:30:44,502 - WARNING -    Fitness actual: 746.9
+2025-10-17 16:30:44,503 - WARNING -    Fitness vecino: -4538.9
+2025-10-17 16:30:44,503 - WARNING -    Delta: -5285.8
+2025-10-17 16:30:44,503 - WARNING -    Temperatura: 7.50
+2025-10-17 16:30:44,503 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:44,503 - WARNING -    Vecino - Puntos: 15571, Tiempo: 15069.0min, Distancia: 191.6km
+2025-10-17 16:30:44,504 - WARNING -    Actual - Puntos: 15571, Tiempo: 14237.8min, Distancia: 198.6km
+2025-10-17 16:30:44,504 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:44,504 - WARNING - ================================================================================
+2025-10-17 16:30:44,505 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 981
+2025-10-17 16:30:44,505 - WARNING -    Fitness: 746.9 → -4538.9 (Δ=-5285.8)
+2025-10-17 16:30:44,505 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:44,931 - INFO - 🌟 MEJORA #125 en iter 992: Fitness=755.6 (+8.5), Puntos=15578
+2025-10-17 16:30:44,931 - INFO -   ✨ Mejora #125 en iteración 993: Fitness = 755.6 | Puntos = 15578 | T = 7.41
+2025-10-17 16:30:45,237 - INFO -   Iter  1000 | Tiempo:    0.7min | T =     7.35 | Fitness =    755.6 | Mejor =    755.6 | Aceptación =  55.8%
+2025-10-17 16:30:45,237 - INFO - Progreso iter 1000: T=7.35, Fitness=755.6, Mejor=755.6, Tasa_acept=55.8%
+2025-10-17 16:30:45,238 - DEBUG - Iter 1000: T=7.35, Fitness_actual=755.6, Mejor=755.6
+2025-10-17 16:30:45,279 - INFO - 🌟 MEJORA #126 en iter 1001: Fitness=758.5 (+3.0), Puntos=15581
+2025-10-17 16:30:45,476 - INFO - 🌟 MEJORA #127 en iter 1006: Fitness=758.6 (+0.1), Puntos=15581
+2025-10-17 16:30:45,515 - INFO - 🌟 MEJORA #128 en iter 1007: Fitness=958.6 (+200.0), Puntos=15581
+2025-10-17 16:30:45,638 - INFO - 🌟 MEJORA #129 en iter 1010: Fitness=965.5 (+6.9), Puntos=15588
+2025-10-17 16:30:45,809 - INFO - 🌟 MEJORA #130 en iter 1014: Fitness=977.5 (+12.0), Puntos=15600
+2025-10-17 16:30:45,809 - INFO -   ✨ Mejora #130 en iteración 1015: Fitness = 977.5 | Puntos = 15600 | T = 7.25
+2025-10-17 16:30:45,982 - INFO - 🌟 MEJORA #131 en iter 1018: Fitness=977.5 (+0.0), Puntos=15600
+2025-10-17 16:30:46,323 - WARNING - ================================================================================
+2025-10-17 16:30:46,324 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1026
+2025-10-17 16:30:46,324 - WARNING -    Fitness actual: 973.1
+2025-10-17 16:30:46,324 - WARNING -    Fitness vecino: -11166.7
+2025-10-17 16:30:46,324 - WARNING -    Delta: -12139.8
+2025-10-17 16:30:46,324 - WARNING -    Temperatura: 7.17
+2025-10-17 16:30:46,324 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:46,325 - WARNING -    Vecino - Puntos: 15596, Tiempo: 14376.6min, Distancia: 208.5km
+2025-10-17 16:30:46,325 - WARNING -    Actual - Puntos: 15596, Tiempo: 14209.6min, Distancia: 194.6km
+2025-10-17 16:30:46,325 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:46,325 - WARNING - ================================================================================
+2025-10-17 16:30:46,325 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1026
+2025-10-17 16:30:46,325 - WARNING -    Fitness: 973.1 → -11166.7 (Δ=-12139.8)
+2025-10-17 16:30:46,326 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:46,990 - WARNING - ================================================================================
+2025-10-17 16:30:46,991 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1042
+2025-10-17 16:30:46,991 - WARNING -    Fitness actual: 964.6
+2025-10-17 16:30:46,991 - WARNING -    Fitness vecino: -5543.9
+2025-10-17 16:30:46,991 - WARNING -    Delta: -6508.5
+2025-10-17 16:30:46,992 - WARNING -    Temperatura: 7.05
+2025-10-17 16:30:46,992 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:46,992 - WARNING -    Vecino - Puntos: 15566, Tiempo: 14876.8min, Distancia: 191.7km
+2025-10-17 16:30:46,992 - WARNING -    Actual - Puntos: 15588, Tiempo: 14217.0min, Distancia: 196.4km
+2025-10-17 16:30:46,992 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:46,993 - WARNING - ================================================================================
+2025-10-17 16:30:46,993 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1042
+2025-10-17 16:30:46,993 - WARNING -    Fitness: 964.6 → -5543.9 (Δ=-6508.5)
+2025-10-17 16:30:46,993 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:47,500 - WARNING - ================================================================================
+2025-10-17 16:30:47,500 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1054
+2025-10-17 16:30:47,500 - WARNING -    Fitness actual: 964.7
+2025-10-17 16:30:47,501 - WARNING -    Fitness vecino: -5343.6
+2025-10-17 16:30:47,501 - WARNING -    Delta: -6308.3
+2025-10-17 16:30:47,501 - WARNING -    Temperatura: 6.97
+2025-10-17 16:30:47,501 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:47,501 - WARNING -    Vecino - Puntos: 15566, Tiempo: 14864.7min, Distancia: 190.7km
+2025-10-17 16:30:47,501 - WARNING -    Actual - Puntos: 15588, Tiempo: 14213.7min, Distancia: 196.1km
+2025-10-17 16:30:47,501 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:47,502 - WARNING - ================================================================================
+2025-10-17 16:30:47,502 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1054
+2025-10-17 16:30:47,502 - WARNING -    Fitness: 964.7 → -5343.6 (Δ=-6308.3)
+2025-10-17 16:30:47,502 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:47,957 - INFO - 🌟 MEJORA #132 en iter 1064: Fitness=1195.5 (+217.9), Puntos=15602
+2025-10-17 16:30:48,002 - INFO - 🌟 MEJORA #133 en iter 1065: Fitness=1195.6 (+0.2), Puntos=15602
+2025-10-17 16:30:48,091 - INFO - 🌟 MEJORA #134 en iter 1067: Fitness=1195.7 (+0.0), Puntos=15602
+2025-10-17 16:30:48,181 - INFO - 🌟 MEJORA #135 en iter 1069: Fitness=1195.8 (+0.2), Puntos=15602
+2025-10-17 16:30:48,181 - INFO -   ✨ Mejora #135 en iteración 1070: Fitness = 1195.8 | Puntos = 15602 | T = 6.86
+2025-10-17 16:30:49,031 - INFO - 🌟 MEJORA #136 en iter 1088: Fitness=1199.6 (+3.8), Puntos=15607
+2025-10-17 16:30:49,075 - INFO - 🌟 MEJORA #137 en iter 1089: Fitness=1202.3 (+2.7), Puntos=15610
+2025-10-17 16:30:49,200 - INFO - 🌟 MEJORA #138 en iter 1092: Fitness=1202.4 (+0.1), Puntos=15610
+2025-10-17 16:30:49,325 - INFO - 🌟 MEJORA #139 en iter 1095: Fitness=1206.2 (+3.9), Puntos=15614
+2025-10-17 16:30:49,366 - INFO - 🌟 MEJORA #140 en iter 1096: Fitness=1218.6 (+12.4), Puntos=15626
+2025-10-17 16:30:49,367 - INFO -   ✨ Mejora #140 en iteración 1097: Fitness = 1218.6 | Puntos = 15626 | T = 6.68
+2025-10-17 16:30:49,491 - INFO - 🌟 MEJORA #141 en iter 1099: Fitness=1218.6 (+0.0), Puntos=15626
+2025-10-17 16:30:49,532 - DEBUG - Iter 1100: T=6.65, Fitness_actual=1218.6, Mejor=1218.6
+2025-10-17 16:30:49,792 - INFO - 🌟 MEJORA #142 en iter 1106: Fitness=1219.0 (+0.4), Puntos=15626
+2025-10-17 16:30:49,887 - WARNING - ================================================================================
+2025-10-17 16:30:49,887 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1108
+2025-10-17 16:30:49,888 - WARNING -    Fitness actual: 1219.0
+2025-10-17 16:30:49,888 - WARNING -    Fitness vecino: -4085.2
+2025-10-17 16:30:49,888 - WARNING -    Delta: -5304.2
+2025-10-17 16:30:49,888 - WARNING -    Temperatura: 6.60
+2025-10-17 16:30:49,888 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:49,888 - WARNING -    Vecino - Puntos: 15619, Tiempo: 14550.9min, Distancia: 179.1km
+2025-10-17 16:30:49,889 - WARNING -    Actual - Puntos: 15626, Tiempo: 14060.1min, Distancia: 188.3km
+2025-10-17 16:30:49,889 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:49,889 - WARNING - ================================================================================
+2025-10-17 16:30:49,889 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1108
+2025-10-17 16:30:49,889 - WARNING -    Fitness: 1219.0 → -4085.2 (Δ=-5304.2)
+2025-10-17 16:30:49,889 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:49,934 - INFO - 🌟 MEJORA #143 en iter 1109: Fitness=1219.1 (+0.0), Puntos=15626
+2025-10-17 16:30:49,978 - INFO - 🌟 MEJORA #144 en iter 1110: Fitness=1219.1 (+0.0), Puntos=15626
+2025-10-17 16:30:50,021 - INFO - 🌟 MEJORA #145 en iter 1111: Fitness=1219.3 (+0.2), Puntos=15626
+2025-10-17 16:30:50,021 - INFO -   ✨ Mejora #145 en iteración 1112: Fitness = 1219.3 | Puntos = 15626 | T = 6.58
+2025-10-17 16:30:50,235 - INFO - 🌟 MEJORA #146 en iter 1116: Fitness=1219.3 (+0.0), Puntos=15626
+2025-10-17 16:30:50,874 - INFO - 🌟 MEJORA #147 en iter 1131: Fitness=1237.3 (+17.9), Puntos=15625
+2025-10-17 16:30:50,918 - INFO - 🌟 MEJORA #148 en iter 1132: Fitness=1237.5 (+0.2), Puntos=15625
+2025-10-17 16:30:51,433 - INFO - 🌟 MEJORA #149 en iter 1144: Fitness=1239.1 (+1.6), Puntos=15627
+2025-10-17 16:30:51,477 - WARNING - ================================================================================
+2025-10-17 16:30:51,477 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1145
+2025-10-17 16:30:51,478 - WARNING -    Fitness actual: 1239.1
+2025-10-17 16:30:51,478 - WARNING -    Fitness vecino: -10827.7
+2025-10-17 16:30:51,478 - WARNING -    Delta: -12066.8
+2025-10-17 16:30:51,478 - WARNING -    Temperatura: 6.36
+2025-10-17 16:30:51,478 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:51,479 - WARNING -    Vecino - Puntos: 15627, Tiempo: 14219.5min, Distancia: 201.6km
+2025-10-17 16:30:51,479 - WARNING -    Actual - Puntos: 15627, Tiempo: 14041.0min, Distancia: 186.8km
+2025-10-17 16:30:51,479 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:51,480 - WARNING - ================================================================================
+2025-10-17 16:30:51,480 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1145
+2025-10-17 16:30:51,480 - WARNING -    Fitness: 1239.1 → -10827.7 (Δ=-12066.8)
+2025-10-17 16:30:51,480 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:51,526 - INFO - 🌟 MEJORA #150 en iter 1146: Fitness=1249.0 (+9.9), Puntos=15637
+2025-10-17 16:30:51,526 - INFO -   ✨ Mejora #150 en iteración 1147: Fitness = 1249.0 | Puntos = 15637 | T = 6.35
+2025-10-17 16:30:52,078 - INFO - 🌟 MEJORA #151 en iter 1159: Fitness=1272.4 (+23.4), Puntos=15621
+2025-10-17 16:30:52,123 - INFO - 🌟 MEJORA #152 en iter 1160: Fitness=1272.6 (+0.2), Puntos=15621
+2025-10-17 16:30:52,344 - WARNING - ================================================================================
+2025-10-17 16:30:52,345 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1165
+2025-10-17 16:30:52,345 - WARNING -    Fitness actual: 1272.6
+2025-10-17 16:30:52,345 - WARNING -    Fitness vecino: 9586.6
+2025-10-17 16:30:52,345 - WARNING -    Delta: +8314.1
+2025-10-17 16:30:52,345 - WARNING -    Temperatura: 6.23
+2025-10-17 16:30:52,346 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:52,346 - WARNING -    Vecino - Puntos: 15624, Tiempo: 14153.3min, Distancia: 171.9km
+2025-10-17 16:30:52,346 - WARNING -    Actual - Puntos: 15621, Tiempo: 13976.3min, Distancia: 185.9km
+2025-10-17 16:30:52,346 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:52,346 - WARNING - ================================================================================
+2025-10-17 16:30:52,347 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1165
+2025-10-17 16:30:52,347 - WARNING -    Fitness: 1272.6 → 9586.6 (Δ=+8314.1)
+2025-10-17 16:30:52,347 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:52,347 - INFO - Iter 1165: Aceptada solución con delta=+8314.1 (T=6.23)
+2025-10-17 16:30:52,347 - INFO - 🌟 MEJORA #153 en iter 1165: Fitness=9586.6 (+8314.0), Puntos=15624
+2025-10-17 16:30:52,677 - INFO - 🌟 MEJORA #154 en iter 1172: Fitness=9586.8 (+0.2), Puntos=15624
+2025-10-17 16:30:52,725 - INFO - 🌟 MEJORA #155 en iter 1173: Fitness=9586.8 (+0.0), Puntos=15624
+2025-10-17 16:30:52,725 - INFO -   ✨ Mejora #155 en iteración 1174: Fitness = 9586.8 | Puntos = 15624 | T = 6.19
+2025-10-17 16:30:53,352 - INFO - 🌟 MEJORA #156 en iter 1187: Fitness=9587.1 (+0.2), Puntos=15624
+2025-10-17 16:30:53,445 - WARNING - ================================================================================
+2025-10-17 16:30:53,445 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1189
+2025-10-17 16:30:53,445 - WARNING -    Fitness actual: 9587.1
+2025-10-17 16:30:53,445 - WARNING -    Fitness vecino: -2474.0
+2025-10-17 16:30:53,446 - WARNING -    Delta: -12061.1
+2025-10-17 16:30:53,446 - WARNING -    Temperatura: 6.09
+2025-10-17 16:30:53,446 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:53,446 - WARNING -    Vecino - Puntos: 15624, Tiempo: 14299.8min, Distancia: 185.4km
+2025-10-17 16:30:53,446 - WARNING -    Actual - Puntos: 15624, Tiempo: 14121.7min, Distancia: 170.6km
+2025-10-17 16:30:53,447 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:53,447 - WARNING - ================================================================================
+2025-10-17 16:30:53,447 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1189
+2025-10-17 16:30:53,447 - WARNING -    Fitness: 9587.1 → -2474.0 (Δ=-12061.1)
+2025-10-17 16:30:53,447 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:53,851 - INFO - 🌟 MEJORA #157 en iter 1198: Fitness=9686.8 (+99.7), Puntos=15624
+2025-10-17 16:30:53,942 - DEBUG - Iter 1200: T=6.02, Fitness_actual=9686.8, Mejor=9686.8
+2025-10-17 16:30:53,942 - INFO - 🌟 MEJORA #158 en iter 1200: Fitness=9690.8 (+4.0), Puntos=15628
+2025-10-17 16:30:53,989 - INFO - 🌟 MEJORA #159 en iter 1201: Fitness=9990.8 (+300.0), Puntos=15628
+2025-10-17 16:30:54,036 - INFO - 🌟 MEJORA #160 en iter 1202: Fitness=9990.9 (+0.1), Puntos=15628
+2025-10-17 16:30:54,036 - INFO -   ✨ Mejora #160 en iteración 1203: Fitness = 9990.9 | Puntos = 15628 | T = 6.01
+2025-10-17 16:30:54,084 - INFO - 🌟 MEJORA #161 en iter 1203: Fitness=10160.9 (+170.0), Puntos=15628
+2025-10-17 16:30:54,394 - INFO - 🌟 MEJORA #162 en iter 1210: Fitness=10643.3 (+482.4), Puntos=15628
+2025-10-17 16:30:54,485 - INFO - 🌟 MEJORA #163 en iter 1212: Fitness=10645.3 (+2.0), Puntos=15630
+2025-10-17 16:30:54,575 - INFO - 🌟 MEJORA #164 en iter 1214: Fitness=10645.4 (+0.1), Puntos=15630
+2025-10-17 16:30:54,666 - INFO - 🌟 MEJORA #165 en iter 1216: Fitness=10645.5 (+0.1), Puntos=15630
+2025-10-17 16:30:54,666 - INFO -   ✨ Mejora #165 en iteración 1217: Fitness = 10645.5 | Puntos = 15630 | T = 5.92
+2025-10-17 16:30:54,714 - INFO - 🌟 MEJORA #166 en iter 1217: Fitness=10645.5 (+0.0), Puntos=15630
+2025-10-17 16:30:54,849 - INFO - 🌟 MEJORA #167 en iter 1220: Fitness=10655.7 (+10.1), Puntos=15641
+2025-10-17 16:30:54,941 - INFO - 🌟 MEJORA #168 en iter 1222: Fitness=10665.4 (+9.8), Puntos=15651
+2025-10-17 16:30:55,079 - WARNING - ================================================================================
+2025-10-17 16:30:55,079 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1225
+2025-10-17 16:30:55,079 - WARNING -    Fitness actual: 10665.2
+2025-10-17 16:30:55,080 - WARNING -    Fitness vecino: 5561.6
+2025-10-17 16:30:55,080 - WARNING -    Delta: -5103.6
+2025-10-17 16:30:55,080 - WARNING -    Temperatura: 5.87
+2025-10-17 16:30:55,080 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:55,080 - WARNING -    Vecino - Puntos: 15644, Tiempo: 14601.1min, Distancia: 172.4km
+2025-10-17 16:30:55,081 - WARNING -    Actual - Puntos: 15651, Tiempo: 13843.6min, Distancia: 174.5km
+2025-10-17 16:30:55,081 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:55,081 - WARNING - ================================================================================
+2025-10-17 16:30:55,081 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1225
+2025-10-17 16:30:55,081 - WARNING -    Fitness: 10665.2 → 5561.6 (Δ=-5103.6)
+2025-10-17 16:30:55,081 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:55,173 - INFO - 🌟 MEJORA #169 en iter 1227: Fitness=10669.6 (+4.1), Puntos=15656
+2025-10-17 16:30:55,805 - WARNING - ================================================================================
+2025-10-17 16:30:55,805 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1241
+2025-10-17 16:30:55,805 - WARNING -    Fitness actual: 10656.7
+2025-10-17 16:30:55,805 - WARNING -    Fitness vecino: 2625.2
+2025-10-17 16:30:55,806 - WARNING -    Delta: -8031.5
+2025-10-17 16:30:55,806 - WARNING -    Temperatura: 5.78
+2025-10-17 16:30:55,806 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:55,806 - WARNING -    Vecino - Puntos: 15636, Tiempo: 14771.1min, Distancia: 176.6km
+2025-10-17 16:30:55,806 - WARNING -    Actual - Puntos: 15643, Tiempo: 13983.6min, Distancia: 176.1km
+2025-10-17 16:30:55,806 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:55,807 - WARNING - ================================================================================
+2025-10-17 16:30:55,807 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1241
+2025-10-17 16:30:55,807 - WARNING -    Fitness: 10656.7 → 2625.2 (Δ=-8031.5)
+2025-10-17 16:30:55,807 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:55,855 - INFO - Iter 1242: Aceptada solución con delta=+2027.3 (T=5.77)
+2025-10-17 16:30:55,855 - INFO - 🌟 MEJORA #170 en iter 1242: Fitness=12684.1 (+2014.5), Puntos=15637
+2025-10-17 16:30:55,855 - INFO -   ✨ Mejora #170 en iteración 1243: Fitness = 12684.1 | Puntos = 15637 | T = 5.77
+2025-10-17 16:30:56,036 - INFO - 🌟 MEJORA #171 en iter 1246: Fitness=12684.2 (+0.1), Puntos=15637
+2025-10-17 16:30:56,083 - INFO - 🌟 MEJORA #172 en iter 1247: Fitness=12689.9 (+5.7), Puntos=15644
+2025-10-17 16:30:56,129 - WARNING - ================================================================================
+2025-10-17 16:30:56,129 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1248
+2025-10-17 16:30:56,129 - WARNING -    Fitness actual: 12689.9
+2025-10-17 16:30:56,129 - WARNING -    Fitness vecino: 621.9
+2025-10-17 16:30:56,129 - WARNING -    Delta: -12068.0
+2025-10-17 16:30:56,129 - WARNING -    Temperatura: 5.74
+2025-10-17 16:30:56,130 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:56,130 - WARNING -    Vecino - Puntos: 15644, Tiempo: 14145.3min, Distancia: 194.6km
+2025-10-17 16:30:56,130 - WARNING -    Actual - Puntos: 15644, Tiempo: 13974.1min, Distancia: 180.3km
+2025-10-17 16:30:56,130 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:56,130 - WARNING - ================================================================================
+2025-10-17 16:30:56,130 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1248
+2025-10-17 16:30:56,131 - WARNING -    Fitness: 12689.9 → 621.9 (Δ=-12068.0)
+2025-10-17 16:30:56,131 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:56,315 - INFO - 🌟 MEJORA #173 en iter 1252: Fitness=12690.7 (+0.8), Puntos=15644
+2025-10-17 16:30:56,499 - INFO - 🌟 MEJORA #174 en iter 1256: Fitness=12691.0 (+0.3), Puntos=15644
+2025-10-17 16:30:56,546 - INFO - 🌟 MEJORA #175 en iter 1257: Fitness=12691.0 (+0.0), Puntos=15644
+2025-10-17 16:30:56,546 - INFO -   ✨ Mejora #175 en iteración 1258: Fitness = 12691.0 | Puntos = 15644 | T = 5.69
+2025-10-17 16:30:56,867 - WARNING - ================================================================================
+2025-10-17 16:30:56,867 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1264
+2025-10-17 16:30:56,867 - WARNING -    Fitness actual: 12689.0
+2025-10-17 16:30:56,868 - WARNING -    Fitness vecino: 7546.7
+2025-10-17 16:30:56,868 - WARNING -    Delta: -5142.3
+2025-10-17 16:30:56,868 - WARNING -    Temperatura: 5.65
+2025-10-17 16:30:56,868 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:56,868 - WARNING -    Vecino - Puntos: 15642, Tiempo: 14426.6min, Distancia: 174.9km
+2025-10-17 16:30:56,869 - WARNING -    Actual - Puntos: 15642, Tiempo: 13953.6min, Distancia: 176.5km
+2025-10-17 16:30:56,869 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:56,869 - WARNING - ================================================================================
+2025-10-17 16:30:56,869 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1264
+2025-10-17 16:30:56,869 - WARNING -    Fitness: 12689.0 → 7546.7 (Δ=-5142.3)
+2025-10-17 16:30:56,870 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:30:57,051 - INFO - 🌟 MEJORA #176 en iter 1268: Fitness=12783.9 (+92.9), Puntos=15636
+2025-10-17 16:30:57,231 - INFO - 🌟 MEJORA #177 en iter 1272: Fitness=12784.0 (+0.1), Puntos=15636
+2025-10-17 16:30:57,278 - INFO - 🌟 MEJORA #178 en iter 1273: Fitness=12784.1 (+0.1), Puntos=15636
+2025-10-17 16:30:57,459 - INFO - 🌟 MEJORA #179 en iter 1277: Fitness=12784.3 (+0.2), Puntos=15636
+2025-10-17 16:30:57,867 - INFO - 🌟 MEJORA #180 en iter 1286: Fitness=12784.5 (+0.1), Puntos=15636
+2025-10-17 16:30:57,868 - INFO -   ✨ Mejora #180 en iteración 1287: Fitness = 12784.5 | Puntos = 15636 | T = 5.52
+2025-10-17 16:30:58,505 - DEBUG - Iter 1300: T=5.45, Fitness_actual=12781.8, Mejor=12784.5
+2025-10-17 16:30:59,757 - WARNING - ================================================================================
+2025-10-17 16:30:59,757 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1328
+2025-10-17 16:30:59,758 - WARNING -    Fitness actual: 12783.3
+2025-10-17 16:30:59,758 - WARNING -    Fitness vecino: 7278.5
+2025-10-17 16:30:59,758 - WARNING -    Delta: -5504.8
+2025-10-17 16:30:59,758 - WARNING -    Temperatura: 5.30
+2025-10-17 16:30:59,759 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:30:59,759 - WARNING -    Vecino - Puntos: 15629, Tiempo: 14859.5min, Distancia: 168.3km
+2025-10-17 16:30:59,759 - WARNING -    Actual - Puntos: 15634, Tiempo: 13892.4min, Distancia: 168.9km
+2025-10-17 16:30:59,759 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:30:59,759 - WARNING - ================================================================================
+2025-10-17 16:30:59,759 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1328
+2025-10-17 16:30:59,760 - WARNING -    Fitness: 12783.3 → 7278.5 (Δ=-5504.8)
+2025-10-17 16:30:59,760 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:00,212 - INFO - 🌟 MEJORA #181 en iter 1338: Fitness=12802.4 (+18.0), Puntos=15653
+2025-10-17 16:31:00,306 - INFO - 🌟 MEJORA #182 en iter 1340: Fitness=12803.2 (+0.8), Puntos=15654
+2025-10-17 16:31:00,399 - INFO - 🌟 MEJORA #183 en iter 1342: Fitness=12803.5 (+0.3), Puntos=15654
+2025-10-17 16:31:01,409 - INFO - 🌟 MEJORA #184 en iter 1364: Fitness=12820.2 (+16.6), Puntos=15671
+2025-10-17 16:31:01,464 - WARNING - ================================================================================
+2025-10-17 16:31:01,465 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1365
+2025-10-17 16:31:01,465 - WARNING -    Fitness actual: 12820.2
+2025-10-17 16:31:01,465 - WARNING -    Fitness vecino: 7705.4
+2025-10-17 16:31:01,465 - WARNING -    Delta: -5114.8
+2025-10-17 16:31:01,466 - WARNING -    Temperatura: 5.10
+2025-10-17 16:31:01,466 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:01,466 - WARNING -    Vecino - Puntos: 15656, Tiempo: 14673.0min, Distancia: 168.8km
+2025-10-17 16:31:01,466 - WARNING -    Actual - Puntos: 15671, Tiempo: 13927.8min, Distancia: 169.4km
+2025-10-17 16:31:01,467 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:01,467 - WARNING - ================================================================================
+2025-10-17 16:31:01,467 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1365
+2025-10-17 16:31:01,467 - WARNING -    Fitness: 12820.2 → 7705.4 (Δ=-5114.8)
+2025-10-17 16:31:01,467 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:03,063 - DEBUG - Iter 1400: T=4.93, Fitness_actual=12809.1, Mejor=12820.2
+2025-10-17 16:31:03,713 - WARNING - ================================================================================
+2025-10-17 16:31:03,713 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1414
+2025-10-17 16:31:03,714 - WARNING -    Fitness actual: 12810.8
+2025-10-17 16:31:03,714 - WARNING -    Fitness vecino: 6872.3
+2025-10-17 16:31:03,714 - WARNING -    Delta: -5938.5
+2025-10-17 16:31:03,714 - WARNING -    Temperatura: 4.86
+2025-10-17 16:31:03,714 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:03,714 - WARNING -    Vecino - Puntos: 15625, Tiempo: 14651.6min, Distancia: 175.8km
+2025-10-17 16:31:03,714 - WARNING -    Actual - Puntos: 15663, Tiempo: 13914.0min, Distancia: 174.1km
+2025-10-17 16:31:03,715 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:03,715 - WARNING - ================================================================================
+2025-10-17 16:31:03,715 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1414
+2025-10-17 16:31:03,715 - WARNING -    Fitness: 12810.8 → 6872.3 (Δ=-5938.5)
+2025-10-17 16:31:03,715 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:04,137 - WARNING - ================================================================================
+2025-10-17 16:31:04,138 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1423
+2025-10-17 16:31:04,138 - WARNING -    Fitness actual: 12810.7
+2025-10-17 16:31:04,138 - WARNING -    Fitness vecino: 6872.2
+2025-10-17 16:31:04,138 - WARNING -    Delta: -5938.5
+2025-10-17 16:31:04,138 - WARNING -    Temperatura: 4.82
+2025-10-17 16:31:04,139 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:04,139 - WARNING -    Vecino - Puntos: 15625, Tiempo: 14654.2min, Distancia: 176.0km
+2025-10-17 16:31:04,139 - WARNING -    Actual - Puntos: 15663, Tiempo: 13918.7min, Distancia: 174.5km
+2025-10-17 16:31:04,139 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:04,140 - WARNING - ================================================================================
+2025-10-17 16:31:04,140 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1423
+2025-10-17 16:31:04,140 - WARNING -    Fitness: 12810.7 → 6872.2 (Δ=-5938.5)
+2025-10-17 16:31:04,140 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:04,382 - WARNING - ================================================================================
+2025-10-17 16:31:04,382 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1428
+2025-10-17 16:31:04,382 - WARNING -    Fitness actual: 12811.3
+2025-10-17 16:31:04,383 - WARNING -    Fitness vecino: 7794.2
+2025-10-17 16:31:04,383 - WARNING -    Delta: -5017.1
+2025-10-17 16:31:04,383 - WARNING -    Temperatura: 4.79
+2025-10-17 16:31:04,383 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:04,384 - WARNING -    Vecino - Puntos: 15648, Tiempo: 14759.4min, Distancia: 179.4km
+2025-10-17 16:31:04,384 - WARNING -    Actual - Puntos: 15665, Tiempo: 14018.8min, Distancia: 179.1km
+2025-10-17 16:31:04,384 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:04,384 - WARNING - ================================================================================
+2025-10-17 16:31:04,384 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1428
+2025-10-17 16:31:04,384 - WARNING -    Fitness: 12811.3 → 7794.2 (Δ=-5017.1)
+2025-10-17 16:31:04,385 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:04,993 - WARNING - ================================================================================
+2025-10-17 16:31:04,993 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1441
+2025-10-17 16:31:04,993 - WARNING -    Fitness actual: 12811.2
+2025-10-17 16:31:04,993 - WARNING -    Fitness vecino: 6777.3
+2025-10-17 16:31:04,994 - WARNING -    Delta: -6033.9
+2025-10-17 16:31:04,994 - WARNING -    Temperatura: 4.73
+2025-10-17 16:31:04,994 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:04,994 - WARNING -    Vecino - Puntos: 15631, Tiempo: 14948.8min, Distancia: 179.1km
+2025-10-17 16:31:04,994 - WARNING -    Actual - Puntos: 15665, Tiempo: 14021.9min, Distancia: 179.3km
+2025-10-17 16:31:04,995 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:04,995 - WARNING - ================================================================================
+2025-10-17 16:31:04,995 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1441
+2025-10-17 16:31:04,995 - WARNING -    Fitness: 12811.2 → 6777.3 (Δ=-6033.9)
+2025-10-17 16:31:04,995 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:05,045 - INFO - 🌟 MEJORA #185 en iter 1442: Fitness=12911.6 (+91.4), Puntos=15665
+2025-10-17 16:31:05,045 - INFO -   ✨ Mejora #185 en iteración 1443: Fitness = 12911.6 | Puntos = 15665 | T = 4.73
+2025-10-17 16:31:05,142 - INFO - 🌟 MEJORA #186 en iter 1444: Fitness=13011.6 (+100.0), Puntos=15665
+2025-10-17 16:31:05,741 - INFO - 🌟 MEJORA #187 en iter 1457: Fitness=13011.8 (+0.2), Puntos=15665
+2025-10-17 16:31:06,576 - WARNING - ================================================================================
+2025-10-17 16:31:06,576 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1475
+2025-10-17 16:31:06,576 - WARNING -    Fitness actual: 13007.0
+2025-10-17 16:31:06,576 - WARNING -    Fitness vecino: 4600.5
+2025-10-17 16:31:06,577 - WARNING -    Delta: -8406.5
+2025-10-17 16:31:06,577 - WARNING -    Temperatura: 4.57
+2025-10-17 16:31:06,577 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:06,577 - WARNING -    Vecino - Puntos: 15654, Tiempo: 15297.1min, Distancia: 178.3km
+2025-10-17 16:31:06,577 - WARNING -    Actual - Puntos: 15661, Tiempo: 14030.0min, Distancia: 180.0km
+2025-10-17 16:31:06,578 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:06,578 - WARNING - ================================================================================
+2025-10-17 16:31:06,578 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1475
+2025-10-17 16:31:06,578 - WARNING -    Fitness: 13007.0 → 4600.5 (Δ=-8406.5)
+2025-10-17 16:31:06,578 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:07,176 - INFO - 🌟 MEJORA #188 en iter 1488: Fitness=13013.5 (+1.7), Puntos=15667
+2025-10-17 16:31:07,224 - INFO - 🌟 MEJORA #189 en iter 1489: Fitness=13013.5 (+0.0), Puntos=15667
+2025-10-17 16:31:07,271 - INFO - 🌟 MEJORA #190 en iter 1490: Fitness=13016.3 (+2.8), Puntos=15669
+2025-10-17 16:31:07,271 - INFO -   ✨ Mejora #190 en iteración 1491: Fitness = 13016.3 | Puntos = 15669 | T = 4.50
+2025-10-17 16:31:07,733 - INFO -   Iter  1500 | Tiempo:    1.1min | T =     4.46 | Fitness =  13016.1 | Mejor =  13016.3 | Aceptación =  54.3%
+2025-10-17 16:31:07,733 - INFO - Progreso iter 1500: T=4.46, Fitness=13016.1, Mejor=13016.3, Tasa_acept=54.3%
+2025-10-17 16:31:07,736 - DEBUG - Iter 1500: T=4.46, Fitness_actual=13016.1, Mejor=13016.3
+2025-10-17 16:31:07,785 - INFO - 🌟 MEJORA #191 en iter 1501: Fitness=13046.6 (+30.3), Puntos=15699
+2025-10-17 16:31:08,016 - INFO - 🌟 MEJORA #192 en iter 1506: Fitness=13146.6 (+100.0), Puntos=15699
+2025-10-17 16:31:08,110 - INFO - 🌟 MEJORA #193 en iter 1508: Fitness=13146.8 (+0.2), Puntos=15699
+2025-10-17 16:31:08,295 - INFO - 🌟 MEJORA #194 en iter 1512: Fitness=13242.2 (+95.4), Puntos=15694
+2025-10-17 16:31:08,433 - INFO - 🌟 MEJORA #195 en iter 1515: Fitness=13248.2 (+6.0), Puntos=15700
+2025-10-17 16:31:08,433 - INFO -   ✨ Mejora #195 en iteración 1516: Fitness = 13248.2 | Puntos = 15700 | T = 4.39
+2025-10-17 16:31:08,526 - INFO - 🌟 MEJORA #196 en iter 1517: Fitness=13348.2 (+99.9), Puntos=15700
+2025-10-17 16:31:08,574 - INFO - 🌟 MEJORA #197 en iter 1518: Fitness=13358.2 (+10.0), Puntos=15710
+2025-10-17 16:31:08,621 - INFO - 🌟 MEJORA #198 en iter 1519: Fitness=13361.8 (+3.6), Puntos=15714
+2025-10-17 16:31:08,859 - INFO - 🌟 MEJORA #199 en iter 1524: Fitness=13367.2 (+5.4), Puntos=15720
+2025-10-17 16:31:09,001 - INFO - 🌟 MEJORA #200 en iter 1527: Fitness=13367.2 (+0.0), Puntos=15720
+2025-10-17 16:31:09,001 - INFO -   ✨ Mejora #200 en iteración 1528: Fitness = 13367.2 | Puntos = 15720 | T = 4.34
+2025-10-17 16:31:09,052 - INFO - 🌟 MEJORA #201 en iter 1528: Fitness=13369.4 (+2.2), Puntos=15720
+2025-10-17 16:31:09,101 - WARNING - ================================================================================
+2025-10-17 16:31:09,101 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1529
+2025-10-17 16:31:09,101 - WARNING -    Fitness actual: 13369.4
+2025-10-17 16:31:09,101 - WARNING -    Fitness vecino: 4290.3
+2025-10-17 16:31:09,102 - WARNING -    Delta: -9079.2
+2025-10-17 16:31:09,102 - WARNING -    Temperatura: 4.33
+2025-10-17 16:31:09,102 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:09,102 - WARNING -    Vecino - Puntos: 15720, Tiempo: 13926.7min, Distancia: 183.5km
+2025-10-17 16:31:09,103 - WARNING -    Actual - Puntos: 15720, Tiempo: 13748.0min, Distancia: 168.6km
+2025-10-17 16:31:09,103 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:09,103 - WARNING - ================================================================================
+2025-10-17 16:31:09,103 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1529
+2025-10-17 16:31:09,104 - WARNING -    Fitness: 13369.4 → 4290.3 (Δ=-9079.2)
+2025-10-17 16:31:09,104 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:09,200 - INFO - 🌟 MEJORA #202 en iter 1531: Fitness=13369.5 (+0.1), Puntos=15720
+2025-10-17 16:31:09,342 - INFO - 🌟 MEJORA #203 en iter 1534: Fitness=13381.5 (+12.0), Puntos=15733
+2025-10-17 16:31:09,391 - INFO - 🌟 MEJORA #204 en iter 1535: Fitness=13381.7 (+0.2), Puntos=15733
+2025-10-17 16:31:09,487 - WARNING - ================================================================================
+2025-10-17 16:31:09,488 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1537
+2025-10-17 16:31:09,488 - WARNING -    Fitness actual: 13381.7
+2025-10-17 16:31:09,488 - WARNING -    Fitness vecino: 7055.2
+2025-10-17 16:31:09,488 - WARNING -    Delta: -6326.5
+2025-10-17 16:31:09,488 - WARNING -    Temperatura: 4.30
+2025-10-17 16:31:09,489 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:09,489 - WARNING -    Vecino - Puntos: 15734, Tiempo: 13867.5min, Distancia: 172.7km
+2025-10-17 16:31:09,489 - WARNING -    Actual - Puntos: 15733, Tiempo: 13787.1min, Distancia: 171.0km
+2025-10-17 16:31:09,489 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:09,489 - WARNING - ================================================================================
+2025-10-17 16:31:09,489 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1537
+2025-10-17 16:31:09,490 - WARNING -    Fitness: 13381.7 → 7055.2 (Δ=-6326.5)
+2025-10-17 16:31:09,490 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:09,728 - INFO - 🌟 MEJORA #205 en iter 1542: Fitness=13381.8 (+0.1), Puntos=15733
+2025-10-17 16:31:09,728 - INFO -   ✨ Mejora #205 en iteración 1543: Fitness = 13381.8 | Puntos = 15733 | T = 4.28
+2025-10-17 16:31:09,963 - WARNING - ================================================================================
+2025-10-17 16:31:09,964 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1547
+2025-10-17 16:31:09,964 - WARNING -    Fitness actual: 13381.8
+2025-10-17 16:31:09,964 - WARNING -    Fitness vecino: 7671.3
+2025-10-17 16:31:09,964 - WARNING -    Delta: -5710.5
+2025-10-17 16:31:09,964 - WARNING -    Temperatura: 4.25
+2025-10-17 16:31:09,965 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:09,965 - WARNING -    Vecino - Puntos: 15756, Tiempo: 13837.9min, Distancia: 171.5km
+2025-10-17 16:31:09,965 - WARNING -    Actual - Puntos: 15733, Tiempo: 13781.4min, Distancia: 170.5km
+2025-10-17 16:31:09,965 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:09,965 - WARNING - ================================================================================
+2025-10-17 16:31:09,966 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1547
+2025-10-17 16:31:09,966 - WARNING -    Fitness: 13381.8 → 7671.3 (Δ=-5710.5)
+2025-10-17 16:31:09,966 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:10,344 - INFO - 🌟 MEJORA #206 en iter 1555: Fitness=13381.9 (+0.1), Puntos=15733
+2025-10-17 16:31:11,410 - INFO - 🌟 MEJORA #207 en iter 1578: Fitness=13382.6 (+0.6), Puntos=15733
+2025-10-17 16:31:12,450 - DEBUG - Iter 1600: T=4.03, Fitness_actual=13381.0, Mejor=13382.6
+2025-10-17 16:31:12,784 - INFO - 🌟 MEJORA #208 en iter 1607: Fitness=13403.4 (+20.9), Puntos=15754
+2025-10-17 16:31:12,989 - INFO - 🌟 MEJORA #209 en iter 1611: Fitness=13407.3 (+3.9), Puntos=15758
+2025-10-17 16:31:13,038 - INFO - 🌟 MEJORA #210 en iter 1612: Fitness=13409.4 (+2.0), Puntos=15760
+2025-10-17 16:31:13,038 - INFO -   ✨ Mejora #210 en iteración 1613: Fitness = 13409.4 | Puntos = 15760 | T = 3.99
+2025-10-17 16:31:13,467 - INFO - 🌟 MEJORA #211 en iter 1621: Fitness=13409.4 (+0.0), Puntos=15760
+2025-10-17 16:31:13,611 - INFO - 🌟 MEJORA #212 en iter 1624: Fitness=13419.4 (+10.0), Puntos=15770
+2025-10-17 16:31:13,756 - WARNING - ================================================================================
+2025-10-17 16:31:13,757 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1627
+2025-10-17 16:31:13,757 - WARNING -    Fitness actual: 13419.4
+2025-10-17 16:31:13,757 - WARNING -    Fitness vecino: 7218.8
+2025-10-17 16:31:13,757 - WARNING -    Delta: -6200.6
+2025-10-17 16:31:13,758 - WARNING -    Temperatura: 3.93
+2025-10-17 16:31:13,758 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:13,758 - WARNING -    Vecino - Puntos: 15770, Tiempo: 14544.1min, Distancia: 170.6km
+2025-10-17 16:31:13,758 - WARNING -    Actual - Puntos: 15770, Tiempo: 13768.3min, Distancia: 168.6km
+2025-10-17 16:31:13,758 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:13,758 - WARNING - ================================================================================
+2025-10-17 16:31:13,758 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1627
+2025-10-17 16:31:13,759 - WARNING -    Fitness: 13419.4 → 7218.8 (Δ=-6200.6)
+2025-10-17 16:31:13,759 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:13,949 - INFO - 🌟 MEJORA #213 en iter 1631: Fitness=13419.4 (+0.0), Puntos=15770
+2025-10-17 16:31:14,305 - INFO - 🌟 MEJORA #214 en iter 1638: Fitness=13443.1 (+23.6), Puntos=15794
+2025-10-17 16:31:14,451 - WARNING - ================================================================================
+2025-10-17 16:31:14,451 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1641
+2025-10-17 16:31:14,452 - WARNING -    Fitness actual: 13443.0
+2025-10-17 16:31:14,452 - WARNING -    Fitness vecino: 8141.4
+2025-10-17 16:31:14,452 - WARNING -    Delta: -5301.6
+2025-10-17 16:31:14,452 - WARNING -    Temperatura: 3.87
+2025-10-17 16:31:14,452 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:14,453 - WARNING -    Vecino - Puntos: 15794, Tiempo: 14490.4min, Distancia: 175.4km
+2025-10-17 16:31:14,453 - WARNING -    Actual - Puntos: 15794, Tiempo: 13739.5min, Distancia: 170.0km
+2025-10-17 16:31:14,453 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:14,453 - WARNING - ================================================================================
+2025-10-17 16:31:14,453 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1641
+2025-10-17 16:31:14,454 - WARNING -    Fitness: 13443.0 → 8141.4 (Δ=-5301.6)
+2025-10-17 16:31:14,454 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:14,593 - INFO - 🌟 MEJORA #215 en iter 1644: Fitness=13443.2 (+0.1), Puntos=15794
+2025-10-17 16:31:14,593 - INFO -   ✨ Mejora #215 en iteración 1645: Fitness = 13443.2 | Puntos = 15794 | T = 3.86
+2025-10-17 16:31:14,687 - INFO - 🌟 MEJORA #216 en iter 1646: Fitness=13443.2 (+0.0), Puntos=15794
+2025-10-17 16:31:14,780 - INFO - 🌟 MEJORA #217 en iter 1648: Fitness=13443.2 (+0.0), Puntos=15794
+2025-10-17 16:31:14,871 - INFO - 🌟 MEJORA #218 en iter 1650: Fitness=13444.1 (+0.9), Puntos=15794
+2025-10-17 16:31:15,068 - INFO - 🌟 MEJORA #219 en iter 1654: Fitness=13444.2 (+0.1), Puntos=15794
+2025-10-17 16:31:15,456 - WARNING - ================================================================================
+2025-10-17 16:31:15,456 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1662
+2025-10-17 16:31:15,456 - WARNING -    Fitness actual: 13444.2
+2025-10-17 16:31:15,457 - WARNING -    Fitness vecino: 7144.2
+2025-10-17 16:31:15,457 - WARNING -    Delta: -6300.0
+2025-10-17 16:31:15,457 - WARNING -    Temperatura: 3.79
+2025-10-17 16:31:15,457 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:15,457 - WARNING -    Vecino - Puntos: 15794, Tiempo: 14444.4min, Distancia: 166.0km
+2025-10-17 16:31:15,458 - WARNING -    Actual - Puntos: 15794, Tiempo: 13693.7min, Distancia: 166.1km
+2025-10-17 16:31:15,458 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:15,458 - WARNING - ================================================================================
+2025-10-17 16:31:15,458 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1662
+2025-10-17 16:31:15,458 - WARNING -    Fitness: 13444.2 → 7144.2 (Δ=-6300.0)
+2025-10-17 16:31:15,458 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:15,741 - WARNING - ================================================================================
+2025-10-17 16:31:15,742 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1668
+2025-10-17 16:31:15,742 - WARNING -    Fitness actual: 13438.1
+2025-10-17 16:31:15,742 - WARNING -    Fitness vecino: 8238.6
+2025-10-17 16:31:15,742 - WARNING -    Delta: -5199.5
+2025-10-17 16:31:15,742 - WARNING -    Temperatura: 3.77
+2025-10-17 16:31:15,743 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:15,743 - WARNING -    Vecino - Puntos: 15788, Tiempo: 14219.9min, Distancia: 164.8km
+2025-10-17 16:31:15,743 - WARNING -    Actual - Puntos: 15788, Tiempo: 13666.9min, Distancia: 166.4km
+2025-10-17 16:31:15,743 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:15,744 - WARNING - ================================================================================
+2025-10-17 16:31:15,744 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1668
+2025-10-17 16:31:15,744 - WARNING -    Fitness: 13438.1 → 8238.6 (Δ=-5199.5)
+2025-10-17 16:31:15,745 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:16,469 - INFO - 🌟 MEJORA #220 en iter 1683: Fitness=13447.1 (+2.9), Puntos=15798
+2025-10-17 16:31:16,469 - INFO -   ✨ Mejora #220 en iteración 1684: Fitness = 13447.1 | Puntos = 15798 | T = 3.71
+2025-10-17 16:31:16,519 - INFO - 🌟 MEJORA #221 en iter 1684: Fitness=13447.1 (+0.1), Puntos=15798
+2025-10-17 16:31:16,710 - INFO - 🌟 MEJORA #222 en iter 1688: Fitness=13447.1 (+0.0), Puntos=15798
+2025-10-17 16:31:16,803 - INFO - 🌟 MEJORA #223 en iter 1690: Fitness=13447.2 (+0.1), Puntos=15798
+2025-10-17 16:31:16,896 - INFO - 🌟 MEJORA #224 en iter 1692: Fitness=13462.3 (+15.1), Puntos=15813
+2025-10-17 16:31:16,988 - INFO - 🌟 MEJORA #225 en iter 1694: Fitness=13462.3 (+0.0), Puntos=15813
+2025-10-17 16:31:16,989 - INFO -   ✨ Mejora #225 en iteración 1695: Fitness = 13462.3 | Puntos = 15813 | T = 3.67
+2025-10-17 16:31:17,283 - DEBUG - Iter 1700: T=3.65, Fitness_actual=13462.1, Mejor=13462.3
+2025-10-17 16:31:17,328 - INFO - 🌟 MEJORA #226 en iter 1701: Fitness=13462.4 (+0.1), Puntos=15813
+2025-10-17 16:31:17,605 - INFO - 🌟 MEJORA #227 en iter 1707: Fitness=13466.0 (+3.6), Puntos=15817
+2025-10-17 16:31:17,653 - INFO - 🌟 MEJORA #228 en iter 1708: Fitness=13466.1 (+0.1), Puntos=15817
+2025-10-17 16:31:17,796 - INFO - 🌟 MEJORA #229 en iter 1711: Fitness=13466.2 (+0.0), Puntos=15817
+2025-10-17 16:31:17,983 - INFO - 🌟 MEJORA #230 en iter 1715: Fitness=13477.0 (+10.8), Puntos=15828
+2025-10-17 16:31:17,984 - INFO -   ✨ Mejora #230 en iteración 1716: Fitness = 13477.0 | Puntos = 15828 | T = 3.60
+2025-10-17 16:31:18,124 - WARNING - ================================================================================
+2025-10-17 16:31:18,124 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1718
+2025-10-17 16:31:18,124 - WARNING -    Fitness actual: 13476.9
+2025-10-17 16:31:18,124 - WARNING -    Fitness vecino: 1447.3
+2025-10-17 16:31:18,125 - WARNING -    Delta: -12029.6
+2025-10-17 16:31:18,125 - WARNING -    Temperatura: 3.59
+2025-10-17 16:31:18,125 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:18,125 - WARNING -    Vecino - Puntos: 15823, Tiempo: 13912.2min, Distancia: 179.3km
+2025-10-17 16:31:18,125 - WARNING -    Actual - Puntos: 15828, Tiempo: 13743.4min, Distancia: 170.3km
+2025-10-17 16:31:18,126 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:18,126 - WARNING - ================================================================================
+2025-10-17 16:31:18,126 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1718
+2025-10-17 16:31:18,126 - WARNING -    Fitness: 13476.9 → 1447.3 (Δ=-12029.6)
+2025-10-17 16:31:18,126 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:18,276 - INFO - 🌟 MEJORA #231 en iter 1721: Fitness=13485.0 (+8.0), Puntos=15836
+2025-10-17 16:31:18,855 - WARNING - ================================================================================
+2025-10-17 16:31:18,856 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1733
+2025-10-17 16:31:18,856 - WARNING -    Fitness actual: 13484.6
+2025-10-17 16:31:18,856 - WARNING -    Fitness vecino: 4438.1
+2025-10-17 16:31:18,856 - WARNING -    Delta: -9046.5
+2025-10-17 16:31:18,856 - WARNING -    Temperatura: 3.53
+2025-10-17 16:31:18,857 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:18,857 - WARNING -    Vecino - Puntos: 15837, Tiempo: 13876.2min, Distancia: 179.3km
+2025-10-17 16:31:18,857 - WARNING -    Actual - Puntos: 15836, Tiempo: 13746.7min, Distancia: 171.4km
+2025-10-17 16:31:18,857 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:18,857 - WARNING - ================================================================================
+2025-10-17 16:31:18,858 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1733
+2025-10-17 16:31:18,858 - WARNING -    Fitness: 13484.6 → 4438.1 (Δ=-9046.5)
+2025-10-17 16:31:18,858 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:19,239 - INFO - 🌟 MEJORA #232 en iter 1741: Fitness=13499.3 (+14.3), Puntos=15851
+2025-10-17 16:31:19,425 - WARNING - ================================================================================
+2025-10-17 16:31:19,425 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1745
+2025-10-17 16:31:19,425 - WARNING -    Fitness actual: 13499.3
+2025-10-17 16:31:19,426 - WARNING -    Fitness vecino: 5704.4
+2025-10-17 16:31:19,426 - WARNING -    Delta: -7794.8
+2025-10-17 16:31:19,426 - WARNING -    Temperatura: 3.49
+2025-10-17 16:31:19,426 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:19,427 - WARNING -    Vecino - Puntos: 15906, Tiempo: 13985.1min, Distancia: 180.0km
+2025-10-17 16:31:19,427 - WARNING -    Actual - Puntos: 15851, Tiempo: 13819.6min, Distancia: 172.5km
+2025-10-17 16:31:19,427 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:19,427 - WARNING - ================================================================================
+2025-10-17 16:31:19,428 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1745
+2025-10-17 16:31:19,428 - WARNING -    Fitness: 13499.3 → 5704.4 (Δ=-7794.8)
+2025-10-17 16:31:19,428 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:19,476 - INFO - 🌟 MEJORA #233 en iter 1746: Fitness=13499.4 (+0.1), Puntos=15851
+2025-10-17 16:31:19,711 - WARNING - ================================================================================
+2025-10-17 16:31:19,711 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1751
+2025-10-17 16:31:19,711 - WARNING -    Fitness actual: 13499.3
+2025-10-17 16:31:19,712 - WARNING -    Fitness vecino: 6790.3
+2025-10-17 16:31:19,712 - WARNING -    Delta: -6709.0
+2025-10-17 16:31:19,712 - WARNING -    Temperatura: 3.47
+2025-10-17 16:31:19,712 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:19,712 - WARNING -    Vecino - Puntos: 15851, Tiempo: 13924.5min, Distancia: 180.0km
+2025-10-17 16:31:19,712 - WARNING -    Actual - Puntos: 15851, Tiempo: 13819.4min, Distancia: 172.4km
+2025-10-17 16:31:19,713 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:19,713 - WARNING - ================================================================================
+2025-10-17 16:31:19,713 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1751
+2025-10-17 16:31:19,713 - WARNING -    Fitness: 13499.3 → 6790.3 (Δ=-6709.0)
+2025-10-17 16:31:19,713 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:20,291 - WARNING - ================================================================================
+2025-10-17 16:31:20,291 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1763
+2025-10-17 16:31:20,292 - WARNING -    Fitness actual: 13497.9
+2025-10-17 16:31:20,292 - WARNING -    Fitness vecino: 6395.5
+2025-10-17 16:31:20,292 - WARNING -    Delta: -7102.3
+2025-10-17 16:31:20,292 - WARNING -    Temperatura: 3.43
+2025-10-17 16:31:20,292 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:20,292 - WARNING -    Vecino - Puntos: 15850, Tiempo: 14569.9min, Distancia: 181.6km
+2025-10-17 16:31:20,293 - WARNING -    Actual - Puntos: 15850, Tiempo: 13790.2min, Distancia: 173.8km
+2025-10-17 16:31:20,293 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:20,293 - WARNING - ================================================================================
+2025-10-17 16:31:20,293 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1763
+2025-10-17 16:31:20,293 - WARNING -    Fitness: 13497.9 → 6395.5 (Δ=-7102.3)
+2025-10-17 16:31:20,294 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:21,627 - INFO - 🌟 MEJORA #234 en iter 1791: Fitness=13504.3 (+4.9), Puntos=15856
+2025-10-17 16:31:21,865 - INFO - 🌟 MEJORA #235 en iter 1796: Fitness=13586.0 (+81.7), Puntos=15838
+2025-10-17 16:31:21,865 - INFO -   ✨ Mejora #235 en iteración 1797: Fitness = 13586.0 | Puntos = 15838 | T = 3.32
+2025-10-17 16:31:22,065 - DEBUG - Iter 1800: T=3.30, Fitness_actual=13586.0, Mejor=13586.0
+2025-10-17 16:31:22,684 - INFO - 🌟 MEJORA #236 en iter 1813: Fitness=13586.1 (+0.0), Puntos=15838
+2025-10-17 16:31:22,781 - INFO - 🌟 MEJORA #237 en iter 1815: Fitness=13586.4 (+0.3), Puntos=15838
+2025-10-17 16:31:22,931 - INFO - 🌟 MEJORA #238 en iter 1818: Fitness=13586.5 (+0.1), Puntos=15838
+2025-10-17 16:31:23,027 - INFO - 🌟 MEJORA #239 en iter 1820: Fitness=13588.6 (+2.1), Puntos=15840
+2025-10-17 16:31:23,167 - INFO - 🌟 MEJORA #240 en iter 1823: Fitness=13588.7 (+0.1), Puntos=15840
+2025-10-17 16:31:23,168 - INFO -   ✨ Mejora #240 en iteración 1824: Fitness = 13588.7 | Puntos = 15840 | T = 3.23
+2025-10-17 16:31:23,268 - INFO - 🌟 MEJORA #241 en iter 1825: Fitness=13588.8 (+0.2), Puntos=15840
+2025-10-17 16:31:23,316 - INFO - 🌟 MEJORA #242 en iter 1826: Fitness=13588.9 (+0.0), Puntos=15840
+2025-10-17 16:31:23,603 - INFO - 🌟 MEJORA #243 en iter 1832: Fitness=13600.5 (+11.6), Puntos=15852
+2025-10-17 16:31:23,986 - WARNING - ================================================================================
+2025-10-17 16:31:23,986 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1840
+2025-10-17 16:31:23,986 - WARNING -    Fitness actual: 13600.3
+2025-10-17 16:31:23,987 - WARNING -    Fitness vecino: 2377.9
+2025-10-17 16:31:23,987 - WARNING -    Delta: -11222.4
+2025-10-17 16:31:23,987 - WARNING -    Temperatura: 3.17
+2025-10-17 16:31:23,987 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:23,988 - WARNING -    Vecino - Puntos: 15852, Tiempo: 14514.4min, Distancia: 188.9km
+2025-10-17 16:31:23,988 - WARNING -    Actual - Puntos: 15852, Tiempo: 13743.9min, Distancia: 172.4km
+2025-10-17 16:31:23,988 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:23,988 - WARNING - ================================================================================
+2025-10-17 16:31:23,988 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1840
+2025-10-17 16:31:23,989 - WARNING -    Fitness: 13600.3 → 2377.9 (Δ=-11222.4)
+2025-10-17 16:31:23,989 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:24,036 - INFO - 🌟 MEJORA #244 en iter 1841: Fitness=13600.7 (+0.2), Puntos=15852
+2025-10-17 16:31:24,084 - INFO - 🌟 MEJORA #245 en iter 1842: Fitness=13600.7 (+0.0), Puntos=15852
+2025-10-17 16:31:24,085 - INFO -   ✨ Mejora #245 en iteración 1843: Fitness = 13600.7 | Puntos = 15852 | T = 3.17
+2025-10-17 16:31:24,134 - INFO - 🌟 MEJORA #246 en iter 1843: Fitness=13612.9 (+12.2), Puntos=15864
+2025-10-17 16:31:24,273 - INFO - 🌟 MEJORA #247 en iter 1846: Fitness=13613.9 (+1.1), Puntos=15865
+2025-10-17 16:31:24,320 - INFO - 🌟 MEJORA #248 en iter 1847: Fitness=13614.2 (+0.2), Puntos=15865
+2025-10-17 16:31:24,554 - INFO - 🌟 MEJORA #249 en iter 1852: Fitness=13614.2 (+0.0), Puntos=15865
+2025-10-17 16:31:24,602 - INFO - 🌟 MEJORA #250 en iter 1853: Fitness=13614.4 (+0.2), Puntos=15865
+2025-10-17 16:31:24,602 - INFO -   ✨ Mejora #250 en iteración 1854: Fitness = 13614.4 | Puntos = 15865 | T = 3.13
+2025-10-17 16:31:24,745 - INFO - 🌟 MEJORA #251 en iter 1856: Fitness=13614.4 (+0.0), Puntos=15865
+2025-10-17 16:31:25,796 - INFO - 🌟 MEJORA #252 en iter 1878: Fitness=13614.6 (+0.1), Puntos=15865
+2025-10-17 16:31:25,892 - INFO - 🌟 MEJORA #253 en iter 1880: Fitness=13614.6 (+0.0), Puntos=15865
+2025-10-17 16:31:25,990 - INFO - 🌟 MEJORA #254 en iter 1882: Fitness=13714.7 (+100.1), Puntos=15865
+2025-10-17 16:31:26,137 - INFO - 🌟 MEJORA #255 en iter 1885: Fitness=13714.7 (+0.1), Puntos=15865
+2025-10-17 16:31:26,137 - INFO -   ✨ Mejora #255 en iteración 1886: Fitness = 13714.7 | Puntos = 15865 | T = 3.03
+2025-10-17 16:31:26,819 - WARNING - ================================================================================
+2025-10-17 16:31:26,819 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1899
+2025-10-17 16:31:26,819 - WARNING -    Fitness actual: 13714.7
+2025-10-17 16:31:26,819 - WARNING -    Fitness vecino: 8116.7
+2025-10-17 16:31:26,819 - WARNING -    Delta: -5598.0
+2025-10-17 16:31:26,819 - WARNING -    Temperatura: 2.99
+2025-10-17 16:31:26,820 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:26,820 - WARNING -    Vecino - Puntos: 15865, Tiempo: 14562.2min, Distancia: 161.0km
+2025-10-17 16:31:26,820 - WARNING -    Actual - Puntos: 15865, Tiempo: 13727.9min, Distancia: 167.7km
+2025-10-17 16:31:26,820 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:26,820 - WARNING - ================================================================================
+2025-10-17 16:31:26,821 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1899
+2025-10-17 16:31:26,821 - WARNING -    Fitness: 13714.7 → 8116.7 (Δ=-5598.0)
+2025-10-17 16:31:26,821 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:26,870 - DEBUG - Iter 1900: T=2.99, Fitness_actual=13714.7, Mejor=13714.7
+2025-10-17 16:31:26,962 - INFO - 🌟 MEJORA #256 en iter 1902: Fitness=13714.8 (+0.0), Puntos=15865
+2025-10-17 16:31:27,584 - INFO - 🌟 MEJORA #257 en iter 1915: Fitness=13714.8 (+0.1), Puntos=15865
+2025-10-17 16:31:28,432 - INFO - 🌟 MEJORA #258 en iter 1933: Fitness=13766.0 (+51.2), Puntos=15917
+2025-10-17 16:31:28,481 - INFO - 🌟 MEJORA #259 en iter 1934: Fitness=13766.1 (+0.1), Puntos=15917
+2025-10-17 16:31:28,530 - INFO - 🌟 MEJORA #260 en iter 1935: Fitness=13766.5 (+0.4), Puntos=15917
+2025-10-17 16:31:28,530 - INFO -   ✨ Mejora #260 en iteración 1936: Fitness = 13766.5 | Puntos = 15917 | T = 2.89
+2025-10-17 16:31:28,674 - WARNING - ================================================================================
+2025-10-17 16:31:28,674 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1938
+2025-10-17 16:31:28,674 - WARNING -    Fitness actual: 13766.5
+2025-10-17 16:31:28,674 - WARNING -    Fitness vecino: 5898.1
+2025-10-17 16:31:28,674 - WARNING -    Delta: -7868.4
+2025-10-17 16:31:28,675 - WARNING -    Temperatura: 2.88
+2025-10-17 16:31:28,675 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:28,675 - WARNING -    Vecino - Puntos: 15917, Tiempo: 13925.7min, Distancia: 183.0km
+2025-10-17 16:31:28,675 - WARNING -    Actual - Puntos: 15917, Tiempo: 13749.2min, Distancia: 168.3km
+2025-10-17 16:31:28,676 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:28,676 - WARNING - ================================================================================
+2025-10-17 16:31:28,676 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1938
+2025-10-17 16:31:28,676 - WARNING -    Fitness: 13766.5 → 5898.1 (Δ=-7868.4)
+2025-10-17 16:31:28,676 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:28,867 - INFO - 🌟 MEJORA #261 en iter 1942: Fitness=13766.6 (+0.0), Puntos=15917
+2025-10-17 16:31:29,199 - INFO - 🌟 MEJORA #262 en iter 1949: Fitness=13766.7 (+0.2), Puntos=15917
+2025-10-17 16:31:29,397 - WARNING - ================================================================================
+2025-10-17 16:31:29,398 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1953
+2025-10-17 16:31:29,398 - WARNING -    Fitness actual: 13766.7
+2025-10-17 16:31:29,398 - WARNING -    Fitness vecino: 8745.4
+2025-10-17 16:31:29,398 - WARNING -    Delta: -5021.3
+2025-10-17 16:31:29,398 - WARNING -    Temperatura: 2.83
+2025-10-17 16:31:29,399 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:29,399 - WARNING -    Vecino - Puntos: 15876, Tiempo: 14364.3min, Distancia: 165.7km
+2025-10-17 16:31:29,399 - WARNING -    Actual - Puntos: 15917, Tiempo: 13742.7min, Distancia: 167.7km
+2025-10-17 16:31:29,399 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:29,399 - WARNING - ================================================================================
+2025-10-17 16:31:29,400 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1953
+2025-10-17 16:31:29,400 - WARNING -    Fitness: 13766.7 → 8745.4 (Δ=-5021.3)
+2025-10-17 16:31:29,400 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:29,604 - WARNING - ================================================================================
+2025-10-17 16:31:29,604 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1957
+2025-10-17 16:31:29,604 - WARNING -    Fitness actual: 13766.7
+2025-10-17 16:31:29,604 - WARNING -    Fitness vecino: 8487.4
+2025-10-17 16:31:29,605 - WARNING -    Delta: -5279.3
+2025-10-17 16:31:29,605 - WARNING -    Temperatura: 2.82
+2025-10-17 16:31:29,605 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:29,605 - WARNING -    Vecino - Puntos: 15917, Tiempo: 14019.8min, Distancia: 162.2km
+2025-10-17 16:31:29,605 - WARNING -    Actual - Puntos: 15917, Tiempo: 13741.1min, Distancia: 167.6km
+2025-10-17 16:31:29,605 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:29,606 - WARNING - ================================================================================
+2025-10-17 16:31:29,606 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1957
+2025-10-17 16:31:29,606 - WARNING -    Fitness: 13766.7 → 8487.4 (Δ=-5279.3)
+2025-10-17 16:31:29,606 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:29,758 - WARNING - ================================================================================
+2025-10-17 16:31:29,759 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1960
+2025-10-17 16:31:29,759 - WARNING -    Fitness actual: 13766.7
+2025-10-17 16:31:29,759 - WARNING -    Fitness vecino: 7988.0
+2025-10-17 16:31:29,759 - WARNING -    Delta: -5778.8
+2025-10-17 16:31:29,759 - WARNING -    Temperatura: 2.81
+2025-10-17 16:31:29,760 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:29,760 - WARNING -    Vecino - Puntos: 15918, Tiempo: 14555.1min, Distancia: 163.8km
+2025-10-17 16:31:29,760 - WARNING -    Actual - Puntos: 15917, Tiempo: 13741.1min, Distancia: 167.6km
+2025-10-17 16:31:29,760 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:29,760 - WARNING - ================================================================================
+2025-10-17 16:31:29,760 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1960
+2025-10-17 16:31:29,760 - WARNING -    Fitness: 13766.7 → 7988.0 (Δ=-5778.8)
+2025-10-17 16:31:29,761 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:29,902 - INFO - 🌟 MEJORA #263 en iter 1963: Fitness=13767.0 (+0.2), Puntos=15917
+2025-10-17 16:31:30,059 - WARNING - ================================================================================
+2025-10-17 16:31:30,059 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1966
+2025-10-17 16:31:30,059 - WARNING -    Fitness actual: 13767.0
+2025-10-17 16:31:30,060 - WARNING -    Fitness vecino: 8745.7
+2025-10-17 16:31:30,060 - WARNING -    Delta: -5021.3
+2025-10-17 16:31:30,060 - WARNING -    Temperatura: 2.80
+2025-10-17 16:31:30,061 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:30,061 - WARNING -    Vecino - Puntos: 15876, Tiempo: 14353.4min, Distancia: 164.8km
+2025-10-17 16:31:30,061 - WARNING -    Actual - Puntos: 15917, Tiempo: 13731.8min, Distancia: 166.8km
+2025-10-17 16:31:30,062 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:30,062 - WARNING - ================================================================================
+2025-10-17 16:31:30,062 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1966
+2025-10-17 16:31:30,062 - WARNING -    Fitness: 13767.0 → 8745.7 (Δ=-5021.3)
+2025-10-17 16:31:30,062 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:30,118 - WARNING - ================================================================================
+2025-10-17 16:31:30,119 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1967
+2025-10-17 16:31:30,119 - WARNING -    Fitness actual: 13767.0
+2025-10-17 16:31:30,119 - WARNING -    Fitness vecino: 7387.3
+2025-10-17 16:31:30,119 - WARNING -    Delta: -6379.7
+2025-10-17 16:31:30,119 - WARNING -    Temperatura: 2.79
+2025-10-17 16:31:30,120 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:30,120 - WARNING -    Vecino - Puntos: 15917, Tiempo: 14369.9min, Distancia: 162.8km
+2025-10-17 16:31:30,120 - WARNING -    Actual - Puntos: 15917, Tiempo: 13731.8min, Distancia: 166.8km
+2025-10-17 16:31:30,120 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:30,121 - WARNING - ================================================================================
+2025-10-17 16:31:30,121 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1967
+2025-10-17 16:31:30,121 - WARNING -    Fitness: 13767.0 → 7387.3 (Δ=-6379.7)
+2025-10-17 16:31:30,121 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:30,175 - WARNING - ================================================================================
+2025-10-17 16:31:30,176 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1968
+2025-10-17 16:31:30,176 - WARNING -    Fitness actual: 13767.0
+2025-10-17 16:31:30,176 - WARNING -    Fitness vecino: 8487.7
+2025-10-17 16:31:30,176 - WARNING -    Delta: -5279.3
+2025-10-17 16:31:30,176 - WARNING -    Temperatura: 2.79
+2025-10-17 16:31:30,177 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:30,177 - WARNING -    Vecino - Puntos: 15917, Tiempo: 14010.5min, Distancia: 161.5km
+2025-10-17 16:31:30,177 - WARNING -    Actual - Puntos: 15917, Tiempo: 13731.8min, Distancia: 166.8km
+2025-10-17 16:31:30,177 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:30,177 - WARNING - ================================================================================
+2025-10-17 16:31:30,178 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1968
+2025-10-17 16:31:30,178 - WARNING -    Fitness: 13767.0 → 8487.7 (Δ=-5279.3)
+2025-10-17 16:31:30,178 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:30,275 - INFO - 🌟 MEJORA #264 en iter 1970: Fitness=13767.0 (+0.1), Puntos=15917
+2025-10-17 16:31:30,465 - INFO - 🌟 MEJORA #265 en iter 1974: Fitness=13767.0 (+0.0), Puntos=15917
+2025-10-17 16:31:30,465 - INFO -   ✨ Mejora #265 en iteración 1975: Fitness = 13767.0 | Puntos = 15917 | T = 2.78
+2025-10-17 16:31:31,382 - INFO - 🌟 MEJORA #266 en iter 1993: Fitness=13773.1 (+6.1), Puntos=15923
+2025-10-17 16:31:31,636 - INFO - 🌟 MEJORA #267 en iter 1998: Fitness=13773.2 (+0.0), Puntos=15923
+2025-10-17 16:31:31,693 - WARNING - ================================================================================
+2025-10-17 16:31:31,693 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1999
+2025-10-17 16:31:31,693 - WARNING -    Fitness actual: 13773.2
+2025-10-17 16:31:31,693 - WARNING -    Fitness vecino: 5991.0
+2025-10-17 16:31:31,694 - WARNING -    Delta: -7782.2
+2025-10-17 16:31:31,694 - WARNING -    Temperatura: 2.71
+2025-10-17 16:31:31,694 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:31,694 - WARNING -    Vecino - Puntos: 15923, Tiempo: 14719.4min, Distancia: 170.4km
+2025-10-17 16:31:31,694 - WARNING -    Actual - Puntos: 15923, Tiempo: 13753.6min, Distancia: 166.1km
+2025-10-17 16:31:31,694 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:31,695 - WARNING - ================================================================================
+2025-10-17 16:31:31,695 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 1999
+2025-10-17 16:31:31,695 - WARNING -    Fitness: 13773.2 → 5991.0 (Δ=-7782.2)
+2025-10-17 16:31:31,695 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:31,743 - INFO -   Iter  2000 | Tiempo:    1.5min | T =     2.70 | Fitness =  13773.2 | Mejor =  13773.2 | Aceptación =  53.1%
+2025-10-17 16:31:31,744 - INFO - Progreso iter 2000: T=2.70, Fitness=13773.2, Mejor=13773.2, Tasa_acept=53.1%
+2025-10-17 16:31:31,747 - DEBUG - Iter 2000: T=2.70, Fitness_actual=13773.2, Mejor=13773.2
+2025-10-17 16:31:31,801 - WARNING - ================================================================================
+2025-10-17 16:31:31,801 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2001
+2025-10-17 16:31:31,801 - WARNING -    Fitness actual: 13773.2
+2025-10-17 16:31:31,802 - WARNING -    Fitness vecino: 8493.1
+2025-10-17 16:31:31,802 - WARNING -    Delta: -5280.0
+2025-10-17 16:31:31,802 - WARNING -    Temperatura: 2.70
+2025-10-17 16:31:31,802 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:31,802 - WARNING -    Vecino - Puntos: 15923, Tiempo: 14290.4min, Distancia: 163.2km
+2025-10-17 16:31:31,803 - WARNING -    Actual - Puntos: 15923, Tiempo: 13753.6min, Distancia: 166.1km
+2025-10-17 16:31:31,803 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:31,803 - WARNING - ================================================================================
+2025-10-17 16:31:31,803 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2001
+2025-10-17 16:31:31,804 - WARNING -    Fitness: 13773.2 → 8493.1 (Δ=-5280.0)
+2025-10-17 16:31:31,804 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:32,094 - WARNING - ================================================================================
+2025-10-17 16:31:32,094 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2007
+2025-10-17 16:31:32,094 - WARNING -    Fitness actual: 13773.1
+2025-10-17 16:31:32,095 - WARNING -    Fitness vecino: 8493.0
+2025-10-17 16:31:32,095 - WARNING -    Delta: -5280.1
+2025-10-17 16:31:32,095 - WARNING -    Temperatura: 2.69
+2025-10-17 16:31:32,095 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:32,096 - WARNING -    Vecino - Puntos: 15923, Tiempo: 14294.1min, Distancia: 163.5km
+2025-10-17 16:31:32,096 - WARNING -    Actual - Puntos: 15923, Tiempo: 13754.7min, Distancia: 166.2km
+2025-10-17 16:31:32,096 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:32,096 - WARNING - ================================================================================
+2025-10-17 16:31:32,097 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2007
+2025-10-17 16:31:32,097 - WARNING -    Fitness: 13773.1 → 8493.0 (Δ=-5280.1)
+2025-10-17 16:31:32,097 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:32,251 - WARNING - ================================================================================
+2025-10-17 16:31:32,251 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2010
+2025-10-17 16:31:32,252 - WARNING -    Fitness actual: 13773.1
+2025-10-17 16:31:32,252 - WARNING -    Fitness vecino: 8393.5
+2025-10-17 16:31:32,252 - WARNING -    Delta: -5379.6
+2025-10-17 16:31:32,252 - WARNING -    Temperatura: 2.68
+2025-10-17 16:31:32,252 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:32,252 - WARNING -    Vecino - Puntos: 15923, Tiempo: 14389.8min, Distancia: 162.0km
+2025-10-17 16:31:32,252 - WARNING -    Actual - Puntos: 15923, Tiempo: 13754.7min, Distancia: 166.2km
+2025-10-17 16:31:32,252 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:32,253 - WARNING - ================================================================================
+2025-10-17 16:31:32,253 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2010
+2025-10-17 16:31:32,253 - WARNING -    Fitness: 13773.1 → 8393.5 (Δ=-5379.6)
+2025-10-17 16:31:32,253 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:32,776 - INFO - 🌟 MEJORA #268 en iter 2021: Fitness=13774.1 (+1.0), Puntos=15925
+2025-10-17 16:31:32,823 - WARNING - ================================================================================
+2025-10-17 16:31:32,824 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2022
+2025-10-17 16:31:32,824 - WARNING -    Fitness actual: 13774.1
+2025-10-17 16:31:32,824 - WARNING -    Fitness vecino: 1693.0
+2025-10-17 16:31:32,824 - WARNING -    Delta: -12081.1
+2025-10-17 16:31:32,824 - WARNING -    Temperatura: 2.65
+2025-10-17 16:31:32,825 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:32,825 - WARNING -    Vecino - Puntos: 15925, Tiempo: 14050.5min, Distancia: 190.9km
+2025-10-17 16:31:32,825 - WARNING -    Actual - Puntos: 15925, Tiempo: 13794.8min, Distancia: 169.6km
+2025-10-17 16:31:32,825 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:32,825 - WARNING - ================================================================================
+2025-10-17 16:31:32,825 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2022
+2025-10-17 16:31:32,826 - WARNING -    Fitness: 13774.1 → 1693.0 (Δ=-12081.1)
+2025-10-17 16:31:32,826 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:32,875 - INFO - 🌟 MEJORA #269 en iter 2023: Fitness=13774.2 (+0.1), Puntos=15925
+2025-10-17 16:31:33,970 - WARNING - ================================================================================
+2025-10-17 16:31:33,970 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2046
+2025-10-17 16:31:33,970 - WARNING -    Fitness actual: 13773.9
+2025-10-17 16:31:33,970 - WARNING -    Fitness vecino: 7894.2
+2025-10-17 16:31:33,971 - WARNING -    Delta: -5879.7
+2025-10-17 16:31:33,971 - WARNING -    Temperatura: 2.58
+2025-10-17 16:31:33,971 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:33,971 - WARNING -    Vecino - Puntos: 15925, Tiempo: 14326.6min, Distancia: 166.2km
+2025-10-17 16:31:33,972 - WARNING -    Actual - Puntos: 15925, Tiempo: 13803.3min, Distancia: 170.3km
+2025-10-17 16:31:33,972 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:33,972 - WARNING - ================================================================================
+2025-10-17 16:31:33,972 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2046
+2025-10-17 16:31:33,973 - WARNING -    Fitness: 13773.9 → 7894.2 (Δ=-5879.7)
+2025-10-17 16:31:33,973 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:34,193 - INFO - 🌟 MEJORA #270 en iter 2051: Fitness=13779.5 (+5.3), Puntos=15930
+2025-10-17 16:31:34,193 - INFO -   ✨ Mejora #270 en iteración 2052: Fitness = 13779.5 | Puntos = 15930 | T = 2.57
+2025-10-17 16:31:34,633 - INFO - 🌟 MEJORA #271 en iter 2061: Fitness=13779.6 (+0.1), Puntos=15930
+2025-10-17 16:31:34,767 - WARNING - ================================================================================
+2025-10-17 16:31:34,767 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2064
+2025-10-17 16:31:34,768 - WARNING -    Fitness actual: 13779.5
+2025-10-17 16:31:34,768 - WARNING -    Fitness vecino: 8151.8
+2025-10-17 16:31:34,768 - WARNING -    Delta: -5627.7
+2025-10-17 16:31:34,768 - WARNING -    Temperatura: 2.54
+2025-10-17 16:31:34,769 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:34,769 - WARNING -    Vecino - Puntos: 15930, Tiempo: 14109.2min, Distancia: 164.7km
+2025-10-17 16:31:34,769 - WARNING -    Actual - Puntos: 15930, Tiempo: 13809.5min, Distancia: 168.3km
+2025-10-17 16:31:34,769 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:34,769 - WARNING - ================================================================================
+2025-10-17 16:31:34,770 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2064
+2025-10-17 16:31:34,770 - WARNING -    Fitness: 13779.5 → 8151.8 (Δ=-5627.7)
+2025-10-17 16:31:34,770 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:34,859 - INFO - 🌟 MEJORA #272 en iter 2066: Fitness=13794.5 (+14.9), Puntos=15945
+2025-10-17 16:31:35,202 - INFO - 🌟 MEJORA #273 en iter 2074: Fitness=13800.4 (+5.9), Puntos=15951
+2025-10-17 16:31:35,248 - INFO - 🌟 MEJORA #274 en iter 2075: Fitness=13800.4 (+0.0), Puntos=15951
+2025-10-17 16:31:35,334 - INFO - 🌟 MEJORA #275 en iter 2077: Fitness=13820.6 (+20.2), Puntos=15971
+2025-10-17 16:31:35,334 - INFO -   ✨ Mejora #275 en iteración 2078: Fitness = 13820.6 | Puntos = 15971 | T = 2.50
+2025-10-17 16:31:36,027 - WARNING - ================================================================================
+2025-10-17 16:31:36,027 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2093
+2025-10-17 16:31:36,027 - WARNING -    Fitness actual: 13819.5
+2025-10-17 16:31:36,027 - WARNING -    Fitness vecino: 1737.5
+2025-10-17 16:31:36,028 - WARNING -    Delta: -12082.1
+2025-10-17 16:31:36,028 - WARNING -    Temperatura: 2.46
+2025-10-17 16:31:36,028 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:36,028 - WARNING -    Vecino - Puntos: 15971, Tiempo: 14166.6min, Distancia: 193.1km
+2025-10-17 16:31:36,028 - WARNING -    Actual - Puntos: 15971, Tiempo: 13908.3min, Distancia: 171.5km
+2025-10-17 16:31:36,029 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:36,029 - WARNING - ================================================================================
+2025-10-17 16:31:36,029 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2093
+2025-10-17 16:31:36,029 - WARNING -    Fitness: 13819.5 → 1737.5 (Δ=-12082.1)
+2025-10-17 16:31:36,030 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:36,338 - DEBUG - Iter 2100: T=2.45, Fitness_actual=13819.5, Mejor=13820.6
+2025-10-17 16:31:36,594 - INFO - 🌟 MEJORA #276 en iter 2106: Fitness=13824.1 (+3.5), Puntos=15976
+2025-10-17 16:31:36,685 - INFO - 🌟 MEJORA #277 en iter 2108: Fitness=13824.3 (+0.2), Puntos=15976
+2025-10-17 16:31:36,729 - INFO - 🌟 MEJORA #278 en iter 2109: Fitness=13824.3 (+0.0), Puntos=15976
+2025-10-17 16:31:36,858 - INFO - 🌟 MEJORA #279 en iter 2112: Fitness=13839.3 (+14.9), Puntos=15991
+2025-10-17 16:31:36,945 - INFO - 🌟 MEJORA #280 en iter 2114: Fitness=13846.2 (+6.9), Puntos=15998
+2025-10-17 16:31:36,945 - INFO -   ✨ Mejora #280 en iteración 2115: Fitness = 13846.2 | Puntos = 15998 | T = 2.41
+2025-10-17 16:31:37,122 - INFO - 🌟 MEJORA #281 en iter 2118: Fitness=13846.4 (+0.2), Puntos=15998
+2025-10-17 16:31:37,216 - WARNING - ================================================================================
+2025-10-17 16:31:37,217 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2120
+2025-10-17 16:31:37,217 - WARNING -    Fitness actual: 13846.4
+2025-10-17 16:31:37,217 - WARNING -    Fitness vecino: 1779.1
+2025-10-17 16:31:37,217 - WARNING -    Delta: -12067.2
+2025-10-17 16:31:37,217 - WARNING -    Temperatura: 2.40
+2025-10-17 16:31:37,217 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:37,218 - WARNING -    Vecino - Puntos: 15969, Tiempo: 14973.6min, Distancia: 183.6km
+2025-10-17 16:31:37,218 - WARNING -    Actual - Puntos: 15998, Tiempo: 13945.3min, Distancia: 172.1km
+2025-10-17 16:31:37,218 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:37,218 - WARNING - ================================================================================
+2025-10-17 16:31:37,218 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2120
+2025-10-17 16:31:37,218 - WARNING -    Fitness: 13846.4 → 1779.1 (Δ=-12067.2)
+2025-10-17 16:31:37,219 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:37,265 - INFO - 🌟 MEJORA #282 en iter 2121: Fitness=13854.4 (+8.0), Puntos=16006
+2025-10-17 16:31:37,438 - INFO - 🌟 MEJORA #283 en iter 2125: Fitness=13854.7 (+0.3), Puntos=16006
+2025-10-17 16:31:37,483 - INFO - 🌟 MEJORA #284 en iter 2126: Fitness=13854.8 (+0.1), Puntos=16006
+2025-10-17 16:31:37,527 - INFO - 🌟 MEJORA #285 en iter 2127: Fitness=13854.9 (+0.1), Puntos=16006
+2025-10-17 16:31:37,527 - INFO -   ✨ Mejora #285 en iteración 2128: Fitness = 13854.9 | Puntos = 16006 | T = 2.38
+2025-10-17 16:31:37,572 - INFO - 🌟 MEJORA #286 en iter 2128: Fitness=13855.0 (+0.1), Puntos=16006
+2025-10-17 16:31:37,794 - WARNING - ================================================================================
+2025-10-17 16:31:37,794 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2133
+2025-10-17 16:31:37,794 - WARNING -    Fitness actual: 13854.8
+2025-10-17 16:31:37,795 - WARNING -    Fitness vecino: 2274.9
+2025-10-17 16:31:37,795 - WARNING -    Delta: -11579.9
+2025-10-17 16:31:37,795 - WARNING -    Temperatura: 2.37
+2025-10-17 16:31:37,795 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:37,796 - WARNING -    Vecino - Puntos: 16006, Tiempo: 14662.1min, Distancia: 181.7km
+2025-10-17 16:31:37,796 - WARNING -    Actual - Puntos: 16006, Tiempo: 13956.4min, Distancia: 170.5km
+2025-10-17 16:31:37,796 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:37,796 - WARNING - ================================================================================
+2025-10-17 16:31:37,797 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2133
+2025-10-17 16:31:37,797 - WARNING -    Fitness: 13854.8 → 2274.9 (Δ=-11579.9)
+2025-10-17 16:31:37,797 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:38,100 - INFO - 🌟 MEJORA #287 en iter 2140: Fitness=13953.5 (+98.6), Puntos=16006
+2025-10-17 16:31:38,145 - INFO - 🌟 MEJORA #288 en iter 2141: Fitness=13953.9 (+0.4), Puntos=16006
+2025-10-17 16:31:38,651 - WARNING - ================================================================================
+2025-10-17 16:31:38,652 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2152
+2025-10-17 16:31:38,652 - WARNING -    Fitness actual: 13953.7
+2025-10-17 16:31:38,652 - WARNING -    Fitness vecino: 6825.9
+2025-10-17 16:31:38,652 - WARNING -    Delta: -7127.9
+2025-10-17 16:31:38,652 - WARNING -    Temperatura: 2.32
+2025-10-17 16:31:38,652 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:38,653 - WARNING -    Vecino - Puntos: 16006, Tiempo: 14877.9min, Distancia: 171.1km
+2025-10-17 16:31:38,653 - WARNING -    Actual - Puntos: 16006, Tiempo: 14000.8min, Distancia: 174.2km
+2025-10-17 16:31:38,653 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:38,653 - WARNING - ================================================================================
+2025-10-17 16:31:38,654 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2152
+2025-10-17 16:31:38,654 - WARNING -    Fitness: 13953.7 → 6825.9 (Δ=-7127.9)
+2025-10-17 16:31:38,654 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:38,962 - INFO - 🌟 MEJORA #289 en iter 2159: Fitness=13959.6 (+5.7), Puntos=16012
+2025-10-17 16:31:39,092 - INFO - 🌟 MEJORA #290 en iter 2162: Fitness=13959.6 (+0.0), Puntos=16012
+2025-10-17 16:31:39,092 - INFO -   ✨ Mejora #290 en iteración 2163: Fitness = 13959.6 | Puntos = 16012 | T = 2.30
+2025-10-17 16:31:39,526 - INFO - 🌟 MEJORA #291 en iter 2172: Fitness=13961.5 (+1.9), Puntos=16014
+2025-10-17 16:31:39,790 - INFO - 🌟 MEJORA #292 en iter 2178: Fitness=13963.2 (+1.7), Puntos=16014
+2025-10-17 16:31:40,098 - WARNING - ================================================================================
+2025-10-17 16:31:40,099 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2185
+2025-10-17 16:31:40,099 - WARNING -    Fitness actual: 13963.1
+2025-10-17 16:31:40,099 - WARNING -    Fitness vecino: 5829.1
+2025-10-17 16:31:40,099 - WARNING -    Delta: -8134.1
+2025-10-17 16:31:40,099 - WARNING -    Temperatura: 2.25
+2025-10-17 16:31:40,100 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:40,100 - WARNING -    Vecino - Puntos: 16014, Tiempo: 14219.6min, Distancia: 188.3km
+2025-10-17 16:31:40,100 - WARNING -    Actual - Puntos: 16014, Tiempo: 13994.7min, Distancia: 169.6km
+2025-10-17 16:31:40,100 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:40,100 - WARNING - ================================================================================
+2025-10-17 16:31:40,101 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2185
+2025-10-17 16:31:40,101 - WARNING -    Fitness: 13963.1 → 5829.1 (Δ=-8134.1)
+2025-10-17 16:31:40,101 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:40,759 - DEBUG - Iter 2200: T=2.21, Fitness_actual=13961.8, Mejor=13963.2
+2025-10-17 16:31:40,760 - INFO - 🌟 MEJORA #293 en iter 2200: Fitness=13967.7 (+4.5), Puntos=16017
+2025-10-17 16:31:41,129 - WARNING - ================================================================================
+2025-10-17 16:31:41,129 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2208
+2025-10-17 16:31:41,129 - WARNING -    Fitness actual: 13967.7
+2025-10-17 16:31:41,129 - WARNING -    Fitness vecino: 8015.6
+2025-10-17 16:31:41,129 - WARNING -    Delta: -5952.1
+2025-10-17 16:31:41,130 - WARNING -    Temperatura: 2.20
+2025-10-17 16:31:41,130 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:41,130 - WARNING -    Vecino - Puntos: 15996, Tiempo: 14776.2min, Distancia: 172.0km
+2025-10-17 16:31:41,130 - WARNING -    Actual - Puntos: 16017, Tiempo: 13946.2min, Distancia: 164.3km
+2025-10-17 16:31:41,130 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:41,130 - WARNING - ================================================================================
+2025-10-17 16:31:41,131 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2208
+2025-10-17 16:31:41,131 - WARNING -    Fitness: 13967.7 → 8015.6 (Δ=-5952.1)
+2025-10-17 16:31:41,131 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:41,615 - INFO - 🌟 MEJORA #294 en iter 2219: Fitness=13967.8 (+0.0), Puntos=16017
+2025-10-17 16:31:43,249 - INFO - 🌟 MEJORA #295 en iter 2256: Fitness=13969.3 (+1.6), Puntos=16019
+2025-10-17 16:31:43,250 - INFO -   ✨ Mejora #295 en iteración 2257: Fitness = 13969.3 | Puntos = 16019 | T = 2.09
+2025-10-17 16:31:43,471 - WARNING - ================================================================================
+2025-10-17 16:31:43,471 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2261
+2025-10-17 16:31:43,471 - WARNING -    Fitness actual: 13968.8
+2025-10-17 16:31:43,471 - WARNING -    Fitness vecino: 7937.6
+2025-10-17 16:31:43,472 - WARNING -    Delta: -6031.1
+2025-10-17 16:31:43,472 - WARNING -    Temperatura: 2.08
+2025-10-17 16:31:43,472 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:43,472 - WARNING -    Vecino - Puntos: 16019, Tiempo: 14623.5min, Distancia: 175.1km
+2025-10-17 16:31:43,472 - WARNING -    Actual - Puntos: 16019, Tiempo: 13958.8min, Distancia: 167.4km
+2025-10-17 16:31:43,472 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:43,473 - WARNING - ================================================================================
+2025-10-17 16:31:43,473 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2261
+2025-10-17 16:31:43,473 - WARNING -    Fitness: 13968.8 → 7937.6 (Δ=-6031.1)
+2025-10-17 16:31:43,473 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:44,660 - WARNING - ================================================================================
+2025-10-17 16:31:44,660 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2287
+2025-10-17 16:31:44,660 - WARNING -    Fitness actual: 13968.6
+2025-10-17 16:31:44,660 - WARNING -    Fitness vecino: 7838.7
+2025-10-17 16:31:44,661 - WARNING -    Delta: -6129.9
+2025-10-17 16:31:44,661 - WARNING -    Temperatura: 2.03
+2025-10-17 16:31:44,661 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:44,661 - WARNING -    Vecino - Puntos: 16019, Tiempo: 14693.9min, Distancia: 171.5km
+2025-10-17 16:31:44,661 - WARNING -    Actual - Puntos: 16019, Tiempo: 13966.4min, Distancia: 168.0km
+2025-10-17 16:31:44,662 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:44,662 - WARNING - ================================================================================
+2025-10-17 16:31:44,662 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2287
+2025-10-17 16:31:44,662 - WARNING -    Fitness: 13968.6 → 7838.7 (Δ=-6129.9)
+2025-10-17 16:31:44,662 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:45,247 - DEBUG - Iter 2300: T=2.00, Fitness_actual=13967.9, Mejor=13969.3
+2025-10-17 16:31:46,040 - WARNING - ================================================================================
+2025-10-17 16:31:46,040 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2317
+2025-10-17 16:31:46,040 - WARNING -    Fitness actual: 13968.0
+2025-10-17 16:31:46,040 - WARNING -    Fitness vecino: 7836.9
+2025-10-17 16:31:46,041 - WARNING -    Delta: -6131.1
+2025-10-17 16:31:46,041 - WARNING -    Temperatura: 1.97
+2025-10-17 16:31:46,041 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:46,041 - WARNING -    Vecino - Puntos: 16007, Tiempo: 14147.9min, Distancia: 184.4km
+2025-10-17 16:31:46,041 - WARNING -    Actual - Puntos: 16019, Tiempo: 13990.9min, Distancia: 170.1km
+2025-10-17 16:31:46,042 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:46,042 - WARNING - ================================================================================
+2025-10-17 16:31:46,042 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2317
+2025-10-17 16:31:46,042 - WARNING -    Fitness: 13968.0 → 7836.9 (Δ=-6131.1)
+2025-10-17 16:31:46,043 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:46,266 - INFO - 🌟 MEJORA #296 en iter 2322: Fitness=13973.7 (+4.4), Puntos=16025
+2025-10-17 16:31:46,354 - INFO - 🌟 MEJORA #297 en iter 2324: Fitness=13973.8 (+0.1), Puntos=16025
+2025-10-17 16:31:46,663 - INFO - 🌟 MEJORA #298 en iter 2331: Fitness=13973.8 (+0.0), Puntos=16025
+2025-10-17 16:31:46,708 - INFO - 🌟 MEJORA #299 en iter 2332: Fitness=13973.8 (+0.0), Puntos=16025
+2025-10-17 16:31:47,685 - WARNING - ================================================================================
+2025-10-17 16:31:47,685 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2354
+2025-10-17 16:31:47,685 - WARNING -    Fitness actual: 13971.4
+2025-10-17 16:31:47,686 - WARNING -    Fitness vecino: 8673.4
+2025-10-17 16:31:47,686 - WARNING -    Delta: -5298.0
+2025-10-17 16:31:47,686 - WARNING -    Temperatura: 1.90
+2025-10-17 16:31:47,686 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-17 16:31:47,686 - WARNING -    Vecino - Puntos: 16032, Tiempo: 14029.6min, Distancia: 175.4km
+2025-10-17 16:31:47,687 - WARNING -    Actual - Puntos: 16022, Tiempo: 13932.1min, Distancia: 168.5km
+2025-10-17 16:31:47,687 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-17 16:31:47,687 - WARNING - ================================================================================
+2025-10-17 16:31:47,687 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2354
+2025-10-17 16:31:47,687 - WARNING -    Fitness: 13971.4 → 8673.4 (Δ=-5298.0)
+2025-10-17 16:31:47,687 - WARNING -    Ver detalles en archivo de log
+2025-10-17 16:31:47,914 - INFO - 🌟 MEJORA #300 en iter 2359: Fitness=13975.5 (+1.6), Puntos=16026
+2025-10-17 16:31:47,914 - INFO -   ✨ Mejora #300 en iteración 2360: Fitness = 13975.5 | Puntos = 16026 | T = 1.89
+2025-10-17 16:31:48,093 - INFO - 🌟 MEJORA #301 en iter 2363: Fitness=13975.5 (+0.0), Puntos=16026
+2025-10-17 16:31:48,180 - INFO - 🌟 MEJORA #302 en iter 2365: Fitness=13975.5 (+0.0), Puntos=16026
+2025-10-17 16:31:48,318 - INFO - 🌟 MEJORA #303 en iter 2368: Fitness=13975.9 (+0.4), Puntos=16026
+2025-10-17 16:31:49,094 - INFO - 🌟 MEJORA #304 en iter 2385: Fitness=13977.9 (+2.1), Puntos=16028
+2025-10-17 16:31:49,243 - INFO - 🌟 MEJORA #305 en iter 2388: Fitness=13977.9 (+0.0), Puntos=16028
+2025-10-17 16:31:49,243 - INFO -   ✨ Mejora #305 en iteración 2389: Fitness = 13977.9 | Puntos = 16028 | T = 1.83
+2025-10-17 16:31:49,292 - INFO - 🌟 MEJORA #306 en iter 2389: Fitness=13980.9 (+2.9), Puntos=16031
+2025-10-17 16:31:49,805 - DEBUG - Iter 2400: T=1.81, Fitness_actual=13980.9, Mejor=13980.9
+2025-10-17 16:31:49,895 - INFO - 🌟 MEJORA #307 en iter 2402: Fitness=13982.8 (+1.9), Puntos=16033
+2025-10-17 16:31:49,941 - INFO - 🌟 MEJORA #308 en iter 2403: Fitness=13982.8 (+0.0), Puntos=16033
+2025-10-17 16:31:50,029 - INFO - 🌟 MEJORA #309 en iter 2405: Fitness=13984.9 (+2.1), Puntos=16035
+2025-10-17 16:31:50,077 - INFO - 🌟 MEJORA #310 en iter 2406: Fitness=13985.2 (+0.3), Puntos=16035
+2025-10-17 16:31:50,078 - INFO -   ✨ Mejora #310 en iteración 2407: Fitness = 13985.2 | Puntos = 16035 | T = 1.80
+2025-10-17 16:31:50,718 - INFO - ⏰ Tiempo máximo alcanzado: 1.8 minutos
+2025-10-17 16:31:50,852 - INFO - 💾 Gráfica guardada: graficas\evolucion_fitness_sa_17_16_31.png
+2025-10-17 16:35:12,994 - INFO - ================================================================================
+2025-10-17 16:35:12,994 - INFO - ✅ ENFRIAMIENTO SIMULADO COMPLETADO
+2025-10-17 16:35:12,995 - INFO - ================================================================================
+2025-10-17 16:35:12,995 - INFO - Iteraciones: 2,421
+2025-10-17 16:35:12,995 - INFO - Tiempo ejecución: 1.80 minutos
+2025-10-17 16:35:12,995 - INFO - Fitness inicial: -13358.3
+2025-10-17 16:35:12,995 - INFO - Fitness final: 13985.2
+2025-10-17 16:35:12,995 - INFO - Mejora: +27343.5 (+204.69%)
+2025-10-17 16:35:12,995 - INFO - Mejoras encontradas: 310
+2025-10-17 16:35:12,995 - INFO - Tasa aceptación: 51.30%
+2025-10-17 16:35:12,996 - INFO - ================================================================================
+2025-10-17 16:35:12,996 - INFO - ================================================================================
+2025-10-17 16:35:12,996 - INFO - ✅ ENFRIAMIENTO SIMULADO COMPLETADO
+2025-10-17 16:35:12,996 - INFO - ================================================================================
+2025-10-17 16:35:12,996 - INFO - 
+2025-10-17 16:35:12,996 - INFO - 📈 Estadísticas:
+2025-10-17 16:35:12,996 - INFO -   • Iteraciones realizadas: 2,421
+2025-10-17 16:35:12,996 - INFO -   • Tiempo de ejecución: 1.80 minutos (0.03 horas)
+2025-10-17 16:35:12,996 - INFO -   • Temperatura final: 1.7763
+2025-10-17 16:35:12,997 - INFO -   • Total aceptaciones: 1,242 (51.3%)
+2025-10-17 16:35:12,997 - INFO -   • Total rechazos: 1,178
+2025-10-17 16:35:12,997 - INFO -   • Mejoras encontradas: 310
+2025-10-17 16:35:12,997 - INFO - 
+2025-10-17 16:35:12,997 - INFO - 🏆 Resultados:
+2025-10-17 16:35:12,997 - INFO -   • Fitness inicial: -13358.3
+2025-10-17 16:35:12,997 - INFO -   • Fitness final: 13985.2
+2025-10-17 16:35:12,998 - INFO -   • Mejora absoluta: +27343.5
+2025-10-17 16:35:12,998 - INFO -   • Mejora porcentual: +204.69%
+2025-10-17 16:35:12,998 - INFO -   • Puntos totales: 16035
+2025-10-17 16:35:12,998 - INFO -   • Tiempo total: 230.5h
+2025-10-17 16:35:12,998 - INFO -   • Distancia total: 166.1km
+2025-10-17 16:35:12,998 - INFO - ================================================================================
+2025-10-17 16:35:12,998 - INFO - ================================================================================
+2025-10-17 16:35:12,999 - INFO - 📋 ANÁLISIS DE LA SOLUCIÓN FINAL
+2025-10-17 16:35:12,999 - INFO - ================================================================================
+2025-10-17 16:35:13,011 - INFO - 💾 Resultados exportados a: resultados_sa_standalone_20251017_163513.json
+2025-10-17 16:35:13,011 - INFO - 
+2025-10-17 16:35:13,012 - INFO - ✅ Resultados guardados exitosamente:
+2025-10-17 16:35:13,012 - INFO -    • JSON: resultados_sa_standalone_20251017_163513.json
+2025-10-17 16:35:13,013 - INFO -    • Log: logs\sa_log_17_16_30.txt
+2025-10-17 16:35:13,013 - INFO -    • Gráfica: graficas/evolucion_fitness_sa_*.png
+2025-10-17 16:35:13,014 - INFO - ✅ Ejecución completada exitosamente!
