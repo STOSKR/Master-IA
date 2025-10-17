@@ -27,20 +27,20 @@ export function animatePlayer() {
 
         if (logPlayerIsOn && !movesQueue.length) {
             player.position.x = logPlayerIsOn.position.x;
+
+            position.currentTile = Math.round(player.position.x / tileSize);
         }
     }
-
     if (!movesQueue.length) return;
 
     if (!moveClock.running) moveClock.start();
 
-    const stepTime = 0.2; // Seconds it takes to take a step
+    const stepTime = 0.2;
     const progress = Math.min(1, moveClock.getElapsedTime() / stepTime);
 
     setPosition(progress);
     setRotation(progress);
 
-    // Once a step has ended
     if (progress >= 1) {
         stepCompleted();
         moveClock.stop();
@@ -48,20 +48,23 @@ export function animatePlayer() {
 }
 
 function setPosition(progress) {
-    const startX = position.currentTile * tileSize;
-    const startY = position.currentRow * tileSize;
-    let endX = startX;
-    let endY = startY;
+    const startX = player.position.x;
+    const startY = player.position.y;
 
     const currentMove = movesQueue[0];
     const direction = typeof currentMove === 'object' ? currentMove.direction : currentMove;
 
-    if (direction === "left") endX -= tileSize;
-    if (direction === "right") endX += tileSize;
-    if (direction === "forward") endY += tileSize;
-    if (direction === "backward") endY -= tileSize;
+    let destinationTile = position.currentTile;
+    let destinationRow = position.currentRow;
 
-    // Si es un salto, mantener la posición inicial
+    if (direction === "left") destinationTile -= 1;
+    if (direction === "right") destinationTile += 1;
+    if (direction === "forward") destinationRow += 1;
+    if (direction === "backward") destinationRow -= 1;
+
+    let endX = destinationTile * tileSize;
+    let endY = destinationRow * tileSize;
+
     if (typeof currentMove === 'object' && currentMove.type === 'jump') {
         endX = startX;
         endY = startY;
