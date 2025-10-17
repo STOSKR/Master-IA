@@ -1,0 +1,27 @@
+2025-10-17 17:53:31 - INFO - ================================================================================
+2025-10-17 17:53:31 - INFO - INICIO DE EJECUCIÓN - Algoritmo Genético España
+2025-10-17 17:53:31 - INFO - Log guardado en: logs\Pob_1000_17_17_53.log
+2025-10-17 17:53:31 - INFO - ================================================================================
+2025-10-17 17:53:31 - INFO - 
+================================================================================
+2025-10-17 17:53:31 - INFO - ALGORITMO GENÉTICO
+2025-10-17 17:53:31 - INFO - ================================================================================
+2025-10-17 17:53:31 - INFO - Días: 20
+2025-10-17 17:53:31 - INFO - Lugares/día: 12
+2025-10-17 17:53:31 - INFO - Población: 1000
+2025-10-17 17:53:31 - INFO - Tiempo límite: 6h 0m (6.00h)
+2025-10-17 17:53:31 - INFO - Elitismo: 15%
+2025-10-17 17:53:31 - INFO - Dataset: 2237 lugares en 20 ciudades
+2025-10-17 17:53:31 - INFO - ================================================================================
+
+2025-10-17 17:53:31 - INFO - Creando población inicial
+2025-10-17 17:59:41 - INFO - Evaluando población inicial
+2025-10-17 17:59:46 - INFO - 
+Iniciando evolución (hasta 21600s)...
+
+2025-10-17 18:00:49 - INFO -   Gen    7 | Tiempo:    7.2m (resta: 352m) | Fitness:    120.1 | Puntos: 16064 | Dist:   168.8km
+2025-10-17 18:01:49 - INFO -   Gen   16 | Tiempo:    8.2m (resta: 351m) | Fitness:    121.4 | Puntos: 16123 | Dist:   167.7km
+2025-10-17 18:02:53 - INFO -   Gen   27 | Tiempo:    9.3m (resta: 350m) | Fitness:    126.3 | Puntos: 16284 | Dist:   179.3km
+2025-10-17 18:03:54 - INFO -   Gen   39 | Tiempo:   10.3m (resta: 349m) | Fitness:    128.5 | Puntos: 16091 | Dist:   150.0km
+2025-10-17 18:04:50 - INFO -   Gen   50 | Tiempo:   11.3m (resta: 348m) | Fitness:    130.0 | Puntos: 16348 | Dist:   156.0km
+2025-10-17 18:05:55 - INFO -   Gen   63 | Tiempo:   12.3m (resta: 347m) | Fitness:    131.1 | Puntos: 16257 | Dist:   152.8km

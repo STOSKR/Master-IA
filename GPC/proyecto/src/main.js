@@ -30,11 +30,9 @@ const resultDOM = document.getElementById("result-container");
 
 document.querySelector("#retry")?.addEventListener("click", initializeGame);
 
-// Reiniciar el juego al presionar la tecla "r"
-window.addEventListener("keydown", (event) => {
+window.addEventListener("keyup", (event) => {
   if (event.key.toLowerCase() === "r") {
     const resultDOM = document.getElementById("result-container");
-    // Solo reiniciar si el menú de game over está visible
     if (resultDOM && resultDOM.style.visibility === "visible") {
       initializeGame();
     }
@@ -46,7 +44,7 @@ initializeGame();
 function initializeGame() {
   initializePlayer();
   initializeMap();
-  setGameActive(true); // Reactivar el juego al reiniciar
+  setGameActive(true);
 
   if (scoreDOM) scoreDOM.innerText = "0";
   if (resultDOM) resultDOM.style.visibility = "hidden";
@@ -54,6 +52,25 @@ function initializeGame() {
 
 const renderer = Renderer();
 renderer.setAnimationLoop(animate);
+
+function handleResize() {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const size = 300;
+  const viewRatio = window.innerWidth / window.innerHeight;
+
+  const width = viewRatio < 1 ? size : size * viewRatio;
+  const height = viewRatio < 1 ? size / viewRatio : size;
+
+  camera.left = width / -2;
+  camera.right = width / 2;
+  camera.top = height / 2;
+  camera.bottom = height / -2;
+
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', handleResize);
 
 function animate() {
   animateVehicles();
