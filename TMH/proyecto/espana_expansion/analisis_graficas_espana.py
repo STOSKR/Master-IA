@@ -42,7 +42,17 @@ COLORES_CIUDADES = {
     "Toledo": "#8B4513",        # Marrón
     "Córdoba": "#00CED1",       # Turquesa
     "San Sebastián": "#FFD700", # Dorado
-    "Santiago": "#4B0082"       # Índigo
+    "Santiago": "#4B0082",       # Índigo
+    "Málaga": {"color": "#FF6347"},   # Tomate / Rojo Coral
+    "Zaragoza": {"color": "#6A5ACD"}, # Azul Pizarra medio
+    "Salamanca": {"color": "#DAA520"},# Oro Viejo / Amarillo mostaza
+    "Segovia": {"color": "#20B2AA"},  # Azul Verdoso Claro / Turquesa fuerte
+    "Cádiz": {"color": "#8A2BE2"},    # Azul Violeta / Púrpura brillante
+    "Alicante": {"color": "#FFD700"}, # Oro / Amarillo vibrante
+    "Pamplona": {"color": "#FF4500"}, # Naranja Rojizo / Naranja fuerte
+    "Oviedo": {"color": "#008080"},   # Verde Azulado / Teal Oscuro
+    "Burgos": {"color": "#8B4513"},   # Marrón Silla de Montar / Marrón Oscuro
+    "León": {"color": "#B0C4DE"}      # Azul Claro de Acero / Azul grisáceo
 }
 
 # Iconos por tipo de lugar

@@ -839,19 +839,6 @@ def comparar_con_sin_2opt(
     max_tiempo_segundos: float = 1800,  # 30 minutos cada uno
     verbose: bool = True
 ) -> Dict:
-    """
-    Compara el rendimiento del SA con y sin optimización 2-opt.
-    
-    Args:
-        solucion_inicial: Solución inicial común para ambas ejecuciones
-        T_inicial: Temperatura inicial
-        alpha: Factor de enfriamiento
-        max_tiempo_segundos: Tiempo máximo para cada ejecución
-        verbose: Mostrar progreso
-    
-    Returns:
-        Dict con resultados de ambas ejecuciones y comparación
-    """
     import copy
     
     sa_logger.info("="*80)
