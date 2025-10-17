@@ -397,131 +397,164 @@ def reparar_individuo(individuo: Individual) -> Individual:
     
     return individuo
 
-def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual:
-    ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
-    dias = []
-    ciudades_plan = []
-    ciudades_visitadas = set()
-    lugares_visitados_global = set()
+def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos: int = 50) -> Individual:
+    """
+    Crea un individuo aleatorio, intentando múltiples veces hasta obtener uno válido
+    (sin violaciones de horario) o alcanzar el límite de intentos.
     
-    if AGRUPAR:
-        dia_actual = 0
-        ciudad_actual = random.choice(ciudades_disponibles)
-        dias_consecutivos_ciudad = 0
-        ciudades_usadas = []  # Lista ordenada de ciudades ya visitadas
+    Args:
+        num_dias: Número de días del viaje
+        lugares_por_dia: Número de lugares por día
+        max_intentos: Número máximo de intentos para crear un individuo válido (default: 50)
+    
+    Returns:
+        Individual creado (válido si fue posible)
+    """
+    mejor_individuo = None
+    menor_violaciones = float('inf')
+    
+    for intento in range(max_intentos):
+        ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
+        dias = []
+        ciudades_plan = []
+        ciudades_visitadas = set()
+        lugares_visitados_global = set()
         
-        while dia_actual < num_dias:
-            dias_restantes = num_dias - dia_actual
+        if AGRUPAR:
+            dia_actual = 0
+            ciudad_actual = random.choice(ciudades_disponibles)
+            dias_consecutivos_ciudad = 0
+            ciudades_usadas = []  # Lista ordenada de ciudades ya visitadas
             
-            # Calcular cuántos días PUEDE quedarse en esta ciudad (máximo MAX_DIAS_POR_CIUDAD)
-            max_permitido = MAX_DIAS_POR_CIUDAD - dias_consecutivos_ciudad
-            
-            # Si llegó al límite, DEBE cambiar de ciudad
-            if max_permitido <= 0:
-                ciudades_usadas.append(ciudad_actual)
-                # Buscar ciudad NO visitada
-                candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
-                if not candidatas:
-                    # Si todas fueron visitadas, reiniciar (permitir reutilizar ciudades)
-                    candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+            while dia_actual < num_dias:
+                dias_restantes = num_dias - dia_actual
                 
-                ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
-                dias_consecutivos_ciudad = 0
-                max_permitido = MAX_DIAS_POR_CIUDAD
-            
-            # Calcular días a asignar: mínimo entre max_permitido y días_restantes
-            dias_en_ciudad = random.randint(1, min(max_permitido, dias_restantes))
-            
-            # Asignar días
-            lugares_ciudad = get_lugares_ciudad(ciudad_actual)
-            
-            # ⚠️ CRÍTICO: Si no hay suficientes lugares, permitir repeticiones
-            # NO usar lugares de otras ciudades (causaría distancias intercity enormes)
-            permitir_repeticiones = len(lugares_ciudad) < lugares_por_dia
-            
-            for _ in range(dias_en_ciudad):
-                if dia_actual >= num_dias:
-                    break
+                # Calcular cuántos días PUEDE quedarse en esta ciudad (máximo MAX_DIAS_POR_CIUDAD)
+                max_permitido = MAX_DIAS_POR_CIUDAD - dias_consecutivos_ciudad
                 
-                lugares_disponibles = [
-                    l for l in lugares_ciudad 
-                    if l["id"] not in lugares_visitados_global
-                ]
+                # Si llegó al límite, DEBE cambiar de ciudad
+                if max_permitido <= 0:
+                    ciudades_usadas.append(ciudad_actual)
+                    # Buscar ciudad NO visitada
+                    candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
+                    if not candidatas:
+                        # Si todas fueron visitadas, reiniciar (permitir reutilizar ciudades)
+                        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                    
+                    ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
+                    dias_consecutivos_ciudad = 0
+                    max_permitido = MAX_DIAS_POR_CIUDAD
                 
-                if len(lugares_disponibles) < lugares_por_dia:
-                    lugares_disponibles = lugares_ciudad
+                # Calcular días a asignar: mínimo entre max_permitido y días_restantes
+                dias_en_ciudad = random.randint(1, min(max_permitido, dias_restantes))
                 
-                # Si hay suficientes lugares, usar sample (sin repetición)
-                # Si no, usar choices (con repetición permitida)
-                if len(lugares_disponibles) >= lugares_por_dia:
-                    lugares_dia = random.sample(lugares_disponibles, lugares_por_dia)
+                # Asignar días
+                lugares_ciudad = get_lugares_ciudad(ciudad_actual)
+                
+                # ⚠️ CRÍTICO: Si no hay suficientes lugares, permitir repeticiones
+                # NO usar lugares de otras ciudades (causaría distancias intercity enormes)
+                permitir_repeticiones = len(lugares_ciudad) < lugares_por_dia
+                
+                for _ in range(dias_en_ciudad):
+                    if dia_actual >= num_dias:
+                        break
+                    
+                    lugares_disponibles = [
+                        l for l in lugares_ciudad 
+                        if l["id"] not in lugares_visitados_global
+                    ]
+                    
+                    if len(lugares_disponibles) < lugares_por_dia:
+                        lugares_disponibles = lugares_ciudad
+                    
+                    # Si hay suficientes lugares, usar sample (sin repetición)
+                    # Si no, usar choices (con repetición permitida)
+                    if len(lugares_disponibles) >= lugares_por_dia:
+                        lugares_dia = random.sample(lugares_disponibles, lugares_por_dia)
+                    else:
+                        # Con repetición: podemos elegir el mismo lugar varias veces si es necesario
+                        lugares_dia = random.choices(lugares_disponibles, k=lugares_por_dia)
+                    
+                    ids_dia = [l["id"] for l in lugares_dia]
+                    
+                    lugares_visitados_global.update(ids_dia)
+                    random.shuffle(ids_dia)
+                    
+                    dias.append(ids_dia)
+                    ciudades_plan.append(ciudad_actual)
+                    dia_actual += 1
+                    dias_consecutivos_ciudad += 1
+                
+                # Si quedan días y estamos cerca del límite o terminamos los días de esta ciudad
+                # cambiar proactivamente
+                if dia_actual < num_dias and dias_consecutivos_ciudad >= MAX_DIAS_POR_CIUDAD:
+                    ciudades_usadas.append(ciudad_actual)
+                    # Buscar ciudad NO visitada
+                    candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
+                    if not candidatas:
+                        candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
+                    
+                    ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
+                    dias_consecutivos_ciudad = 0
+                elif dia_actual < num_dias and random.random() < 0.5:  # 50% probabilidad de cambiar voluntariamente
+                    ciudades_usadas.append(ciudad_actual)
+                    candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
+                    if candidatas:
+                        ciudad_actual = random.choice(candidatas)
+                        dias_consecutivos_ciudad = 0
+        else:
+            ciudad_actual = random.choice(ciudades_disponibles)
+            dias_consecutivos = 0
+            
+            for dia_idx in range(num_dias):
+                if dia_idx > 0 and ciudades_plan[-1] == ciudad_actual:
+                    dias_consecutivos += 1
                 else:
-                    # Con repetición: podemos elegir el mismo lugar varias veces si es necesario
-                    lugares_dia = random.choices(lugares_disponibles, k=lugares_por_dia)
+                    dias_consecutivos = 1
                 
+                if dias_consecutivos >= MAX_DIAS_POR_CIUDAD:
+                    ciudades_visitadas.add(ciudad_actual)
+                    ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, dias_consecutivos)
+                    dias_consecutivos = 1
+                
+                lugares_ciudad = get_lugares_ciudad(ciudad_actual)
+                if len(lugares_ciudad) < lugares_por_dia:
+                    lugares_ciudad = lugares_turisticos_espana
+                
+                lugares_dia = random.sample(lugares_ciudad, min(lugares_por_dia, len(lugares_ciudad)))
                 ids_dia = [l["id"] for l in lugares_dia]
-                
-                lugares_visitados_global.update(ids_dia)
                 random.shuffle(ids_dia)
                 
                 dias.append(ids_dia)
                 ciudades_plan.append(ciudad_actual)
-                dia_actual += 1
-                dias_consecutivos_ciudad += 1
-            
-            # Si quedan días y estamos cerca del límite o terminamos los días de esta ciudad
-            # cambiar proactivamente
-            if dia_actual < num_dias and dias_consecutivos_ciudad >= MAX_DIAS_POR_CIUDAD:
-                ciudades_usadas.append(ciudad_actual)
-                # Buscar ciudad NO visitada
-                candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
-                if not candidatas:
-                    candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
-                
-                ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
-                dias_consecutivos_ciudad = 0
-            elif dia_actual < num_dias and random.random() < 0.5:  # 50% probabilidad de cambiar voluntariamente
-                ciudades_usadas.append(ciudad_actual)
-                candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
-                if candidatas:
-                    ciudad_actual = random.choice(candidatas)
-                    dias_consecutivos_ciudad = 0
-    else:
-        ciudad_actual = random.choice(ciudades_disponibles)
-        dias_consecutivos = 0
-        
-        for dia_idx in range(num_dias):
-            if dia_idx > 0 and ciudades_plan[-1] == ciudad_actual:
-                dias_consecutivos += 1
-            else:
-                dias_consecutivos = 1
-            
-            if dias_consecutivos >= MAX_DIAS_POR_CIUDAD:
-                ciudades_visitadas.add(ciudad_actual)
-                ciudad_actual = obtener_ciudad_mas_cercana(ciudad_actual, ciudades_visitadas, dias_consecutivos)
-                dias_consecutivos = 1
-            
-            lugares_ciudad = get_lugares_ciudad(ciudad_actual)
-            if len(lugares_ciudad) < lugares_por_dia:
-                lugares_ciudad = lugares_turisticos_espana
-            
-            lugares_dia = random.sample(lugares_ciudad, min(lugares_por_dia, len(lugares_ciudad)))
-            ids_dia = [l["id"] for l in lugares_dia]
-            random.shuffle(ids_dia)
-            
-            dias.append(ids_dia)
-            ciudades_plan.append(ciudad_actual)
 
+        
+        individuo = Individual(dias, ciudades_plan)
+        
+        if not validar_restricciones_ciudades(individuo):
+            individuo = reparar_individuo(individuo)
+        
+        # Intentar reparar horarios
+        individuo = reparar_horarios_individuo(individuo, max_intentos=2)
+        
+        # Contar violaciones
+        violaciones = contar_violaciones_horario(individuo)
+        
+        # Si es válido (sin violaciones), devolverlo inmediatamente
+        if violaciones == 0:
+            return individuo
+        
+        # Si es el mejor hasta ahora, guardarlo
+        if violaciones < menor_violaciones:
+            menor_violaciones = violaciones
+            mejor_individuo = copy.deepcopy(individuo)
     
-    individuo = Individual(dias, ciudades_plan)
+    # Si no se encontró uno perfecto, devolver el mejor
+    if mejor_individuo is None:
+        # Esto no debería pasar, pero por seguridad
+        mejor_individuo = Individual(dias, ciudades_plan)
     
-    if not validar_restricciones_ciudades(individuo):
-        individuo = reparar_individuo(individuo)
-    
-    # Intentar reparar horarios desde el inicio
-    individuo = reparar_horarios_individuo(individuo, max_intentos=1)
-    
-    return individuo
+    return mejor_individuo
 
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
     return [crear_individuo_aleatorio(num_dias, lugares_por_dia) for _ in range(tam_poblacion)]
@@ -547,6 +580,75 @@ def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, 
         tiempo_total += dist / VELOCIDAD_MEDIA * 60
     
     return tiempo_total, distancia_total, puntos_total
+
+def contar_violaciones_horario(individuo: Individual) -> int:
+    """
+    Cuenta el número de violaciones de horario en un individuo.
+    
+    Args:
+        individuo: El individuo a verificar
+    
+    Returns:
+        Número de lugares visitados fuera de su horario de apertura
+    """
+    # Asegurar que los transportes estén calculados
+    if not hasattr(individuo, 'transportes_intercity') or not individuo.transportes_intercity:
+        individuo.transportes_intercity = []
+        for dia_idx in range(1, len(individuo.dias)):
+            if individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
+                tipo_trans, tiempo_trans, costo_trans = elegir_mejor_transporte(
+                    individuo.ciudades[dia_idx - 1],
+                    individuo.ciudades[dia_idx],
+                    1000
+                )
+                individuo.transportes_intercity.append((
+                    dia_idx,
+                    individuo.ciudades[dia_idx - 1],
+                    individuo.ciudades[dia_idx],
+                    tipo_trans,
+                    tiempo_trans,
+                    costo_trans
+                ))
+    
+    violaciones = 0
+    
+    for dia_idx in range(len(individuo.dias)):
+        hora_actual = HORA_INICIO
+        
+        # Considerar transporte intercity
+        if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
+            for transporte in individuo.transportes_intercity:
+                if transporte[0] == dia_idx:
+                    hora_actual += transporte[4]
+                    break
+        
+        lugares_dia = get_lugares_por_ids(individuo.dias[dia_idx])
+        
+        for lugar in lugares_dia:
+            tipo = lugar.get('tipo', '')
+            tiempo_visita = lugar['tiempo_visita']
+            hora_fin_visita = hora_actual + tiempo_visita
+            
+            if tipo in HORARIOS_TIPO:
+                apertura = HORARIOS_TIPO[tipo]["apertura"]
+                cierre = HORARIOS_TIPO[tipo]["cierre"]
+                
+                # Caso especial: bares
+                if tipo == "bar" and cierre < apertura:
+                    cierre = 26 * 60
+                
+                if hora_actual < apertura or hora_fin_visita > cierre:
+                    violaciones += 1
+            
+            hora_actual = hora_fin_visita
+            
+            # Añadir tiempo de desplazamiento
+            idx_lugar = lugares_dia.index(lugar)
+            if idx_lugar < len(lugares_dia) - 1:
+                dist = distancia_haversine(lugar, lugares_dia[idx_lugar + 1])
+                hora_actual += dist / VELOCIDAD_MEDIA * 60
+    
+    return violaciones
 
 def verificar_lugar_en_horario(lugar: Dict, hora_inicio: int, hora_fin: int) -> bool:
     """
@@ -1482,8 +1584,8 @@ if __name__ == "__main__":
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
             "num_dias": 20,
             "lugares_por_dia": 12,
-            "tam_poblacion": 1000,
-            "num_generaciones": 600,
+            "tam_poblacion": 100,
+            "num_generaciones": 100,
             "tasa_elitismo": 0.10,
             "descripcion": "Máxima calidad de solución"
         }
