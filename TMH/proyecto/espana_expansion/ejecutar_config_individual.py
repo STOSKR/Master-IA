@@ -111,7 +111,7 @@ def ejecutar_con_config(args):
     
     # Guardar JSON
     if args.guardar_json:
-        archivo_json = f"{args.output_dir}/{nombre_archivo}_{timestamp}.json"
+        archivo_json = f"{args.output_dir}/{timestamp}_{nombre_archivo}.json"
         
         datos = {
             'nombre': args.nombre,

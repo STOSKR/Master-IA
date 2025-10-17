@@ -1303,6 +1303,8 @@ def algoritmo_genetico_espana(
     tiempo_limite_horas: float = None
 ) -> Dict:
     import time as time_module
+    import sys
+    import threading
     
     tiempo_limite_segundos = None
     if tiempo_limite_horas is not None:
@@ -1312,6 +1314,27 @@ def algoritmo_genetico_espana(
         raise ValueError("Debe especificar num_generaciones o tiempo_limite_horas")
     
     modo_tiempo = tiempo_limite_segundos is not None
+    detencion_manual = [False]  # Lista mutable para compartir entre threads
+    
+    # Thread para detectar la tecla 'q'
+    def monitor_tecla():
+        """Monitorea la entrada del teclado en un thread separado"""
+        try:
+            import msvcrt
+            while not detencion_manual[0]:
+                if msvcrt.kbhit():
+                    tecla = msvcrt.getch().decode('utf-8', errors='ignore').lower()
+                    if tecla == 'q':
+                        detencion_manual[0] = True
+                        break
+                time_module.sleep(0.1)
+        except Exception as e:
+            # Si falla msvcrt, intentar con input estándar
+            pass
+    
+    # Iniciar thread de monitoreo
+    thread_teclado = threading.Thread(target=monitor_tecla, daemon=True)
+    thread_teclado.start()
     
     log(f"\n{'='*80}")
     log(f"ALGORITMO GENÉTICO")
@@ -1327,6 +1350,7 @@ def algoritmo_genetico_espana(
         log(f"Generaciones: {num_generaciones}")
     log(f"Elitismo: {tasa_elitismo*100:.0f}%")
     log(f"Dataset: {len(lugares_turisticos_espana)} lugares en 20 ciudades")
+    log(f"💡 Presiona 'q' + ENTER en cualquier momento para detener y guardar el mejor resultado")
     log(f"{'='*80}\n")
     
     tiempo_inicio_total = time_module.time()
@@ -1359,6 +1383,12 @@ def algoritmo_genetico_espana(
     ultimo_reporte = time_module.time()
     
     while True:
+        # Verificar si se presionó 'q' para detener
+        if detencion_manual[0]:
+            log(f"\n⏹️  DETENCIÓN MANUAL - Tecla 'q' presionada")
+            log(f"   Guardando mejor resultado encontrado hasta ahora...")
+            break
+        
         # Verificar criterio de parada
         tiempo_transcurrido = time_module.time() - tiempo_inicio_total
         
@@ -1436,10 +1466,16 @@ def algoritmo_genetico_espana(
     
     tiempo_total_ejecucion = time_module.time() - tiempo_inicio_total
     
-    log(f"\n✅ Evolución completada!")
-    log(f"🏆 Mejor fitness global: {mejor_global.fitness:.1f}")
-    log(f"📊 Generaciones ejecutadas: {gen}")
-    log(f"⏱️  Tiempo total: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
+    if detencion_manual[0]:
+        log(f"\n✅ Ejecución detenida manualmente!")
+        log(f"🏆 Mejor fitness encontrado: {mejor_global.fitness:.1f}")
+        log(f"📊 Generaciones completadas: {gen}")
+        log(f"⏱️  Tiempo transcurrido: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
+    else:
+        log(f"\n✅ Evolución completada!")
+        log(f"🏆 Mejor fitness global: {mejor_global.fitness:.1f}")
+        log(f"📊 Generaciones ejecutadas: {gen}")
+        log(f"⏱️  Tiempo total: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
     
     return {
         "mejor_individuo": mejor_global,
@@ -1448,7 +1484,8 @@ def algoritmo_genetico_espana(
         "historial_tiempos": historial_tiempos,
         "poblacion_final": poblacion,
         "generaciones_ejecutadas": gen,
-        "tiempo_ejecucion": tiempo_total_ejecucion
+        "tiempo_ejecucion": tiempo_total_ejecucion,
+        "detencion_manual": detencion_manual[0]
     }
 
 
