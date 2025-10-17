@@ -54,7 +54,7 @@ def ejecutar_con_config(args):
     
     # Si no se especificó ni generaciones ni horas, usar 1 hora por defecto
     if args.generaciones is None and args.horas is None:
-        args.horas = 0.01
+        args.horas = 8.0
         print("⚠️  No se especificó --generaciones ni --horas, usando --horas 1.0 por defecto\n")
     
     timestamp = datetime.now().strftime("%d_%H_%M")
