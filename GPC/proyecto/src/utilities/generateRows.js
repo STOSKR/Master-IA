@@ -97,7 +97,7 @@ function generateWaterLaneMetadata() {
 
     const occupiedTiles = new Set();
 
-    const vehicles = Array.from({ length: 2 }, () => {
+    const vehicles = Array.from({ length: 3 }, () => {
         let initialTileIndex;
         do {
             initialTileIndex = THREE.MathUtils.randInt(

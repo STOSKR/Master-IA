@@ -3,6 +3,7 @@ import { Renderer } from "./components/Renderer";
 import { Camera } from "./components/Camera";
 import { DirectionalLight } from "./components/DirectionalLight";
 import { createPlayer, player, initializePlayer } from "./components/Player";
+import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { map, initializeMap } from "./components/Map";
 import { animateVehicles } from "./animateVehicles";
 import { animatePlayer } from "./animatePlayer";
@@ -12,6 +13,8 @@ import "./style.css";
 import "./collectUserInput";
 
 async function startGame() {
+  const stats = new Stats();
+  document.body.appendChild(stats.dom);
 
   const scene = new THREE.Scene();
 
@@ -79,6 +82,8 @@ async function startGame() {
 
   function animate() {
     if (!player) return;
+
+    stats.update();
 
     camera.position.x = player.position.x + 300;
     camera.position.y = player.position.y - 300;
