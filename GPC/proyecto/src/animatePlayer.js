@@ -6,10 +6,30 @@ import {
     stepCompleted
 } from "./components/Player";
 import { tileSize } from "./constants";
+import { metadata as rows } from "./components/Map";
 
 const moveClock = new THREE.Clock(false);
 
 export function animatePlayer() {
+    const currentRow = rows[position.currentRow - 1];
+    if (currentRow && currentRow.type === "water") {
+        const playerBox = new THREE.Box3().setFromObject(player, true);
+        let logPlayerIsOn = null;
+
+        for (const log of currentRow.vehicles) {
+            if (!log.ref) continue;
+            const logBox = new THREE.Box3().setFromObject(log.ref);
+            if (playerBox.intersectsBox(logBox)) {
+                logPlayerIsOn = log.ref;
+                break;
+            }
+        }
+
+        if (logPlayerIsOn && !movesQueue.length) {
+            player.position.x = logPlayerIsOn.position.x;
+        }
+    }
+
     if (!movesQueue.length) return;
 
     if (!moveClock.running) moveClock.start();
@@ -49,7 +69,11 @@ function setPosition(progress) {
 
     player.position.x = THREE.MathUtils.lerp(startX, endX, progress);
     player.position.y = THREE.MathUtils.lerp(startY, endY, progress);
-    player.children[0].position.z = Math.sin(progress * Math.PI) * 8;
+
+    const visualsGroup = player.children[0];
+    if (visualsGroup && visualsGroup.children[0]) {
+        visualsGroup.children[0].position.z = Math.sin(progress * Math.PI) * 8;
+    }
 }
 
 function setRotation(progress) {
@@ -62,9 +86,12 @@ function setRotation(progress) {
     if (direction === "right") endRotation = -Math.PI / 2;
     if (direction === "backward") endRotation = Math.PI;
 
-    player.children[0].rotation.z = THREE.MathUtils.lerp(
-        player.children[0].rotation.z,
-        endRotation,
-        progress
-    );
+    const visualsGroup = player.children[0];
+    if (visualsGroup) {
+        visualsGroup.rotation.z = THREE.MathUtils.lerp(
+            visualsGroup.rotation.z,
+            endRotation,
+            progress
+        );
+    }
 }

@@ -6,9 +6,13 @@ import { setGameActive } from "./gameState";
 const resultDOM = document.getElementById("result-container");
 const finalScoreDOM = document.getElementById("final-score");
 
+const playerBoundingBox = new THREE.Box3();
+
 export function hitTest() {
     const row = rows[position.currentRow - 1];
     if (!row) return;
+
+    playerBoundingBox.setFromObject(player, true);
 
     if (row.type === "car" || row.type === "truck") {
         const playerBoundingBox = new THREE.Box3();
@@ -23,11 +27,26 @@ export function hitTest() {
             if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
                 if (!resultDOM || !finalScoreDOM) return;
 
-                setGameActive(false); // Primero desactiva el juego
-                clearMoveQueue();    // <-- Luego vacía la cola de movimientos
+                setGameActive(false);
+                clearMoveQueue();
                 resultDOM.style.visibility = "visible";
                 finalScoreDOM.innerText = position.currentRow.toString();
             }
         });
+    }
+
+    if (row.type === "water") {
+        const isOnLog = row.vehicles.some(({ ref }) => {
+            if (!ref) return false;
+            const logBoundingBox = new THREE.Box3().setFromObject(ref);
+            return playerBoundingBox.intersectsBox(logBoundingBox);
+        });
+
+        if (!isOnLog) {
+            setGameActive(false);
+            clearMoveQueue();
+            resultDOM.style.visibility = "visible";
+            finalScoreDOM.innerText = position.currentRow.toString();
+        }
     }
 }

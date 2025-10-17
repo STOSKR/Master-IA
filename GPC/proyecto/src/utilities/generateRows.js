@@ -11,9 +11,10 @@ export function generateRows(amount) {
 }
 
 function generateRow() {
-    const type = randomElement(["car", "truck", "forest"]);
+    const type = randomElement(["car", "truck", "forest", "water"]);
     if (type === "car") return generateCarLaneMetadata();
     if (type === "truck") return generateTruckLaneMetadata();
+    if (type === "water") return generateWaterLaneMetadata();
     return generateForesMetadata();
 }
 
@@ -23,7 +24,7 @@ function randomElement(array) {
 
 function generateForesMetadata() {
     const occupiedTiles = new Set();
-    const trees = Array.from({ length: 8 }, () => {
+    const trees = Array.from({ length: 4 }, () => {
         let tileIndex;
         do {
             tileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
@@ -43,7 +44,7 @@ function generateCarLaneMetadata() {
 
     const occupiedTiles = new Set();
 
-    const vehicles = Array.from({ length: 5 }, () => {
+    const vehicles = Array.from({ length: 3 }, () => {
         let initialTileIndex;
         do {
             initialTileIndex = THREE.MathUtils.randInt(
@@ -68,7 +69,7 @@ function generateTruckLaneMetadata() {
 
     const occupiedTiles = new Set();
 
-    const vehicles = Array.from({ length: 4 }, () => {
+    const vehicles = Array.from({ length: 2 }, () => {
         let initialTileIndex;
         do {
             initialTileIndex = THREE.MathUtils.randInt(
@@ -88,4 +89,36 @@ function generateTruckLaneMetadata() {
     });
 
     return { type: "truck", direction, speed, vehicles };
+}
+
+function generateWaterLaneMetadata() {
+    const direction = randomElement([true, false]);
+    const speed = randomElement([80, 100, 120]);
+
+    const occupiedTiles = new Set();
+
+    const vehicles = Array.from({ length: 2 }, () => {
+        let initialTileIndex;
+        do {
+            initialTileIndex = THREE.MathUtils.randInt(
+                minTileIndex,
+                maxTileIndex
+            );
+        } while (
+            occupiedTiles.has(initialTileIndex - 2) ||
+            occupiedTiles.has(initialTileIndex - 1) ||
+            occupiedTiles.has(initialTileIndex) ||
+            occupiedTiles.has(initialTileIndex + 1) ||
+            occupiedTiles.has(initialTileIndex + 2)
+        );
+        occupiedTiles.add(initialTileIndex - 2);
+        occupiedTiles.add(initialTileIndex - 1);
+        occupiedTiles.add(initialTileIndex);
+        occupiedTiles.add(initialTileIndex + 1);
+        occupiedTiles.add(initialTileIndex + 2);
+
+        return { initialTileIndex };
+    });
+
+    return { type: "water", direction, speed, vehicles };
 }

@@ -4,6 +4,8 @@ import { Road } from "./Road";
 import { Tree } from "./Tree";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
+import { Water } from "./Water";
+import { Log } from "./Log";
 import { generateRows } from "../utilities/generateRows";
 
 export const metadata = [];
@@ -68,6 +70,20 @@ export function addRows() {
                 );
                 vehicle.ref = truck;
                 row.add(truck);
+            });
+
+            map.add(row);
+        }
+        if (rowData.type === "water") {
+            const row = Water(rowIndex);
+
+            rowData.vehicles.forEach((vehicle) => {
+                const log = Log(
+                    vehicle.initialTileIndex,
+                    rowData.direction
+                );
+                vehicle.ref = log;
+                row.add(log);
             });
 
             map.add(row);

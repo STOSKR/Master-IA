@@ -9,7 +9,7 @@ export function animateVehicles() {
 
     // Animate cars and trucks
     rows.forEach((rowData) => {
-        if (rowData.type === "car" || rowData.type === "truck") {
+        if (rowData.type === "car" || rowData.type === "truck" || rowData.type === "water") {
             const beginningOfRow = (minTileIndex - 2) * tileSize;
             const endOfRow = (maxTileIndex + 2) * tileSize;
 
