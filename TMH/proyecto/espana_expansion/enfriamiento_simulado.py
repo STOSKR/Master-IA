@@ -41,7 +41,7 @@ def configurar_logging_sa(nombre_archivo: str = None):
     
     if nombre_archivo is None:
         timestamp = datetime.now().strftime("%d_%H_%M")
-        nombre_archivo = f"sa_log_{timestamp}.txt"
+        nombre_archivo = f"{timestamp}_sa_log.log"
     
     # Guardar el log en la carpeta logs
     ruta_log = os.path.join(logs_dir, nombre_archivo)

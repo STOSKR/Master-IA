@@ -149,7 +149,7 @@ def ejecutar_con_config(args):
     
     # Guardar gráfica
     if args.guardar_grafica:
-        archivo_png = f"{args.output_dir}/{nombre_archivo}_{timestamp}.png"
+        archivo_png = f"{args.output_dir}/{timestamp}_{nombre_archivo}.png"
         
         fig, axes = plt.subplots(1, 2, figsize=(16, 6))
         

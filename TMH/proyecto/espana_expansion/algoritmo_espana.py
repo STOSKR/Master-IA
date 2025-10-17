@@ -22,7 +22,7 @@ def configurar_logging(output_dir="logs", prefijo="ag_espana"):
         os.makedirs(output_dir)
     
     timestamp = datetime.now().strftime("%d_%H_%M")
-    log_filename = os.path.join(output_dir, f"{prefijo}_{timestamp}.log")
+    log_filename = os.path.join(output_dir, f"{timestamp}_{prefijo}.log")
     
     logging.basicConfig(
         level=logging.INFO,
