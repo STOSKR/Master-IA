@@ -25,7 +25,7 @@ document
         if (gameState.isActive) queueMove("right");
     });
 
-window.addEventListener("keydown", (event) => {
+window.addEventListener("keyup", (event) => {
     if (!gameState.isActive) return; // Ignorar eventos del teclado si el juego no está activo
 
     if (event.key === "ArrowUp") {

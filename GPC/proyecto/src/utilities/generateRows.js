@@ -23,7 +23,7 @@ function randomElement(array) {
 
 function generateForesMetadata() {
     const occupiedTiles = new Set();
-    const trees = Array.from({ length: 4 }, () => {
+    const trees = Array.from({ length: 8 }, () => {
         let tileIndex;
         do {
             tileIndex = THREE.MathUtils.randInt(minTileIndex, maxTileIndex);
@@ -43,7 +43,7 @@ function generateCarLaneMetadata() {
 
     const occupiedTiles = new Set();
 
-    const vehicles = Array.from({ length: 3 }, () => {
+    const vehicles = Array.from({ length: 5 }, () => {
         let initialTileIndex;
         do {
             initialTileIndex = THREE.MathUtils.randInt(
@@ -68,7 +68,7 @@ function generateTruckLaneMetadata() {
 
     const occupiedTiles = new Set();
 
-    const vehicles = Array.from({ length: 2 }, () => {
+    const vehicles = Array.from({ length: 4 }, () => {
         let initialTileIndex;
         do {
             initialTileIndex = THREE.MathUtils.randInt(

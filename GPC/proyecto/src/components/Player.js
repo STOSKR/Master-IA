@@ -8,20 +8,26 @@ export let player;
 
 export async function createPlayer() {
     const playerContainer = new THREE.Group();
+    const visualsGroup = new THREE.Group();
 
     const loader = new GLTFLoader();
     const gltf = await loader.loadAsync("/models/vaquero.glb");
     const playerModel = gltf.scene;
 
     playerModel.scale.set(8, 8, 8);
+
+    playerModel.rotation.x = -Math.PI / 2;
+    playerModel.rotation.z = Math.PI;
+
     playerModel.traverse(function (node) {
         if (node.isMesh) {
             node.castShadow = true;
             node.receiveShadow = true;
         }
     });
+    visualsGroup.add(playerModel);
+    playerContainer.add(visualsGroup);
 
-    playerContainer.add(playerModel);
     player = playerContainer;
     /*
     const body = new THREE.Mesh(
