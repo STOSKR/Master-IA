@@ -28,13 +28,23 @@ from algoritmo_espana import (
     reparar_individuo,
     analizar_solucion
 )
-
+tiempo_ejecucion = 0.03 # horas
 # Configurar logging
 def configurar_logging_sa(nombre_archivo: str = None):
     """Configura el sistema de logging para enfriamiento simulado"""
+    import os
+    
+    # Crear carpeta de logs si no existe
+    logs_dir = "logs"
+    if not os.path.exists(logs_dir):
+        os.makedirs(logs_dir)
+    
     if nombre_archivo is None:
         timestamp = datetime.now().strftime("%d_%H_%M")
         nombre_archivo = f"sa_log_{timestamp}.txt"
+    
+    # Guardar el log en la carpeta logs
+    ruta_log = os.path.join(logs_dir, nombre_archivo)
     
     # Crear logger
     logger = logging.getLogger('EnfriamientoSimulado')
@@ -44,7 +54,7 @@ def configurar_logging_sa(nombre_archivo: str = None):
     logger.handlers.clear()
     
     # Handler para archivo
-    fh = logging.FileHandler(nombre_archivo, encoding='utf-8')
+    fh = logging.FileHandler(ruta_log, encoding='utf-8')
     fh.setLevel(logging.DEBUG)
     
     # Handler para consola
@@ -59,22 +69,13 @@ def configurar_logging_sa(nombre_archivo: str = None):
     logger.addHandler(fh)
     logger.addHandler(ch)
     
-    return logger, nombre_archivo
+    return logger, ruta_log
 
 # Inicializar logger global
 sa_logger = None
 
 
 def eliminar_duplicados_dia(individuo: Individual) -> Individual:
-    """
-    Elimina lugares duplicados en cada día, reemplazándolos por lugares únicos de la misma ciudad.
-    
-    Args:
-        individuo: Individuo a limpiar
-    
-    Returns:
-        Individuo sin lugares duplicados
-    """
     for dia_idx in range(len(individuo.dias)):
         dia = individuo.dias[dia_idx]
         ciudad = individuo.ciudades[dia_idx]
@@ -108,22 +109,6 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
 
 
 def generar_vecino(solucion_actual: Individual, iteracion: int = 0, max_iteraciones: int = 5000, usar_2opt: bool = True) -> Individual:
-    """
-    Genera una solución vecina aplicando perturbaciones mixtas mejoradas:
-    - 40% Swap de dos lugares en un día (preserva fitness mejor)
-    - 30% 2-opt (optimizar orden dentro de un día) - OPCIONAL
-    - 20% Reemplazar un lugar por otro de la misma ciudad
-    - 10% Swap intercity (intercambiar dos días completos - más disruptivo)
-    
-    Args:
-        solucion_actual: Solución actual
-        iteracion: Iteración actual (opcional)
-        max_iteraciones: Iteraciones máximas (opcional)
-        usar_2opt: Si True, incluye 2-opt en las perturbaciones
-    
-    Returns:
-        Nueva solución vecina (copia profunda)
-    """
     # Crear copia profunda para no modificar la original
     vecino = Individual(
         [dia[:] for dia in solucion_actual.dias],
@@ -270,17 +255,11 @@ def enfriamiento_simulado(
     # Configurar logging
     if sa_logger is None:
         sa_logger, log_file = configurar_logging_sa()
-        if verbose:
-            print(f"📝 Log guardándose en: {log_file}")
+        sa_logger.info(f"📝 Log guardándose en: {log_file}")
     
     sa_logger.info("="*80)
     sa_logger.info("🔥 INICIANDO ENFRIAMIENTO SIMULADO")
     sa_logger.info("="*80)
-    
-    if verbose:
-        print(f"\n{'='*80}")
-        print(f"🔥 ALGORITMO DE ENFRIAMIENTO SIMULADO")
-        print(f"{'='*80}")
     
     # Importar time para medir tiempo de ejecución
     import time
@@ -288,19 +267,16 @@ def enfriamiento_simulado(
     
     # Generar o usar solución inicial
     if solucion_inicial is None:
-        if verbose:
-            print(f"🎲 Generando solución inicial aleatoria...")
-        sa_logger.info("Generando solución inicial aleatoria")
+        sa_logger.info("🎲 Generando solución inicial aleatoria...")
         # Usar parámetros por defecto
         solucion_inicial = crear_individuo_aleatorio(num_dias=20, lugares_por_dia=12)
         # Evaluar solución inicial aleatoria
         evaluar_individuo(solucion_inicial)
         sa_logger.info(f"Solución inicial creada - Fitness: {solucion_inicial.fitness:.1f}, Puntos: {solucion_inicial.puntos_totales}")
     else:
-        if verbose:
-            print(f"🚀 Usando solución inicial proporcionada (warm start)...")
-            print(f"  • Fitness reportado por el GA: {solucion_inicial.fitness:.1f}")
-            print(f"  • Puntos reportados por el GA: {solucion_inicial.puntos_totales}")
+        sa_logger.info("🚀 Usando solución inicial proporcionada (warm start)...")
+        sa_logger.info(f"  • Fitness reportado por el GA: {solucion_inicial.fitness:.1f}")
+        sa_logger.info(f"  • Puntos reportados por el GA: {solucion_inicial.puntos_totales}")
         
         sa_logger.info(f"Usando solución inicial proporcionada - Fitness: {solucion_inicial.fitness:.1f}, Puntos: {solucion_inicial.puntos_totales}")
         
@@ -308,8 +284,7 @@ def enfriamiento_simulado(
         # El módulo copy ya está importado al inicio del archivo
         solucion_inicial = copy.deepcopy(solucion_inicial)
         
-        if verbose:
-            print(f"  • Fitness después de copia (sin cambios): {solucion_inicial.fitness:.1f}")
+        sa_logger.debug(f"  • Fitness después de copia (sin cambios): {solucion_inicial.fitness:.1f}")
         
         sa_logger.debug(f"Copia profunda realizada - Fitness: {solucion_inicial.fitness:.1f}")
     
@@ -322,38 +297,33 @@ def enfriamiento_simulado(
             break
     
     if tiene_duplicados:
-        if verbose:
-            print(f"\n  ⚠️  ¡ATENCIÓN! La solución del GA contiene lugares duplicados en el mismo día.")
-            print(f"      Esto infla artificialmente el fitness del GA porque no los penaliza.")
-            print(f"      Procedo a limpiar la solución y a re-evaluarla para obtener el fitness REAL.")
+        sa_logger.warning("⚠️  ¡ATENCIÓN! La solución del GA contiene lugares duplicados en el mismo día.")
+        sa_logger.warning("Esto infla artificialmente el fitness del GA porque no los penaliza.")
+        sa_logger.warning("Procedo a limpiar la solución y a re-evaluarla para obtener el fitness REAL.")
         solucion_inicial = eliminar_duplicados_dia(solucion_inicial)
         # Re-evaluar solo si modificamos
         evaluar_individuo(solucion_inicial)
-        if verbose:
-            print(f"  • Fitness REAL después de limpiar duplicados: {solucion_inicial.fitness:.1f}")
+        sa_logger.info(f"  • Fitness REAL después de limpiar duplicados: {solucion_inicial.fitness:.1f}")
     else:
-        if verbose:
-            print(f"  ✅ La solución del GA es válida (sin duplicados).")
+        sa_logger.info("  ✅ La solución del GA es válida (sin duplicados).")
     
     # Calcular temperatura inicial si no se proporcionó
     if T_inicial is None:
-        if verbose:
-            print(f"🌡️  Calculando temperatura inicial adaptativa...")
+        sa_logger.info("🌡️  Calculando temperatura inicial adaptativa...")
         T_inicial = calcular_temperatura_inicial(solucion_inicial)
     
-    if verbose:
-        print(f"\n📊 Configuración para Enfriamiento Simulado:")
-        print(f"  • Temperatura inicial: {T_inicial:.1f}")
-        print(f"  • Temperatura mínima: {T_minima}")
-        print(f"  • Factor de enfriamiento (α): {alpha}")
-        if max_iteraciones:
-            print(f"  • Máx. iteraciones: {max_iteraciones:,}")
-        print(f"  • Máx. tiempo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
-        print(f"  • Máx. iter. sin mejora: {iteraciones_sin_mejora_max:,}")
-        print(f"  • Usar optimización 2-opt: {'✅ SÍ' if usar_2opt else '❌ NO'}")
-        print(f"  • Fitness inicial (REAL): {solucion_inicial.fitness:.1f}")
-        print(f"  • Puntos iniciales (REAL): {solucion_inicial.puntos_totales}")
-        print(f"{'='*80}\n")
+    sa_logger.info("📊 Configuración para Enfriamiento Simulado:")
+    sa_logger.info(f"  • Temperatura inicial: {T_inicial:.1f}")
+    sa_logger.info(f"  • Temperatura mínima: {T_minima}")
+    sa_logger.info(f"  • Factor de enfriamiento (α): {alpha}")
+    if max_iteraciones:
+        sa_logger.info(f"  • Máx. iteraciones: {max_iteraciones:,}")
+    sa_logger.info(f"  • Máx. tiempo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
+    sa_logger.info(f"  • Máx. iter. sin mejora: {iteraciones_sin_mejora_max:,}")
+    sa_logger.info(f"  • Usar optimización 2-opt: {'✅ SÍ' if usar_2opt else '❌ NO'}")
+    sa_logger.info(f"  • Fitness inicial (REAL): {solucion_inicial.fitness:.1f}")
+    sa_logger.info(f"  • Puntos iniciales (REAL): {solucion_inicial.puntos_totales}")
+    sa_logger.info("="*80)
     
     # Inicializar variables
     solucion_actual = solucion_inicial
@@ -380,8 +350,7 @@ def enfriamiento_simulado(
     line_mejor, = ax.plot([], [], label="Mejor fitness global")
     ax.legend()
     
-    if verbose:
-        print(f"🔄 Iniciando búsqueda...\n")
+    sa_logger.info("🔄 Iniciando búsqueda...")
     
     sa_logger.info("Iniciando búsqueda por vecindario")
     sa_logger.info(f"Configuración: T_inicial={T_inicial}, alpha={alpha}, max_tiempo={max_tiempo_segundos}s, usar_2opt={usar_2opt}")
@@ -396,16 +365,12 @@ def enfriamiento_simulado(
         
         # Verificar límite de tiempo
         if tiempo_transcurrido >= max_tiempo_segundos:
-            if verbose:
-                print(f"\n⏰ Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
-            sa_logger.info(f"Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
+            sa_logger.info(f"⏰ Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
             break
         
         # Verificar límite de iteraciones (si se especificó)
         if max_iteraciones and iteracion >= max_iteraciones:
-            if verbose:
-                print(f"\n🔢 Iteraciones máximas alcanzadas: {iteracion}")
-            sa_logger.info(f"Iteraciones máximas alcanzadas: {iteracion}")
+            sa_logger.info(f"🔢 Iteraciones máximas alcanzadas: {iteracion}")
             break
         
         # Generar solución vecina
@@ -460,9 +425,9 @@ def enfriamiento_simulado(
             
             # Imprimir en consola también
             if verbose:
-                print(f"\n⚠️  SALTO ANORMAL DETECTADO en iteración {iteracion}")
-                print(f"   Fitness: {solucion_actual.fitness:.1f} → {vecino.fitness:.1f} (Δ={delta_fitness:+.1f})")
-                print(f"   Ver detalles en archivo de log\n")
+                sa_logger.warning(f"⚠️  SALTO ANORMAL DETECTADO en iteración {iteracion}")
+                sa_logger.warning(f"   Fitness: {solucion_actual.fitness:.1f} → {vecino.fitness:.1f} (Δ={delta_fitness:+.1f})")
+                sa_logger.warning(f"   Ver detalles en archivo de log")
         
         # Decidir si aceptar
         aceptado = aceptar_solucion(delta_fitness, temperatura)
@@ -487,7 +452,7 @@ def enfriamiento_simulado(
                 sa_logger.info(f"🌟 MEJORA #{mejoras_encontradas} en iter {iteracion}: Fitness={mejor_solucion.fitness:.1f} (+{mejora_sobre_mejor:.1f}), Puntos={mejor_solucion.puntos_totales}")
                 
                 if verbose and mejoras_encontradas % 5 == 0:
-                    print(f"  ✨ Mejora #{mejoras_encontradas} en iteración {iteracion+1}: "
+                    sa_logger.info(f"  ✨ Mejora #{mejoras_encontradas} en iteración {iteracion+1}: "
                           f"Fitness = {mejor_solucion.fitness:.1f} | "
                           f"Puntos = {mejor_solucion.puntos_totales} | "
                           f"T = {temperatura:.2f}")
@@ -527,7 +492,7 @@ def enfriamiento_simulado(
         if verbose and (iteracion + 1) % 500 == 0:
             tasa_aceptacion = total_aceptaciones / (iteracion + 1) * 100
             tiempo_transcurrido = time.time() - tiempo_inicio
-            print(f"  Iter {iteracion+1:5d} | "
+            sa_logger.info(f"  Iter {iteracion+1:5d} | "
                   f"Tiempo: {tiempo_transcurrido/60:6.1f}min | "
                   f"T = {temperatura:8.2f} | "
                   f"Fitness = {solucion_actual.fitness:8.1f} | "
@@ -539,15 +504,11 @@ def enfriamiento_simulado(
         
         # Condiciones de parada
         if temperatura < T_minima:
-            if verbose:
-                print(f"\n❄️  Temperatura mínima alcanzada: {temperatura:.4f} < {T_minima}")
-            sa_logger.info(f"Temperatura mínima alcanzada: {temperatura:.4f}")
+            sa_logger.info(f"❄️  Temperatura mínima alcanzada: {temperatura:.4f} < {T_minima}")
             break
         
         if iteraciones_sin_mejora >= iteraciones_sin_mejora_max:
-            if verbose:
-                print(f"\n⏸️  Estancamiento detectado: {iteraciones_sin_mejora} iteraciones sin mejora")
-            sa_logger.info(f"Estancamiento: {iteraciones_sin_mejora} iteraciones sin mejora")
+            sa_logger.info(f"⏸️  Estancamiento detectado: {iteraciones_sin_mejora} iteraciones sin mejora")
             break
         
         # Incrementar contador de iteraciones
@@ -562,11 +523,16 @@ def enfriamiento_simulado(
     # Guardar la figura antes de cerrarla
     import os
     from datetime import datetime
+    
+    # Crear carpeta de graficas si no existe
+    graficas_dir = "graficas"
+    if not os.path.exists(graficas_dir):
+        os.makedirs(graficas_dir)
+    
     timestamp = datetime.now().strftime("%d_%H_%M")
-    fig_filename = f"evolucion_fitness_sa_{timestamp}.png"
+    fig_filename = os.path.join(graficas_dir, f"evolucion_fitness_sa_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    if verbose:
-        print(f"\n💾 Gráfica guardada: {fig_filename}")
+    sa_logger.info(f"💾 Gráfica guardada: {fig_filename}")
     
     plt.show()
     
@@ -588,26 +554,27 @@ def enfriamiento_simulado(
     sa_logger.info(f"Tasa aceptación: {tasa_aceptacion_final:.2f}%")
     sa_logger.info("="*80)
     
-    if verbose:
-        print(f"\n{'='*80}")
-        print(f"✅ ENFRIAMIENTO SIMULADO COMPLETADO")
-        print(f"{'='*80}")
-        print(f"\n📈 Estadísticas:")
-        print(f"  • Iteraciones realizadas: {iteraciones_realizadas:,}")
-        print(f"  • Tiempo de ejecución: {tiempo_total_ejecucion/60:.2f} minutos ({tiempo_total_ejecucion/3600:.2f} horas)")
-        print(f"  • Temperatura final: {temperatura:.4f}")
-        print(f"  • Total aceptaciones: {total_aceptaciones:,} ({tasa_aceptacion_final:.1f}%)")
-        print(f"  • Total rechazos: {total_rechazos:,}")
-        print(f"  • Mejoras encontradas: {mejoras_encontradas}")
-        print(f"\n🏆 Resultados:")
-        print(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
-        print(f"  • Fitness final: {mejor_solucion.fitness:.1f}")
-        print(f"  • Mejora absoluta: {mejora_absoluta:+.1f}")
-        print(f"  • Mejora porcentual: {mejora_porcentual:+.2f}%")
-        print(f"  • Puntos totales: {mejor_solucion.puntos_totales}")
-        print(f"  • Tiempo total: {mejor_solucion.tiempo_total/60:.1f}h")
-        print(f"  • Distancia total: {mejor_solucion.distancia_total:.1f}km")
-        print(f"{'='*80}\n")
+    sa_logger.info("="*80)
+    sa_logger.info("✅ ENFRIAMIENTO SIMULADO COMPLETADO")
+    sa_logger.info("="*80)
+    sa_logger.info("")
+    sa_logger.info("📈 Estadísticas:")
+    sa_logger.info(f"  • Iteraciones realizadas: {iteraciones_realizadas:,}")
+    sa_logger.info(f"  • Tiempo de ejecución: {tiempo_total_ejecucion/60:.2f} minutos ({tiempo_total_ejecucion/3600:.2f} horas)")
+    sa_logger.info(f"  • Temperatura final: {temperatura:.4f}")
+    sa_logger.info(f"  • Total aceptaciones: {total_aceptaciones:,} ({tasa_aceptacion_final:.1f}%)")
+    sa_logger.info(f"  • Total rechazos: {total_rechazos:,}")
+    sa_logger.info(f"  • Mejoras encontradas: {mejoras_encontradas}")
+    sa_logger.info("")
+    sa_logger.info("🏆 Resultados:")
+    sa_logger.info(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
+    sa_logger.info(f"  • Fitness final: {mejor_solucion.fitness:.1f}")
+    sa_logger.info(f"  • Mejora absoluta: {mejora_absoluta:+.1f}")
+    sa_logger.info(f"  • Mejora porcentual: {mejora_porcentual:+.2f}%")
+    sa_logger.info(f"  • Puntos totales: {mejor_solucion.puntos_totales}")
+    sa_logger.info(f"  • Tiempo total: {mejor_solucion.tiempo_total/60:.1f}h")
+    sa_logger.info(f"  • Distancia total: {mejor_solucion.distancia_total:.1f}km")
+    sa_logger.info("="*80)
     
     return {
         "mejor_solucion": mejor_solucion,
@@ -639,30 +606,31 @@ def enfriamiento_desde_genetico(
     alpha: float = 0.999,  # Enfriamiento más rápido para convergencia
     max_tiempo_segundos: float = 3600  # 1 hora por defecto
 ) -> Dict:
-    print(f"\n{'='*80}")
-    print(f"🔗 ENFRIAMIENTO SIMULADO DESDE ALGORITMO GENÉTICO (HÍBRIDO GA+SA)")
-    print(f"{'='*80}\n")
+    sa_logger.info("="*80)
+    sa_logger.info("🔗 ENFRIAMIENTO SIMULADO DESDE ALGORITMO GENÉTICO (HÍBRIDO GA+SA)")
+    sa_logger.info("="*80)
     
     if usar_mejor:
-        print(f"📍 Estrategia: Partir del MEJOR individuo del GA")
+        sa_logger.info("📍 Estrategia: Partir del MEJOR individuo del GA")
         solucion_inicial = resultados_genetico["mejor_individuo"]
     else:
-        print(f"📍 Estrategia: Partir de un individuo del TOP 10 del GA")
+        sa_logger.info("📍 Estrategia: Partir de un individuo del TOP 10 del GA")
         poblacion_final = resultados_genetico.get("poblacion_final", [])
         if poblacion_final:
             top_10 = sorted(poblacion_final, key=lambda x: x.fitness, reverse=True)[:10]
             solucion_inicial = random.choice(top_10)
-            print(f"  • Seleccionado individuo con fitness: {solucion_inicial.fitness:.1f}")
+            sa_logger.info(f"  • Seleccionado individuo con fitness: {solucion_inicial.fitness:.1f}")
         else:
-            print(f"  ⚠️  No hay población final, usando mejor individuo")
+            sa_logger.warning("  ⚠️  No hay población final, usando mejor individuo")
             solucion_inicial = resultados_genetico["mejor_individuo"]
     
-    print(f"\n💡 Configuración OPTIMIZADA de refinamiento:")
-    print(f"  • Temperatura inicial: {T_inicial} (moderada para refinamiento inteligente)")
-    print(f"  • Factor α: {alpha} (convergencia balanceada)")
-    print(f"  • Tiempo máximo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
-    print(f"  • Vecindad adaptativa: 4 tipos de perturbaciones con probabilidades dinámicas")
-    print(f"  • Estrategia: Perturbaciones conservadoras que preservan calidad")
+    sa_logger.info("")
+    sa_logger.info("💡 Configuración OPTIMIZADA de refinamiento:")
+    sa_logger.info(f"  • Temperatura inicial: {T_inicial} (moderada para refinamiento inteligente)")
+    sa_logger.info(f"  • Factor α: {alpha} (convergencia balanceada)")
+    sa_logger.info(f"  • Tiempo máximo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
+    sa_logger.info(f"  • Vecindad adaptativa: 4 tipos de perturbaciones con probabilidades dinámicas")
+    sa_logger.info(f"  • Estrategia: Perturbaciones conservadoras que preservan calidad")
     
     # Ejecutar enfriamiento simulado
     resultados_sa = enfriamiento_simulado(
@@ -677,44 +645,108 @@ def enfriamiento_desde_genetico(
     return resultados_sa
 
 
-def exportar_resultados_sa(resultados: Dict, archivo: str = "resultados_sa_espana.json"):
+def exportar_resultados_sa(resultados: Dict, archivo: str = None, config: Dict = None):
     """
-    Exporta resultados del enfriamiento simulado a JSON.
+    Exporta resultados del enfriamiento simulado a JSON (formato similar al AG).
     
     Args:
         resultados: Diccionario con resultados del SA
-        archivo: Nombre del archivo de salida
+        archivo: Nombre del archivo de salida (si es None, se genera automáticamente)
+        config: Configuración utilizada (opcional)
     """
     import json
+    from datetime import datetime
+    
+    # Generar nombre de archivo automáticamente si no se proporciona
+    if archivo is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archivo = f"resultados_sa_{timestamp}.json"
     
     mejor = resultados["mejor_solucion"]
     inicial = resultados["solucion_inicial"]
     stats = resultados["estadisticas"]
     
+    # Contar tipos de transporte
+    transportes_summary = {"avion": 0, "tren": 0, "tren_ave": 0, "bus": 0, "coche": 0, "ferry": 0}
+    costo_total_transporte = 0
+    tiempo_total_transporte = 0
+    
+    if hasattr(mejor, 'transportes_intercity') and mejor.transportes_intercity:
+        for t in mejor.transportes_intercity:
+            tipo = t[3]
+            costo = t[5]
+            tiempo = t[4]
+            if tipo in transportes_summary:
+                transportes_summary[tipo] += 1
+            costo_total_transporte += costo
+            tiempo_total_transporte += tiempo
+    
     data = {
         "algoritmo": "Enfriamiento Simulado",
+        "timestamp": datetime.now().isoformat(),
         "mejor_solucion": {
             "fitness": mejor.fitness,
             "puntos_totales": mejor.puntos_totales,
             "tiempo_total_min": mejor.tiempo_total,
+            "tiempo_total_horas": mejor.tiempo_total / 60,
             "distancia_total_km": mejor.distancia_total,
             "num_dias": len(mejor.dias),
+            "lugares_totales": sum(len(dia) for dia in mejor.dias),
             "ciudades_visitadas": list(set(mejor.ciudades)),
-            "itinerario": [
-                {
-                    "dia": i + 1,
-                    "ciudad": ciudad,
-                    "lugares_ids": dia,
-                    "num_lugares": len(dia)
-                }
-                for i, (dia, ciudad) in enumerate(zip(mejor.dias, mejor.ciudades))
-            ]
+            "num_ciudades": len(set(mejor.ciudades)),
+            "transportes": {
+                "avion": transportes_summary["avion"],
+                "tren": transportes_summary["tren"],
+                "tren_ave": transportes_summary["tren_ave"],
+                "bus": transportes_summary["bus"],
+                "coche": transportes_summary["coche"],
+                "ferry": transportes_summary["ferry"],
+                "costo_total_euros": costo_total_transporte,
+                "tiempo_total_min": tiempo_total_transporte,
+                "tiempo_total_horas": tiempo_total_transporte / 60
+            }
         },
         "solucion_inicial": {
             "fitness": inicial.fitness,
-            "puntos_totales": inicial.puntos_totales
+            "puntos_totales": inicial.puntos_totales,
+            "tiempo_total_min": inicial.tiempo_total,
+            "distancia_total_km": inicial.distancia_total
         },
-        "estadisticas": stats,
+        "configuracion": {
+            "T_inicial": config.get("T_inicial") if config else stats.get("T_inicial", "auto"),
+            "T_minima": config.get("T_minima") if config else 0.1,
+            "alpha": config.get("alpha") if config else 0.95,
+            "max_tiempo_segundos": config.get("max_tiempo_segundos") if config else None,
+            "max_tiempo_minutos": config.get("max_tiempo_segundos", 3600) / 60 if config else None,
+            "usar_2opt": config.get("usar_2opt", True) if config else True,
+            "max_dias_por_ciudad": MAX_DIAS_POR_CIUDAD,
+            "agrupar": AGRUPAR
+        },
+        "estadisticas": {
+            "iteraciones_realizadas": stats["iteraciones_realizadas"],
+            "tiempo_ejecucion_segundos": stats["tiempo_ejecucion_segundos"],
+            "tiempo_ejecucion_minutos": stats["tiempo_ejecucion_minutos"],
+            "tiempo_ejecucion_horas": stats["tiempo_ejecucion_segundos"] / 3600,
+            "temperatura_inicial": config.get("T_inicial") if config else "auto",
+            "temperatura_final": stats["temperatura_final"],
+            "total_aceptaciones": stats["total_aceptaciones"],
+            "total_rechazos": stats["total_rechazos"],
+            "tasa_aceptacion_pct": stats["tasa_aceptacion"],
+            "mejoras_encontradas": stats["mejoras_encontradas"],
+            "fitness_inicial": stats["fitness_inicial"],
+            "fitness_final": stats["fitness_final"],
+            "mejora_absoluta": stats["mejora_absoluta"],
+            "mejora_porcentual": stats["mejora_porcentual"]
+        },
+        "itinerario": [
+            {
+                "dia": i + 1,
+                "ciudad": ciudad,
+                "lugares_ids": dia,
+                "num_lugares": len(dia)
+            }
+            for i, (dia, ciudad) in enumerate(zip(mejor.dias, mejor.ciudades))
+        ],
         "historial": {
             "fitness_actual": resultados["historial_fitness"],
             "mejor_fitness": resultados["historial_mejor_fitness"],
@@ -725,7 +757,10 @@ def exportar_resultados_sa(resultados: Dict, archivo: str = "resultados_sa_espan
     with open(archivo, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     
-    print(f"💾 Resultados exportados a: {archivo}")
+    if sa_logger:
+        sa_logger.info(f"💾 Resultados exportados a: {archivo}")
+    
+    return archivo
 
 
 def comparar_con_sin_2opt(
@@ -750,24 +785,24 @@ def comparar_con_sin_2opt(
     """
     import copy
     
-    print(f"\n{'='*80}")
-    print(f"🔬 EXPERIMENTO: COMPARACIÓN CON/SIN OPTIMIZACIÓN 2-OPT")
-    print(f"{'='*80}\n")
+    sa_logger.info("="*80)
+    sa_logger.info("🔬 EXPERIMENTO: COMPARACIÓN CON/SIN OPTIMIZACIÓN 2-OPT")
+    sa_logger.info("="*80)
     
     # Hacer copias de la solución inicial
     solucion_con = copy.deepcopy(solucion_inicial)
     solucion_sin = copy.deepcopy(solucion_inicial)
     
-    print(f"📋 Configuración del experimento:")
-    print(f"  • Temperatura inicial: {T_inicial}")
-    print(f"  • Factor α: {alpha}")
-    print(f"  • Tiempo máximo por ejecución: {max_tiempo_segundos/60:.1f} minutos")
-    print(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
+    sa_logger.info("📋 Configuración del experimento:")
+    sa_logger.info(f"  • Temperatura inicial: {T_inicial}")
+    sa_logger.info(f"  • Factor α: {alpha}")
+    sa_logger.info(f"  • Tiempo máximo por ejecución: {max_tiempo_segundos/60:.1f} minutos")
+    sa_logger.info(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
     
     # Ejecución CON 2-opt
-    print(f"\n{'='*80}")
-    print(f"🟢 EJECUCIÓN 1: CON Optimización 2-opt")
-    print(f"{'='*80}")
+    sa_logger.info("="*80)
+    sa_logger.info("🟢 EJECUCIÓN 1: CON Optimización 2-opt")
+    sa_logger.info("="*80)
     
     resultados_con = enfriamiento_simulado(
         solucion_inicial=solucion_con,
@@ -779,9 +814,9 @@ def comparar_con_sin_2opt(
     )
     
     # Ejecución SIN 2-opt
-    print(f"\n{'='*80}")
-    print(f"🔴 EJECUCIÓN 2: SIN Optimización 2-opt")
-    print(f"{'='*80}")
+    sa_logger.info("="*80)
+    sa_logger.info("🔴 EJECUCIÓN 2: SIN Optimización 2-opt")
+    sa_logger.info("="*80)
     
     resultados_sin = enfriamiento_simulado(
         solucion_inicial=solucion_sin,
@@ -798,52 +833,52 @@ def comparar_con_sin_2opt(
     stats_con = resultados_con["estadisticas"]
     stats_sin = resultados_sin["estadisticas"]
     
-    print(f"\n{'='*80}")
-    print(f"📊 RESULTADOS DE LA COMPARACIÓN 2-OPT")
-    print(f"{'='*80}\n")
+    sa_logger.info("="*80)
+    sa_logger.info("📊 RESULTADOS DE LA COMPARACIÓN 2-OPT")
+    sa_logger.info("="*80)
     
-    print(f"{'Métrica':<35} {'CON 2-opt':<20} {'SIN 2-opt':<20} {'Diferencia':<20}")
-    print(f"{'-'*95}")
+    sa_logger.info(f"{'Métrica':<35} {'CON 2-opt':<20} {'SIN 2-opt':<20} {'Diferencia':<20}")
+    sa_logger.info("-"*95)
     
     # Fitness final
     diff_fitness = mejor_con.fitness - mejor_sin.fitness
     simbolo_fitness = "✅ CON" if diff_fitness > 0 else "✅ SIN" if diff_fitness < 0 else "="
-    print(f"{'Fitness final':<35} {mejor_con.fitness:<20.1f} {mejor_sin.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
+    sa_logger.info(f"{'Fitness final':<35} {mejor_con.fitness:<20.1f} {mejor_sin.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
     
     # Puntos
     diff_puntos = mejor_con.puntos_totales - mejor_sin.puntos_totales
-    print(f"{'Puntos totales':<35} {mejor_con.puntos_totales:<20} {mejor_sin.puntos_totales:<20} {diff_puntos:+d}")
+    sa_logger.info(f"{'Puntos totales':<35} {mejor_con.puntos_totales:<20} {mejor_sin.puntos_totales:<20} {diff_puntos:+d}")
     
     # Iteraciones
     diff_iter = stats_con["iteraciones_realizadas"] - stats_sin["iteraciones_realizadas"]
-    print(f"{'Iteraciones realizadas':<35} {stats_con['iteraciones_realizadas']:<20,} {stats_sin['iteraciones_realizadas']:<20,} {diff_iter:+,}")
+    sa_logger.info(f"{'Iteraciones realizadas':<35} {stats_con['iteraciones_realizadas']:<20,} {stats_sin['iteraciones_realizadas']:<20,} {diff_iter:+,}")
     
     # Mejoras encontradas
     diff_mejoras = stats_con["mejoras_encontradas"] - stats_sin["mejoras_encontradas"]
     simbolo_mejoras = "✅ CON" if diff_mejoras > 0 else "✅ SIN" if diff_mejoras < 0 else "="
-    print(f"{'Mejoras encontradas':<35} {stats_con['mejoras_encontradas']:<20} {stats_sin['mejoras_encontradas']:<20} {diff_mejoras:+d} {simbolo_mejoras}")
+    sa_logger.info(f"{'Mejoras encontradas':<35} {stats_con['mejoras_encontradas']:<20} {stats_sin['mejoras_encontradas']:<20} {diff_mejoras:+d} {simbolo_mejoras}")
     
     # Tasa de aceptación
     diff_tasa = stats_con["tasa_aceptacion"] - stats_sin["tasa_aceptacion"]
-    print(f"{'Tasa de aceptación (%)':<35} {stats_con['tasa_aceptacion']:<20.2f} {stats_sin['tasa_aceptacion']:<20.2f} {diff_tasa:+.2f}")
+    sa_logger.info(f"{'Tasa de aceptación (%)':<35} {stats_con['tasa_aceptacion']:<20.2f} {stats_sin['tasa_aceptacion']:<20.2f} {diff_tasa:+.2f}")
     
     # Tiempo
     diff_tiempo = stats_con["tiempo_ejecucion_minutos"] - stats_sin["tiempo_ejecucion_minutos"]
-    print(f"{'Tiempo de ejecución (min)':<35} {stats_con['tiempo_ejecucion_minutos']:<20.2f} {stats_sin['tiempo_ejecucion_minutos']:<20.2f} {diff_tiempo:+.2f}")
+    sa_logger.info(f"{'Tiempo de ejecución (min)':<35} {stats_con['tiempo_ejecucion_minutos']:<20.2f} {stats_sin['tiempo_ejecucion_minutos']:<20.2f} {diff_tiempo:+.2f}")
     
-    print(f"{'-'*95}")
+    sa_logger.info("-"*95)
     
     # Conclusiones
     if diff_fitness > 0:
         mejora_pct = (diff_fitness / abs(mejor_sin.fitness)) * 100 if mejor_sin.fitness != 0 else 0
-        print(f"\n🏆 CONCLUSIÓN: El uso de 2-opt MEJORÓ el resultado en {mejora_pct:.2f}%")
-        print(f"   La optimización 2-opt ayuda a encontrar mejores rutas locales.")
+        sa_logger.info(f"🏆 CONCLUSIÓN: El uso de 2-opt MEJORÓ el resultado en {mejora_pct:.2f}%")
+        sa_logger.info(f"   La optimización 2-opt ayuda a encontrar mejores rutas locales.")
     elif diff_fitness < 0:
         empeora_pct = (abs(diff_fitness) / abs(mejor_con.fitness)) * 100 if mejor_con.fitness != 0 else 0
-        print(f"\n⚠️  CONCLUSIÓN: El uso de 2-opt EMPEORÓ el resultado en {empeora_pct:.2f}%")
-        print(f"   Esto puede indicar que 2-opt consume tiempo que podría usarse en más iteraciones.")
+        sa_logger.info(f"⚠️  CONCLUSIÓN: El uso de 2-opt EMPEORÓ el resultado en {empeora_pct:.2f}%")
+        sa_logger.info(f"   Esto puede indicar que 2-opt consume tiempo que podría usarse en más iteraciones.")
     else:
-        print(f"\n🤝 CONCLUSIÓN: Ambas configuraciones produjeron resultados similares")
+        sa_logger.info(f"🤝 CONCLUSIÓN: Ambas configuraciones produjeron resultados similares")
     
     # Crear gráficas comparativas
     import matplotlib.pyplot as plt
@@ -894,13 +929,20 @@ def comparar_con_sin_2opt(
     plt.tight_layout()
     
     # Guardar gráfica
+    import os
+    
+    # Crear carpeta de graficas si no existe
+    graficas_dir = "graficas"
+    if not os.path.exists(graficas_dir):
+        os.makedirs(graficas_dir)
+    
     timestamp = datetime.now().strftime("%d_%H_%M")
-    fig_filename = f"comparacion_2opt_{timestamp}.png"
+    fig_filename = os.path.join(graficas_dir, f"comparacion_2opt_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    print(f"\n💾 Gráfica comparativa guardada: {fig_filename}")
+    sa_logger.info(f"💾 Gráfica comparativa guardada: {fig_filename}")
     plt.show()
     
-    print(f"{'='*80}\n")
+    sa_logger.info("="*80)
     
     return {
         "con_2opt": resultados_con,
@@ -921,51 +963,52 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     mejor_ga = resultados_ga["mejor_individuo"]
     mejor_sa = resultados_sa["mejor_solucion"]
     
-    print(f"\n{'='*80}")
-    print(f"⚖️  COMPARACIÓN: ALGORITMO GENÉTICO vs ENFRIAMIENTO SIMULADO")
-    print(f"{'='*80}\n")
+    sa_logger.info("="*80)
+    sa_logger.info("⚖️  COMPARACIÓN: ALGORITMO GENÉTICO vs ENFRIAMIENTO SIMULADO")
+    sa_logger.info("="*80)
     
-    print(f"{'Métrica':<30} {'GA':<20} {'SA':<20} {'Diferencia':<20}")
-    print(f"{'-'*90}")
+    sa_logger.info(f"{'Métrica':<30} {'GA':<20} {'SA':<20} {'Diferencia':<20}")
+    sa_logger.info("-"*90)
     
     # Fitness
     diff_fitness = mejor_sa.fitness - mejor_ga.fitness
     simbolo_fitness = "✅" if diff_fitness > 0 else "⚠️" if diff_fitness < 0 else "="
-    print(f"{'Fitness':<30} {mejor_ga.fitness:<20.1f} {mejor_sa.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
+    sa_logger.info(f"{'Fitness':<30} {mejor_ga.fitness:<20.1f} {mejor_sa.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
     
     # Puntos
     diff_puntos = mejor_sa.puntos_totales - mejor_ga.puntos_totales
     simbolo_puntos = "✅" if diff_puntos > 0 else "⚠️" if diff_puntos < 0 else "="
-    print(f"{'Puntos totales':<30} {mejor_ga.puntos_totales:<20} {mejor_sa.puntos_totales:<20} {diff_puntos:+d} {simbolo_puntos}")
+    sa_logger.info(f"{'Puntos totales':<30} {mejor_ga.puntos_totales:<20} {mejor_sa.puntos_totales:<20} {diff_puntos:+d} {simbolo_puntos}")
     
     # Tiempo
     diff_tiempo = (mejor_sa.tiempo_total - mejor_ga.tiempo_total) / 60
     simbolo_tiempo = "⚠️" if diff_tiempo > 0 else "✅" if diff_tiempo < 0 else "="
-    print(f"{'Tiempo total (h)':<30} {mejor_ga.tiempo_total/60:<20.1f} {mejor_sa.tiempo_total/60:<20.1f} {diff_tiempo:+.1f} {simbolo_tiempo}")
+    sa_logger.info(f"{'Tiempo total (h)':<30} {mejor_ga.tiempo_total/60:<20.1f} {mejor_sa.tiempo_total/60:<20.1f} {diff_tiempo:+.1f} {simbolo_tiempo}")
     
     # Distancia
     diff_distancia = mejor_sa.distancia_total - mejor_ga.distancia_total
     simbolo_distancia = "⚠️" if diff_distancia > 0 else "✅" if diff_distancia < 0 else "="
-    print(f"{'Distancia total (km)':<30} {mejor_ga.distancia_total:<20.1f} {mejor_sa.distancia_total:<20.1f} {diff_distancia:+.1f} {simbolo_distancia}")
+    sa_logger.info(f"{'Distancia total (km)':<30} {mejor_ga.distancia_total:<20.1f} {mejor_sa.distancia_total:<20.1f} {diff_distancia:+.1f} {simbolo_distancia}")
     
-    print(f"{'-'*90}")
+    sa_logger.info("-"*90)
     
     # Tiempo de ejecución de algoritmos
     tiempo_ga = resultados_ga.get("tiempo_ejecucion_segundos", 0) / 60
     tiempo_sa = resultados_sa["estadisticas"]["tiempo_ejecucion_minutos"]
-    print(f"\n⏱️  Tiempo de ejecución de algoritmos:")
-    print(f"  • GA: {tiempo_ga:.2f} minutos")
-    print(f"  • SA: {tiempo_sa:.2f} minutos")
-    print(f"  • Total híbrido: {tiempo_ga + tiempo_sa:.2f} minutos")
+    sa_logger.info("")
+    sa_logger.info("⏱️  Tiempo de ejecución de algoritmos:")
+    sa_logger.info(f"  • GA: {tiempo_ga:.2f} minutos")
+    sa_logger.info(f"  • SA: {tiempo_sa:.2f} minutos")
+    sa_logger.info(f"  • Total híbrido: {tiempo_ga + tiempo_sa:.2f} minutos")
     
     if diff_fitness > 0:
         mejora_pct = (diff_fitness / abs(mejor_ga.fitness)) * 100
-        print(f"\n🏆 El enfriamiento simulado MEJORÓ la solución del GA en {mejora_pct:.2f}%")
+        sa_logger.info(f"🏆 El enfriamiento simulado MEJORÓ la solución del GA en {mejora_pct:.2f}%")
     elif diff_fitness < 0:
         empeora_pct = (abs(diff_fitness) / abs(mejor_ga.fitness)) * 100
-        print(f"\n📉 El enfriamiento simulado empeoró ligeramente ({empeora_pct:.2f}%)")
+        sa_logger.info(f"📉 El enfriamiento simulado empeoró ligeramente ({empeora_pct:.2f}%)")
     else:
-        print(f"\n🤝 Ambos algoritmos encontraron soluciones de calidad similar")
+        sa_logger.info(f"🤝 Ambos algoritmos encontraron soluciones de calidad similar")
     
     # Crear gráfica comparativa
     import matplotlib.pyplot as plt
@@ -1026,18 +1069,29 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     plt.tight_layout()
     
     # Guardar gráfica
+    import os
+    
+    # Crear carpeta de graficas si no existe
+    graficas_dir = "graficas"
+    if not os.path.exists(graficas_dir):
+        os.makedirs(graficas_dir)
+    
     timestamp = datetime.now().strftime("%d_%H_%M")
-    fig_filename = f"comparacion_ga_vs_sa_{timestamp}.png"
+    fig_filename = os.path.join(graficas_dir, f"comparacion_ga_vs_sa_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    print(f"\n💾 Gráfica comparativa guardada: {fig_filename}")
+    sa_logger.info(f"💾 Gráfica comparativa guardada: {fig_filename}")
     plt.show()
     
-    print(f"{'='*80}\n")
+    sa_logger.info("="*80)
 
 
 # Ejecución principal
 if __name__ == "__main__":
     import sys
+    
+    # Inicializar logger global al inicio del programa
+    sa_logger, log_file = configurar_logging_sa()
+    sa_logger.info(f"📝 Log iniciado: {log_file}")
     
     modos = {
         "1": {
@@ -1081,95 +1135,161 @@ if __name__ == "__main__":
     
     if modo_elegido == "standalone":
         # Modo 1: SA desde cero
-        print(f"\n🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria\n")
+        sa_logger.info("🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria")
+        
+        # Configuración - VALORES ORIGINALES DEL USUARIO
+        config_sa = {
+            "T_inicial": 20,      # Temperatura baja para búsqueda más enfocada
+            "T_minima": 0.1,
+            "alpha": 0.999,       # Enfriamiento muy lento
+            "max_tiempo_segundos": tiempo_ejecucion * 3600,
+            "usar_2opt": True
+        }
         
         resultados = enfriamiento_simulado(
             solucion_inicial=None,  # Generará una aleatoria
-            T_inicial=2000,
-            T_minima=0.1,
-            alpha=0.97,
-            max_tiempo_segundos=3600,  # 1 hora
+            T_inicial=config_sa["T_inicial"],
+            T_minima=config_sa["T_minima"],
+            alpha=config_sa["alpha"],
+            max_tiempo_segundos=config_sa["max_tiempo_segundos"],
             iteraciones_sin_mejora_max=1000,
-            usar_2opt=True,
-            verbose=True
+            usar_2opt=config_sa["usar_2opt"],
+            verbose=True,
+            debug_saltos=True
         )
         
+        # Analizar solución
+        sa_logger.info("="*80)
+        sa_logger.info("📋 ANÁLISIS DE LA SOLUCIÓN FINAL")
+        sa_logger.info("="*80)
         analizar_solucion(resultados["mejor_solucion"])
-        exportar_resultados_sa(resultados, archivo="resultados_sa_standalone.json")
+        
+        # Guardar resultados con timestamp
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archivo_json = exportar_resultados_sa(resultados, archivo=f"resultados_sa_standalone_{timestamp}.json", config=config_sa)
+        
+        sa_logger.info("")
+        sa_logger.info("✅ Resultados guardados exitosamente:")
+        sa_logger.info(f"   • JSON: {archivo_json}")
+        sa_logger.info(f"   • Log: {log_file}")
+        sa_logger.info(f"   • Gráfica: graficas/evolucion_fitness_sa_*.png")
     
     elif modo_elegido == "hybrid":
         # Modo 2: GA + SA (híbrido)
-        print(f"\n🔗 Modo 2: Algoritmo Híbrido (GA + SA)\n")
-        print(f"{'='*80}")
-        print(f"FASE 1: ALGORITMO GENÉTICO (Exploración Global)")
-        print(f"{'='*80}")
+        sa_logger.info("🔗 Modo 2: Algoritmo Híbrido (GA + SA)")
+        sa_logger.info("="*80)
+        sa_logger.info("FASE 1: ALGORITMO GENÉTICO (Exploración Global)")
+        sa_logger.info("="*80)
         
         from algoritmo_espana import algoritmo_genetico_espana
         
         # Ejecutar GA con configuración rápida
         resultados_ga = algoritmo_genetico_espana(
             num_dias=30,
-            lugares_por_dia=12,
-            tam_poblacion=1000,
-            num_generaciones=600,
+            lugares_por_dia=9,
+            tam_poblacion=100,
+            tiempo_limite_horas= tiempo_ejecucion,
             tasa_elitismo=0.20
         )
         
-        print(f"\n{'='*80}")
-        print(f"FASE 2: ENFRIAMIENTO SIMULADO (Refinamiento Local)")
-        print(f"{'='*80}")
+        sa_logger.info("="*80)
+        sa_logger.info("FASE 2: ENFRIAMIENTO SIMULADO (Refinamiento Local)")
+        sa_logger.info("="*80)
+        
+        # Configuración SA - RESPETA LOS VALORES ORIGINALES DEL USUARIO
+        config_sa = {
+            "T_inicial": 20,      # Temperatura baja para refinamiento local
+            "T_minima": 0.1,
+            "alpha": 0.999,       # Enfriamiento muy lento para refinamiento detallado
+            "max_tiempo_segundos": tiempo_ejecucion * 3600,
+            "usar_2opt": True
+        }
         
         # Ejecutar SA desde el mejor del GA
         resultados_sa = enfriamiento_desde_genetico(
             resultados_genetico=resultados_ga,
             usar_mejor=True,
-            T_inicial=2000,  # Temperatura moderada para refinamiento
-            alpha=0.97,  # Convergencia balanceada
-            max_tiempo_segundos=3600  # 1 hora
+            T_inicial=config_sa["T_inicial"],
+            alpha=config_sa["alpha"],
+            max_tiempo_segundos=config_sa["max_tiempo_segundos"]
         )
         
         # Comparar resultados
         comparar_ga_vs_sa(resultados_ga, resultados_sa)
         
         # Analizar y exportar la mejor solución final
-        print(f"\n{'='*80}")
-        print(f"📋 ANÁLISIS DE LA SOLUCIÓN FINAL (POST-SA)")
-        print(f"{'='*80}")
+        sa_logger.info("="*80)
+        sa_logger.info("📋 ANÁLISIS DE LA SOLUCIÓN FINAL (POST-SA)")
+        sa_logger.info("="*80)
         analizar_solucion(resultados_sa["mejor_solucion"])
         
-        # Guardar resultados automáticamente
+        # Guardar resultados automáticamente con timestamp
         from datetime import datetime
-        timestamp = datetime.now().strftime("%d_%H_%M")
-        archivo_resultados = f"resultados_sa_hybrid_{timestamp}.json"
-        exportar_resultados_sa(resultados_sa, archivo=archivo_resultados)
-        print(f"\n💾 Resultados guardados en: {archivo_resultados}")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archivo_json = exportar_resultados_sa(resultados_sa, archivo=f"resultados_sa_hybrid_{timestamp}.json", config=config_sa)
+        
+        sa_logger.info("")
+        sa_logger.info("✅ Resultados guardados exitosamente:")
+        sa_logger.info(f"   • JSON: {archivo_json}")
+        sa_logger.info(f"   • Gráfica comparativa: graficas/comparacion_ga_vs_sa_*.png")
+        sa_logger.info(f"   • Gráfica evolución: graficas/evolucion_fitness_sa_*.png")
+        sa_logger.info(f"   • Log: {log_file}")
     
     elif modo_elegido == "comparar_2opt":
         # Modo 3: Comparar con/sin 2-opt
-        print(f"\n🔬 Modo 3: Comparación del impacto de 2-opt\n")
+        sa_logger.info("🔬 Modo 3: Comparación del impacto de 2-opt")
         
         # Generar solución inicial común
-        print(f"🎲 Generando solución inicial aleatoria...")
+        sa_logger.info("🎲 Generando solución inicial aleatoria...")
         solucion_inicial = crear_individuo_aleatorio(num_dias=20, lugares_por_dia=12)
         evaluar_individuo(solucion_inicial)
+        
+        # Configuración común
+        config_base = {
+            "T_inicial": 20,
+            "T_minima": 0.1,
+            "alpha": 0.999,
+            "max_tiempo_segundos": tiempo_ejecucion * 3600  # 30 minutos cada uno
+        }
         
         # Ejecutar comparación
         resultados_comp = comparar_con_sin_2opt(
             solucion_inicial=solucion_inicial,
-            T_inicial=2000,
-            alpha=0.97,
-            max_tiempo_segundos=1800,  # 30 minutos cada uno
+            T_inicial=config_base["T_inicial"],
+            alpha=config_base["alpha"],
+            max_tiempo_segundos=config_base["max_tiempo_segundos"],
             verbose=True
         )
         
-        # Guardar resultados
+        # Guardar resultados con timestamp
         from datetime import datetime
-        timestamp = datetime.now().strftime("%d_%H_%M")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        print(f"\n💾 Guardando resultados...")
-        exportar_resultados_sa(resultados_comp["con_2opt"], archivo=f"resultados_con_2opt_{timestamp}.json")
-        exportar_resultados_sa(resultados_comp["sin_2opt"], archivo=f"resultados_sin_2opt_{timestamp}.json")
+        sa_logger.info("💾 Guardando resultados...")
         
-        print(f"\n✅ Comparación completada. Mejor configuración: {resultados_comp['mejor_configuracion']}")
+        config_con = config_base.copy()
+        config_con["usar_2opt"] = True
+        archivo_con = exportar_resultados_sa(
+            resultados_comp["con_2opt"], 
+            archivo=f"resultados_con_2opt_{timestamp}.json",
+            config=config_con
+        )
+        
+        config_sin = config_base.copy()
+        config_sin["usar_2opt"] = False
+        archivo_sin = exportar_resultados_sa(
+            resultados_comp["sin_2opt"], 
+            archivo=f"resultados_sin_2opt_{timestamp}.json",
+            config=config_sin
+        )
+        
+        sa_logger.info(f"✅ Comparación completada. Mejor configuración: {resultados_comp['mejor_configuracion']}")
+        sa_logger.info("")
+        sa_logger.info("📊 Archivos generados:")
+        sa_logger.info(f"   • JSON con 2-opt: {archivo_con}")
+        sa_logger.info(f"   • JSON sin 2-opt: {archivo_sin}")
+        sa_logger.info(f"   • Gráfica comparativa: graficas/comparacion_2opt_{timestamp}.png")
+        sa_logger.info(f"   • Logs: {log_file}")
     
-    print(f"\n✅ Ejecución completada exitosamente!")
+    sa_logger.info("✅ Ejecución completada exitosamente!")
