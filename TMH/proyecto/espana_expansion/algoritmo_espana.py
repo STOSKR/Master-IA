@@ -1173,12 +1173,12 @@ def mutar(individuo: Individual):
     individuo.ciudades = individuo_reparado.ciudades
 
 
-def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int, mejor_individuo: Individual) -> List[Individual]:
-    log(f"\n REINICIANDO POBLACIÓN (manteniendo mejor individuo)...")
+def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
+    log(f"\n REINICIANDO POBLACIÓN")
     
-    nueva_poblacion = [copy.deepcopy(mejor_individuo)]
+    nueva_poblacion = []
     
-    for _ in range(tam_poblacion - 1):
+    for _ in range(tam_poblacion):
         nuevo_ind = crear_individuo_aleatorio(num_dias, lugares_por_dia)
         evaluar_individuo(nuevo_ind)
         nueva_poblacion.append(nuevo_ind)
@@ -1582,7 +1582,7 @@ if __name__ == "__main__":
         },
         "3": {
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
-            "num_dias": 20,
+            "num_dias": 30,
             "lugares_por_dia": 12,
             "tam_poblacion": 100,
             "num_generaciones": 100,

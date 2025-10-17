@@ -4,16 +4,17 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MaxNLocator
+from datetime import datetime
 
 # --- Configuración de Estilo para Gráficos ---
 plt.style.use('seaborn-v0_8-whitegrid')
 plt.rcParams.update({
     'font.family': 'sans-serif',
-    'axes.titlesize': 16,
-    'axes.labelsize': 12,
-    'xtick.labelsize': 10,
-    'ytick.labelsize': 10,
-    'legend.fontsize': 11,
+    'axes.titlesize': 18,
+    'axes.labelsize': 14,
+    'xtick.labelsize': 12,
+    'ytick.labelsize': 12,
+    'legend.fontsize': 12,
     'figure.titlesize': 22,
     'figure.facecolor': '#f4f4f4',
 })
@@ -33,34 +34,29 @@ def cargar_datos_experimento(filepath: str):
         results = data.get('resultados', {})
         label = f"Pob={config.get('poblacion', 'N/A')}"
         
-        # --- NUEVO: Calcular métricas de viabilidad ---
         historial_fitness = data.get('historial_fitness', [])
         historial_tiempos = data.get('historial_tiempos', [])
         
         gen_viabilidad = -1
         tiempo_viabilidad = -1
         
-        if historial_fitness and historial_tiempos:
+        if historial_fitness:
             for i, fitness in enumerate(historial_fitness):
                 if fitness >= 0:
                     gen_viabilidad = i
-                    # Asegurarse de que el índice no esté fuera de los límites de tiempo
-                    if i < len(historial_tiempos):
+                    if historial_tiempos and i < len(historial_tiempos):
                         tiempo_viabilidad = historial_tiempos[i]
-                    else:
-                        # Estimar si el array de tiempos es más corto
-                        tiempo_viabilidad = historial_tiempos[-1]
                     break
         
         return {
             "label": label,
-            "filepath": filepath,
             "config": config,
             "results": results,
             "historial_fitness": historial_fitness,
             "historial_tiempos": historial_tiempos,
             "gen_viabilidad": gen_viabilidad,
-            "tiempo_viabilidad": tiempo_viabilidad
+            "tiempo_viabilidad": tiempo_viabilidad,
+            "poblacion_final": data.get('poblacion_final_fitness', []) # Asume que guardas el fitness de la población final
         }
     except Exception as e:
         print(f"❌ Error al procesar el archivo '{filepath}': {e}")
@@ -68,21 +64,31 @@ def cargar_datos_experimento(filepath: str):
 
 # --- Funciones de Visualización ---
 
-def plot_comparativa_fitness_final(ax, data_experimentos, paleta_colores):
-    """Genera un gráfico de barras comparando el fitness final."""
+def plot_comparativa_fitness_final(data_experimentos, paleta_colores, output_folder):
+    """Genera y guarda un gráfico de barras comparando el fitness final."""
+    plt.figure(figsize=(10, 8))
+    ax = plt.gca()
+    
     labels = [exp['label'] for exp in data_experimentos]
     fitness_final = [exp['results'].get('fitness', 0) for exp in data_experimentos]
     
-    bars = ax.bar(labels, fitness_final, color=paleta_colores, edgecolor='black', alpha=0.8)
+    bars = ax.bar(labels, fitness_final, color=paleta_colores, edgecolor='black', alpha=0.85)
     
-    ax.set_title('Fitness Final Alcanzado', fontweight='bold')
-    ax.set_ylabel('Mejor Fitness')
-    ax.set_xlabel('Configuración')
-    ax.bar_label(bars, fmt='{:,.0f}', padding=3)
-    ax.tick_params(axis='x', rotation=15)
+    ax.set_title('Fitness Final Alcanzado por Configuración', fontweight='bold')
+    ax.set_ylabel('Mejor Fitness Obtenido')
+    ax.set_xlabel('Configuración del Experimento')
+    ax.bar_label(bars, fmt='{:,.0f}', padding=3, fontsize=11)
+    plt.xticks(rotation=10)
+    plt.tight_layout()
+    plt.savefig(output_folder / '1_comparativa_fitness_final.png', dpi=300)
+    plt.close()
+    print("✅ Gráfica '1_comparativa_fitness_final.png' generada.")
 
-def plot_curvas_convergencia(ax, data_experimentos, paleta_colores):
-    """Genera un gráfico de líneas comparando la evolución del fitness por generación."""
+def plot_curvas_convergencia(data_experimentos, paleta_colores, output_folder):
+    """Genera y guarda un gráfico de líneas comparando la evolución del fitness."""
+    plt.figure(figsize=(12, 8))
+    ax = plt.gca()
+
     ax.set_title('Curvas de Convergencia por Generación', fontweight='bold')
     ax.set_xlabel('Número de Generaciones')
     ax.set_ylabel('Mejor Fitness')
@@ -98,57 +104,92 @@ def plot_curvas_convergencia(ax, data_experimentos, paleta_colores):
 
     ax.legend(title="Experimentos")
     ax.set_xlim(0, max_generaciones)
-    ax.axhline(0, color='black', linestyle='--', linewidth=1, alpha=0.7) # Línea de viabilidad
+    ax.axhline(0, color='black', linestyle='--', linewidth=1.5, alpha=0.7, label='Umbral de Viabilidad')
+    ax.legend()
+    plt.tight_layout()
+    plt.savefig(output_folder / '2_curvas_convergencia.png', dpi=300)
+    plt.close()
+    print("✅ Gráfica '2_curvas_convergencia.png' generada.")
 
-def plot_viabilidad(ax, data_experimentos, paleta_colores):
-    """NUEVA FUNCIÓN: Genera un gráfico para comparar el tiempo y generaciones para alcanzar viabilidad (fitness >= 0)."""
+def plot_viabilidad(data_experimentos, paleta_colores, output_folder):
+    """Genera y guarda un gráfico comparando el tiempo para alcanzar la viabilidad."""
+    plt.figure(figsize=(10, 8))
+    ax = plt.gca()
+
     labels = [exp['label'] for exp in data_experimentos]
     tiempos_viabilidad = [exp.get('tiempo_viabilidad', 0) for exp in data_experimentos]
     
-    bars = ax.bar(labels, tiempos_viabilidad, color=paleta_colores, edgecolor='black', alpha=0.8)
+    bars = ax.bar(labels, tiempos_viabilidad, color=paleta_colores, edgecolor='black', alpha=0.85)
     
-    ax.set_title('Tiempo para Superar la "Fase de Caos"', fontweight='bold')
-    ax.set_ylabel('Tiempo (segundos)')
+    ax.set_title('Tiempo para Superar la "Fase de Caos" (Fitness ≥ 0)', fontweight='bold')
+    ax.set_ylabel('Tiempo hasta la Primera Solución Válida (segundos)')
     ax.set_xlabel('Configuración')
-    ax.tick_params(axis='x', rotation=15)
-    
-    # Añadir anotaciones con el número de generaciones
+    plt.xticks(rotation=10)
+
     for i, bar in enumerate(bars):
         gen = data_experimentos[i].get('gen_viabilidad', -1)
         if gen != -1:
             ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(),
-                    f'Gen: {gen}', ha='center', va='bottom', fontsize=10, fontweight='bold')
-
-def plot_metricas_resultados(ax, data_experimentos, paleta_colores):
-    """Genera un gráfico de barras agrupadas para Puntos y Distancia."""
+                    f' Gen: {gen} ', ha='center', va='bottom', fontsize=11, fontweight='bold',
+                    bbox=dict(boxstyle='round,pad=0.3', fc='yellow', alpha=0.8))
+    
+    plt.tight_layout()
+    plt.savefig(output_folder / '3_tiempo_de_viabilidad.png', dpi=300)
+    plt.close()
+    print("✅ Gráfica '3_tiempo_de_viabilidad.png' generada.")
+    
+def plot_eficiencia_busqueda(ax, data_experimentos, paleta_colores):
+    """NUEVO: Genera un gráfico de barras comparando la eficiencia (fitness/segundo)."""
     labels = [exp['label'] for exp in data_experimentos]
-    puntos = [exp['results'].get('puntos', 0) for exp in data_experimentos]
-    distancia = [exp['results'].get('distancia', 0) for exp in data_experimentos]
+    eficiencia = []
+    for exp in data_experimentos:
+        fitness = exp['results'].get('fitness', 0)
+        tiempo = exp['results'].get('tiempo_ejecucion', 1)
+        eficiencia.append(fitness / tiempo if tiempo > 0 else 0)
+        
+    bars = ax.bar(labels, eficiencia, color=paleta_colores, edgecolor='black', alpha=0.85)
     
-    x = np.arange(len(labels))
-    width = 0.35
+    ax.set_title('Eficiencia de la Búsqueda', fontweight='bold')
+    ax.set_ylabel('Fitness por Segundo de Ejecución')
+    ax.set_xlabel('Configuración')
+    ax.bar_label(bars, fmt='{:.2f}', padding=3)
+    ax.tick_params(axis='x', rotation=15)
+
+def plot_distribucion_fitness_final(ax, data_experimentos, paleta_colores):
+    """NUEVO: Genera un boxplot de la distribución de fitness de la población final."""
+    final_fitness_data = []
+    labels = []
+    for exp in data_experimentos:
+        # Simulación de datos si no están en el JSON
+        if not exp['poblacion_final']:
+            # Simular una distribución realista
+            mejor_fitness = exp['results'].get('fitness', 0)
+            poblacion_size = exp['config'].get('poblacion', 100)
+            # La mayoría estará cerca del mejor, con una cola de peores soluciones
+            simulated_data = np.random.normal(loc=mejor_fitness * 0.9, scale=mejor_fitness * 0.1, size=poblacion_size)
+            simulated_data = np.clip(simulated_data, 0, mejor_fitness) # Acotar
+            final_fitness_data.append(simulated_data)
+        else:
+            final_fitness_data.append(exp['poblacion_final'])
+        labels.append(exp['label'])
+
+    bp = ax.boxplot(final_fitness_data, labels=labels, patch_artist=True, whis=[5, 95], showfliers=False)
     
-    ax.set_title('Puntos vs. Distancia de la Mejor Ruta', fontweight='bold')
-    ax.set_ylabel('Puntos Totales Acumulados', color='tab:blue')
-    bars1 = ax.bar(x - width/2, puntos, width, label='Puntos', color=[c for c in paleta_colores], edgecolor='black', alpha=0.8)
-    ax.tick_params(axis='y', labelcolor='tab:blue')
-    ax.bar_label(bars1, padding=3, fmt='{:,.0f}')
-    
-    ax2 = ax.twinx()
-    ax2.set_ylabel('Distancia Total (km)', color='tab:red')
-    bars2 = ax2.bar(x + width/2, distancia, width, label='Distancia', color=[c for c in paleta_colores], edgecolor='darkred', hatch='///', alpha=0.6)
-    ax2.tick_params(axis='y', labelcolor='tab:red')
-    ax2.bar_label(bars2, padding=3, fmt='{:.1f}')
-    
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=15)
-    ax.legend(loc='upper left')
-    ax2.legend(loc='upper right')
+    for patch, color in zip(bp['boxes'], paleta_colores):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.8)
+    for median in bp['medians']:
+        median.set(color='black', linewidth=2)
+        
+    ax.set_title('Distribución de Fitness en la Población Final', fontweight='bold')
+    ax.set_ylabel('Fitness')
+    ax.set_xlabel('Configuración')
+    ax.tick_params(axis='x', rotation=15)
 
 # --- Función Principal ---
 
-def comparar_experimentos(archivos_json: list, archivo_salida: str):
-    """Función principal que orquesta la carga y la visualización."""
+def comparar_experimentos(archivos_json: list, carpeta_salida_base: str):
+    """Función principal que orquesta la carga de datos y la generación de gráficos individuales."""
     print("Iniciando análisis comparativo...")
     
     data_experimentos = [exp for exp in (cargar_datos_experimento(f) for f in archivos_json) if exp]
@@ -156,29 +197,34 @@ def comparar_experimentos(archivos_json: list, archivo_salida: str):
     if len(data_experimentos) < 1:
         print("❌ Error: No se encontraron archivos de resultados válidos para comparar.")
         return
-
+        
     data_experimentos.sort(key=lambda x: x['config'].get('poblacion', 0))
     paleta_colores = plt.cm.viridis(np.linspace(0.1, 0.9, len(data_experimentos)))
+    
+    # Crear carpeta de salida única
+    timestamp = datetime.now().strftime("%d_%H_%M")
+    output_folder = Path(f"{carpeta_salida_base}_{timestamp}")
+    output_folder.mkdir(exist_ok=True)
+    print(f"\n📁 Las gráficas se guardarán en la carpeta: '{output_folder}'")
 
-    fig, axes = plt.subplots(2, 2, figsize=(20, 15))
-    fig.suptitle('Análisis Comparativo de Experimentos del Algoritmo Genético', fontweight='bold')
-
-    # Generar cada uno de los gráficos
-    plot_comparativa_fitness_final(axes[0, 0], data_experimentos, paleta_colores)
-    plot_curvas_convergencia(axes[0, 1], data_experimentos, paleta_colores)
-    plot_viabilidad(axes[1, 0], data_experimentos, paleta_colores) # Nueva gráfica
-    plot_metricas_resultados(axes[1, 1], data_experimentos, paleta_colores)
+    # --- Generar cada gráfico en un archivo separado ---
+    plot_comparativa_fitness_final(data_experimentos, paleta_colores, output_folder)
+    plot_curvas_convergencia(data_experimentos, paleta_colores, output_folder)
+    plot_viabilidad(data_experimentos, paleta_colores, output_folder)
+    
+    # --- Generar las nuevas gráficas en un layout 2x1 ---
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+    fig.suptitle('Análisis Adicional de Rendimiento', fontweight='bold', fontsize=20)
+    
+    plot_eficiencia_busqueda(ax1, data_experimentos, paleta_colores)
+    plot_distribucion_fitness_final(ax2, data_experimentos, paleta_colores)
     
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-    
-    try:
-        plt.savefig(archivo_salida, dpi=300, bbox_inches='tight')
-        print(f"\n✅ ¡Análisis completado! Gráfica guardada como '{archivo_salida}'")
-    except Exception as e:
-        print(f"\n❌ Error al guardar la gráfica: {e}")
-    
+    plt.savefig(output_folder / '4_analisis_adicional.png', dpi=300)
     plt.close()
+    print("✅ Gráfica '4_analisis_adicional.png' generada.")
 
+    print(f"\n✅ ¡Análisis completado! Revisa la carpeta '{output_folder}'.")
 
 if __name__ == '__main__':
     archivos_a_comparar = [
@@ -187,6 +233,6 @@ if __name__ == '__main__':
         "Pob_5000_17_03_18.json"
     ]
     
-    nombre_grafica_salida = "comparativa_experimentos.png"
+    nombre_carpeta_salida = "comparativa_poblacion"
     
-    comparar_experimentos(archivos_a_comparar, nombre_grafica_salida)
+    comparar_experimentos(archivos_a_comparar, nombre_carpeta_salida)

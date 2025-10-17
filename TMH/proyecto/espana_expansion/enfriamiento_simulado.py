@@ -613,11 +613,6 @@ if __name__ == "__main__":
             "nombre": "SA desde GA (Hybrid start)",
             "descripcion": "Primero ejecuta GA, luego refina con SA",
             "funcion": "hybrid"
-        },
-        "3": {
-            "nombre": "SA con solución personalizada",
-            "descripcion": "Carga solución desde JSON y ejecuta SA",
-            "funcion": "custom"
         }
     }
     
@@ -649,9 +644,9 @@ if __name__ == "__main__":
         
         resultados = enfriamiento_simulado(
             solucion_inicial=None,  # Generará una aleatoria
-            T_inicial=2000,
+            T_inicial=20,
             T_minima=0.1,
-            alpha=0.95,
+            alpha=0.999,
             max_iteraciones=5000,
             iteraciones_sin_mejora_max=1000,
             verbose=True
@@ -706,45 +701,5 @@ if __name__ == "__main__":
         archivo_resultados = f"resultados_sa_hybrid_{timestamp}.json"
         exportar_resultados_sa(resultados_sa, archivo=archivo_resultados)
         print(f"\n💾 Resultados guardados en: {archivo_resultados}")
-    
-    elif modo_elegido == "custom":
-        # Modo 3: Cargar desde JSON
-        print(f"\n📂 Modo 3: SA desde solución personalizada\n")
-        
-        archivo_json = input("📄 Introduce la ruta del archivo JSON: ").strip()
-        
-        try:
-            import json
-            with open(archivo_json, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            
-            # Reconstruir individuo desde JSON
-            itinerario = data.get("itinerario", data.get("mejor_individuo", {}).get("itinerario", []))
-            
-            dias = [item["lugares_ids"] for item in itinerario]
-            ciudades = [item["ciudad"] for item in itinerario]
-            
-            solucion_custom = Individual(dias, ciudades)
-            evaluar_individuo(solucion_custom)
-            
-            print(f"✅ Solución cargada correctamente")
-            print(f"  • Fitness: {solucion_custom.fitness:.1f}")
-            print(f"  • Puntos: {solucion_custom.puntos_totales}")
-            print(f"  • Días: {len(dias)}")
-            
-            resultados = enfriamiento_simulado(
-                solucion_inicial=solucion_custom,
-                T_inicial=1500,
-                alpha=0.95,
-                max_iteraciones=5000,
-                verbose=True
-            )
-            
-            analizar_solucion(resultados["mejor_solucion"])
-            exportar_resultados_sa(resultados, archivo="resultados_sa_custom.json")
-        
-        except Exception as e:
-            print(f"\n❌ ERROR al cargar archivo: {e}")
-            sys.exit(1)
     
     print(f"\n✅ Ejecución completada exitosamente!")
