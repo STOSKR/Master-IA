@@ -1,0 +1,32 @@
+2025-10-17 02:48:27 - INFO - ================================================================================
+2025-10-17 02:48:27 - INFO - INICIO DE EJECUCIÓN - Algoritmo Genético España
+2025-10-17 02:48:27 - INFO - Log guardado en: logs\Pob_100_17_02_48.log
+2025-10-17 02:48:27 - INFO - ================================================================================
+2025-10-17 02:48:27 - INFO - 
+================================================================================
+2025-10-17 02:48:27 - INFO - ALGORITMO GENÉTICO
+2025-10-17 02:48:27 - INFO - ================================================================================
+2025-10-17 02:48:27 - INFO - Días: 20
+2025-10-17 02:48:27 - INFO - Lugares/día: 12
+2025-10-17 02:48:27 - INFO - Población: 100
+2025-10-17 02:48:27 - INFO - Tiempo límite: 0h 0m (0.01h)
+2025-10-17 02:48:27 - INFO - Elitismo: 15%
+2025-10-17 02:48:27 - INFO - Dataset: 1367 lugares en 10 ciudades
+2025-10-17 02:48:27 - INFO - ================================================================================
+
+2025-10-17 02:48:27 - INFO - Creando población inicial
+2025-10-17 02:48:27 - INFO - Evaluando población inicial
+2025-10-17 02:48:27 - INFO - 
+Iniciando evolución (hasta 36s)...
+
+2025-10-17 02:48:36 - INFO -   Gen   50 | Tiempo:    0.1m (resta: 0m) | Fitness: -79168.1 | Puntos: 12187 | Dist:   229.4km
+2025-10-17 02:48:45 - INFO -   Gen  100 | Tiempo:    0.3m (resta: 0m) | Fitness: -21564.3 | Puntos: 12410 | Dist:   247.5km
+2025-10-17 02:48:54 - INFO -   Gen  150 | Tiempo:    0.4m (resta: 0m) | Fitness:  -6047.3 | Puntos: 12529 | Dist:   254.5km
+2025-10-17 02:49:03 - INFO -   Gen  200 | Tiempo:    0.6m (resta: 0m) | Fitness:   -693.3 | Puntos: 12575 | Dist:   227.6km
+2025-10-17 02:49:03 - INFO - 
+⏱️  Tiempo límite alcanzado: 36.1s
+2025-10-17 02:49:03 - INFO - 
+✅ Evolución completada!
+2025-10-17 02:49:03 - INFO - 🏆 Mejor fitness global: -693.3
+2025-10-17 02:49:03 - INFO - 📊 Generaciones ejecutadas: 200
+2025-10-17 02:49:03 - INFO - ⏱️  Tiempo total: 36.07s (0.60m)

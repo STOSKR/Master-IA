@@ -2,7 +2,7 @@
 REM Script para lanzar configuración 1 en una terminal separada
 REM Ejecuta durante 8 horas con población pequeña
 
-title AG - Config 1: Pequeña 8h
+title AG - Config 2
 
 echo Iniciando...
 echo Hora inicio: %time%
@@ -16,4 +16,3 @@ echo COMPLETADO
 echo Hora fin: %time%
 echo ============================================================================
 echo.
-pause

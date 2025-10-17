@@ -2,7 +2,7 @@
 REM Script para lanzar configuración 3 en una terminal separada
 REM Ejecuta durante 8 horas con población grande
 
-title AG - Config 3: Grande 8h
+title AG - Config 4
 
 echo ============================================================================
 echo CONFIGURACION 3: Poblacion Grande - 8 horas
@@ -20,4 +20,3 @@ echo COMPLETADO
 echo Hora fin: %time%
 echo ============================================================================
 echo.
-pause

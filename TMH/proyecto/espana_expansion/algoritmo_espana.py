@@ -518,6 +518,9 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int) -> Individual
     if not validar_restricciones_ciudades(individuo):
         individuo = reparar_individuo(individuo)
     
+    # Intentar reparar horarios desde el inicio
+    individuo = reparar_horarios_individuo(individuo, max_intentos=1)
+    
     return individuo
 
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
@@ -544,6 +547,232 @@ def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, 
         tiempo_total += dist / VELOCIDAD_MEDIA * 60
     
     return tiempo_total, distancia_total, puntos_total
+
+def verificar_lugar_en_horario(lugar: Dict, hora_inicio: int, hora_fin: int) -> bool:
+    """
+    Verifica si un lugar puede ser visitado en el rango de tiempo especificado.
+    
+    Args:
+        lugar: Diccionario con información del lugar (debe incluir 'tipo')
+        hora_inicio: Hora de inicio de la visita en minutos desde medianoche
+        hora_fin: Hora de fin de la visita en minutos desde medianoche
+    
+    Returns:
+        True si el lugar está abierto durante todo el periodo de visita
+    """
+    tipo = lugar.get('tipo', '')
+    
+    if tipo not in HORARIOS_TIPO:
+        return True  # Si no tiene horario definido, se considera siempre disponible
+    
+    apertura = HORARIOS_TIPO[tipo]["apertura"]
+    cierre = HORARIOS_TIPO[tipo]["cierre"]
+    
+    # Caso especial: bares abiertos después de medianoche
+    if tipo == "bar" and cierre < apertura:
+        cierre = 26 * 60
+    
+    # El lugar debe estar abierto al inicio Y al final de la visita
+    return hora_inicio >= apertura and hora_fin <= cierre
+
+def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
+    """
+    Intenta intercambiar lugares dentro del mismo día para que todos queden dentro de horario.
+    
+    Args:
+        individuo: El individuo a reparar
+        dia_idx: Índice del día a reparar
+    
+    Returns:
+        True si se logró hacer algún intercambio que mejore los horarios
+    """
+    dia = individuo.dias[dia_idx]
+    if len(dia) < 2:
+        return False
+    
+    lugares_dia = get_lugares_por_ids(dia)
+    ciudad = individuo.ciudades[dia_idx]
+    
+    # Calcular hora inicial considerando transporte intercity si es necesario
+    hora_actual = HORA_INICIO
+    if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
+        for transporte in individuo.transportes_intercity:
+            if transporte[0] == dia_idx:
+                hora_actual += transporte[4]
+                break
+    
+    # Identificar lugares fuera de horario
+    lugares_problematicos = []
+    hora_simulada = hora_actual
+    
+    for idx, lugar in enumerate(lugares_dia):
+        tiempo_visita = lugar['tiempo_visita']
+        hora_fin_visita = hora_simulada + tiempo_visita
+        
+        if not verificar_lugar_en_horario(lugar, hora_simulada, hora_fin_visita):
+            lugares_problematicos.append(idx)
+        
+        hora_simulada += tiempo_visita
+        
+        # Añadir tiempo de desplazamiento al siguiente lugar
+        if idx < len(lugares_dia) - 1:
+            dist = distancia_haversine(lugar, lugares_dia[idx + 1])
+            hora_simulada += dist / VELOCIDAD_MEDIA * 60
+    
+    if not lugares_problematicos:
+        return False  # No hay problemas
+    
+    # Intentar intercambios: probar swaps entre lugares problemáticos y otros
+    for idx_problema in lugares_problematicos:
+        for idx_otro in range(len(dia)):
+            if idx_otro == idx_problema:
+                continue
+            
+            # Crear copia temporal para probar el intercambio
+            dia_temp = dia[:]
+            dia_temp[idx_problema], dia_temp[idx_otro] = dia_temp[idx_otro], dia_temp[idx_problema]
+            
+            # Verificar si el intercambio mejora la situación
+            lugares_temp = get_lugares_por_ids(dia_temp)
+            hora_simulada = hora_actual
+            problemas_nuevos = 0
+            
+            for idx, lugar in enumerate(lugares_temp):
+                tiempo_visita = lugar['tiempo_visita']
+                hora_fin_visita = hora_simulada + tiempo_visita
+                
+                if not verificar_lugar_en_horario(lugar, hora_simulada, hora_fin_visita):
+                    problemas_nuevos += 1
+                
+                hora_simulada += tiempo_visita
+                
+                if idx < len(lugares_temp) - 1:
+                    dist = distancia_haversine(lugar, lugares_temp[idx + 1])
+                    hora_simulada += dist / VELOCIDAD_MEDIA * 60
+            
+            # Si hay menos problemas, aplicar el intercambio
+            if problemas_nuevos < len(lugares_problematicos):
+                individuo.dias[dia_idx] = dia_temp
+                return True
+    
+    return False
+
+def buscar_lugar_alternativo_horario(individuo: Individual, dia_idx: int, lugar_idx: int, 
+                                     hora_visita: int) -> bool:
+    """
+    Busca un lugar alternativo de la misma ciudad que esté disponible en el horario especificado.
+    
+    Args:
+        individuo: El individuo a reparar
+        dia_idx: Índice del día
+        lugar_idx: Índice del lugar problemático dentro del día
+        hora_visita: Hora en minutos a la que se visitaría el lugar
+    
+    Returns:
+        True si se encontró y aplicó un reemplazo
+    """
+    ciudad = individuo.ciudades[dia_idx]
+    dia = individuo.dias[dia_idx]
+    lugar_actual_id = dia[lugar_idx]
+    lugar_actual = get_lugares_por_ids([lugar_actual_id])[0]
+    
+    # Obtener todos los lugares de la ciudad
+    lugares_ciudad = get_lugares_ciudad(ciudad)
+    
+    # Filtrar lugares ya visitados en este viaje (no solo este día)
+    lugares_visitados_global = set()
+    for d in individuo.dias:
+        lugares_visitados_global.update(d)
+    
+    # Buscar lugares alternativos que estén dentro del horario
+    candidatos = []
+    for lugar in lugares_ciudad:
+        if lugar["id"] in lugares_visitados_global and lugar["id"] != lugar_actual_id:
+            continue  # Ya visitado
+        
+        tiempo_visita = lugar["tiempo_visita"]
+        hora_fin = hora_visita + tiempo_visita
+        
+        if verificar_lugar_en_horario(lugar, hora_visita, hora_fin):
+            candidatos.append(lugar)
+    
+    if not candidatos:
+        return False
+    
+    # Elegir el mejor candidato (por puntos o aleatoriamente)
+    # Priorizar lugares con puntos similares al original
+    puntos_original = lugar_actual.get("puntos", 0)
+    candidatos.sort(key=lambda x: abs(x.get("puntos", 0) - puntos_original))
+    
+    mejor_candidato = candidatos[0]
+    individuo.dias[dia_idx][lugar_idx] = mejor_candidato["id"]
+    
+    return True
+
+def reparar_horarios_individuo(individuo: Individual, max_intentos: int = 3) -> Individual:
+    """
+    Repara un individuo intentando corregir lugares visitados fuera de horario.
+    
+    Estrategia:
+    1. Intentar intercambiar lugares dentro del mismo día
+    2. Si no funciona, buscar lugares alternativos en la misma ciudad
+    
+    Args:
+        individuo: El individuo a reparar
+        max_intentos: Número máximo de intentos de reparación por día
+    
+    Returns:
+        El individuo reparado
+    """
+    for dia_idx in range(len(individuo.dias)):
+        # Intentar reparar este día
+        for intento in range(max_intentos):
+            # Calcular hora inicial del día
+            hora_actual = HORA_INICIO
+            if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
+                for transporte in individuo.transportes_intercity:
+                    if transporte[0] == dia_idx:
+                        hora_actual += transporte[4]
+                        break
+            
+            # Identificar lugares problemáticos
+            lugares_dia = get_lugares_por_ids(individuo.dias[dia_idx])
+            hora_simulada = hora_actual
+            indices_problematicos = []
+            horas_problematicas = []
+            
+            for idx, lugar in enumerate(lugares_dia):
+                tiempo_visita = lugar['tiempo_visita']
+                hora_fin_visita = hora_simulada + tiempo_visita
+                
+                if not verificar_lugar_en_horario(lugar, hora_simulada, hora_fin_visita):
+                    indices_problematicos.append(idx)
+                    horas_problematicas.append(hora_simulada)
+                
+                hora_simulada += tiempo_visita
+                
+                if idx < len(lugares_dia) - 1:
+                    dist = distancia_haversine(lugar, lugares_dia[idx + 1])
+                    hora_simulada += dist / VELOCIDAD_MEDIA * 60
+            
+            if not indices_problematicos:
+                break  # Este día está bien, pasar al siguiente
+            
+            # Estrategia 1: Intentar intercambios
+            if intentar_intercambio_horarios(individuo, dia_idx):
+                continue  # Volver a verificar con el nuevo orden
+            
+            # Estrategia 2: Buscar lugares alternativos
+            se_hizo_cambio = False
+            for idx_problema, hora_problema in zip(indices_problematicos, horas_problematicas):
+                if buscar_lugar_alternativo_horario(individuo, dia_idx, idx_problema, hora_problema):
+                    se_hizo_cambio = True
+                    break  # Hacer un cambio a la vez y volver a verificar
+            
+            if not se_hizo_cambio:
+                break  # No se pudo hacer más, continuar con el siguiente día
+    
+    return individuo
 
 def elegir_mejor_transporte(ciudad_origen: str, ciudad_destino: str, presupuesto_restante: float) -> Tuple[str, int, float]:
     opciones = []
@@ -710,6 +939,23 @@ def evaluar_individuo(individuo: Individual) -> float:
     individuo.puntos_totales = puntos_acum
     individuo.fitness = fitness
     
+    # ⚠️ NUEVO: Si hay violaciones de horario, intentar reparar
+    if violaciones_horarios > 0:
+        # Guardar fitness actual para comparar
+        fitness_antes = fitness
+        
+        # Intentar reparar horarios
+        individuo_reparado = reparar_horarios_individuo(individuo, max_intentos=2)
+        
+        # Re-evaluar después de reparar (llamada recursiva, pero solo una vez)
+        # Para evitar recursión infinita, marcamos que ya se intentó reparar
+        if not hasattr(individuo, '_reparacion_horarios_intentada'):
+            individuo._reparacion_horarios_intentada = True
+            individuo.dias = individuo_reparado.dias
+            individuo.ciudades = individuo_reparado.ciudades
+            # Re-evaluar con los cambios
+            return evaluar_individuo(individuo)
+    
     return fitness
 
 def seleccion_torneo(poblacion: List[Individual], k: int = 3) -> Individual:
@@ -818,14 +1064,15 @@ def mutar(individuo: Individual):
         individuo_reparado = reparar_individuo(individuo)
         individuo.dias = individuo_reparado.dias
         individuo.ciudades = individuo_reparado.ciudades
+    
+    # Intentar reparar horarios después de mutar
+    individuo_reparado = reparar_horarios_individuo(individuo, max_intentos=1)
+    individuo.dias = individuo_reparado.dias
+    individuo.ciudades = individuo_reparado.ciudades
 
 
 def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int, mejor_individuo: Individual) -> List[Individual]:
-    """
-    Reinicia la población manteniendo el mejor individuo y generando nuevos individuos.
-    Se usa cuando el algoritmo está estancado (sin mejora por muchas generaciones).
-    """
-    log(f"\n   🔄 REINICIANDO POBLACIÓN (manteniendo mejor individuo)...")
+    log(f"\n REINICIANDO POBLACIÓN (manteniendo mejor individuo)...")
     
     nueva_poblacion = [copy.deepcopy(mejor_individuo)]
     
@@ -834,7 +1081,7 @@ def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int,
         evaluar_individuo(nuevo_ind)
         nueva_poblacion.append(nuevo_ind)
     
-    log(f"   ✅ Nueva población creada ({tam_poblacion} individuos)\n")
+    log(f"Nueva población creada ({tam_poblacion} individuos)\n")
     return nueva_poblacion
 
 
@@ -848,7 +1095,6 @@ def algoritmo_genetico_espana(
 ) -> Dict:
     import time as time_module
     
-    # Convertir horas a segundos si se especificó
     tiempo_limite_segundos = None
     if tiempo_limite_horas is not None:
         tiempo_limite_segundos = int(tiempo_limite_horas * 3600)
@@ -893,7 +1139,7 @@ def algoritmo_genetico_espana(
     # Variables para control de estancamiento
     mejor_fitness_era = mejor_global.fitness
     generaciones_estancadas = 0
-    umbral_estancamiento = 20
+    umbral_estancamiento = 100
     
     if modo_tiempo:
         log(f"\nIniciando evolución (hasta {tiempo_limite_segundos}s)...\n")
