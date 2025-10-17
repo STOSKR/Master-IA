@@ -8,35 +8,29 @@ import matplotlib.pyplot as plt
 from algoritmo_espana import algoritmo_genetico_espana, analizar_solucion, configurar_logging
 
 def parsear_argumentos():
-    """Parsea los argumentos de línea de comandos"""
     
     parser = argparse.ArgumentParser(
         description='Ejecutar algoritmo genético con configuración específica'
     )
     
-    # Parámetros obligatorios
     parser.add_argument('--nombre', type=str, required=True,
                         help='Nombre identificador de la configuración')
     
-    # Parámetros del viaje
     parser.add_argument('--dias', type=int, default=20,
                         help='Número de días del viaje (default: 20)')
     parser.add_argument('--lugares-por-dia', type=int, default=12,
                         help='Lugares por día (default: 12)')
 
-    # Parámetros del algoritmo
     parser.add_argument('--poblacion', type=int, default=1000,
                         help='Tamaño de la población (default: 1000)')
     parser.add_argument('--elitismo', type=float, default=0.15,
                         help='Tasa de elitismo 0.05-0.35 (default: 0.15)')
     
-    # Criterio de parada (uno de los dos, si no se especifica ninguno usa --horas 1.0 por defecto)
     parser.add_argument('--generaciones', type=int, default=None,
                         help='Número de generaciones a ejecutar')
     parser.add_argument('--horas', type=float, default=None,
                         help='Tiempo límite en HORAS (puede ser decimal: 0.5 = 30min, 8 = 8 horas) (default: 1.0)')
     
-    # Opciones adicionales
     parser.add_argument('--guardar-json', action='store_true',
                         help='Guardar resultados en JSON')
     parser.add_argument('--guardar-grafica', action='store_true',
@@ -50,12 +44,9 @@ def parsear_argumentos():
 
 
 def ejecutar_con_config(args):
-    """Ejecuta el algoritmo con la configuración especificada"""
-    
-    # Si no se especificó ni generaciones ni horas, usar 1 hora por defecto
     if args.generaciones is None and args.horas is None:
-        args.horas = 6.0
-        print("⚠️  No se especificó --generaciones ni --horas, usando --horas 1.0 por defecto\n")
+        args.horas = 2.0
+        print("⚠️  No se especificó --generaciones ni --horas, usando --horas 2.0 por defecto\n")
     
     timestamp = datetime.now().strftime("%d_%H_%M")
     nombre_archivo = args.nombre.replace(' ', '_').replace('/', '-')

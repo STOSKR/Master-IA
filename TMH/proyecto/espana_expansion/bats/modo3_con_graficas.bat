@@ -1,6 +1,7 @@
 @echo off
 
 REM Ejecutar el algoritmo genético con modo 3
+cd ..
 python algoritmo_espana.py 3
 
 REM Verificar si la ejecución fue exitosa
@@ -20,6 +21,7 @@ echo ===========================================================================
 echo.
 
 REM Ejecutar el análisis de gráficas
+
 python analisis_graficas_espana.py ag_3.json
 
 REM Verificar si el análisis fue exitoso
