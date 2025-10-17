@@ -1326,7 +1326,7 @@ def algoritmo_genetico_espana(
     else:
         log(f"Generaciones: {num_generaciones}")
     log(f"Elitismo: {tasa_elitismo*100:.0f}%")
-    log(f"Dataset: {len(lugares_turisticos_espana)} lugares en 10 ciudades")
+    log(f"Dataset: {len(lugares_turisticos_espana)} lugares en 20 ciudades")
     log(f"{'='*80}\n")
     
     tiempo_inicio_total = time_module.time()
