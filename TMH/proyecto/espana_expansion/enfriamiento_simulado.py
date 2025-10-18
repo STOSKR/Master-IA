@@ -18,7 +18,7 @@ from algoritmo_espana import (
     reparar_individuo,
     analizar_solucion
 )
-tiempo_ejecucion = 0.1 # en horas (6 minutos)
+tiempo_ejecucion = 2 # en horas (2 horas)
 # tiempo_ejecucion = 0.01 # en horas (36 segundos)
 # Configurar logging
 def configurar_logging_sa(nombre_archivo: str = None):
@@ -725,14 +725,6 @@ def enfriamiento_desde_genetico(
 
 
 def exportar_resultados_sa(resultados: Dict, archivo: str = None, config: Dict = None):
-    """
-    Exporta resultados del enfriamiento simulado a JSON (formato similar al AG).
-    
-    Args:
-        resultados: Diccionario con resultados del SA
-        archivo: Nombre del archivo de salida (si es None, se genera automáticamente)
-        config: Configuración utilizada (opcional)
-    """
     import json
     from datetime import datetime
     
@@ -1257,7 +1249,7 @@ if __name__ == "__main__":
         resultados_ga = algoritmo_genetico_espana(
             num_dias=20,
             lugares_por_dia=12,
-            tam_poblacion=100,
+            tam_poblacion=1000,
             tiempo_limite_horas= tiempo_ejecucion,
             tasa_elitismo=0.10
         )
