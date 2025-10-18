@@ -1440,8 +1440,10 @@ def algoritmo_genetico_espana(
         if generaciones_estancadas >= umbral_estancamiento:
             log(f"\nESTANCAMIENTO DETECTADO: {generaciones_estancadas} generaciones sin mejora en la era")
             log(f" Mejor fitness de la era: {mejor_fitness_era:.1f} (Mejor global: {mejor_global.fitness:.1f})")
-        
-        poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia)
+            
+            poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia)
+            generaciones_estancadas = 0
+            mejor_fitness_era = max(poblacion, key=lambda ind: ind.fitness).fitness
         
         gen += 1
         

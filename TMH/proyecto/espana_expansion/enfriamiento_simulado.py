@@ -3,20 +3,10 @@ import copy
 import math
 import logging
 from datetime import datetime
-from typing import List, Dict, Tuple
+from typing import Dict, Tuple
 from config import *
 from utils_espana import (
-    lugares_turisticos_espana,
     get_lugares_ciudad,
-    get_lugares_por_ids,
-    calcular_transporte_intercity,
-    distancia_haversine,
-    COORDENADAS_CIUDADES
-)
-from restricciones_espana import (
-    validar_limite_ciudad,
-    calcular_penalizacion_cambio_ciudad,
-    aplicar_restricciones_basicas
 )
 
 # Importar componentes reutilizables del algoritmo genético
@@ -28,7 +18,8 @@ from algoritmo_espana import (
     reparar_individuo,
     analizar_solucion
 )
-tiempo_ejecucion = 0.03 # horas
+tiempo_ejecucion = 0.1 # en horas (6 minutos)
+# tiempo_ejecucion = 0.01 # en horas (36 segundos)
 # Configurar logging
 def configurar_logging_sa(nombre_archivo: str = None):
     """Configura el sistema de logging para enfriamiento simulado"""
@@ -41,7 +32,7 @@ def configurar_logging_sa(nombre_archivo: str = None):
     
     if nombre_archivo is None:
         timestamp = datetime.now().strftime("%d_%H_%M")
-        nombre_archivo = f"{timestamp}_sa_log.log"
+        nombre_archivo = f"{timestamp}_sa.log"
     
     # Guardar el log en la carpeta logs
     ruta_log = os.path.join(logs_dir, nombre_archivo)
@@ -108,35 +99,48 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
     return individuo
 
 
-def generar_vecino(solucion_actual: Individual, iteracion: int = 0, max_iteraciones: int = 5000, usar_2opt: bool = True) -> Individual:
+def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0, max_tiempo_segundos: float = 3600.0, usar_2opt: bool = True,   
+                    fase_anterior: str = "") -> Tuple[Individual, str]:
     # Crear copia profunda para no modificar la original
     vecino = Individual(
         [dia[:] for dia in solucion_actual.dias],
         solucion_actual.ciudades[:]
     )
+
+    # AJUSTE CLAVE: Calcular progreso basado en tiempo
+    progreso = tiempo_transcurrido / max_tiempo_segundos if max_tiempo_segundos > 0 else 0
+    # Asegurarse de que el progreso no supere 1.0 (por si acaso)
+    progreso = min(progreso, 1.0)
     
-    # Ajustar probabilidades dinámicamente según si se usa 2-opt
-    progreso = iteracion / max_iteraciones if max_iteraciones > 0 else 0
+    # Determinar fase actual
+    fase_actual = ""
+    if progreso < 0.33:
+        fase_actual = "Inicial (Exploración)"
+    elif progreso < 0.66:
+        fase_actual = "Intermedia (Balance)"
+    else:
+        fase_actual = "Final (Refinamiento)"
+
+    # --- IMPRIMIR SOLO SI LA FASE CAMBIA ---
+    if fase_actual != fase_anterior:
+        sa_logger.info(f"--- Cambiando a Fase: {fase_actual} (Progreso: {progreso:.1%}) ---")
+    # ----------------------------------------
     
     if usar_2opt:
-        # Configuración original con 2-opt
-        if progreso < 0.3:
-            # Etapa inicial: más exploración
-            probabilidades = [0.30, 0.20, 0.20, 0.30]
-        elif progreso < 0.7:
-            # Etapa intermedia: balance
-            probabilidades = [0.40, 0.30, 0.20, 0.10]
-        else:
-            # Etapa final: más refinamiento local
-            probabilidades = [0.50, 0.35, 0.10, 0.05]
+        if fase_actual == "Inicial (Exploración)":
+             probabilidades = [0.30, 0.20, 0.20, 0.30]
+        elif fase_actual == "Intermedia (Balance)":
+             probabilidades = [0.40, 0.30, 0.20, 0.10]
+        else: # Final
+             probabilidades = [0.50, 0.35, 0.10, 0.05]
     else:
-        # Sin 2-opt: redistribuir probabilidades
-        if progreso < 0.3:
-            probabilidades = [0.40, 0.0, 0.30, 0.30]
-        elif progreso < 0.7:
-            probabilidades = [0.55, 0.0, 0.30, 0.15]
-        else:
-            probabilidades = [0.65, 0.0, 0.25, 0.10]
+        # ... (lógica sin 2-opt basada en fase_actual) ...
+        if fase_actual == "Inicial (Exploración)":
+             probabilidades = [0.40, 0.0, 0.30, 0.30]
+        elif fase_actual == "Intermedia (Balance)":
+             probabilidades = [0.55, 0.0, 0.30, 0.15]
+        else: # Final
+             probabilidades = [0.65, 0.0, 0.25, 0.10]
     
     tipo_perturbacion = random.choices(
         ["swap", "ruta_2opt", "reemplazar", "swap_intercity"],
@@ -196,7 +200,7 @@ def generar_vecino(solucion_actual: Individual, iteracion: int = 0, max_iteracio
     # Eliminar duplicados en cada día
     vecino = eliminar_duplicados_dia(vecino)
     
-    return vecino
+    return vecino, fase_actual
 
 
 def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int = 100) -> float:
@@ -245,7 +249,7 @@ def enfriamiento_simulado(
     alpha: float = 0.95,
     max_iteraciones: int = None,
     max_tiempo_segundos: float = 3600,  # 1 hora por defecto
-    iteraciones_sin_mejora_max: int = 1000,
+    iteraciones_sin_mejora_max: int = 2000,
     usar_2opt: bool = True,  # Nuevo parámetro para controlar 2-opt
     verbose: bool = True,
     debug_saltos: bool = True  # Nuevo: activar detección de saltos anormales
@@ -360,6 +364,7 @@ def enfriamiento_simulado(
     # Bucle principal
     iteracion = 0
     fitness_anterior = solucion_actual.fitness  # Para detectar saltos
+    fase_actual_sa = ""
     
     while True:
         # Verificar tiempo transcurrido
@@ -375,11 +380,16 @@ def enfriamiento_simulado(
             sa_logger.info(f"🔢 Iteraciones máximas alcanzadas: {iteracion}")
             break
         
-        # Generar solución vecina
-        vecino = generar_vecino(solucion_actual, iteracion, max_iteraciones if max_iteraciones else 10000, usar_2opt)
+        tiempo_transcurrido = time.time() - tiempo_inicio
         
-        # Evaluar vecino
-        fitness_antes_evaluar = vecino.fitness if hasattr(vecino, 'fitness') else None
+        # Generar solución vecina
+        vecino, fase_actual_sa = generar_vecino(
+            solucion_actual,
+            tiempo_transcurrido,
+            max_tiempo_segundos,
+            usar_2opt,
+            fase_anterior=fase_actual_sa # Pasa la fase guardada
+        )
         evaluar_individuo(vecino)
         
         # Log detallado cada 100 iteraciones
@@ -671,8 +681,8 @@ def enfriamiento_simulado(
 def enfriamiento_desde_genetico(
     resultados_genetico: Dict,
     usar_mejor: bool = True,
-    T_inicial: float = 20,  # Temperatura moderada para refinamiento
-    alpha: float = 0.999,  # Enfriamiento más rápido para convergencia
+    T_inicial: float = 200,  # Temperatura moderada para refinamiento
+    alpha: float = 0.95,  # Enfriamiento más rápido para convergencia
     max_tiempo_segundos: float = 3600  # 1 hora por defecto
 ) -> Dict:
     sa_logger.info("="*80)
@@ -1245,11 +1255,11 @@ if __name__ == "__main__":
         
         # Ejecutar GA con configuración rápida
         resultados_ga = algoritmo_genetico_espana(
-            num_dias=30,
-            lugares_por_dia=9,
+            num_dias=20,
+            lugares_por_dia=12,
             tam_poblacion=100,
             tiempo_limite_horas= tiempo_ejecucion,
-            tasa_elitismo=0.20
+            tasa_elitismo=0.10
         )
         
         sa_logger.info("="*80)
