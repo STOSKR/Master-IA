@@ -21,8 +21,8 @@ def parsear_argumentos():
     parser.add_argument('--lugares-por-dia', type=int, default=12,
                         help='Lugares por día (default: 12)')
 
-    parser.add_argument('--poblacion', type=int, default=1000,
-                        help='Tamaño de la población (default: 1000)')
+    parser.add_argument('--poblacion', type=int, default=750,
+                        help='Tamaño de la población (default: 750)')
     parser.add_argument('--elitismo', type=float, default=0.15,
                         help='Tasa de elitismo 0.05-0.35 (default: 0.15)')
     
@@ -45,7 +45,7 @@ def parsear_argumentos():
 
 def ejecutar_con_config(args):
     if args.generaciones is None and args.horas is None:
-        args.horas = 0.1
+        args.horas = 2
         print("⚠️  No se especificó --generaciones ni --horas, usando --horas 2.0 por defecto\n")
     
     timestamp = datetime.now().strftime("%d_%H_%M")
@@ -154,7 +154,7 @@ def ejecutar_con_config(args):
         # Gráfica vs tiempo
         axes[1].plot(resultado['historial_tiempos'], resultado['historial_fitness'], 
                     linewidth=2, color='green')
-        axes[1].set_xlabel('Tiempo (segundos)', fontsize=12)
+        axes[1].set_xlabel('Tiempo', fontsize=12)
         axes[1].set_ylabel('Fitness', fontsize=12)
         axes[1].set_title(f'Fitness vs Tiempo - {args.nombre}', fontsize=13, fontweight='bold')
         axes[1].grid(True, alpha=0.3)

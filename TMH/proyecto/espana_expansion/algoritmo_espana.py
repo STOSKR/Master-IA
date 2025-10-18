@@ -1385,7 +1385,7 @@ def algoritmo_genetico_espana(
     while True:
         # Verificar si se presionó 'q' para detener
         if detencion_manual[0]:
-            log(f"\n⏹️  DETENCIÓN MANUAL - Tecla 'q' presionada")
+            log(f"\n  DETENCIÓN MANUAL - Tecla 'q' presionada")
             log(f"   Guardando mejor resultado encontrado hasta ahora...")
             break
         
@@ -1394,7 +1394,7 @@ def algoritmo_genetico_espana(
         
         if modo_tiempo:
             if tiempo_transcurrido >= tiempo_limite_segundos:
-                log(f"\n⏱️  Tiempo límite alcanzado: {tiempo_transcurrido:.1f}s")
+                log(f"\n  Tiempo límite alcanzado: {tiempo_transcurrido:.1f}s")
                 break
         else:
             if gen >= num_generaciones:
@@ -1432,18 +1432,16 @@ def algoritmo_genetico_espana(
         
         # Comprobar estancamiento
         if mejor_gen.fitness > mejor_fitness_era:
-            mejor_fitness_era = mejor_gen.fitness
-            generaciones_estancadas = 0
+            mejor_fitness_era = mejor_gen.fitness # Nuevo récord de la era
+            generaciones_estancadas = 0  # Reiniciar contador porque hubo mejora
         else:
-            generaciones_estancadas += 1
-        
-        # Reiniciar población si hay estancamiento prolongado
+            generaciones_estancadas += 1 
+            
         if generaciones_estancadas >= umbral_estancamiento:
-            log(f"\n⚠️  ESTANCAMIENTO DETECTADO: {generaciones_estancadas} generaciones sin mejora")
-            log(f"   Mejor fitness actual: {mejor_fitness_era:.1f}")
-            poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia)
-            generaciones_estancadas = 0
-            mejor_fitness_era = mejor_global.fitness
+            log(f"\nESTANCAMIENTO DETECTADO: {generaciones_estancadas} generaciones sin mejora en la era")
+            log(f" Mejor fitness de la era: {mejor_fitness_era:.1f} (Mejor global: {mejor_global.fitness:.1f})")
+        
+        poblacion = reiniciar_poblacion(tam_poblacion, num_dias, lugares_por_dia)
         
         gen += 1
         
