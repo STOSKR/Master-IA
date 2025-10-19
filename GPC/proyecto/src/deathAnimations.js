@@ -101,4 +101,19 @@ function createBubble() {
 export function resetDeathAnimation() {
     deathAnimationType = null;
     animationFrame = 0;
+
+    // Resetear posición y rotación del jugador que las animaciones pudieron modificar
+    if (player && player.children[0]) {
+        player.children[0].position.x = 0;
+        player.children[0].position.y = 0;
+        player.children[0].position.z = 0;
+        player.children[0].rotation.x = 0;
+        player.children[0].rotation.y = 0;
+        player.children[0].rotation.z = 0;
+
+        // Resetear también el modelo interno si existe
+        if (player.children[0].children[0]) {
+            player.children[0].children[0].position.z = 5; // Mantener la altura inicial del modelo
+        }
+    }
 }

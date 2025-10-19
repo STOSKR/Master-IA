@@ -7,8 +7,16 @@ import {
 } from "./components/Player";
 import { tileSize } from "./constants";
 import { metadata as rows } from "./components/Map";
+import { isPlayerOnLog } from "./hitTest";
 
 const moveClock = new THREE.Clock(false);
+let particleSystemRef = null;
+const LOG_HEIGHT_OFFSET = 6; // Altura adicional cuando está sobre un tronco
+
+// Función para establecer la referencia al sistema de partículas
+export function setParticleSystem(particleSystem) {
+    particleSystemRef = particleSystem;
+}
 
 // Función de easing (ease in-out cubic)
 function easeInOutCubic(t) {
@@ -19,6 +27,19 @@ function easeInOutCubic(t) {
 
 export function animatePlayer() {
     const currentRow = rows[position.currentRow - 1];
+
+    // Ajustar altura del jugador basada en si está sobre un tronco SOLO cuando está quieto
+    const visualsGroup = player.children[0];
+    if (visualsGroup && visualsGroup.children[0] && !moveClock.running) {
+        const targetHeight = isPlayerOnLog() ? LOG_HEIGHT_OFFSET : 0;
+        // Usar lerp suave solo cuando está completamente quieto
+        visualsGroup.children[0].position.z = THREE.MathUtils.lerp(
+            visualsGroup.children[0].position.z,
+            targetHeight,
+            0.2
+        );
+    }
+
     if (currentRow && currentRow.type === "water") {
         const playerBox = new THREE.Box3().setFromObject(player, true);
         let logPlayerIsOn = null;
@@ -38,6 +59,19 @@ export function animatePlayer() {
 
             // Efecto de hundimiento del tronco
             animateLogSink(logPlayerIsOn);
+
+            // Crear salpicaduras de agua cuando el jugador aterriza en el tronco
+            if (particleSystemRef && moveClock.running && moveClock.getElapsedTime() > 0.18) {
+                // Solo crear salpicaduras al final del salto
+                const splashCreated = logPlayerIsOn.userData.splashCreated || false;
+                if (!splashCreated) {
+                    particleSystemRef.createWaterSplash(player.position);
+                    logPlayerIsOn.userData.splashCreated = true;
+                    setTimeout(() => {
+                        logPlayerIsOn.userData.splashCreated = false;
+                    }, 500);
+                }
+            }
         }
     }
     if (!movesQueue.length) return;
@@ -52,6 +86,18 @@ export function animatePlayer() {
     setRotation(progress);
 
     if (rawProgress >= 1) {
+        // Ajustar altura instantáneamente al aterrizar
+        if (visualsGroup && visualsGroup.children[0]) {
+            const targetHeight = isPlayerOnLog() ? LOG_HEIGHT_OFFSET : 0;
+            visualsGroup.children[0].position.z = targetHeight;
+        }
+
+        // Crear partículas de polvo al aterrizar (si no es en agua)
+        const currentRow = rows[position.currentRow - 1];
+        if (particleSystemRef && currentRow && currentRow.type !== "water") {
+            particleSystemRef.createDustParticles(player.position);
+        }
+
         stepCompleted();
         moveClock.stop();
     }
@@ -59,13 +105,15 @@ export function animatePlayer() {
 
 // Función para animar el hundimiento del tronco
 function animateLogSink(log) {
-    const targetZ = -0.8; // Hundimiento objetivo
-    const sinkSpeed = 0.1;
+    const sinkAmount = 1.2; // Cuánto se hunde
+    const sinkSpeed = 0.08;
 
     // Guardar la posición Z original si no existe
     if (log.userData.originalZ === undefined) {
         log.userData.originalZ = log.position.z || 0;
     }
+
+    const targetZ = log.userData.originalZ - sinkAmount;
 
     // Animar hacia el hundimiento
     if (log.position.z > targetZ) {
@@ -111,8 +159,14 @@ function setPosition(progress, rawProgress) {
 
     const visualsGroup = player.children[0];
     if (visualsGroup && visualsGroup.children[0]) {
-        // Usar rawProgress para el salto para que sea más natural
-        visualsGroup.children[0].position.z = Math.sin(rawProgress * Math.PI) * 10;
+        // Calcular altura base del salto
+        const jumpHeight = Math.sin(rawProgress * Math.PI) * 10;
+
+        // Añadir altura del tronco si está sobre uno
+        const logHeight = isPlayerOnLog() ? LOG_HEIGHT_OFFSET : 0;
+
+        // Aplicar altura total
+        visualsGroup.children[0].position.z = jumpHeight + logHeight;
     }
 }
 

@@ -19,6 +19,9 @@ export async function createPlayer() {
     playerModel.rotation.x = -Math.PI / 2;
     playerModel.rotation.z = Math.PI;
 
+    // Ajustar altura inicial del modelo
+    playerModel.position.z = 5; // Cambia este valor para subir o bajar el personaje
+
     playerModel.traverse(function (node) {
         if (node.isMesh) {
             node.castShadow = true;
@@ -82,6 +85,11 @@ export function initializePlayer() {
     player.children[0].rotation.x = 0;
     player.children[0].rotation.y = 0;
     player.children[0].rotation.z = 0;
+
+    // Resetear también la altura del modelo interno
+    if (player.children[0].children[0]) {
+        player.children[0].children[0].position.z = 5; // Mantener la altura inicial del modelo
+    }
 
     position.currentRow = 0;
     position.currentTile = 0;

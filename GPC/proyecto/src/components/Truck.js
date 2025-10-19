@@ -114,17 +114,17 @@ export function Truck(initialTileIndex, direction, color) {
     hood.receiveShadow = true;
     truck.add(hood);
 
-    // Parabrisas
+    // Parabrisas (más grande y visible)
     const windshield = new THREE.Mesh(
-        new THREE.BoxGeometry(3, 24, 12),
+        new THREE.BoxGeometry(4, 24, 14),
         new THREE.MeshLambertMaterial({
-            color: 0x2c4a6b,
+            color: 0x5a8fc4,
             flatShading: true,
             transparent: true,
-            opacity: 0.7
+            opacity: 0.5
         })
     );
-    windshield.position.x = 44;
+    windshield.position.x = 46;
     windshield.position.z = 32;
     truck.add(windshield);
 

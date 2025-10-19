@@ -6,10 +6,12 @@ import { DirectionalLight } from "./components/DirectionalLight";
 import { createPlayer, player, initializePlayer } from "./components/Player";
 import { map, initializeMap } from "./components/Map";
 import { animateVehicles } from "./animateVehicles";
-import { animatePlayer } from "./animatePlayer";
+import { animatePlayer, setParticleSystem } from "./animatePlayer";
 import { hitTest, clearDeathTimeout } from "./hitTest";
 import { setGameActive } from "./gameState";
 import { updateDeathAnimation, resetDeathAnimation } from "./deathAnimations";
+import ParticleSystem from "./particleSystem";
+import WeatherSystem from "./weatherSystem";
 import "./style.css";
 import "./collectUserInput";
 
@@ -41,7 +43,20 @@ async function startGame() {
   const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0xbaf455, 0.4);
   scene.add(hemiLight);
 
-  // Renamed for clarity
+  // Sistemas de efectos
+  const particleSystem = new ParticleSystem(scene);
+  const weatherSystem = new WeatherSystem(scene);
+
+  // Conectar el sistema de partículas con animatePlayer
+  setParticleSystem(particleSystem);
+
+  // Activar lluvia ocasionalmente (ejemplo: cada 30 segundos)
+  setInterval(() => {
+    if (Math.random() > 0.5) {
+      weatherSystem.startRain(0.3 + Math.random() * 0.4);
+      setTimeout(() => weatherSystem.stopRain(), 10000 + Math.random() * 10000);
+    }
+  }, 30000);  // Renamed for clarity
   const mainCamera = Camera();
 
   // --- CÁMARA DEL MINIMAPA (AJUSTADA) ---
@@ -83,10 +98,10 @@ async function startGame() {
 
   function initializeGame() {
     clearDeathTimeout(); // Limpiar timeouts pendientes
+    resetDeathAnimation(); // Resetear animaciones de muerte primero
     initializePlayer();
     initializeMap();
     setGameActive(true);
-    resetDeathAnimation();
     if (scoreDOM) scoreDOM.innerText = "0";
     if (resultDOM) resultDOM.style.visibility = "hidden";
   }
@@ -134,6 +149,10 @@ async function startGame() {
     animatePlayer();
     updateDeathAnimation();
     hitTest();
+
+    // Actualizar sistemas de efectos
+    particleSystem.update();
+    weatherSystem.update(player.position);
 
     // --- LÓGICA DE RENDERIZADO ---
     renderer.setScissorTest(true);
