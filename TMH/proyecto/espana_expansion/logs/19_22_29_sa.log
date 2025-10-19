@@ -16,3 +16,272 @@
 2025-10-19 22:29:42,071 - INFO -   • Fitness inicial (REAL): 99.8
 2025-10-19 22:29:42,071 - INFO -   • Puntos iniciales (REAL): 15233
 2025-10-19 22:29:42,072 - INFO - ================================================================================
+2025-10-19 22:29:42,950 - INFO - 🔄 Iniciando búsqueda...
+2025-10-19 22:29:42,950 - INFO - Iniciando búsqueda por vecindario
+2025-10-19 22:29:42,951 - INFO - Configuración: T_inicial=3, alpha=0.9995, max_tiempo=7200s, usar_2opt=True
+2025-10-19 22:29:42,951 - INFO - --- Cambiando a Fase: Inicial (Exploración) (Progreso: 0.0%) ---
+2025-10-19 22:29:42,955 - DEBUG - Iter 0: T=3.00, Fitness_actual=99.8, Mejor=99.8
+2025-10-19 22:29:42,955 - INFO - 🌟 MEJORA #1 en iter 0: Fitness=99.8 (+0.0), Puntos=15233
+2025-10-19 22:29:43,336 - INFO - 🌟 MEJORA #2 en iter 3: Fitness=100.8 (+1.0), Puntos=15231
+2025-10-19 22:29:43,480 - INFO - 🌟 MEJORA #3 en iter 6: Fitness=100.9 (+0.1), Puntos=15237
+2025-10-19 22:29:43,763 - INFO - 🌟 MEJORA #4 en iter 13: Fitness=101.8 (+0.9), Puntos=15228
+2025-10-19 22:29:44,388 - INFO - 🌟 MEJORA #5 en iter 26: Fitness=102.0 (+0.2), Puntos=14298
+2025-10-19 22:29:44,389 - INFO -   ✨ Mejora #5 en iteración 27: Fitness = 102.0 | Puntos = 14298 | T = 3.00
+2025-10-19 22:29:46,266 - INFO - Iter 50: Aceptada solución con delta=-10.5 (T=2.99)
+2025-10-19 22:29:46,266 - INFO -   📊 Desglose del cambio:
+2025-10-19 22:29:46,267 - INFO -      Puntos: +0 → 14358 total
+2025-10-19 22:29:46,267 - INFO -      Tiempo: +0.0min → 13385.6min total
+2025-10-19 22:29:46,267 - INFO -      Distancia: +0.0km → 161.1km total
+2025-10-19 22:29:48,237 - DEBUG - Iter 100: T=2.99, Fitness_actual=93.7, Mejor=102.0
+2025-10-19 22:29:52,362 - DEBUG - Iter 200: T=2.99, Fitness_actual=100.9, Mejor=102.0
+2025-10-19 22:29:56,465 - DEBUG - Iter 300: T=2.98, Fitness_actual=89.0, Mejor=102.0
+2025-10-19 22:30:01,031 - DEBUG - Iter 400: T=2.98, Fitness_actual=80.2, Mejor=102.0
+2025-10-19 22:30:05,064 - INFO -   Iter   500 | Tiempo:    0.4min ( 0.3%) | T =     2.97 | Fitness =     78.5 | Mejor =    102.0 | Aceptación =  85.6%
+2025-10-19 22:30:05,064 - INFO - Progreso iter 500: T=2.97, Fitness=78.5, Mejor=102.0, Tasa_acept=85.6%
+2025-10-19 22:30:05,065 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 500:
+2025-10-19 22:30:05,065 - WARNING -    Mejor fitness: 102.0
+2025-10-19 22:30:05,065 - WARNING -    Fitness promedio reciente: 80.0
+2025-10-19 22:30:05,065 - WARNING -    Degradación: 22.0
+2025-10-19 22:30:05,066 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:30:05,069 - DEBUG - Iter 500: T=2.97, Fitness_actual=102.0, Mejor=102.0
+2025-10-19 22:30:05,107 - INFO - 🌟 MEJORA #6 en iter 501: Fitness=102.0 (+0.0), Puntos=14298
+2025-10-19 22:30:05,146 - INFO - 🌟 MEJORA #7 en iter 502: Fitness=102.0 (+0.0), Puntos=14298
+2025-10-19 22:30:07,614 - INFO - 🌟 MEJORA #8 en iter 563: Fitness=104.9 (+2.9), Puntos=14788
+2025-10-19 22:30:07,655 - INFO - 🌟 MEJORA #9 en iter 564: Fitness=106.4 (+1.5), Puntos=14788
+2025-10-19 22:30:09,183 - DEBUG - Iter 600: T=2.97, Fitness_actual=102.2, Mejor=106.4
+2025-10-19 22:30:09,570 - INFO - 🌟 MEJORA #10 en iter 609: Fitness=106.4 (+0.1), Puntos=14949
+2025-10-19 22:30:09,571 - INFO -   ✨ Mejora #10 en iteración 610: Fitness = 106.4 | Puntos = 14949 | T = 2.97
+2025-10-19 22:30:11,119 - INFO - 🌟 MEJORA #11 en iter 643: Fitness=106.9 (+0.4), Puntos=14540
+2025-10-19 22:30:11,289 - INFO - 🌟 MEJORA #12 en iter 647: Fitness=107.0 (+0.1), Puntos=14503
+2025-10-19 22:30:11,331 - INFO - 🌟 MEJORA #13 en iter 648: Fitness=107.0 (+0.0), Puntos=14503
+2025-10-19 22:30:11,418 - INFO - 🌟 MEJORA #14 en iter 650: Fitness=107.0 (+0.0), Puntos=14503
+2025-10-19 22:30:13,423 - INFO - 🌟 MEJORA #15 en iter 696: Fitness=107.9 (+0.8), Puntos=14489
+2025-10-19 22:30:13,423 - INFO -   ✨ Mejora #15 en iteración 697: Fitness = 107.9 | Puntos = 14489 | T = 2.96
+2025-10-19 22:30:13,599 - DEBUG - Iter 700: T=2.96, Fitness_actual=107.2, Mejor=107.9
+2025-10-19 22:30:14,493 - INFO - 🌟 MEJORA #16 en iter 720: Fitness=108.2 (+0.3), Puntos=14773
+2025-10-19 22:30:14,583 - INFO - 🌟 MEJORA #17 en iter 722: Fitness=108.8 (+0.6), Puntos=14783
+2025-10-19 22:30:14,999 - INFO - 🌟 MEJORA #18 en iter 731: Fitness=108.8 (+0.0), Puntos=14783
+2025-10-19 22:30:15,089 - INFO - 🌟 MEJORA #19 en iter 733: Fitness=108.8 (+0.0), Puntos=14783
+2025-10-19 22:30:15,134 - INFO - 🌟 MEJORA #20 en iter 734: Fitness=108.8 (+0.0), Puntos=14784
+2025-10-19 22:30:15,134 - INFO -   ✨ Mejora #20 en iteración 735: Fitness = 108.8 | Puntos = 14784 | T = 2.96
+2025-10-19 22:30:15,311 - INFO - 🌟 MEJORA #21 en iter 738: Fitness=108.8 (+0.0), Puntos=14789
+2025-10-19 22:30:15,355 - INFO - 🌟 MEJORA #22 en iter 739: Fitness=108.8 (+0.0), Puntos=14789
+2025-10-19 22:30:15,398 - INFO - 🌟 MEJORA #23 en iter 740: Fitness=109.0 (+0.1), Puntos=14799
+2025-10-19 22:30:15,659 - INFO - 🌟 MEJORA #24 en iter 746: Fitness=109.4 (+0.4), Puntos=14839
+2025-10-19 22:30:15,703 - INFO - 🌟 MEJORA #25 en iter 747: Fitness=109.4 (+0.0), Puntos=14839
+2025-10-19 22:30:15,703 - INFO -   ✨ Mejora #25 en iteración 748: Fitness = 109.4 | Puntos = 14839 | T = 2.96
+2025-10-19 22:30:16,013 - INFO - 🌟 MEJORA #26 en iter 754: Fitness=109.7 (+0.4), Puntos=14978
+2025-10-19 22:30:16,101 - INFO - 🌟 MEJORA #27 en iter 756: Fitness=109.8 (+0.1), Puntos=14986
+2025-10-19 22:30:16,145 - INFO - 🌟 MEJORA #28 en iter 757: Fitness=109.8 (+0.0), Puntos=14989
+2025-10-19 22:30:18,122 - DEBUG - Iter 800: T=2.96, Fitness_actual=108.5, Mejor=109.8
+2025-10-19 22:30:18,299 - INFO - 🌟 MEJORA #29 en iter 804: Fitness=112.5 (+2.7), Puntos=14810
+2025-10-19 22:30:18,389 - INFO - 🌟 MEJORA #30 en iter 806: Fitness=113.0 (+0.5), Puntos=14804
+2025-10-19 22:30:18,389 - INFO -   ✨ Mejora #30 en iteración 807: Fitness = 113.0 | Puntos = 14804 | T = 2.96
+2025-10-19 22:30:22,321 - DEBUG - Iter 900: T=2.95, Fitness_actual=84.2, Mejor=113.0
+2025-10-19 22:30:24,276 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 950:
+2025-10-19 22:30:24,276 - WARNING -    Mejor fitness: 113.0
+2025-10-19 22:30:24,277 - WARNING -    Fitness promedio reciente: 84.5
+2025-10-19 22:30:24,277 - WARNING -    Degradación: 28.5
+2025-10-19 22:30:24,277 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:30:24,280 - INFO - 🌟 MEJORA #31 en iter 950: Fitness=113.0 (+0.0), Puntos=14804
+2025-10-19 22:30:24,320 - INFO - 🌟 MEJORA #32 en iter 951: Fitness=113.9 (+0.9), Puntos=14793
+2025-10-19 22:30:26,345 - INFO -   Iter  1000 | Tiempo:    0.7min ( 0.6%) | T =     2.95 | Fitness =    110.9 | Mejor =    113.9 | Aceptación =  84.9%
+2025-10-19 22:30:26,345 - INFO - Progreso iter 1000: T=2.95, Fitness=110.9, Mejor=113.9, Tasa_acept=84.9%
+2025-10-19 22:30:26,349 - DEBUG - Iter 1000: T=2.95, Fitness_actual=110.9, Mejor=113.9
+2025-10-19 22:30:30,416 - DEBUG - Iter 1100: T=2.94, Fitness_actual=100.6, Mejor=113.9
+2025-10-19 22:30:34,560 - DEBUG - Iter 1200: T=2.94, Fitness_actual=107.9, Mejor=113.9
+2025-10-19 22:30:38,744 - DEBUG - Iter 1300: T=2.93, Fitness_actual=100.2, Mejor=113.9
+2025-10-19 22:30:43,336 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 1400:
+2025-10-19 22:30:43,336 - WARNING -    Mejor fitness: 113.9
+2025-10-19 22:30:43,337 - WARNING -    Fitness promedio reciente: 88.7
+2025-10-19 22:30:43,337 - WARNING -    Degradación: 25.2
+2025-10-19 22:30:43,337 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:30:43,340 - DEBUG - Iter 1400: T=2.93, Fitness_actual=113.9, Mejor=113.9
+2025-10-19 22:30:48,051 - INFO -   Iter  1500 | Tiempo:    1.1min ( 0.9%) | T =     2.92 | Fitness =    100.0 | Mejor =    113.9 | Aceptación =  86.0%
+2025-10-19 22:30:48,051 - INFO - Progreso iter 1500: T=2.92, Fitness=100.0, Mejor=113.9, Tasa_acept=86.0%
+2025-10-19 22:30:48,052 - DEBUG - Iter 1500: T=2.92, Fitness_actual=100.0, Mejor=113.9
+2025-10-19 22:30:52,938 - DEBUG - Iter 1600: T=2.92, Fitness_actual=99.7, Mejor=113.9
+2025-10-19 22:30:57,374 - DEBUG - Iter 1700: T=2.91, Fitness_actual=89.3, Mejor=113.9
+2025-10-19 22:30:59,433 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 1750:
+2025-10-19 22:30:59,433 - WARNING -    Mejor fitness: 113.9
+2025-10-19 22:30:59,434 - WARNING -    Fitness promedio reciente: 89.4
+2025-10-19 22:30:59,434 - WARNING -    Degradación: 24.5
+2025-10-19 22:30:59,434 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:30:59,437 - INFO - 🌟 MEJORA #33 en iter 1750: Fitness=113.9 (+0.0), Puntos=14793
+2025-10-19 22:30:59,520 - INFO - 🌟 MEJORA #34 en iter 1752: Fitness=113.9 (+0.0), Puntos=14793
+2025-10-19 22:31:01,498 - DEBUG - Iter 1800: T=2.91, Fitness_actual=111.7, Mejor=113.9
+2025-10-19 22:31:05,616 - DEBUG - Iter 1900: T=2.90, Fitness_actual=102.3, Mejor=113.9
+2025-10-19 22:31:09,858 - INFO -   Iter  2000 | Tiempo:    1.5min ( 1.2%) | T =     2.90 | Fitness =    103.1 | Mejor =    113.9 | Aceptación =  85.9%
+2025-10-19 22:31:09,858 - INFO - Progreso iter 2000: T=2.90, Fitness=103.1, Mejor=113.9, Tasa_acept=85.9%
+2025-10-19 22:31:09,862 - DEBUG - Iter 2000: T=2.90, Fitness_actual=103.1, Mejor=113.9
+2025-10-19 22:31:13,968 - DEBUG - Iter 2100: T=2.89, Fitness_actual=99.4, Mejor=113.9
+2025-10-19 22:31:17,902 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 2200:
+2025-10-19 22:31:17,902 - WARNING -    Mejor fitness: 113.9
+2025-10-19 22:31:17,902 - WARNING -    Fitness promedio reciente: 85.7
+2025-10-19 22:31:17,903 - WARNING -    Degradación: 28.3
+2025-10-19 22:31:17,903 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:31:17,905 - DEBUG - Iter 2200: T=2.89, Fitness_actual=113.9, Mejor=113.9
+2025-10-19 22:31:17,989 - INFO - 🌟 MEJORA #35 en iter 2202: Fitness=113.9 (+0.0), Puntos=14795
+2025-10-19 22:31:17,989 - INFO -   ✨ Mejora #35 en iteración 2203: Fitness = 113.9 | Puntos = 14795 | T = 2.89
+2025-10-19 22:31:18,658 - WARNING - ================================================================================
+2025-10-19 22:31:18,658 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2218
+2025-10-19 22:31:18,659 - WARNING -    Fitness actual: 111.8
+2025-10-19 22:31:18,659 - WARNING -    Fitness vecino: 61.2
+2025-10-19 22:31:18,659 - WARNING -    Delta: -50.6
+2025-10-19 22:31:18,660 - WARNING -    Temperatura: 2.89
+2025-10-19 22:31:18,660 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-19 22:31:18,660 - WARNING -    Vecino - Puntos: 14778, Tiempo: 16590.4min, Distancia: 364.0km
+2025-10-19 22:31:18,660 - WARNING -    Actual - Puntos: 14785, Tiempo: 14071.4min, Distancia: 171.1km
+2025-10-19 22:31:18,661 - WARNING -    Validez restricciones - Vecino: False, Actual: False
+2025-10-19 22:31:18,661 - WARNING - ================================================================================
+2025-10-19 22:31:18,661 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 2218
+2025-10-19 22:31:18,661 - WARNING -    Fitness: 111.8 → 61.2 (Δ=-50.6)
+2025-10-19 22:31:18,662 - WARNING -    Ver detalles en archivo de log
+2025-10-19 22:31:19,743 - INFO - 🌟 MEJORA #36 en iter 2244: Fitness=113.9 (+0.0), Puntos=14846
+2025-10-19 22:31:19,826 - INFO - 🌟 MEJORA #37 en iter 2246: Fitness=113.9 (+0.0), Puntos=14846
+2025-10-19 22:31:22,352 - DEBUG - Iter 2300: T=2.88, Fitness_actual=87.3, Mejor=113.9
+2025-10-19 22:31:24,702 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 2350:
+2025-10-19 22:31:24,702 - WARNING -    Mejor fitness: 113.9
+2025-10-19 22:31:24,703 - WARNING -    Fitness promedio reciente: 91.7
+2025-10-19 22:31:24,703 - WARNING -    Degradación: 22.3
+2025-10-19 22:31:24,704 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:31:24,750 - INFO - 🌟 MEJORA #38 en iter 2351: Fitness=114.5 (+0.5), Puntos=14846
+2025-10-19 22:31:24,793 - INFO - 🌟 MEJORA #39 en iter 2352: Fitness=115.0 (+0.5), Puntos=14844
+2025-10-19 22:31:24,835 - INFO - 🌟 MEJORA #40 en iter 2353: Fitness=115.0 (+0.0), Puntos=14844
+2025-10-19 22:31:24,836 - INFO -   ✨ Mejora #40 en iteración 2354: Fitness = 115.0 | Puntos = 14844 | T = 2.88
+2025-10-19 22:31:24,921 - INFO - 🌟 MEJORA #41 en iter 2355: Fitness=115.0 (+0.0), Puntos=14844
+2025-10-19 22:31:26,163 - INFO - 🌟 MEJORA #42 en iter 2383: Fitness=115.3 (+0.4), Puntos=15083
+2025-10-19 22:31:26,209 - INFO - 🌟 MEJORA #43 en iter 2384: Fitness=115.8 (+0.5), Puntos=15083
+2025-10-19 22:31:26,303 - INFO - 🌟 MEJORA #44 en iter 2386: Fitness=116.2 (+0.3), Puntos=15163
+2025-10-19 22:31:26,394 - INFO - 🌟 MEJORA #45 en iter 2388: Fitness=117.1 (+1.0), Puntos=15161
+2025-10-19 22:31:26,394 - INFO -   ✨ Mejora #45 en iteración 2389: Fitness = 117.1 | Puntos = 15161 | T = 2.88
+2025-10-19 22:31:26,486 - INFO - 🌟 MEJORA #46 en iter 2390: Fitness=117.1 (+0.0), Puntos=15161
+2025-10-19 22:31:27,037 - DEBUG - Iter 2400: T=2.88, Fitness_actual=112.5, Mejor=117.1
+2025-10-19 22:31:31,675 - INFO -   Iter  2500 | Tiempo:    1.8min ( 1.5%) | T =     2.87 | Fitness =    102.4 | Mejor =    117.1 | Aceptación =  85.1%
+2025-10-19 22:31:31,675 - INFO - Progreso iter 2500: T=2.87, Fitness=102.4, Mejor=117.1, Tasa_acept=85.1%
+2025-10-19 22:31:31,677 - DEBUG - Iter 2500: T=2.87, Fitness_actual=102.4, Mejor=117.1
+2025-10-19 22:31:36,371 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 2600:
+2025-10-19 22:31:36,371 - WARNING -    Mejor fitness: 117.1
+2025-10-19 22:31:36,372 - WARNING -    Fitness promedio reciente: 96.5
+2025-10-19 22:31:36,372 - WARNING -    Degradación: 20.7
+2025-10-19 22:31:36,372 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:31:36,375 - DEBUG - Iter 2600: T=2.86, Fitness_actual=117.1, Mejor=117.1
+2025-10-19 22:31:36,422 - INFO - 🌟 MEJORA #47 en iter 2601: Fitness=117.2 (+0.0), Puntos=15162
+2025-10-19 22:31:40,965 - DEBUG - Iter 2700: T=2.86, Fitness_actual=98.0, Mejor=117.2
+2025-10-19 22:31:43,330 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 2750:
+2025-10-19 22:31:43,330 - WARNING -    Mejor fitness: 117.2
+2025-10-19 22:31:43,330 - WARNING -    Fitness promedio reciente: 93.7
+2025-10-19 22:31:43,331 - WARNING -    Degradación: 23.4
+2025-10-19 22:31:43,331 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:31:43,481 - INFO - 🌟 MEJORA #48 en iter 2753: Fitness=117.2 (+0.0), Puntos=15162
+2025-10-19 22:31:43,624 - INFO - 🌟 MEJORA #49 en iter 2756: Fitness=117.7 (+0.5), Puntos=15164
+2025-10-19 22:31:43,950 - INFO - 🌟 MEJORA #50 en iter 2763: Fitness=118.1 (+0.4), Puntos=15153
+2025-10-19 22:31:43,950 - INFO -   ✨ Mejora #50 en iteración 2764: Fitness = 118.1 | Puntos = 15153 | T = 2.86
+2025-10-19 22:31:43,999 - INFO - 🌟 MEJORA #51 en iter 2764: Fitness=118.1 (+0.0), Puntos=15153
+2025-10-19 22:31:44,237 - INFO - 🌟 MEJORA #52 en iter 2769: Fitness=118.5 (+0.5), Puntos=15202
+2025-10-19 22:31:44,286 - INFO - 🌟 MEJORA #53 en iter 2770: Fitness=120.7 (+2.2), Puntos=15519
+2025-10-19 22:31:44,328 - INFO - 🌟 MEJORA #54 en iter 2771: Fitness=121.8 (+1.1), Puntos=15525
+2025-10-19 22:31:44,509 - INFO - 🌟 MEJORA #55 en iter 2775: Fitness=122.9 (+1.1), Puntos=15532
+2025-10-19 22:31:44,509 - INFO -   ✨ Mejora #55 en iteración 2776: Fitness = 122.9 | Puntos = 15532 | T = 2.86
+2025-10-19 22:31:44,642 - INFO - 🌟 MEJORA #56 en iter 2778: Fitness=123.0 (+0.2), Puntos=15547
+2025-10-19 22:31:44,686 - INFO - 🌟 MEJORA #57 en iter 2779: Fitness=123.5 (+0.5), Puntos=15547
+2025-10-19 22:31:45,588 - DEBUG - Iter 2800: T=2.85, Fitness_actual=119.7, Mejor=123.5
+2025-10-19 22:31:49,833 - DEBUG - Iter 2900: T=2.85, Fitness_actual=115.1, Mejor=123.5
+2025-10-19 22:31:54,154 - INFO -   Iter  3000 | Tiempo:    2.2min ( 1.8%) | T =     2.84 | Fitness =    102.0 | Mejor =    123.5 | Aceptación =  85.1%
+2025-10-19 22:31:54,154 - INFO - Progreso iter 3000: T=2.84, Fitness=102.0, Mejor=123.5, Tasa_acept=85.1%
+2025-10-19 22:31:54,155 - DEBUG - Iter 3000: T=2.84, Fitness_actual=102.0, Mejor=123.5
+2025-10-19 22:31:58,433 - DEBUG - Iter 3100: T=2.84, Fitness_actual=108.4, Mejor=123.5
+2025-10-19 22:32:02,773 - DEBUG - Iter 3200: T=2.83, Fitness_actual=108.1, Mejor=123.5
+2025-10-19 22:32:07,107 - DEBUG - Iter 3300: T=2.83, Fitness_actual=104.8, Mejor=123.5
+2025-10-19 22:32:11,514 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 3400:
+2025-10-19 22:32:11,514 - WARNING -    Mejor fitness: 123.5
+2025-10-19 22:32:11,515 - WARNING -    Fitness promedio reciente: 102.1
+2025-10-19 22:32:11,515 - WARNING -    Degradación: 21.4
+2025-10-19 22:32:11,515 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:32:11,518 - DEBUG - Iter 3400: T=2.82, Fitness_actual=123.5, Mejor=123.5
+2025-10-19 22:32:15,985 - INFO -   Iter  3500 | Tiempo:    2.6min ( 2.1%) | T =     2.82 | Fitness =    114.0 | Mejor =    123.5 | Aceptación =  85.1%
+2025-10-19 22:32:15,985 - INFO - Progreso iter 3500: T=2.82, Fitness=114.0, Mejor=123.5, Tasa_acept=85.1%
+2025-10-19 22:32:15,989 - DEBUG - Iter 3500: T=2.82, Fitness_actual=114.0, Mejor=123.5
+2025-10-19 22:32:21,081 - DEBUG - Iter 3600: T=2.81, Fitness_actual=116.1, Mejor=123.5
+2025-10-19 22:32:25,901 - DEBUG - Iter 3700: T=2.81, Fitness_actual=104.7, Mejor=123.5
+2025-10-19 22:32:30,753 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 3800:
+2025-10-19 22:32:30,754 - WARNING -    Mejor fitness: 123.5
+2025-10-19 22:32:30,754 - WARNING -    Fitness promedio reciente: 99.0
+2025-10-19 22:32:30,755 - WARNING -    Degradación: 24.5
+2025-10-19 22:32:30,755 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:32:30,758 - DEBUG - Iter 3800: T=2.80, Fitness_actual=123.5, Mejor=123.5
+2025-10-19 22:32:35,282 - DEBUG - Iter 3900: T=2.80, Fitness_actual=104.0, Mejor=123.5
+2025-10-19 22:32:39,752 - INFO -   Iter  4000 | Tiempo:    3.0min ( 2.5%) | T =     2.79 | Fitness =     97.4 | Mejor =    123.5 | Aceptación =  85.0%
+2025-10-19 22:32:39,753 - INFO - Progreso iter 4000: T=2.79, Fitness=97.4, Mejor=123.5, Tasa_acept=85.0%
+2025-10-19 22:32:39,755 - DEBUG - Iter 4000: T=2.79, Fitness_actual=97.4, Mejor=123.5
+2025-10-19 22:32:42,174 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 4050:
+2025-10-19 22:32:42,175 - WARNING -    Mejor fitness: 123.5
+2025-10-19 22:32:42,176 - WARNING -    Fitness promedio reciente: 98.2
+2025-10-19 22:32:42,176 - WARNING -    Degradación: 25.3
+2025-10-19 22:32:42,177 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:32:42,780 - INFO - 🌟 MEJORA #58 en iter 4063: Fitness=125.9 (+2.4), Puntos=15835
+2025-10-19 22:32:42,918 - INFO - 🌟 MEJORA #59 en iter 4066: Fitness=126.9 (+1.0), Puntos=15830
+2025-10-19 22:32:43,101 - INFO - 🌟 MEJORA #60 en iter 4070: Fitness=126.9 (+0.1), Puntos=15835
+2025-10-19 22:32:43,101 - INFO -   ✨ Mejora #60 en iteración 4071: Fitness = 126.9 | Puntos = 15835 | T = 2.79
+2025-10-19 22:32:44,465 - DEBUG - Iter 4100: T=2.79, Fitness_actual=122.9, Mejor=126.9
+2025-10-19 22:32:48,661 - DEBUG - Iter 4200: T=2.78, Fitness_actual=116.8, Mejor=126.9
+2025-10-19 22:32:52,855 - DEBUG - Iter 4300: T=2.78, Fitness_actual=108.4, Mejor=126.9
+2025-10-19 22:32:54,921 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 4350:
+2025-10-19 22:32:54,921 - WARNING -    Mejor fitness: 126.9
+2025-10-19 22:32:54,922 - WARNING -    Fitness promedio reciente: 106.8
+2025-10-19 22:32:54,922 - WARNING -    Degradación: 20.1
+2025-10-19 22:32:54,922 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:32:57,044 - DEBUG - Iter 4400: T=2.77, Fitness_actual=120.0, Mejor=126.9
+2025-10-19 22:33:01,237 - INFO -   Iter  4500 | Tiempo:    3.3min ( 2.8%) | T =     2.77 | Fitness =    117.4 | Mejor =    126.9 | Aceptación =  84.7%
+2025-10-19 22:33:01,237 - INFO - Progreso iter 4500: T=2.77, Fitness=117.4, Mejor=126.9, Tasa_acept=84.7%
+2025-10-19 22:33:01,241 - DEBUG - Iter 4500: T=2.77, Fitness_actual=117.4, Mejor=126.9
+2025-10-19 22:33:05,651 - DEBUG - Iter 4600: T=2.76, Fitness_actual=108.4, Mejor=126.9
+2025-10-19 22:33:09,868 - DEBUG - Iter 4700: T=2.76, Fitness_actual=107.4, Mejor=126.9
+2025-10-19 22:33:12,014 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 4750:
+2025-10-19 22:33:12,014 - WARNING -    Mejor fitness: 126.9
+2025-10-19 22:33:12,015 - WARNING -    Fitness promedio reciente: 103.9
+2025-10-19 22:33:12,015 - WARNING -    Degradación: 23.0
+2025-10-19 22:33:12,015 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:33:12,060 - INFO - 🌟 MEJORA #61 en iter 4751: Fitness=126.9 (+0.0), Puntos=15835
+2025-10-19 22:33:12,144 - INFO - 🌟 MEJORA #62 en iter 4753: Fitness=126.9 (+0.0), Puntos=15835
+2025-10-19 22:33:12,185 - INFO - 🌟 MEJORA #63 en iter 4754: Fitness=126.9 (+0.0), Puntos=15835
+2025-10-19 22:33:12,270 - INFO - 🌟 MEJORA #64 en iter 4756: Fitness=126.9 (+0.0), Puntos=15835
+2025-10-19 22:33:12,906 - INFO - 🌟 MEJORA #65 en iter 4771: Fitness=126.9 (+0.0), Puntos=15837
+2025-10-19 22:33:12,906 - INFO -   ✨ Mejora #65 en iteración 4772: Fitness = 126.9 | Puntos = 15837 | T = 2.76
+2025-10-19 22:33:12,950 - INFO - 🌟 MEJORA #66 en iter 4772: Fitness=126.9 (+0.0), Puntos=15838
+2025-10-19 22:33:13,037 - INFO - 🌟 MEJORA #67 en iter 4774: Fitness=127.0 (+0.1), Puntos=15848
+2025-10-19 22:33:13,082 - INFO - 🌟 MEJORA #68 en iter 4775: Fitness=127.0 (+0.0), Puntos=15848
+2025-10-19 22:33:13,125 - INFO - 🌟 MEJORA #69 en iter 4776: Fitness=127.0 (+0.0), Puntos=15848
+2025-10-19 22:33:14,154 - DEBUG - Iter 4800: T=2.75, Fitness_actual=118.7, Mejor=127.0
+2025-10-19 22:33:18,439 - DEBUG - Iter 4900: T=2.75, Fitness_actual=113.2, Mejor=127.0
+2025-10-19 22:33:22,719 - INFO -   Iter  5000 | Tiempo:    3.7min ( 3.1%) | T =     2.74 | Fitness =    107.9 | Mejor =    127.0 | Aceptación =  84.7%
+2025-10-19 22:33:22,719 - INFO - Progreso iter 5000: T=2.74, Fitness=107.9, Mejor=127.0, Tasa_acept=84.7%
+2025-10-19 22:33:22,722 - DEBUG - Iter 5000: T=2.74, Fitness_actual=107.9, Mejor=127.0
+2025-10-19 22:33:24,940 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 5050:
+2025-10-19 22:33:24,941 - WARNING -    Mejor fitness: 127.0
+2025-10-19 22:33:24,941 - WARNING -    Fitness promedio reciente: 105.3
+2025-10-19 22:33:24,942 - WARNING -    Degradación: 21.8
+2025-10-19 22:33:24,942 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:33:27,095 - DEBUG - Iter 5100: T=2.74, Fitness_actual=114.1, Mejor=127.0
+2025-10-19 22:33:31,392 - DEBUG - Iter 5200: T=2.74, Fitness_actual=116.5, Mejor=127.0
+2025-10-19 22:33:35,789 - DEBUG - Iter 5300: T=2.73, Fitness_actual=109.7, Mejor=127.0
+2025-10-19 22:33:37,950 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 5350:
+2025-10-19 22:33:37,950 - WARNING -    Mejor fitness: 127.0
+2025-10-19 22:33:37,950 - WARNING -    Fitness promedio reciente: 107.0
+2025-10-19 22:33:37,950 - WARNING -    Degradación: 20.0
+2025-10-19 22:33:37,951 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:33:38,038 - INFO - 🌟 MEJORA #70 en iter 5352: Fitness=127.0 (+0.0), Puntos=15848
+2025-10-19 22:33:38,039 - INFO -   ✨ Mejora #70 en iteración 5353: Fitness = 127.0 | Puntos = 15848 | T = 2.73
+2025-10-19 22:33:38,209 - INFO - 🌟 MEJORA #71 en iter 5356: Fitness=127.0 (+0.0), Puntos=15848
+2025-10-19 22:33:40,319 - DEBUG - Iter 5400: T=2.73, Fitness_actual=116.0, Mejor=127.0
+2025-10-19 22:33:44,890 - INFO -   Iter  5500 | Tiempo:    4.1min ( 3.4%) | T =     2.72 | Fitness =    112.2 | Mejor =    127.0 | Aceptación =  84.5%
+2025-10-19 22:33:44,890 - INFO - Progreso iter 5500: T=2.72, Fitness=112.2, Mejor=127.0, Tasa_acept=84.5%
+2025-10-19 22:33:44,893 - DEBUG - Iter 5500: T=2.72, Fitness_actual=112.2, Mejor=127.0
+2025-10-19 22:33:49,615 - WARNING - ⚠️  DEGRADACIÓN DETECTADA en iter 5600:
+2025-10-19 22:33:49,615 - WARNING -    Mejor fitness: 127.0
+2025-10-19 22:33:49,615 - WARNING -    Fitness promedio reciente: 101.8
+2025-10-19 22:33:49,616 - WARNING -    Degradación: 25.3
+2025-10-19 22:33:49,616 - WARNING -    🔄 RESTAURANDO mejor solución...
+2025-10-19 22:33:49,619 - DEBUG - Iter 5600: T=2.72, Fitness_actual=127.0, Mejor=127.0
+2025-10-19 22:33:54,310 - DEBUG - Iter 5700: T=2.71, Fitness_actual=119.3, Mejor=127.0
+2025-10-19 22:33:58,866 - DEBUG - Iter 5800: T=2.71, Fitness_actual=118.3, Mejor=127.0

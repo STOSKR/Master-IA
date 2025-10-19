@@ -18,16 +18,27 @@ async function startGame() {
 
   const scene = new THREE.Scene();
 
+  // Skybox con gradiente de cielo
+  const skyColor = new THREE.Color(0x87ceeb); // Celeste claro
+  const horizonColor = new THREE.Color(0xffd89b); // Amarillo/naranja horizonte
+  scene.background = skyColor;
+  scene.fog = new THREE.Fog(horizonColor, 400, 800);
+
   await createPlayer();
   scene.add(player);
   scene.add(map);
 
-  const ambientLight = new THREE.AmbientLight();
+  // Luz ambiental más cálida y suave
+  const ambientLight = new THREE.AmbientLight(0xfff8dc, 0.6); // Tono cálido
   scene.add(ambientLight);
 
   const dirLight = DirectionalLight();
   dirLight.target = player;
   player.add(dirLight);
+
+  // Luz hemisférica para simular luz del cielo
+  const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0xbaf455, 0.4);
+  scene.add(hemiLight);
 
   // Renamed for clarity
   const mainCamera = Camera();
