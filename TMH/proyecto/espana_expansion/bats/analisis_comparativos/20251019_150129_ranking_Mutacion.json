@@ -1,0 +1,110 @@
+[
+  {
+    "posicion": 1,
+    "nombre": "Mut_15",
+    "fitness": 151.52434470624948,
+    "puntos": 16789,
+    "distancia": 121.8850979168405,
+    "configuracion": {
+      "dias": 20,
+      "lugares_por_dia": 12,
+      "poblacion": 1000,
+      "elitismo": 0.15,
+      "prob_mutacion": 0.15,
+      "prob_cruce": 0.8,
+      "generaciones": null,
+      "tiempo_limite_horas": 1.5,
+      "modo": "tiempo"
+    }
+  },
+  {
+    "posicion": 2,
+    "nombre": "Mut_25",
+    "fitness": 151.52434470624948,
+    "puntos": 16789,
+    "distancia": 121.8850979168405,
+    "configuracion": {
+      "dias": 20,
+      "lugares_por_dia": 12,
+      "poblacion": 1000,
+      "elitismo": 0.15,
+      "prob_mutacion": 0.25,
+      "prob_cruce": 0.8,
+      "generaciones": null,
+      "tiempo_limite_horas": 1.5,
+      "modo": "tiempo"
+    }
+  },
+  {
+    "posicion": 3,
+    "nombre": "Mut_70",
+    "fitness": 151.52434470624948,
+    "puntos": 16789,
+    "distancia": 121.8850979168405,
+    "configuracion": {
+      "dias": 20,
+      "lugares_por_dia": 12,
+      "poblacion": 1000,
+      "elitismo": 0.15,
+      "prob_mutacion": 0.7,
+      "prob_cruce": 0.8,
+      "generaciones": null,
+      "tiempo_limite_horas": 1.5,
+      "modo": "tiempo"
+    }
+  },
+  {
+    "posicion": 4,
+    "nombre": "Mut_90",
+    "fitness": 151.52434470624948,
+    "puntos": 16789,
+    "distancia": 121.8850979168405,
+    "configuracion": {
+      "dias": 20,
+      "lugares_por_dia": 12,
+      "poblacion": 1000,
+      "elitismo": 0.15,
+      "prob_mutacion": 0.9,
+      "prob_cruce": 0.8,
+      "generaciones": null,
+      "tiempo_limite_horas": 1.5,
+      "modo": "tiempo"
+    }
+  },
+  {
+    "posicion": 5,
+    "nombre": "Mut_50",
+    "fitness": 151.40576176767442,
+    "puntos": 16882,
+    "distancia": 138.07941077519246,
+    "configuracion": {
+      "dias": 20,
+      "lugares_por_dia": 12,
+      "poblacion": 1000,
+      "elitismo": 0.15,
+      "prob_mutacion": 0.5,
+      "prob_cruce": 0.8,
+      "generaciones": null,
+      "tiempo_limite_horas": 1.5,
+      "modo": "tiempo"
+    }
+  },
+  {
+    "posicion": 6,
+    "nombre": "Mut_35",
+    "fitness": 151.3533468262595,
+    "puntos": 16971,
+    "distancia": 118.88439124683744,
+    "configuracion": {
+      "dias": 20,
+      "lugares_por_dia": 12,
+      "poblacion": 1000,
+      "elitismo": 0.15,
+      "prob_mutacion": 0.35,
+      "prob_cruce": 0.8,
+      "generaciones": null,
+      "tiempo_limite_horas": 1.5,
+      "modo": "tiempo"
+    }
+  }
+]
