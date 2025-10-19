@@ -1,0 +1,27 @@
+2025-10-19 15:43:27 - INFO - ================================================================================
+2025-10-19 15:43:27 - INFO - INICIO DE EJECUCIÓN - Algoritmo Genético España
+2025-10-19 15:43:27 - INFO - Log guardado en: logs\19_15_43_Cruce_50.log
+2025-10-19 15:43:27 - INFO - ================================================================================
+2025-10-19 15:43:27 - INFO - 
+================================================================================
+2025-10-19 15:43:27 - INFO - ALGORITMO GENÉTICO
+2025-10-19 15:43:27 - INFO - ================================================================================
+2025-10-19 15:43:27 - INFO - Días: 20
+2025-10-19 15:43:27 - INFO - Lugares/día: 12
+2025-10-19 15:43:27 - INFO - Población: 1000
+2025-10-19 15:43:27 - INFO - Tiempo límite: 1h 30m (1.50h)
+2025-10-19 15:43:27 - INFO - Elitismo: 15%
+2025-10-19 15:43:27 - INFO - Dataset: 2237 lugares en 20 ciudades
+2025-10-19 15:43:27 - INFO - 💡 Presiona 'q' + ENTER en cualquier momento para detener y guardar el mejor resultado
+2025-10-19 15:43:27 - INFO - ================================================================================
+
+2025-10-19 15:43:27 - INFO - Creando población inicial
+2025-10-19 15:49:38 - INFO - Evaluando población inicial
+2025-10-19 15:49:43 - INFO - 
+Iniciando evolución (hasta 5400s)...
+
+2025-10-19 15:50:49 - INFO -   Gen    7 | Tiempo:    7.2m (resta: 82m) | Fitness:    120.1 | Puntos: 16064 | Dist:   168.8km
+2025-10-19 15:51:54 - INFO -   Gen   17 | Tiempo:    8.3m (resta: 81m) | Fitness:    121.4 | Puntos: 16123 | Dist:   167.7km
+2025-10-19 15:52:57 - INFO -   Gen   28 | Tiempo:    9.4m (resta: 80m) | Fitness:    126.3 | Puntos: 16284 | Dist:   179.3km
+2025-10-19 15:53:58 - INFO -   Gen   40 | Tiempo:   10.4m (resta: 79m) | Fitness:    128.5 | Puntos: 15900 | Dist:   160.6km
+2025-10-19 15:54:48 - INFO -   Gen   50 | Tiempo:   11.3m (resta: 78m) | Fitness:    130.0 | Puntos: 16348 | Dist:   156.0km
