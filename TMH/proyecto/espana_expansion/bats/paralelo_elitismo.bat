@@ -7,6 +7,8 @@ echo.
 echo Lanzando Par 1 (Elit 05 y Elit 10)...
 echo.
 
+timeout /t 7800 /nobreak > nul
+
 REM --- Par 1 ---
 set "TITLE1=AG Elit 05 - Par 1"
 set "TITLE2=AG Elit 10 - Par 1"
@@ -17,7 +19,7 @@ start "%TITLE2%" cmd /c lanzar_elitismo_10.bat
 REM --- MODIFICADO ---
 echo Esperando a que termine el Par 1 (revisando cada 2h 10min)...
 REM Pausa larga
-timeout /t 7800 /nobreak > nul
+timeout /t 15000 /nobreak > nul
 REM --- FIN MODIFICACIÓN ---
 set PROC1_RUNNING=1
 set PROC2_RUNNING=1
@@ -41,7 +43,7 @@ start "%TITLE4%" cmd /c lanzar_elitismo_25.bat
 REM --- MODIFICADO ---
 echo Esperando a que termine el Par 2 (revisando cada 2h 10min)...
 REM Pausa larga
-timeout /t 7800 /nobreak > nul
+timeout /t 15000 /nobreak > nul
 REM --- FIN MODIFICACIÓN ---
 set PROC3_RUNNING=1
 set PROC4_RUNNING=1
@@ -65,7 +67,7 @@ start "%TITLE6%" cmd /c lanzar_elitismo_95.bat
 REM --- MODIFICADO ---
 echo Esperando a que termine el Par 3 (revisando cada 2h 10min)...
 REM Pausa larga
-timeout /t 7800 /nobreak > nul
+timeout /t 15000 /nobreak > nul
 REM --- FIN MODIFICACIÓN ---
 set PROC5_RUNNING=1
 set PROC6_RUNNING=1

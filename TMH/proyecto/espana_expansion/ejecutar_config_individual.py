@@ -45,7 +45,7 @@ def parsear_argumentos():
 
 def ejecutar_con_config(args):
     if args.generaciones is None and args.horas is None:
-        args.horas = 2
+        args.horas = 4
         print("⚠️  No se especificó --generaciones ni --horas, usando --horas 2.0 por defecto\n")
     
     timestamp = datetime.now().strftime("%d_%H_%M")
