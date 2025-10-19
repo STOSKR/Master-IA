@@ -1,0 +1,67 @@
+2025-10-19 17:54:09,757 - INFO - 📝 Log iniciado: logs\19_17_54_sa.log
+2025-10-19 17:54:09,759 - INFO - 🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria
+2025-10-19 17:54:09,759 - INFO - ================================================================================
+2025-10-19 17:54:09,759 - INFO - 🔥 INICIANDO ENFRIAMIENTO SIMULADO
+2025-10-19 17:54:09,759 - INFO - ================================================================================
+2025-10-19 17:54:09,759 - INFO - 🎲 Generando solución inicial aleatoria...
+2025-10-19 17:54:10,116 - INFO - Solución inicial creada - Fitness: 99.8, Puntos: 15233
+2025-10-19 17:54:10,116 - INFO -   ✅ La solución del GA es válida (sin duplicados).
+2025-10-19 17:54:10,118 - INFO - 📊 Configuración para Enfriamiento Simulado:
+2025-10-19 17:54:10,118 - INFO -   • Temperatura inicial: 50.0
+2025-10-19 17:54:10,119 - INFO -   • Temperatura mínima: 0.1
+2025-10-19 17:54:10,119 - INFO -   • Tipo de enfriamiento: 🔄 ADAPTATIVO (lineal por tiempo)
+2025-10-19 17:54:10,119 - INFO -   • Máx. tiempo: 120.0 minutos (2.0 horas)
+2025-10-19 17:54:10,119 - INFO -   • Máx. iter. sin mejora: 999,999
+2025-10-19 17:54:10,120 - INFO -   • Usar optimización 2-opt: ✅ SÍ
+2025-10-19 17:54:10,120 - INFO -   • Fitness inicial (REAL): 99.8
+2025-10-19 17:54:10,120 - INFO -   • Puntos iniciales (REAL): 15233
+2025-10-19 17:54:10,120 - INFO - ================================================================================
+2025-10-19 17:54:10,757 - INFO - 🔄 Iniciando búsqueda...
+2025-10-19 17:54:10,758 - INFO - Iniciando búsqueda por vecindario
+2025-10-19 17:54:10,758 - INFO - Configuración: T_inicial=50, alpha=0.9995, max_tiempo=7200s, usar_2opt=True
+2025-10-19 17:54:10,758 - INFO - --- Cambiando a Fase: Inicial (Exploración) (Progreso: 0.0%) ---
+2025-10-19 17:54:10,762 - DEBUG - Iter 0: T=50.00, Fitness_actual=99.8, Mejor=99.8
+2025-10-19 17:54:10,762 - INFO - 🌟 MEJORA #1 en iter 0: Fitness=99.8 (+0.0), Puntos=15233
+2025-10-19 17:54:14,825 - DEBUG - Iter 100: T=49.97, Fitness_actual=69.7, Mejor=99.8
+2025-10-19 17:54:19,659 - DEBUG - Iter 200: T=49.93, Fitness_actual=50.0, Mejor=99.8
+2025-10-19 17:54:23,588 - DEBUG - Iter 300: T=49.90, Fitness_actual=51.2, Mejor=99.8
+2025-10-19 17:54:29,852 - DEBUG - Iter 400: T=49.86, Fitness_actual=35.8, Mejor=99.8
+2025-10-19 17:54:34,333 - INFO -   Iter   500 | Tiempo:    0.4min ( 0.3%) | T =    49.83 | Fitness =     24.1 | Mejor =     99.8 | Aceptación =  97.8%
+2025-10-19 17:54:34,333 - INFO - Progreso iter 500: T=49.83, Fitness=24.1, Mejor=99.8, Tasa_acept=97.8%
+2025-10-19 17:54:34,337 - DEBUG - Iter 500: T=49.83, Fitness_actual=24.1, Mejor=99.8
+2025-10-19 17:54:38,834 - DEBUG - Iter 600: T=49.80, Fitness_actual=-9.8, Mejor=99.8
+2025-10-19 17:54:38,834 - INFO - Iter 600: Aceptada solución con delta=+13.6 (T=49.80)
+2025-10-19 17:54:38,834 - INFO -   📊 Desglose del cambio:
+2025-10-19 17:54:38,835 - INFO -      Puntos: -41 → 5724 total
+2025-10-19 17:54:38,835 - INFO -      Tiempo: -1841.7min → 10884.4min total
+2025-10-19 17:54:38,835 - INFO -      Distancia: -3.1km → 142.8km total
+2025-10-19 17:54:42,491 - INFO - Iter 673: Aceptada solución con delta=-11.5 (T=49.77)
+2025-10-19 17:54:42,491 - INFO -   📊 Desglose del cambio:
+2025-10-19 17:54:42,491 - INFO -      Puntos: +0 → 6249 total
+2025-10-19 17:54:42,492 - INFO -      Tiempo: +2916.0min → 14388.9min total
+2025-10-19 17:54:42,492 - INFO -      Distancia: +0.0km → 86.3km total
+2025-10-19 17:54:43,823 - DEBUG - Iter 700: T=49.76, Fitness_actual=11.3, Mejor=99.8
+2025-10-19 17:54:48,799 - DEBUG - Iter 800: T=49.73, Fitness_actual=17.1, Mejor=99.8
+2025-10-19 17:54:53,865 - DEBUG - Iter 900: T=49.69, Fitness_actual=10.8, Mejor=99.8
+2025-10-19 17:54:58,941 - INFO -   Iter  1000 | Tiempo:    0.8min ( 0.7%) | T =    49.66 | Fitness =     -0.3 | Mejor =     99.8 | Aceptación =  98.9%
+2025-10-19 17:54:58,941 - INFO - Progreso iter 1000: T=49.66, Fitness=-0.3, Mejor=99.8, Tasa_acept=98.9%
+2025-10-19 17:54:58,943 - DEBUG - Iter 1000: T=49.66, Fitness_actual=-0.3, Mejor=99.8
+2025-10-19 17:55:04,258 - DEBUG - Iter 1100: T=49.62, Fitness_actual=8.7, Mejor=99.8
+2025-10-19 17:55:09,533 - DEBUG - Iter 1200: T=49.59, Fitness_actual=-5.8, Mejor=99.8
+2025-10-19 17:55:15,067 - DEBUG - Iter 1300: T=49.55, Fitness_actual=-7.9, Mejor=99.8
+2025-10-19 17:55:20,700 - DEBUG - Iter 1400: T=49.51, Fitness_actual=-16.9, Mejor=99.8
+2025-10-19 17:55:22,188 - INFO - Iter 1423: Aceptada solución con delta=+10.5 (T=49.50)
+2025-10-19 17:55:22,188 - INFO -   📊 Desglose del cambio:
+2025-10-19 17:55:22,188 - INFO -      Puntos: +0 → 3672 total
+2025-10-19 17:55:22,188 - INFO -      Tiempo: -544.0min → 4965.4min total
+2025-10-19 17:55:22,189 - INFO -      Distancia: +0.0km → 48.5km total
+2025-10-19 17:55:26,477 - INFO -   Iter  1500 | Tiempo:    1.3min ( 1.1%) | T =    49.47 | Fitness =     -3.2 | Mejor =     99.8 | Aceptación =  99.1%
+2025-10-19 17:55:26,477 - INFO - Progreso iter 1500: T=49.47, Fitness=-3.2, Mejor=99.8, Tasa_acept=99.1%
+2025-10-19 17:55:26,479 - DEBUG - Iter 1500: T=49.47, Fitness_actual=-3.2, Mejor=99.8
+2025-10-19 17:55:32,316 - DEBUG - Iter 1600: T=49.43, Fitness_actual=-2.6, Mejor=99.8
+2025-10-19 17:55:38,177 - DEBUG - Iter 1700: T=49.39, Fitness_actual=-3.6, Mejor=99.8
+2025-10-19 17:55:44,074 - DEBUG - Iter 1800: T=49.35, Fitness_actual=-17.6, Mejor=99.8
+2025-10-19 17:55:50,359 - DEBUG - Iter 1900: T=49.30, Fitness_actual=-23.8, Mejor=99.8
+2025-10-19 17:55:55,591 - INFO -   Iter  2000 | Tiempo:    1.8min ( 1.5%) | T =    49.27 | Fitness =    -18.0 | Mejor =     99.8 | Aceptación =  99.2%
+2025-10-19 17:55:55,591 - INFO - Progreso iter 2000: T=49.27, Fitness=-18.0, Mejor=99.8, Tasa_acept=99.2%
+2025-10-19 17:55:55,592 - DEBUG - Iter 2000: T=49.27, Fitness_actual=-18.0, Mejor=99.8

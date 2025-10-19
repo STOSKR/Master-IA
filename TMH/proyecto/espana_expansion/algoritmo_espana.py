@@ -17,6 +17,9 @@ from utils_espana import (
 from restricciones_espana import (
     validar_limite_ciudad
 )
+import time
+probabilidad_reparacion = 0.7 
+
 def configurar_logging(output_dir="logs", prefijo="ag_espana"):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -173,20 +176,7 @@ def validar_restricciones_ciudades(individuo: Individual) -> bool:
     return True
 
 def reparar_individuo(individuo: Individual) -> Individual:
-    """
-    Repara un individuo para que cumpla TODAS las restricciones:
-    1. Tiempo por día ≤ TIEMPO_DIA (14 horas = 840 min)
-    2. Máximo MAX_DIAS_POR_CIUDAD consecutivos por ciudad
-    3. Elimina regresos innecesarios si AGRUPAR=False
     
-    ESTRATEGIA DE REPARACIÓN:
-    - Paso 0: Ajustar tiempo de cada día (CRÍTICO - evita fitness negativo)
-    - Paso 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD
-    - Paso 2: Eliminar regresos innecesarios
-    
-    Returns:
-        Individual reparado y válido
-    """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     
     DEBUG_REPARAR = False  # ⚠️ DEBUG DESACTIVADO
@@ -650,15 +640,17 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos:
 
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
     """
-    Crea la población inicial y REPARA cada individuo para garantizar validez.
+    Crea la población inicial con reparación probabilística para mantener diversidad.
     
-    CRÍTICO: Sin reparación, la población inicial tiene fitness negativo!
+    El 70% de los individuos se reparan (válidos desde el inicio)
+    El 30% mantienen pequeñas "imperfecciones" que pueden aportar diversidad genética
     """
     poblacion = []
     for _ in range(tam_poblacion):
         individuo = crear_individuo_aleatorio(num_dias, lugares_por_dia)
-        # CRÍTICO: Reparar ANTES de evaluar para evitar fitness negativo
-        individuo = reparar_individuo(individuo)
+        # Reparación probabilística: solo el 70% se repara inmediatamente
+        if random.random() < probabilidad_reparacion:
+            individuo = reparar_individuo(individuo)
         poblacion.append(individuo)
     return poblacion
 
@@ -1208,10 +1200,13 @@ def crossover_dos_puntos(padre1: Individual, padre2: Individual) -> Tuple[Indivi
     hijo1 = Individual(hijo1_dias, hijo1_ciudades)
     hijo2 = Individual(hijo2_dias, hijo2_ciudades)
     
+    # Reparación probabilística: permitir que algunos hijos mantengan variaciones
     if not validar_restricciones_ciudades(hijo1):
-        hijo1 = reparar_individuo(hijo1)
+        if random.random() < probabilidad_reparacion:
+            hijo1 = reparar_individuo(hijo1)
     if not validar_restricciones_ciudades(hijo2):
-        hijo2 = reparar_individuo(hijo2)
+        if random.random() < probabilidad_reparacion:
+            hijo2 = reparar_individuo(hijo2)
     
     return hijo1, hijo2
 
@@ -1267,30 +1262,35 @@ def mutar(individuo: Individual):
                         random.choice(lugares_nueva)["id"] for _ in range(len(dia))
                     ]
     
-    # ⚠️ CRÍTICO: Validar y reparar después de mutar
+    # Reparación probabilística: validar y reparar con probabilidad controlada
     if not validar_restricciones_ciudades(individuo):
-        # La reparación devuelve un nuevo individuo, hay que copiarlo
-        individuo_reparado = reparar_individuo(individuo)
+        if random.random() < probabilidad_reparacion:
+            # La reparación devuelve un nuevo individuo, hay que copiarlo
+            individuo_reparado = reparar_individuo(individuo)
+            individuo.dias = individuo_reparado.dias
+            individuo.ciudades = individuo_reparado.ciudades
+    
+    # Reparar horarios también con probabilidad (más permisiva para mantener diversidad)
+    if random.random() < probabilidad_reparacion:
+        individuo_reparado = reparar_horarios_individuo(individuo, max_intentos=1)
         individuo.dias = individuo_reparado.dias
         individuo.ciudades = individuo_reparado.ciudades
-    
-    # Intentar reparar horarios después de mutar
-    individuo_reparado = reparar_horarios_individuo(individuo, max_intentos=1)
-    individuo.dias = individuo_reparado.dias
-    individuo.ciudades = individuo_reparado.ciudades
 
 
 def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
-    log(f"\n REINICIANDO POBLACIÓN")
+    log(f"\n🔄 REINICIANDO POBLACIÓN (con reparación probabilística)")
     
     nueva_poblacion = []
     
     for _ in range(tam_poblacion):
         nuevo_ind = crear_individuo_aleatorio(num_dias, lugares_por_dia)
+        
+        if random.random() < probabilidad_reparacion:
+            nuevo_ind = reparar_individuo(nuevo_ind)
         evaluar_individuo(nuevo_ind)
         nueva_poblacion.append(nuevo_ind)
     
-    log(f"Nueva población creada ({tam_poblacion} individuos)\n")
+    log(f"Nueva población creada ({tam_poblacion} individuos, {int(probabilidad_reparacion*100)}% reparados)\n")
     return nueva_poblacion
 
 
@@ -1349,6 +1349,7 @@ def algoritmo_genetico_espana(
     else:
         log(f"Generaciones: {num_generaciones}")
     log(f"Elitismo: {tasa_elitismo*100:.0f}%")
+    log(f"Reparación probabilística: {probabilidad_reparacion*100:.0f}% ({(1-probabilidad_reparacion)*100:.0f}% mantienen diversidad)")
     log(f"Dataset: {len(lugares_turisticos_espana)} lugares en 20 ciudades")
     log(f"💡 Presiona 'q' + ENTER en cualquier momento para detener y guardar el mejor resultado")
     log(f"{'='*80}\n")
@@ -1701,6 +1702,10 @@ def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json
 
 if __name__ == "__main__":
     import sys
+    
+    seed = int(time.time() * 1000) % (2**32)
+    random.seed(seed)
+    log(f"🔖 Semilla aleatoria inicial: {seed}")
     
     # CONFIGURAR LOGGING AL INICIO
     log_file = configurar_logging(output_dir="logs", prefijo="ag_espana")

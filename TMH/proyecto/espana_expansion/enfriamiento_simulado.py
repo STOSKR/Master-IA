@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Dict, Tuple
 from config import *
 from utils_espana import (
+    COORDENADAS_CIUDADES,
     get_lugares_ciudad,
 )
 
@@ -112,13 +113,13 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
     # Asegurarse de que el progreso no supere 1.0 (por si acaso)
     progreso = min(progreso, 1.0)
     
-    # Determinar fase actual
+    # Determinar fase actual con 3 etapas claras
     fase_actual = ""
-    if progreso < 0.33:
+    if progreso < 0.3:  # Primeros 30% del tiempo
         fase_actual = "Inicial (Exploración)"
-    elif progreso < 0.66:
+    elif progreso < 0.7:  # 30-70% del tiempo
         fase_actual = "Intermedia (Balance)"
-    else:
+    else:  # Últimos 30% del tiempo
         fase_actual = "Final (Refinamiento)"
 
     # --- IMPRIMIR SOLO SI LA FASE CAMBIA ---
@@ -128,22 +129,26 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
     
     if usar_2opt:
         if fase_actual == "Inicial (Exploración)":
-             probabilidades = [0.30, 0.20, 0.20, 0.30]
+            # Exploración agresiva: más cambios grandes
+            # swap, 2opt, reemplazar, swap_intercity, cambiar_ciudad
+            probabilidades = [0.25, 0.20, 0.25, 0.20, 0.10] 
         elif fase_actual == "Intermedia (Balance)":
-             probabilidades = [0.40, 0.30, 0.20, 0.10]
-        else: # Final
-             probabilidades = [0.50, 0.35, 0.10, 0.05]
+            # Balance: reducir cambios drásticos
+            probabilidades = [0.35, 0.25, 0.25, 0.10, 0.05]
+        else: # Final (Refinamiento)
+            # Solo ajustes finos: swap y 2opt
+            probabilidades = [0.50, 0.40, 0.10, 0.0, 0.0]
     else:
-        # ... (lógica sin 2-opt basada en fase_actual) ...
         if fase_actual == "Inicial (Exploración)":
-             probabilidades = [0.40, 0.0, 0.30, 0.30]
+            # Sin 2opt: compensar con más swaps
+            probabilidades = [0.40, 0.0, 0.25, 0.20, 0.15]
         elif fase_actual == "Intermedia (Balance)":
-             probabilidades = [0.55, 0.0, 0.30, 0.15]
+            probabilidades = [0.55, 0.0, 0.25, 0.12, 0.08]
         else: # Final
-             probabilidades = [0.65, 0.0, 0.25, 0.10]
+            probabilidades = [0.70, 0.0, 0.20, 0.10, 0.0]
     
     tipo_perturbacion = random.choices(
-        ["swap", "ruta_2opt", "reemplazar", "swap_intercity"],
+        ["swap", "ruta_2opt", "reemplazar", "swap_intercity", "cambiar_ciudad"],
         weights=probabilidades
     )[0]
     
@@ -192,6 +197,29 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
             vecino.dias[i], vecino.dias[j] = vecino.dias[j], vecino.dias[i]
             # Intercambiar ciudades
             vecino.ciudades[i], vecino.ciudades[j] = vecino.ciudades[j], vecino.ciudades[i]
+    elif tipo_perturbacion == "cambiar_ciudad":
+        # PERTURBACIÓN MEDIA/ALTA: Cambiar la ciudad de un día
+        if len(vecino.dias) > 0:
+            dia_idx = random.randint(0, len(vecino.dias) - 1)
+            ciudad_actual_del_dia = vecino.ciudades[dia_idx]
+
+            # Obtener una nueva ciudad (que no sea la misma)
+            candidatas = [c for c in COORDENADAS_CIUDADES.keys() if c != ciudad_actual_del_dia]
+            if candidatas:
+                nueva_ciudad = random.choice(candidatas)
+                vecino.ciudades[dia_idx] = nueva_ciudad
+                
+                # Reconstruir el día con lugares de la nueva ciudad
+                lugares_nueva = get_lugares_ciudad(nueva_ciudad)
+                if lugares_nueva:
+                    # Asegurarse de que el día tenga el mismo número de lugares
+                    num_lugares = len(vecino.dias[dia_idx])
+                    if num_lugares == 0: num_lugares = 12 # Default si el día estaba vacío
+                    
+                    # Usar choices para permitir repetición si no hay suficientes lugares únicos
+                    vecino.dias[dia_idx] = [
+                        random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
+                    ]
     
     # Validar y reparar si es necesario
     if not validar_restricciones_ciudades(vecino):
@@ -199,7 +227,7 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
     
     # Eliminar duplicados en cada día
     vecino = eliminar_duplicados_dia(vecino)
-    
+
     return vecino, fase_actual
 
 
@@ -207,7 +235,7 @@ def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int
     deltas = []
     
     for _ in range(num_muestras):
-        vecino = generar_vecino(solucion_inicial)
+        vecino, _ = generar_vecino(solucion_inicial)
         evaluar_individuo(vecino)
         delta = vecino.fitness - solucion_inicial.fitness
         deltas.append(abs(delta))
@@ -220,11 +248,42 @@ def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int
         T0 = std_delta * 2.0
         
         # Asegurar un mínimo y máximo razonable
-        T0 = max(500, min(T0, 5000))
+        T0 = max(10, min(T0, 100))  # Rango ajustado: 10-100 (antes 500-5000)
     else:
-        T0 = 2000  # Valor por defecto
+        T0 = 50  # Valor por defecto más bajo
     
     return T0
+
+
+def calcular_temperatura_adaptativa(tiempo_transcurrido: float, max_tiempo: float, 
+                                     T_inicial: float, T_final: float = 0.1) -> float:
+    """
+    Calcula temperatura usando enfriamiento NO-LINEAL basado en tiempo.
+    Usa una curva exponencial para enfriar más rápido al inicio.
+    
+    Args:
+        tiempo_transcurrido: Tiempo en segundos desde el inicio
+        max_tiempo: Tiempo máximo de ejecución en segundos
+        T_inicial: Temperatura inicial
+        T_final: Temperatura final mínima
+    
+    Returns:
+        Temperatura actual
+    """
+    if max_tiempo <= 0:
+        return T_final
+    
+    progreso = min(tiempo_transcurrido / max_tiempo, 1.0)
+    
+    # Enfriamiento EXPONENCIAL: enfría rápido al inicio, lento al final
+    # Esto permite explorar al inicio y refinar al final
+    import math
+    factor_exp = math.exp(-3 * progreso)  # e^(-3*p): 1.0 → 0.05
+    
+    # Interpolación con curva exponencial
+    temperatura = T_final + (T_inicial - T_final) * factor_exp
+    
+    return max(temperatura, T_final)
 
 
 def aceptar_solucion(delta_fitness: float, temperatura: float) -> bool:
@@ -249,8 +308,9 @@ def enfriamiento_simulado(
     alpha: float = 0.95,
     max_iteraciones: int = None,
     max_tiempo_segundos: float = 3600,  # 1 hora por defecto
-    iteraciones_sin_mejora_max: int = 2000,
+    iteraciones_sin_mejora_max: int = 999999,
     usar_2opt: bool = True,  # Nuevo parámetro para controlar 2-opt
+    usar_temp_adaptativa: bool = True,  # NUEVO: usar temperatura adaptativa
     verbose: bool = True,
     debug_saltos: bool = True  # Nuevo: activar detección de saltos anormales
 ) -> Dict:
@@ -316,10 +376,28 @@ def enfriamiento_simulado(
         sa_logger.info("🌡️  Calculando temperatura inicial adaptativa...")
         T_inicial = calcular_temperatura_inicial(solucion_inicial)
     
+    # AJUSTE CRÍTICO: Si usa temperatura adaptativa, la temperatura inicial
+    # debe ser proporcional al tiempo disponible para evitar sobre-exploración
+    if usar_temp_adaptativa and max_tiempo_segundos > 0:
+        # Regla empírica: T_inicial óptima depende del tiempo
+        # Para 2h (7200s): T=5-10 es suficiente
+        # Para 1h (3600s): T=3-5
+        # Para 30min (1800s): T=2-3
+        factor_tiempo = max_tiempo_segundos / 3600  # Normalizar por 1 hora
+        T_inicial_sugerida = 5 * factor_tiempo  # Escala lineal
+        
+        if T_inicial > T_inicial_sugerida * 3:  # Si es más de 3x lo sugerido
+            T_vieja = T_inicial
+            T_inicial = T_inicial_sugerida
+            sa_logger.warning(f"⚠️  T_inicial={T_vieja:.1f} es muy alta para temp. adaptativa con {max_tiempo_segundos/60:.0f}min")
+            sa_logger.warning(f"   Ajustada automáticamente a T_inicial={T_inicial:.1f} para evitar sobre-exploración")
+    
     sa_logger.info("📊 Configuración para Enfriamiento Simulado:")
     sa_logger.info(f"  • Temperatura inicial: {T_inicial:.1f}")
     sa_logger.info(f"  • Temperatura mínima: {T_minima}")
-    sa_logger.info(f"  • Factor de enfriamiento (α): {alpha}")
+    sa_logger.info(f"  • Tipo de enfriamiento: {'🔄 ADAPTATIVO (lineal por tiempo)' if usar_temp_adaptativa else f'🌡️  GEOMÉTRICO (α={alpha})'}")
+    if not usar_temp_adaptativa:
+        sa_logger.info(f"  • Factor de enfriamiento (α): {alpha}")
     if max_iteraciones:
         sa_logger.info(f"  • Máx. iteraciones: {max_iteraciones:,}")
     sa_logger.info(f"  • Máx. tiempo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
@@ -343,6 +421,8 @@ def enfriamiento_simulado(
     historial_mejor_fitness = [mejor_solucion.fitness]
     historial_temperatura = [temperatura]
     
+    
+    
     # Configuración de visualización en tiempo real
     import matplotlib.pyplot as plt
     plt.ion()
@@ -356,6 +436,10 @@ def enfriamiento_simulado(
     ax.legend()
     ax.grid(True, alpha=0.3, which='both', linestyle='--')  # Grid para ambas escalas
     
+    
+    
+    
+    
     sa_logger.info("🔄 Iniciando búsqueda...")
     
     sa_logger.info("Iniciando búsqueda por vecindario")
@@ -366,6 +450,12 @@ def enfriamiento_simulado(
     fitness_anterior = solucion_actual.fitness  # Para detectar saltos
     fase_actual_sa = ""
     
+    # NUEVO: Detección de degradación
+    ultima_mejora_iter = 0
+    fitness_medio_reciente = []  # Ventana deslizante de fitness
+    VENTANA_DEGRADACION = 50  # Cada 50 iteraciones (más frecuente)
+    UMBRAL_DEGRADACION = 20   # Si cae más de 20 puntos (más estricto)
+    
     while True:
         # Verificar tiempo transcurrido
         tiempo_transcurrido = time.time() - tiempo_inicio
@@ -375,12 +465,33 @@ def enfriamiento_simulado(
             sa_logger.info(f"⏰ Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
             break
         
-        # Verificar límite de iteraciones (si se especificó)
-        if max_iteraciones and iteracion >= max_iteraciones:
-            sa_logger.info(f"🔢 Iteraciones máximas alcanzadas: {iteracion}")
-            break
-        
         tiempo_transcurrido = time.time() - tiempo_inicio
+        
+        # NUEVO: Detección de degradación cada VENTANA_DEGRADACION iteraciones
+        if iteracion > 0 and iteracion % VENTANA_DEGRADACION == 0:
+            if len(fitness_medio_reciente) > 0:
+                fitness_promedio = sum(fitness_medio_reciente) / len(fitness_medio_reciente)
+                
+                # Si el fitness promedio es muy bajo comparado con el mejor
+                degradacion = mejor_solucion.fitness - fitness_promedio
+                
+                # Si hay degradación significativa y hace mucho que no mejora
+                iteraciones_sin_mejora_real = iteracion - ultima_mejora_iter
+                if degradacion > UMBRAL_DEGRADACION and iteraciones_sin_mejora_real > 100:
+                    sa_logger.warning(f"⚠️  DEGRADACIÓN DETECTADA en iter {iteracion}:")
+                    sa_logger.warning(f"   Mejor fitness: {mejor_solucion.fitness:.1f}")
+                    sa_logger.warning(f"   Fitness promedio reciente: {fitness_promedio:.1f}")
+                    sa_logger.warning(f"   Degradación: {degradacion:.1f}")
+                    sa_logger.warning(f"   🔄 RESTAURANDO mejor solución...")
+                    
+                    # Restaurar la mejor solución encontrada
+                    solucion_actual = copy.deepcopy(mejor_solucion)
+                    fitness_medio_reciente.clear()
+            
+            fitness_medio_reciente.clear()
+        
+        # Guardar fitness actual en ventana
+        fitness_medio_reciente.append(solucion_actual.fitness)
         
         # Generar solución vecina
         vecino, fase_actual_sa = generar_vecino(
@@ -527,6 +638,7 @@ def enfriamiento_simulado(
                 mejor_solucion = copy.deepcopy(solucion_actual)
                 iteraciones_sin_mejora = 0
                 mejoras_encontradas += 1
+                ultima_mejora_iter = iteracion  # NUEVO: Actualizar última mejora
                 
                 sa_logger.info(f"🌟 MEJORA #{mejoras_encontradas} en iter {iteracion}: Fitness={mejor_solucion.fitness:.1f} (+{mejora_sobre_mejor:.1f}), Puntos={mejor_solucion.puntos_totales}")
                 
@@ -564,15 +676,26 @@ def enfriamiento_simulado(
         ax.autoscale_view()
         plt.pause(0.01)
         
-        # Enfriar sistema (enfriamiento geométrico)
-        temperatura = temperatura * alpha
+        # Actualizar temperatura según el método elegido
+        if usar_temp_adaptativa:
+            # Enfriamiento adaptativo (lineal por tiempo)
+            temperatura = calcular_temperatura_adaptativa(
+                tiempo_transcurrido, 
+                max_tiempo_segundos, 
+                T_inicial, 
+                T_minima
+            )
+        else:
+            # Enfriamiento geométrico tradicional
+            temperatura = temperatura * alpha
         
         # Mostrar progreso periódicamente
         if verbose and (iteracion + 1) % 500 == 0:
             tasa_aceptacion = total_aceptaciones / (iteracion + 1) * 100
             tiempo_transcurrido = time.time() - tiempo_inicio
+            progreso_tiempo = (tiempo_transcurrido / max_tiempo_segundos) * 100
             sa_logger.info(f"  Iter {iteracion+1:5d} | "
-                  f"Tiempo: {tiempo_transcurrido/60:6.1f}min | "
+                  f"Tiempo: {tiempo_transcurrido/60:6.1f}min ({progreso_tiempo:4.1f}%) | "
                   f"T = {temperatura:8.2f} | "
                   f"Fitness = {solucion_actual.fitness:8.1f} | "
                   f"Mejor = {mejor_solucion.fitness:8.1f} | "
@@ -582,14 +705,9 @@ def enfriamiento_simulado(
                           f"Mejor={mejor_solucion.fitness:.1f}, Tasa_acept={tasa_aceptacion:.1f}%")
         
         # Condiciones de parada
-        if temperatura < T_minima:
+        if not usar_temp_adaptativa and temperatura < T_minima:
             sa_logger.info(f"❄️  Temperatura mínima alcanzada: {temperatura:.4f} < {T_minima}")
             break
-        
-        if iteraciones_sin_mejora >= iteraciones_sin_mejora_max:
-            sa_logger.info(f"⏸️  Estancamiento detectado: {iteraciones_sin_mejora} iteraciones sin mejora")
-            break
-        
         # Incrementar contador de iteraciones
         iteracion += 1
     
@@ -681,9 +799,10 @@ def enfriamiento_simulado(
 def enfriamiento_desde_genetico(
     resultados_genetico: Dict,
     usar_mejor: bool = True,
-    T_inicial: float = 200,  # Temperatura moderada para refinamiento
-    alpha: float = 0.95,  # Enfriamiento más rápido para convergencia
-    max_tiempo_segundos: float = 3600  # 1 hora por defecto
+    T_inicial: float = 10,  # Temperatura baja para refinamiento (era 20)
+    alpha: float = 0.98,    # Solo usado si no se usa temp. adaptativa
+    max_tiempo_segundos: float = 3600,  # 1 hora por defecto
+    usar_temp_adaptativa: bool = True  # NUEVO: usar temperatura adaptativa
 ) -> Dict:
     sa_logger.info("="*80)
     sa_logger.info("🔗 ENFRIAMIENTO SIMULADO DESDE ALGORITMO GENÉTICO (HÍBRIDO GA+SA)")
@@ -705,11 +824,11 @@ def enfriamiento_desde_genetico(
     
     sa_logger.info("")
     sa_logger.info("💡 Configuración OPTIMIZADA de refinamiento:")
-    sa_logger.info(f"  • Temperatura inicial: {T_inicial} (moderada para refinamiento inteligente)")
-    sa_logger.info(f"  • Factor α: {alpha} (convergencia balanceada)")
+    sa_logger.info(f"  • Temperatura inicial: {T_inicial} (baja para refinamiento local)")
+    sa_logger.info(f"  • Enfriamiento: {'Adaptativo (lineal por tiempo)' if usar_temp_adaptativa else f'Geométrico (α={alpha})'}")
     sa_logger.info(f"  • Tiempo máximo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
-    sa_logger.info(f"  • Vecindad adaptativa: 4 tipos de perturbaciones con probabilidades dinámicas")
-    sa_logger.info(f"  • Estrategia: Perturbaciones conservadoras que preservan calidad")
+    sa_logger.info(f"  • Vecindad adaptativa: 5 tipos de perturbaciones con probabilidades dinámicas")
+    sa_logger.info(f"  • Estrategia: Perturbaciones conservadoras que preservan calidad del GA")
     
     # Ejecutar enfriamiento simulado
     resultados_sa = enfriamiento_simulado(
@@ -718,6 +837,7 @@ def enfriamiento_desde_genetico(
         alpha=alpha,
         max_tiempo_segundos=max_tiempo_segundos,
         usar_2opt=True,
+        usar_temp_adaptativa=usar_temp_adaptativa,
         verbose=True
     )
     
@@ -1198,13 +1318,15 @@ if __name__ == "__main__":
         # Modo 1: SA desde cero
         sa_logger.info("🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria")
         
-        # Configuración - VALORES ORIGINALES DEL USUARIO
+        # Configuración ULTRA-CONSERVADORA para minimizar caídas
+        # Con T_inicial=2-3, solo aceptará cambios pequeños (~20% prob para Δ=-2)
         config_sa = {
-            "T_inicial": 20,      # Temperatura baja para búsqueda más enfocada
+            "T_inicial": 3,            # MUY BAJA: minimiza aceptación de soluciones malas
             "T_minima": 0.1,
-            "alpha": 0.999,       # Enfriamiento muy lento
+            "alpha": 0.9995,           # Solo usado si usar_temp_adaptativa=False
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
-            "usar_2opt": True
+            "usar_2opt": True,
+            "usar_temp_adaptativa": True  # Usar enfriamiento adaptativo exponencial
         }
         
         resultados = enfriamiento_simulado(
@@ -1213,8 +1335,9 @@ if __name__ == "__main__":
             T_minima=config_sa["T_minima"],
             alpha=config_sa["alpha"],
             max_tiempo_segundos=config_sa["max_tiempo_segundos"],
-            iteraciones_sin_mejora_max=1000,
+            iteraciones_sin_mejora_max=999999,
             usar_2opt=config_sa["usar_2opt"],
+            usar_temp_adaptativa=config_sa["usar_temp_adaptativa"],
             verbose=True,
             debug_saltos=True
         )
@@ -1258,13 +1381,14 @@ if __name__ == "__main__":
         sa_logger.info("FASE 2: ENFRIAMIENTO SIMULADO (Refinamiento Local)")
         sa_logger.info("="*80)
         
-        # Configuración SA - RESPETA LOS VALORES ORIGINALES DEL USUARIO
+        # Configuración SA MEJORADA - Para refinamiento desde GA
         config_sa = {
-            "T_inicial": 20,      # Temperatura baja para refinamiento local
+            "T_inicial": 10,           # Temperatura baja para refinamiento
             "T_minima": 0.1,
-            "alpha": 0.999,       # Enfriamiento muy lento para refinamiento detallado
+            "alpha": 0.98,             # Solo usado si usar_temp_adaptativa=False
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
-            "usar_2opt": True
+            "usar_2opt": True,
+            "usar_temp_adaptativa": True  # Enfriamiento adaptativo
         }
         
         # Ejecutar SA desde el mejor del GA

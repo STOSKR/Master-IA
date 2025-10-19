@@ -14,7 +14,7 @@ echo Lanzando terminales...
 echo.
 
 REM Lanzar Enfriamiento Simulado
-start "Enfriamiento Simulado" cmd /k "cd .. && python enfriamiento_simulado.py --horas 4 --guardar-json --guardar-grafica --output-dir resultados_comparativa && echo. && echo COMPLETADO - Hora fin: %time% && pause"
+start "Enfriamiento Simulado" cmd /k "cd .. && python enfriamiento_simulado.py 1 --horas 4 --guardar-json --guardar-grafica --output-dir resultados_comparativa && echo. && echo COMPLETADO - Hora fin: %time% && pause"
 
 timeout /t 2 > nul
 

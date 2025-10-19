@@ -1,6 +1,9 @@
 @echo off
 
 REM Ejecutar el algoritmo genético con modo 3
+
+echo EJECUTANDO MODO 3
+
 cd ..
 python algoritmo_espana.py 3
 
