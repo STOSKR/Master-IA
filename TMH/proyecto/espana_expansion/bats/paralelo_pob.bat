@@ -1,6 +1,5 @@
 @echo off
 
-timeout /t 7800 /nobreak > nul
 echo Lanzando Par 1 (pob100 y pob500)...
 start "AG pob100" cmd /c lanzar_pob100.bat
 start "AG pob500" cmd /c lanzar_pob500.bat
