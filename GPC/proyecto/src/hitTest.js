@@ -3,11 +3,28 @@ import { metadata as rows } from "./components/Map";
 // 1. Importa movesQueue para saber si el jugador está saltando
 import { player, position, clearMoveQueue, movesQueue } from "./components/Player";
 import { setGameActive } from "./gameState";
+import { playDeathAnimation } from "./deathAnimations";
 
 const resultDOM = document.getElementById("result-container");
 const finalScoreDOM = document.getElementById("final-score");
 
 const playerBoundingBox = new THREE.Box3();
+let deathTimeout = null;
+
+function showGameOver() {
+    if (resultDOM && finalScoreDOM) {
+        resultDOM.style.visibility = "visible";
+        finalScoreDOM.innerText = position.currentRow.toString();
+    }
+    deathTimeout = null;
+}
+
+export function clearDeathTimeout() {
+    if (deathTimeout) {
+        clearTimeout(deathTimeout);
+        deathTimeout = null;
+    }
+}
 
 export function hitTest() {
     const row = rows[position.currentRow - 1];
@@ -26,8 +43,13 @@ export function hitTest() {
 
                 setGameActive(false);
                 clearMoveQueue();
-                resultDOM.style.visibility = "visible";
-                finalScoreDOM.innerText = position.currentRow.toString();
+
+                // Reproducir animación de atropello
+                playDeathAnimation("hit");
+
+                // Mostrar resultado después de un delay para que se vea la animación
+                clearDeathTimeout(); // Limpiar cualquier timeout previo
+                deathTimeout = setTimeout(showGameOver, 1000);
             }
         });
     }
@@ -42,8 +64,13 @@ export function hitTest() {
         if (!isOnLog) {
             setGameActive(false);
             clearMoveQueue();
-            resultDOM.style.visibility = "visible";
-            finalScoreDOM.innerText = position.currentRow.toString();
+
+            // Reproducir animación de ahogamiento
+            playDeathAnimation("drown");
+
+            // Mostrar resultado después de un delay para que se vea la animación
+            clearDeathTimeout(); // Limpiar cualquier timeout previo
+            deathTimeout = setTimeout(showGameOver, 1000);
         }
     }
 }

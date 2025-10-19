@@ -74,15 +74,20 @@ export function clearMoveQueue() {
 export function initializePlayer() {
     player.position.x = 0;
     player.position.y = 0;
+
+    // Resetear completamente el grupo visual (posición y rotación)
+    player.children[0].position.x = 0;
+    player.children[0].position.y = 0;
     player.children[0].position.z = 0;
+    player.children[0].rotation.x = 0;
+    player.children[0].rotation.y = 0;
+    player.children[0].rotation.z = 0;
 
     position.currentRow = 0;
     position.currentTile = 0;
 
     clearMoveQueue();
-}
-
-export function queueMove(direction) {
+} export function queueMove(direction) {
     if (!gameState.isActive) {
         clearMoveQueue();
         return;
