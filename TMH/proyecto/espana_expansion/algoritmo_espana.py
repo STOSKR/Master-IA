@@ -2,6 +2,7 @@ import random
 import copy
 import logging
 import os
+import sys
 from datetime import datetime
 from typing import List, Dict, Tuple
 from math import radians, sin, cos, sqrt, atan2
@@ -21,20 +22,29 @@ import time
 probabilidad_reparacion = 0.7 
 
 def configurar_logging(output_dir="logs", prefijo="ag_espana"):
+    import sys
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
     timestamp = datetime.now().strftime("%d_%H_%M")
     log_filename = os.path.join(output_dir, f"{timestamp}_{prefijo}.log")
     
+    # Crear handler para consola con flush inmediato
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter('%(message)s'))
+    
+    # Crear handler para archivo
+    file_handler = logging.FileHandler(log_filename, encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', 
+                                                  datefmt='%Y-%m-%d %H:%M:%S'))
+    
+    # Configurar logging
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S',
-        handlers=[
-            logging.FileHandler(log_filename, encoding='utf-8'),
-            logging.StreamHandler() 
-        ]
+        handlers=[file_handler, console_handler],
+        force=True  # Forzar reconfiguración si ya existe
     )
     
     logger = logging.getLogger(__name__)
@@ -42,11 +52,13 @@ def configurar_logging(output_dir="logs", prefijo="ag_espana"):
     logger.info(f"INICIO DE EJECUCIÓN - Algoritmo Genético España")
     logger.info(f"Log guardado en: {log_filename}")
     logger.info(f"{'='*80}")
+    sys.stdout.flush()  # Flush inmediato
     
     return log_filename
 
 def log(mensaje):
     logging.info(mensaje)
+    sys.stdout.flush()  # Forzar flush inmediato para ver output en consola
 
 class Individual:
     def __init__(self, dias: List[List[int]], ciudades: List[str]):
