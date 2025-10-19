@@ -3,10 +3,14 @@ import { player } from "./components/Player";
 
 let animationFrame = 0;
 let deathAnimationType = null;
+let hitDirection = 1; // 1 = derecha (vuela hacia izquierda), -1 = izquierda (vuela hacia derecha)
 
-export function playDeathAnimation(type) {
+export function playDeathAnimation(type, direction = 1) {
     deathAnimationType = type;
     animationFrame = 0;
+    if (type === "hit") {
+        hitDirection = direction;
+    }
 }
 
 export function updateDeathAnimation() {
@@ -43,19 +47,30 @@ function animateDrowning() {
 }
 
 function animateHit() {
-    // El jugador vuela por el aire cuando es atropellado
-    const maxFrames = 60;
+    // El jugador sale volando dando vueltas cuando es atropellado
+    const maxFrames = 70;
 
-    if (animationFrame < 20) {
-        // Fase 1: Vuela hacia arriba y hacia atrás
-        player.children[0].position.z += 2;
-        player.children[0].position.x -= 1;
-        player.children[0].rotation.x += 0.15;
-        player.children[0].rotation.y += 0.1;
+    if (animationFrame < 25) {
+        // Fase 1: Vuela hacia arriba y en la dirección del impacto dando vueltas rápidas
+        player.children[0].position.z += 2.5;
+        player.children[0].position.x += 1.5 * hitDirection; // Vuela en la misma dirección del vehículo
+        player.children[0].position.y -= 0.5;
+
+        // Rotaciones múltiples para efecto de dar vueltas
+        player.children[0].rotation.x += 0.25;
+        player.children[0].rotation.y += 0.20 * hitDirection;
+        player.children[0].rotation.z += 0.18 * hitDirection;
     } else if (animationFrame < maxFrames) {
-        // Fase 2: Cae al suelo
-        player.children[0].position.z -= 1.5;
-        player.children[0].rotation.x += 0.1;
+        // Fase 2: Cae al suelo mientras sigue girando
+        player.children[0].position.z -= 2;
+
+        // Continuar moviéndose en la dirección del impacto
+        player.children[0].position.x += 0.5 * hitDirection;
+
+        // Continuar girando pero más lento
+        player.children[0].rotation.x += 0.15;
+        player.children[0].rotation.y += 0.10 * hitDirection;
+        player.children[0].rotation.z += 0.08 * hitDirection;
     }
 
     if (animationFrame >= maxFrames) {

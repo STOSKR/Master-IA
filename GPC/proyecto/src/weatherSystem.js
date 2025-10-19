@@ -82,9 +82,12 @@ class WeatherSystem {
 
                 drop.position.z += drop.userData.velocity * this.rainIntensity;
 
+                // Ajustar opacidad basada en la intensidad de la lluvia
+                drop.material.opacity = 0.6 * this.rainIntensity;
+
                 // Resetear gota si toca el suelo
                 if (drop.position.z < 0) {
-                    if (this.rainIntensity > 0) {
+                    if (this.rainIntensity > 0.1) {
                         drop.position.z = drop.userData.startZ;
                         drop.position.x = playerPosition.x + (Math.random() - 0.5) * 400;
                         drop.position.y = playerPosition.y + (Math.random() - 0.5) * 400;

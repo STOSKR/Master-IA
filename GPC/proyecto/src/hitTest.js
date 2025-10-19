@@ -57,8 +57,14 @@ export function hitTest() {
                 setGameActive(false);
                 clearMoveQueue();
 
-                // Reproducir animación de atropello
-                playDeathAnimation("hit");
+                // Determinar dirección del vehículo
+                // row.direction: true = derecha, false = izquierda
+                // Si va hacia la derecha (true), el jugador vuela hacia la izquierda (1)
+                // Si va hacia la izquierda (false), el jugador vuela hacia la derecha (-1)
+                const hitDirection = row.direction ? 1 : -1;
+
+                // Reproducir animación de atropello con dirección
+                playDeathAnimation("hit", hitDirection);
 
                 // Mostrar resultado después de un delay para que se vea la animación
                 clearDeathTimeout(); // Limpiar cualquier timeout previo
