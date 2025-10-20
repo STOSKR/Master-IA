@@ -1,0 +1,18 @@
+2025-10-20 09:33:03,766 - INFO - 📝 Log iniciado: logs\20_09_33_sa.log
+2025-10-20 09:33:03,768 - INFO - 🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria
+2025-10-20 09:33:03,768 - INFO - ================================================================================
+2025-10-20 09:33:03,768 - INFO - 🔥 INICIANDO ENFRIAMIENTO SIMULADO
+2025-10-20 09:33:03,768 - INFO - ================================================================================
+2025-10-20 09:33:03,768 - INFO - 🎲 Generando solución inicial aleatoria...
+2025-10-20 09:33:04,150 - INFO - Solución inicial creada - Fitness: 99.8, Puntos: 15233
+2025-10-20 09:33:04,150 - INFO -   ✅ La solución del GA es válida (sin duplicados).
+2025-10-20 09:33:04,153 - INFO - 📊 Configuración para Enfriamiento Simulado:
+2025-10-20 09:33:04,153 - INFO -   • Temperatura inicial: 3.0
+2025-10-20 09:33:04,153 - INFO -   • Temperatura mínima: 0.1
+2025-10-20 09:33:04,153 - INFO -   • Tipo de enfriamiento: 🔄 ADAPTATIVO (lineal por tiempo)
+2025-10-20 09:33:04,153 - INFO -   • Máx. tiempo: 240.0 minutos (4.0 horas)
+2025-10-20 09:33:04,153 - INFO -   • Máx. iter. sin mejora: 999,999
+2025-10-20 09:33:04,153 - INFO -   • Usar optimización 2-opt: ✅ SÍ
+2025-10-20 09:33:04,153 - INFO -   • Fitness inicial (REAL): 99.8
+2025-10-20 09:33:04,154 - INFO -   • Puntos iniciales (REAL): 15233
+2025-10-20 09:33:04,154 - INFO - ================================================================================

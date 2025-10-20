@@ -19,7 +19,7 @@ from algoritmo_espana import (
     reparar_individuo,
     analizar_solucion
 )
-tiempo_ejecucion = 2 # en horas (2 horas)
+tiempo_ejecucion = 4 # en horas (2 horas)
 # tiempo_ejecucion = 0.01 # en horas (36 segundos)
 # Configurar logging
 def configurar_logging_sa(nombre_archivo: str = None):
