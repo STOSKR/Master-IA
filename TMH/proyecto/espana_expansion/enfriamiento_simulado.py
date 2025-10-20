@@ -19,9 +19,7 @@ from algoritmo_espana import (
     reparar_individuo,
     analizar_solucion
 )
-tiempo_ejecucion = 4 # en horas (2 horas)
-# tiempo_ejecucion = 0.01 # en horas (36 segundos)
-# Configurar logging
+tiempo_ejecucion = 2
 def configurar_logging_sa(nombre_archivo: str = None):
     """Configura el sistema de logging para enfriamiento simulado"""
     import os
@@ -457,12 +455,17 @@ def enfriamiento_simulado(
     UMBRAL_DEGRADACION = 20   # Si cae más de 20 puntos (más estricto)
     
     while True:
-        # Verificar tiempo transcurrido
+        # Verificar tiempo transcurrido PRIMERO
         tiempo_transcurrido = time.time() - tiempo_inicio
         
         # Verificar límite de tiempo
         if tiempo_transcurrido >= max_tiempo_segundos:
             sa_logger.info(f"⏰ Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
+            break
+        
+        # Verificar límite de iteraciones si está definido
+        if max_iteraciones is not None and iteracion >= max_iteraciones:
+            sa_logger.info(f"🔢 Máximo de iteraciones alcanzado: {iteracion:,}")
             break
         
         tiempo_transcurrido = time.time() - tiempo_inicio
@@ -708,8 +711,14 @@ def enfriamiento_simulado(
         if not usar_temp_adaptativa and temperatura < T_minima:
             sa_logger.info(f"❄️  Temperatura mínima alcanzada: {temperatura:.4f} < {T_minima}")
             break
+        
         # Incrementar contador de iteraciones
         iteracion += 1
+        
+        # Condición de seguridad: si lleva muchas iteraciones sin mejora, parar
+        if iteraciones_sin_mejora > iteraciones_sin_mejora_max:
+            sa_logger.info(f"⏸️  Detenido por iteraciones sin mejora: {iteraciones_sin_mejora:,} > {iteraciones_sin_mejora_max:,}")
+            break
     
     # Cerrar visualización y guardar
     plt.ioff()
@@ -1368,14 +1377,33 @@ if __name__ == "__main__":
         
         from algoritmo_espana import algoritmo_genetico_espana
         
+        # IMPORTANTE: Configurar el logging del GA antes de ejecutarlo
+        from algoritmo_espana import configurar_logging as configurar_logging_ga
+        configurar_logging_ga(output_dir="logs", prefijo="ga_desde_sa")
+        
         # Ejecutar GA con configuración rápida
-        resultados_ga = algoritmo_genetico_espana(
-            num_dias=20,
-            lugares_por_dia=12,
-            tam_poblacion=1000,
-            tiempo_limite_horas= tiempo_ejecucion,
-            tasa_elitismo=0.10
-        )
+        sa_logger.info(f"⏳ Ejecutando GA por {tiempo_ejecucion} hora(s)...")
+        sa_logger.info("   (Esto puede tardar. Si se cuelga, usa Ctrl+C y ejecuta modo 1)")
+        sa_logger.info("")
+        
+        try:
+            resultados_ga = algoritmo_genetico_espana(
+                num_dias=20,
+                lugares_por_dia=12,
+                tam_poblacion=750,
+                tiempo_limite_horas=tiempo_ejecucion,
+                tasa_elitismo=0.10
+            )
+            sa_logger.info("")
+            sa_logger.info("✅ GA completado exitosamente")
+        except KeyboardInterrupt:
+            sa_logger.error("❌ Ejecución cancelada por el usuario")
+            sys.exit(1)
+        except Exception as e:
+            sa_logger.error(f"❌ Error en GA: {e}")
+            import traceback
+            sa_logger.error(traceback.format_exc())
+            sys.exit(1)
         
         sa_logger.info("="*80)
         sa_logger.info("FASE 2: ENFRIAMIENTO SIMULADO (Refinamiento Local)")
