@@ -20,3 +20,21 @@
 2025-10-20 20:38:30 - INFO - ================================================================================
 
 2025-10-20 20:38:30 - INFO - Creando población inicial
+2025-10-20 20:43:12 - INFO - Evaluando población inicial
+2025-10-20 20:43:17 - INFO - 
+Iniciando evolución (hasta 7200s)...
+
+2025-10-20 20:44:21 - INFO -   Gen    9 | Tiempo:    5.8m (resta: 114m) | Fitness:    126.9 | Puntos: 16637 | Dist:   153.3km
+2025-10-20 20:45:24 - INFO -   Gen   20 | Tiempo:    6.8m (resta: 113m) | Fitness:    131.2 | Puntos: 16962 | Dist:   158.6km
+2025-10-20 20:46:26 - INFO -   Gen   30 | Tiempo:    7.8m (resta: 112m) | Fitness:    134.6 | Puntos: 16658 | Dist:   163.4km
+2025-10-20 20:47:28 - INFO -   Gen   39 | Tiempo:    8.9m (resta: 111m) | Fitness:    136.5 | Puntos: 17016 | Dist:   161.4km
+2025-10-20 20:48:26 - INFO -   Gen   50 | Tiempo:    9.9m (resta: 110m) | Fitness:    140.1 | Puntos: 17020 | Dist:   169.5km
+2025-10-20 20:49:30 - INFO -   Gen   63 | Tiempo:   10.9m (resta: 109m) | Fitness:    141.0 | Puntos: 17307 | Dist:   152.2km
+2025-10-20 20:50:33 - INFO -   Gen   76 | Tiempo:   12.0m (resta: 108m) | Fitness:    144.3 | Puntos: 17195 | Dist:   137.5km
+2025-10-20 20:51:36 - INFO -   Gen   89 | Tiempo:   13.0m (resta: 106m) | Fitness:    148.2 | Puntos: 17231 | Dist:   143.4km
+2025-10-20 20:52:25 - INFO -   Gen  100 | Tiempo:   13.9m (resta: 106m) | Fitness:    148.3 | Puntos: 17365 | Dist:   147.6km
+2025-10-20 20:53:30 - INFO -   Gen  114 | Tiempo:   14.9m (resta: 105m) | Fitness:    149.8 | Puntos: 17221 | Dist:   129.8km
+2025-10-20 20:54:33 - INFO -   Gen  128 | Tiempo:   16.0m (resta: 104m) | Fitness:    151.6 | Puntos: 17308 | Dist:   149.7km
+2025-10-20 20:55:35 - INFO -   Gen  142 | Tiempo:   17.0m (resta: 102m) | Fitness:    152.9 | Puntos: 17535 | Dist:   141.3km
+2025-10-20 20:56:11 - INFO -   Gen  150 | Tiempo:   17.6m (resta: 102m) | Fitness:    153.5 | Puntos: 17498 | Dist:   151.2km
+2025-10-20 20:57:13 - INFO -   Gen  163 | Tiempo:   18.6m (resta: 101m) | Fitness:    153.5 | Puntos: 17498 | Dist:   151.2km
