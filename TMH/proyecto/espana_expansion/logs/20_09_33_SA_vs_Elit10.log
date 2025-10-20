@@ -256,3 +256,11 @@ ESTANCAMIENTO DETECTADO: 100 generaciones sin mejora en la era
 2025-10-20 13:05:43 - INFO -   Gen 2262 | Tiempo:  212.5m (resta: 27m) | Fitness:    164.9 | Puntos: 17792 | Dist:   147.1km
 2025-10-20 13:06:49 - INFO -   Gen 2274 | Tiempo:  213.6m (resta: 26m) | Fitness:    164.9 | Puntos: 17792 | Dist:   147.1km
 2025-10-20 13:07:53 - INFO -   Gen 2286 | Tiempo:  214.7m (resta: 25m) | Fitness:    164.9 | Puntos: 17792 | Dist:   147.1km
+2025-10-20 13:08:55 - INFO -   Gen 2298 | Tiempo:  215.7m (resta: 24m) | Fitness:    164.9 | Puntos: 17792 | Dist:   147.1km
+2025-10-20 20:26:21 - INFO - 
+  Tiempo límite alcanzado: 39196.1s
+2025-10-20 20:26:21 - INFO - 
+✅ Evolución completada!
+2025-10-20 20:26:21 - INFO - 🏆 Mejor fitness global: 164.9
+2025-10-20 20:26:21 - INFO - 📊 Generaciones ejecutadas: 2298
+2025-10-20 20:26:21 - INFO - ⏱️  Tiempo total: 39196.08s (653.27m)
