@@ -38,3 +38,6 @@ Iniciando evolución (hasta 7200s)...
 2025-10-20 20:55:35 - INFO -   Gen  142 | Tiempo:   17.0m (resta: 102m) | Fitness:    152.9 | Puntos: 17535 | Dist:   141.3km
 2025-10-20 20:56:11 - INFO -   Gen  150 | Tiempo:   17.6m (resta: 102m) | Fitness:    153.5 | Puntos: 17498 | Dist:   151.2km
 2025-10-20 20:57:13 - INFO -   Gen  163 | Tiempo:   18.6m (resta: 101m) | Fitness:    153.5 | Puntos: 17498 | Dist:   151.2km
+2025-10-20 20:58:15 - INFO -   Gen  177 | Tiempo:   19.7m (resta: 100m) | Fitness:    153.9 | Puntos: 17253 | Dist:   146.7km
+2025-10-20 20:59:16 - INFO -   Gen  191 | Tiempo:   20.7m (resta: 99m) | Fitness:    154.0 | Puntos: 17405 | Dist:   144.3km
+2025-10-20 20:59:56 - INFO -   Gen  200 | Tiempo:   21.4m (resta: 98m) | Fitness:    154.4 | Puntos: 17494 | Dist:   150.8km
