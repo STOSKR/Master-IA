@@ -17,6 +17,10 @@ import "./collectUserInput";
 
 async function startGame() {
   const stats = new Stats();
+  stats.dom.style.position = 'absolute';
+  stats.dom.style.top = '20px';
+  stats.dom.style.right = '20px';
+  stats.dom.style.left = 'auto';
   document.body.appendChild(stats.dom);
 
   const scene = new THREE.Scene();
