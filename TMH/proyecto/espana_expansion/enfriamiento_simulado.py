@@ -124,7 +124,8 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
     if fase_actual != fase_anterior:
         sa_logger.info(f"--- Cambiando a Fase: {fase_actual} (Progreso: {progreso:.1%}) ---")
     # ----------------------------------------
-    
+    """
+
     if usar_2opt:
         if fase_actual == "Inicial (Exploración)":
             # Exploración agresiva: más cambios grandes
@@ -144,6 +145,23 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
             probabilidades = [0.55, 0.0, 0.25, 0.12, 0.08]
         else: # Final
             probabilidades = [0.70, 0.0, 0.20, 0.10, 0.0]
+
+    
+    """
+    if usar_2opt:
+        if fase_actual == "Inicial (Exploración)":
+            probabilidades = [0.45, 0.35, 0.20, 0.0, 0.0]  
+        elif fase_actual == "Intermedia (Balance)":
+            probabilidades = [0.50, 0.40, 0.10, 0.0, 0.0]
+        else:  
+            probabilidades = [0.60, 0.35, 0.05, 0.0, 0.0]
+    else:
+        if fase_actual == "Inicial (Exploración)":
+            probabilidades = [0.60, 0.0, 0.40, 0.0, 0.0]
+        elif fase_actual == "Intermedia (Balance)":
+            probabilidades = [0.70, 0.0, 0.30, 0.0, 0.0]
+        else:  # Final
+            probabilidades = [0.80, 0.0, 0.20, 0.0, 0.0]
     
     tipo_perturbacion = random.choices(
         ["swap", "ruta_2opt", "reemplazar", "swap_intercity", "cambiar_ciudad"],
@@ -451,8 +469,8 @@ def enfriamiento_simulado(
     # NUEVO: Detección de degradación
     ultima_mejora_iter = 0
     fitness_medio_reciente = []  # Ventana deslizante de fitness
-    VENTANA_DEGRADACION = 50  # Cada 50 iteraciones (más frecuente)
-    UMBRAL_DEGRADACION = 20   # Si cae más de 20 puntos (más estricto)
+    VENTANA_DEGRADACION = 200  # Cada 200 iteraciones (más frecuente)
+    UMBRAL_DEGRADACION = 40   # Si cae más de 40 puntos (más estricto)
     
     while True:
         # Verificar tiempo transcurrido PRIMERO
@@ -1413,10 +1431,10 @@ if __name__ == "__main__":
         config_sa = {
             "T_inicial": 10,           # Temperatura baja para refinamiento
             "T_minima": 0.1,
-            "alpha": 0.98,             # Solo usado si usar_temp_adaptativa=False
+            "alpha": 0.99,             # Solo usado si usar_temp_adaptativa=False
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
             "usar_2opt": True,
-            "usar_temp_adaptativa": True  # Enfriamiento adaptativo
+            "usar_temp_adaptativa": False  # Enfriamiento adaptativo
         }
         
         # Ejecutar SA desde el mejor del GA
