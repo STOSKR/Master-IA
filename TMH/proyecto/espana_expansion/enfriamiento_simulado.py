@@ -124,8 +124,6 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
     if fase_actual != fase_anterior:
         sa_logger.info(f"--- Cambiando a Fase: {fase_actual} (Progreso: {progreso:.1%}) ---")
     # ----------------------------------------
-    """
-
     if usar_2opt:
         if fase_actual == "Inicial (Exploración)":
             # Exploración agresiva: más cambios grandes
@@ -162,7 +160,7 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
             probabilidades = [0.70, 0.0, 0.30, 0.0, 0.0]
         else:  # Final
             probabilidades = [0.80, 0.0, 0.20, 0.0, 0.0]
-    
+    """
     tipo_perturbacion = random.choices(
         ["swap", "ruta_2opt", "reemplazar", "swap_intercity", "cambiar_ciudad"],
         weights=probabilidades
@@ -469,8 +467,8 @@ def enfriamiento_simulado(
     # NUEVO: Detección de degradación
     ultima_mejora_iter = 0
     fitness_medio_reciente = []  # Ventana deslizante de fitness
-    VENTANA_DEGRADACION = 200  # Cada 200 iteraciones (más frecuente)
-    UMBRAL_DEGRADACION = 40   # Si cae más de 40 puntos (más estricto)
+    VENTANA_DEGRADACION = 50  # Cada 200 iteraciones (más frecuente)
+    UMBRAL_DEGRADACION = 20   # Si cae más de 40 puntos (más estricto)
     
     while True:
         # Verificar tiempo transcurrido PRIMERO

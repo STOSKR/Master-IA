@@ -1,0 +1,1197 @@
+2025-10-21 09:47:49 - INFO - ================================================================================
+2025-10-21 09:47:49 - INFO - INICIO DE EJECUCIÓN - Algoritmo Genético España
+2025-10-21 09:47:49 - INFO - Log guardado en: logs\21_09_47_ga_desde_sa.log
+2025-10-21 09:47:49 - INFO - ================================================================================
+2025-10-21 09:47:49 - INFO - ⏳ Ejecutando GA por 1 hora(s)...
+2025-10-21 09:47:49 - INFO -    (Esto puede tardar. Si se cuelga, usa Ctrl+C y ejecuta modo 1)
+2025-10-21 09:47:49 - INFO - 
+2025-10-21 09:47:49 - INFO - 
+================================================================================
+2025-10-21 09:47:49 - INFO - ALGORITMO GENÉTICO
+2025-10-21 09:47:49 - INFO - ================================================================================
+2025-10-21 09:47:49 - INFO - Días: 20
+2025-10-21 09:47:49 - INFO - Lugares/día: 12
+2025-10-21 09:47:49 - INFO - Población: 750
+2025-10-21 09:47:49 - INFO - Tiempo límite: 1h 0m (1.00h)
+2025-10-21 09:47:49 - INFO - Elitismo: 10%
+2025-10-21 09:47:49 - INFO - Reparación probabilística: 70% (30% mantienen diversidad)
+2025-10-21 09:47:49 - INFO - Dataset: 2237 lugares en 20 ciudades
+2025-10-21 09:47:49 - INFO - 💡 Presiona 'q' + ENTER en cualquier momento para detener y guardar el mejor resultado
+2025-10-21 09:47:49 - INFO - ================================================================================
+
+2025-10-21 09:47:49 - INFO - Creando población inicial
+2025-10-21 09:52:47 - INFO - Evaluando población inicial
+2025-10-21 09:52:52 - INFO - 
+Iniciando evolución (hasta 3600s)...
+
+2025-10-21 09:53:57 - INFO -   Gen    8 | Tiempo:    6.0m (resta: 53m) | Fitness:    126.9 | Puntos: 16637 | Dist:   153.3km
+2025-10-21 09:54:58 - INFO -   Gen   18 | Tiempo:    7.1m (resta: 52m) | Fitness:    131.2 | Puntos: 16962 | Dist:   158.6km
+2025-10-21 09:56:01 - INFO -   Gen   28 | Tiempo:    8.1m (resta: 51m) | Fitness:    132.6 | Puntos: 16658 | Dist:   163.4km
+2025-10-21 09:57:01 - INFO -   Gen   36 | Tiempo:    9.1m (resta: 50m) | Fitness:    136.2 | Puntos: 16718 | Dist:   152.0km
+2025-10-21 09:58:03 - INFO -   Gen   46 | Tiempo:   10.1m (resta: 49m) | Fitness:    138.6 | Puntos: 16707 | Dist:   149.2km
+2025-10-21 09:58:25 - INFO -   Gen   50 | Tiempo:   10.5m (resta: 49m) | Fitness:    140.1 | Puntos: 17020 | Dist:   169.5km
+2025-10-21 09:59:30 - INFO -   Gen   62 | Tiempo:   11.6m (resta: 48m) | Fitness:    141.0 | Puntos: 17074 | Dist:   145.6km
+2025-10-21 10:00:33 - INFO -   Gen   74 | Tiempo:   12.6m (resta: 47m) | Fitness:    144.3 | Puntos: 17195 | Dist:   137.5km
+2025-10-21 10:01:36 - INFO -   Gen   86 | Tiempo:   13.7m (resta: 46m) | Fitness:    148.2 | Puntos: 17231 | Dist:   143.4km
+2025-10-21 10:02:40 - INFO -   Gen   99 | Tiempo:   14.8m (resta: 45m) | Fitness:    148.2 | Puntos: 17315 | Dist:   142.1km
+2025-10-21 10:02:45 - INFO -   Gen  100 | Tiempo:   14.9m (resta: 45m) | Fitness:    148.3 | Puntos: 17365 | Dist:   147.6km
+2025-10-21 10:03:49 - INFO -   Gen  113 | Tiempo:   15.9m (resta: 44m) | Fitness:    149.8 | Puntos: 17221 | Dist:   129.8km
+2025-10-21 10:04:53 - INFO -   Gen  126 | Tiempo:   17.0m (resta: 43m) | Fitness:    151.6 | Puntos: 17308 | Dist:   149.7km
+2025-10-21 10:05:56 - INFO -   Gen  139 | Tiempo:   18.0m (resta: 41m) | Fitness:    152.9 | Puntos: 17535 | Dist:   141.3km
+2025-10-21 10:06:49 - INFO -   Gen  150 | Tiempo:   18.9m (resta: 41m) | Fitness:    153.5 | Puntos: 17498 | Dist:   151.2km
+2025-10-21 10:07:54 - INFO -   Gen  163 | Tiempo:   20.0m (resta: 40m) | Fitness:    153.5 | Puntos: 17498 | Dist:   151.2km
+2025-10-21 10:08:55 - INFO -   Gen  176 | Tiempo:   21.0m (resta: 38m) | Fitness:    153.9 | Puntos: 17253 | Dist:   146.7km
+2025-10-21 10:09:57 - INFO -   Gen  189 | Tiempo:   22.1m (resta: 37m) | Fitness:    154.0 | Puntos: 17405 | Dist:   144.3km
+2025-10-21 10:10:49 - INFO -   Gen  200 | Tiempo:   22.9m (resta: 37m) | Fitness:    154.4 | Puntos: 17494 | Dist:   150.8km
+2025-10-21 10:11:51 - INFO -   Gen  213 | Tiempo:   24.0m (resta: 36m) | Fitness:    154.4 | Puntos: 17494 | Dist:   150.8km
+2025-10-21 10:12:53 - INFO -   Gen  226 | Tiempo:   25.0m (resta: 35m) | Fitness:    155.7 | Puntos: 17473 | Dist:   142.4km
+2025-10-21 10:13:55 - INFO -   Gen  239 | Tiempo:   26.0m (resta: 33m) | Fitness:    155.7 | Puntos: 17473 | Dist:   142.4km
+2025-10-21 10:14:47 - INFO -   Gen  250 | Tiempo:   26.9m (resta: 33m) | Fitness:    155.7 | Puntos: 17473 | Dist:   142.4km
+2025-10-21 10:15:51 - INFO -   Gen  263 | Tiempo:   27.9m (resta: 32m) | Fitness:    155.9 | Puntos: 17427 | Dist:   136.6km
+2025-10-21 10:16:53 - INFO -   Gen  276 | Tiempo:   29.0m (resta: 31m) | Fitness:    156.2 | Puntos: 17431 | Dist:   139.9km
+2025-10-21 10:17:56 - INFO -   Gen  289 | Tiempo:   30.0m (resta: 29m) | Fitness:    156.2 | Puntos: 17431 | Dist:   139.9km
+2025-10-21 10:18:48 - INFO -   Gen  300 | Tiempo:   30.9m (resta: 29m) | Fitness:    156.3 | Puntos: 17458 | Dist:   134.7km
+2025-10-21 10:19:50 - INFO -   Gen  313 | Tiempo:   31.9m (resta: 28m) | Fitness:    156.7 | Puntos: 17463 | Dist:   131.2km
+2025-10-21 10:20:50 - INFO -   Gen  326 | Tiempo:   32.9m (resta: 27m) | Fitness:    156.7 | Puntos: 17463 | Dist:   130.4km
+2025-10-21 10:21:54 - INFO -   Gen  339 | Tiempo:   34.0m (resta: 25m) | Fitness:    157.0 | Puntos: 17453 | Dist:   136.0km
+2025-10-21 10:22:48 - INFO -   Gen  350 | Tiempo:   34.9m (resta: 25m) | Fitness:    157.0 | Puntos: 17453 | Dist:   136.0km
+2025-10-21 10:23:49 - INFO -   Gen  362 | Tiempo:   35.9m (resta: 24m) | Fitness:    157.5 | Puntos: 17495 | Dist:   129.1km
+2025-10-21 10:24:49 - INFO -   Gen  374 | Tiempo:   36.9m (resta: 23m) | Fitness:    157.9 | Puntos: 17505 | Dist:   135.1km
+2025-10-21 10:25:50 - INFO -   Gen  386 | Tiempo:   37.9m (resta: 22m) | Fitness:    157.9 | Puntos: 17505 | Dist:   135.1km
+2025-10-21 10:26:52 - INFO -   Gen  398 | Tiempo:   39.0m (resta: 21m) | Fitness:    157.9 | Puntos: 17505 | Dist:   135.1km
+2025-10-21 10:27:02 - INFO -   Gen  400 | Tiempo:   39.1m (resta: 20m) | Fitness:    157.9 | Puntos: 17505 | Dist:   135.1km
+2025-10-21 10:28:04 - INFO -   Gen  412 | Tiempo:   40.2m (resta: 19m) | Fitness:    157.9 | Puntos: 17505 | Dist:   135.1km
+2025-10-21 10:29:06 - INFO -   Gen  424 | Tiempo:   41.2m (resta: 18m) | Fitness:    157.9 | Puntos: 17505 | Dist:   135.1km
+2025-10-21 10:30:08 - INFO -   Gen  436 | Tiempo:   42.2m (resta: 17m) | Fitness:    157.9 | Puntos: 17505 | Dist:   133.7km
+2025-10-21 10:31:09 - INFO -   Gen  448 | Tiempo:   43.3m (resta: 16m) | Fitness:    158.3 | Puntos: 17463 | Dist:   130.5km
+2025-10-21 10:31:20 - INFO -   Gen  450 | Tiempo:   43.4m (resta: 16m) | Fitness:    158.3 | Puntos: 17463 | Dist:   130.5km
+2025-10-21 10:32:22 - INFO -   Gen  462 | Tiempo:   44.5m (resta: 15m) | Fitness:    158.3 | Puntos: 17463 | Dist:   130.5km
+2025-10-21 10:33:24 - INFO -   Gen  474 | Tiempo:   45.5m (resta: 14m) | Fitness:    158.4 | Puntos: 17454 | Dist:   142.5km
+2025-10-21 10:34:25 - INFO -   Gen  486 | Tiempo:   46.5m (resta: 13m) | Fitness:    158.4 | Puntos: 17454 | Dist:   141.3km
+2025-10-21 10:35:26 - INFO -   Gen  498 | Tiempo:   47.5m (resta: 12m) | Fitness:    158.6 | Puntos: 17497 | Dist:   129.8km
+2025-10-21 10:35:37 - INFO -   Gen  500 | Tiempo:   47.7m (resta: 12m) | Fitness:    158.7 | Puntos: 17507 | Dist:   130.4km
+2025-10-21 10:36:39 - INFO -   Gen  512 | Tiempo:   48.8m (resta: 11m) | Fitness:    158.7 | Puntos: 17512 | Dist:   128.6km
+2025-10-21 10:37:42 - INFO -   Gen  524 | Tiempo:   49.8m (resta: 10m) | Fitness:    159.2 | Puntos: 17440 | Dist:   141.0km
+2025-10-21 10:38:45 - INFO -   Gen  536 | Tiempo:   50.9m (resta: 9m) | Fitness:    159.2 | Puntos: 17440 | Dist:   141.0km
+2025-10-21 10:39:46 - INFO -   Gen  548 | Tiempo:   51.9m (resta: 8m) | Fitness:    159.2 | Puntos: 17437 | Dist:   138.3km
+2025-10-21 10:39:56 - INFO -   Gen  550 | Tiempo:   52.0m (resta: 7m) | Fitness:    159.2 | Puntos: 17437 | Dist:   138.3km
+2025-10-21 10:40:58 - INFO -   Gen  562 | Tiempo:   53.1m (resta: 6m) | Fitness:    159.3 | Puntos: 17424 | Dist:   134.3km
+2025-10-21 10:41:59 - INFO -   Gen  574 | Tiempo:   54.1m (resta: 5m) | Fitness:    159.5 | Puntos: 17521 | Dist:   135.2km
+2025-10-21 10:43:02 - INFO -   Gen  586 | Tiempo:   55.1m (resta: 4m) | Fitness:    159.6 | Puntos: 17632 | Dist:   135.5km
+2025-10-21 10:44:04 - INFO -   Gen  598 | Tiempo:   56.2m (resta: 3m) | Fitness:    159.6 | Puntos: 17632 | Dist:   135.5km
+2025-10-21 10:44:15 - INFO -   Gen  600 | Tiempo:   56.3m (resta: 3m) | Fitness:    159.6 | Puntos: 17632 | Dist:   135.5km
+2025-10-21 10:45:18 - INFO -   Gen  612 | Tiempo:   57.4m (resta: 2m) | Fitness:    159.6 | Puntos: 17632 | Dist:   135.5km
+2025-10-21 10:46:21 - INFO -   Gen  624 | Tiempo:   58.4m (resta: 1m) | Fitness:    159.8 | Puntos: 17633 | Dist:   145.3km
+2025-10-21 10:47:23 - INFO -   Gen  636 | Tiempo:   59.5m (resta: 0m) | Fitness:    159.8 | Puntos: 17633 | Dist:   145.3km
+2025-10-21 10:47:54 - INFO - 
+  Tiempo límite alcanzado: 3604.9s
+2025-10-21 10:47:54 - INFO - 
+✅ Evolución completada!
+2025-10-21 10:47:54 - INFO - 🏆 Mejor fitness global: 159.8
+2025-10-21 10:47:54 - INFO - 📊 Generaciones ejecutadas: 642
+2025-10-21 10:47:54 - INFO - ⏱️  Tiempo total: 3604.92s (60.08m)
+2025-10-21 10:47:54 - INFO - 
+2025-10-21 10:47:54 - INFO - ✅ GA completado exitosamente
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:54 - INFO - FASE 2: ENFRIAMIENTO SIMULADO (Refinamiento Local)
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:54 - INFO - 🔗 ENFRIAMIENTO SIMULADO DESDE ALGORITMO GENÉTICO (HÍBRIDO GA+SA)
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:54 - INFO - 📍 Estrategia: Partir del MEJOR individuo del GA
+2025-10-21 10:47:54 - INFO - 
+2025-10-21 10:47:54 - INFO - 💡 Configuración OPTIMIZADA de refinamiento:
+2025-10-21 10:47:54 - INFO -   • Temperatura inicial: 10 (baja para refinamiento local)
+2025-10-21 10:47:54 - INFO -   • Enfriamiento: Adaptativo (lineal por tiempo)
+2025-10-21 10:47:54 - INFO -   • Tiempo máximo: 60.0 minutos (1.0 horas)
+2025-10-21 10:47:54 - INFO -   • Vecindad adaptativa: 5 tipos de perturbaciones con probabilidades dinámicas
+2025-10-21 10:47:54 - INFO -   • Estrategia: Perturbaciones conservadoras que preservan calidad del GA
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:54 - INFO - 🔥 INICIANDO ENFRIAMIENTO SIMULADO
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:54 - INFO - 🚀 Usando solución inicial proporcionada (warm start)...
+2025-10-21 10:47:54 - INFO -   • Fitness reportado por el GA: 159.8
+2025-10-21 10:47:54 - INFO -   • Puntos reportados por el GA: 17633
+2025-10-21 10:47:54 - INFO - Usando solución inicial proporcionada - Fitness: 159.8, Puntos: 17633
+2025-10-21 10:47:54 - INFO -   ✅ La solución del GA es válida (sin duplicados).
+2025-10-21 10:47:54 - INFO - 📊 Configuración para Enfriamiento Simulado:
+2025-10-21 10:47:54 - INFO -   • Temperatura inicial: 10.0
+2025-10-21 10:47:54 - INFO -   • Temperatura mínima: 0.1
+2025-10-21 10:47:54 - INFO -   • Tipo de enfriamiento: 🔄 ADAPTATIVO (lineal por tiempo)
+2025-10-21 10:47:54 - INFO -   • Máx. tiempo: 60.0 minutos (1.0 horas)
+2025-10-21 10:47:54 - INFO -   • Máx. iter. sin mejora: 999,999
+2025-10-21 10:47:54 - INFO -   • Usar optimización 2-opt: ✅ SÍ
+2025-10-21 10:47:54 - INFO -   • Fitness inicial (REAL): 159.8
+2025-10-21 10:47:54 - INFO -   • Puntos iniciales (REAL): 17633
+2025-10-21 10:47:54 - INFO - ================================================================================
+2025-10-21 10:47:55 - INFO - 🔄 Iniciando búsqueda...
+2025-10-21 10:47:55 - INFO - Iniciando búsqueda por vecindario
+2025-10-21 10:47:55 - INFO - Configuración: T_inicial=10, alpha=0.99, max_tiempo=3600s, usar_2opt=True
+2025-10-21 10:47:55 - INFO - --- Cambiando a Fase: Inicial (Exploración) (Progreso: 0.0%) ---
+2025-10-21 10:48:14 - INFO -   Iter   500 | Tiempo:    0.3min ( 0.5%) | T =     9.84 | Fitness =    130.3 | Mejor =    159.8 | Aceptación =  98.2%
+2025-10-21 10:48:14 - INFO - Progreso iter 500: T=9.84, Fitness=130.3, Mejor=159.8, Tasa_acept=98.2%
+2025-10-21 10:48:33 - INFO -   Iter  1000 | Tiempo:    0.6min ( 1.1%) | T =     9.69 | Fitness =    133.2 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:48:33 - INFO - Progreso iter 1000: T=9.69, Fitness=133.2, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:48:53 - INFO -   Iter  1500 | Tiempo:    1.0min ( 1.6%) | T =     9.53 | Fitness =    133.3 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:48:53 - INFO - Progreso iter 1500: T=9.53, Fitness=133.3, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:49:05 - INFO - Iter 1783: Aceptada solución con delta=-10.6 (T=9.43)
+2025-10-21 10:49:05 - INFO -   📊 Desglose del cambio:
+2025-10-21 10:49:05 - INFO -      Puntos: +10 → 17124 total
+2025-10-21 10:49:05 - INFO -      Tiempo: +486.9min → 15096.0min total
+2025-10-21 10:49:05 - INFO -      Distancia: +37.2km → 219.2km total
+2025-10-21 10:49:14 - INFO -   Iter  2000 | Tiempo:    1.3min ( 2.2%) | T =     9.36 | Fitness =    124.9 | Mejor =    159.8 | Aceptación =  99.0%
+2025-10-21 10:49:14 - INFO - Progreso iter 2000: T=9.36, Fitness=124.9, Mejor=159.8, Tasa_acept=99.0%
+2025-10-21 10:49:32 - INFO -   Iter  2500 | Tiempo:    1.6min ( 2.7%) | T =     9.22 | Fitness =    133.3 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:49:32 - INFO - Progreso iter 2500: T=9.22, Fitness=133.3, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:49:51 - INFO -   Iter  3000 | Tiempo:    1.9min ( 3.2%) | T =     9.08 | Fitness =    134.8 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:49:51 - INFO - Progreso iter 3000: T=9.08, Fitness=134.8, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:50:10 - INFO -   Iter  3500 | Tiempo:    2.3min ( 3.8%) | T =     8.94 | Fitness =    134.0 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:50:10 - INFO - Progreso iter 3500: T=8.94, Fitness=134.0, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:50:31 - INFO -   Iter  4000 | Tiempo:    2.6min ( 4.3%) | T =     8.79 | Fitness =    127.0 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:50:31 - INFO - Progreso iter 4000: T=8.79, Fitness=127.0, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:50:52 - INFO -   Iter  4500 | Tiempo:    3.0min ( 4.9%) | T =     8.64 | Fitness =    133.4 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:50:52 - INFO - Progreso iter 4500: T=8.64, Fitness=133.4, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:51:15 - INFO -   Iter  5000 | Tiempo:    3.3min ( 5.6%) | T =     8.48 | Fitness =    133.5 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:51:15 - INFO - Progreso iter 5000: T=8.48, Fitness=133.5, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:51:39 - INFO -   Iter  5500 | Tiempo:    3.7min ( 6.2%) | T =     8.31 | Fitness =    132.5 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:51:39 - INFO - Progreso iter 5500: T=8.31, Fitness=132.5, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:52:03 - INFO -   Iter  6000 | Tiempo:    4.1min ( 6.9%) | T =     8.15 | Fitness =    127.0 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:52:03 - INFO - Progreso iter 6000: T=8.15, Fitness=127.0, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:52:28 - INFO -   Iter  6500 | Tiempo:    4.6min ( 7.6%) | T =     7.98 | Fitness =    133.0 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:52:28 - INFO - Progreso iter 6500: T=7.98, Fitness=133.0, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:52:54 - INFO -   Iter  7000 | Tiempo:    5.0min ( 8.3%) | T =     7.81 | Fitness =    131.8 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:52:54 - INFO - Progreso iter 7000: T=7.81, Fitness=131.8, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:53:17 - INFO -   Iter  7500 | Tiempo:    5.4min ( 9.0%) | T =     7.67 | Fitness =    130.9 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:53:17 - INFO - Progreso iter 7500: T=7.67, Fitness=130.9, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:53:40 - INFO -   Iter  8000 | Tiempo:    5.8min ( 9.6%) | T =     7.52 | Fitness =    131.7 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:53:40 - INFO - Progreso iter 8000: T=7.52, Fitness=131.7, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:54:02 - INFO -   Iter  8500 | Tiempo:    6.1min (10.2%) | T =     7.39 | Fitness =    132.9 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:54:02 - INFO - Progreso iter 8500: T=7.39, Fitness=132.9, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:54:24 - INFO -   Iter  9000 | Tiempo:    6.5min (10.8%) | T =     7.25 | Fitness =    134.3 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:54:24 - INFO - Progreso iter 9000: T=7.25, Fitness=134.3, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:54:46 - INFO -   Iter  9500 | Tiempo:    6.9min (11.4%) | T =     7.12 | Fitness =    130.7 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:54:46 - INFO - Progreso iter 9500: T=7.12, Fitness=130.7, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:55:09 - INFO -   Iter 10000 | Tiempo:    7.3min (12.1%) | T =     6.99 | Fitness =    132.7 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:55:09 - INFO - Progreso iter 10000: T=6.99, Fitness=132.7, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:55:33 - INFO -   Iter 10500 | Tiempo:    7.6min (12.7%) | T =     6.86 | Fitness =    131.4 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:55:33 - INFO - Progreso iter 10500: T=6.86, Fitness=131.4, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:55:57 - INFO -   Iter 11000 | Tiempo:    8.0min (13.4%) | T =     6.72 | Fitness =    131.8 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:55:57 - INFO - Progreso iter 11000: T=6.72, Fitness=131.8, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:56:22 - INFO -   Iter 11500 | Tiempo:    8.5min (14.1%) | T =     6.59 | Fitness =    135.1 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:56:22 - INFO - Progreso iter 11500: T=6.59, Fitness=135.1, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:56:46 - INFO -   Iter 12000 | Tiempo:    8.9min (14.8%) | T =     6.45 | Fitness =    134.9 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:56:46 - INFO - Progreso iter 12000: T=6.45, Fitness=134.9, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:57:12 - INFO -   Iter 12500 | Tiempo:    9.3min (15.5%) | T =     6.32 | Fitness =    138.1 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:57:12 - INFO - Progreso iter 12500: T=6.32, Fitness=138.1, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:57:30 - WARNING - ================================================================================
+2025-10-21 10:57:30 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 12855
+2025-10-21 10:57:30 - WARNING -    Fitness actual: 133.0
+2025-10-21 10:57:30 - WARNING -    Fitness vecino: 111.2
+2025-10-21 10:57:30 - WARNING -    Delta: -21.7
+2025-10-21 10:57:30 - WARNING -    Temperatura: 6.23
+2025-10-21 10:57:30 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 10:57:30 - WARNING -    Vecino - Puntos: 17245, Tiempo: 15190.0min, Distancia: 266.2km
+2025-10-21 10:57:30 - WARNING -    Actual - Puntos: 17242, Tiempo: 13758.2min, Distancia: 163.2km
+2025-10-21 10:57:30 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 10:57:30 - WARNING - ================================================================================
+2025-10-21 10:57:30 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 12855
+2025-10-21 10:57:30 - WARNING -    Fitness: 133.0 → 111.2 (Δ=-21.7)
+2025-10-21 10:57:30 - WARNING -    Ver detalles en archivo de log
+2025-10-21 10:57:37 - INFO -   Iter 13000 | Tiempo:    9.7min (16.2%) | T =     6.19 | Fitness =    133.0 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:57:37 - INFO - Progreso iter 13000: T=6.19, Fitness=133.0, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:58:04 - INFO -   Iter 13500 | Tiempo:   10.2min (16.9%) | T =     6.06 | Fitness =    134.8 | Mejor =    159.8 | Aceptación =  98.9%
+2025-10-21 10:58:04 - INFO - Progreso iter 13500: T=6.06, Fitness=134.8, Mejor=159.8, Tasa_acept=98.9%
+2025-10-21 10:58:21 - WARNING - ================================================================================
+2025-10-21 10:58:21 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 13818
+2025-10-21 10:58:21 - WARNING -    Fitness actual: 137.4
+2025-10-21 10:58:21 - WARNING -    Fitness vecino: 103.2
+2025-10-21 10:58:21 - WARNING -    Delta: -34.2
+2025-10-21 10:58:21 - WARNING -    Temperatura: 5.97
+2025-10-21 10:58:21 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 10:58:21 - WARNING -    Vecino - Puntos: 17114, Tiempo: 15921.8min, Distancia: 308.5km
+2025-10-21 10:58:21 - WARNING -    Actual - Puntos: 17099, Tiempo: 14000.6min, Distancia: 159.6km
+2025-10-21 10:58:21 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 10:58:21 - WARNING - ================================================================================
+2025-10-21 10:58:21 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 13818
+2025-10-21 10:58:21 - WARNING -    Fitness: 137.4 → 103.2 (Δ=-34.2)
+2025-10-21 10:58:21 - WARNING -    Ver detalles en archivo de log
+2025-10-21 10:58:31 - INFO -   Iter 14000 | Tiempo:   10.6min (17.7%) | T =     5.92 | Fitness =    136.4 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:58:31 - INFO - Progreso iter 14000: T=5.92, Fitness=136.4, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:58:58 - INFO -   Iter 14500 | Tiempo:   11.1min (18.4%) | T =     5.79 | Fitness =    134.5 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:58:58 - INFO - Progreso iter 14500: T=5.79, Fitness=134.5, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:59:09 - WARNING - ================================================================================
+2025-10-21 10:59:09 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 14697
+2025-10-21 10:59:09 - WARNING -    Fitness actual: 134.8
+2025-10-21 10:59:09 - WARNING -    Fitness vecino: 110.4
+2025-10-21 10:59:09 - WARNING -    Delta: -24.5
+2025-10-21 10:59:09 - WARNING -    Temperatura: 5.74
+2025-10-21 10:59:09 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 10:59:09 - WARNING -    Vecino - Puntos: 17150, Tiempo: 15318.4min, Distancia: 250.7km
+2025-10-21 10:59:09 - WARNING -    Actual - Puntos: 17149, Tiempo: 13902.0min, Distancia: 147.7km
+2025-10-21 10:59:09 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 10:59:09 - WARNING - ================================================================================
+2025-10-21 10:59:09 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 14697
+2025-10-21 10:59:09 - WARNING -    Fitness: 134.8 → 110.4 (Δ=-24.5)
+2025-10-21 10:59:09 - WARNING -    Ver detalles en archivo de log
+2025-10-21 10:59:25 - INFO -   Iter 15000 | Tiempo:   11.5min (19.2%) | T =     5.67 | Fitness =    131.9 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:59:25 - INFO - Progreso iter 15000: T=5.67, Fitness=131.9, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 10:59:53 - INFO -   Iter 15500 | Tiempo:   12.0min (20.0%) | T =     5.54 | Fitness =    133.8 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 10:59:53 - INFO - Progreso iter 15500: T=5.54, Fitness=133.8, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 11:00:21 - INFO -   Iter 16000 | Tiempo:   12.4min (20.7%) | T =     5.41 | Fitness =    132.0 | Mejor =    159.8 | Aceptación =  98.8%
+2025-10-21 11:00:21 - INFO - Progreso iter 16000: T=5.41, Fitness=132.0, Mejor=159.8, Tasa_acept=98.8%
+2025-10-21 11:00:50 - INFO -   Iter 16500 | Tiempo:   12.9min (21.5%) | T =     5.29 | Fitness =    135.1 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:00:50 - INFO - Progreso iter 16500: T=5.29, Fitness=135.1, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:01:18 - INFO -   Iter 17000 | Tiempo:   13.4min (22.3%) | T =     5.17 | Fitness =    135.3 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:01:18 - INFO - Progreso iter 17000: T=5.17, Fitness=135.3, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:01:47 - INFO -   Iter 17500 | Tiempo:   13.9min (23.1%) | T =     5.05 | Fitness =    130.8 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:01:47 - INFO - Progreso iter 17500: T=5.05, Fitness=130.8, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:02:16 - INFO -   Iter 18000 | Tiempo:   14.4min (23.9%) | T =     4.93 | Fitness =    135.2 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:02:16 - INFO - Progreso iter 18000: T=4.93, Fitness=135.2, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:02:46 - INFO -   Iter 18500 | Tiempo:   14.9min (24.8%) | T =     4.81 | Fitness =    134.8 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:02:46 - INFO - Progreso iter 18500: T=4.81, Fitness=134.8, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:03:16 - INFO -   Iter 19000 | Tiempo:   15.4min (25.6%) | T =     4.69 | Fitness =    133.2 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:03:16 - INFO - Progreso iter 19000: T=4.69, Fitness=133.2, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:03:47 - INFO -   Iter 19500 | Tiempo:   15.9min (26.5%) | T =     4.58 | Fitness =    133.1 | Mejor =    159.8 | Aceptación =  98.7%
+2025-10-21 11:03:47 - INFO - Progreso iter 19500: T=4.58, Fitness=133.1, Mejor=159.8, Tasa_acept=98.7%
+2025-10-21 11:04:18 - INFO -   Iter 20000 | Tiempo:   16.4min (27.3%) | T =     4.46 | Fitness =    135.6 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:04:18 - INFO - Progreso iter 20000: T=4.46, Fitness=135.6, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:04:49 - INFO -   Iter 20500 | Tiempo:   16.9min (28.2%) | T =     4.35 | Fitness =    135.0 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:04:49 - INFO - Progreso iter 20500: T=4.35, Fitness=135.0, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:05:19 - INFO -   Iter 21000 | Tiempo:   17.4min (29.0%) | T =     4.25 | Fitness =    131.2 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:05:19 - INFO - Progreso iter 21000: T=4.25, Fitness=131.2, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:05:39 - WARNING - ================================================================================
+2025-10-21 11:05:39 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 21332
+2025-10-21 11:05:39 - WARNING -    Fitness actual: 135.1
+2025-10-21 11:05:39 - WARNING -    Fitness vecino: 104.4
+2025-10-21 11:05:39 - WARNING -    Delta: -30.7
+2025-10-21 11:05:39 - WARNING -    Temperatura: 4.18
+2025-10-21 11:05:39 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 11:05:39 - WARNING -    Vecino - Puntos: 17030, Tiempo: 16240.1min, Distancia: 307.1km
+2025-10-21 11:05:39 - WARNING -    Actual - Puntos: 17011, Tiempo: 14297.4min, Distancia: 159.0km
+2025-10-21 11:05:39 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 11:05:39 - WARNING - ================================================================================
+2025-10-21 11:05:39 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 21332
+2025-10-21 11:05:39 - WARNING -    Fitness: 135.1 → 104.4 (Δ=-30.7)
+2025-10-21 11:05:39 - WARNING -    Ver detalles en archivo de log
+2025-10-21 11:05:49 - INFO -   Iter 21500 | Tiempo:   17.9min (29.9%) | T =     4.14 | Fitness =    133.0 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:05:49 - INFO - Progreso iter 21500: T=4.14, Fitness=133.0, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:05:54 - INFO - --- Cambiando a Fase: Intermedia (Balance) (Progreso: 30.0%) ---
+2025-10-21 11:06:20 - INFO -   Iter 22000 | Tiempo:   18.4min (30.7%) | T =     4.04 | Fitness =    130.1 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:06:20 - INFO - Progreso iter 22000: T=4.04, Fitness=130.1, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:06:52 - INFO -   Iter 22500 | Tiempo:   19.0min (31.6%) | T =     3.94 | Fitness =    134.7 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:06:52 - INFO - Progreso iter 22500: T=3.94, Fitness=134.7, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:07:24 - INFO -   Iter 23000 | Tiempo:   19.5min (32.5%) | T =     3.84 | Fitness =    129.1 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:07:24 - INFO - Progreso iter 23000: T=3.84, Fitness=129.1, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:07:55 - INFO -   Iter 23500 | Tiempo:   20.0min (33.4%) | T =     3.74 | Fitness =    132.9 | Mejor =    159.8 | Aceptación =  98.6%
+2025-10-21 11:07:55 - INFO - Progreso iter 23500: T=3.74, Fitness=132.9, Mejor=159.8, Tasa_acept=98.6%
+2025-10-21 11:08:13 - WARNING - ================================================================================
+2025-10-21 11:08:13 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 23777
+2025-10-21 11:08:13 - WARNING -    Fitness actual: 132.4
+2025-10-21 11:08:13 - WARNING -    Fitness vecino: 102.1
+2025-10-21 11:08:13 - WARNING -    Delta: -30.4
+2025-10-21 11:08:13 - WARNING -    Temperatura: 3.69
+2025-10-21 11:08:13 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 11:08:13 - WARNING -    Vecino - Puntos: 16993, Tiempo: 15298.2min, Distancia: 291.9km
+2025-10-21 11:08:13 - WARNING -    Actual - Puntos: 16985, Tiempo: 13452.0min, Distancia: 143.1km
+2025-10-21 11:08:13 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 11:08:13 - WARNING - ================================================================================
+2025-10-21 11:08:13 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 23777
+2025-10-21 11:08:13 - WARNING -    Fitness: 132.4 → 102.1 (Δ=-30.4)
+2025-10-21 11:08:13 - WARNING -    Ver detalles en archivo de log
+2025-10-21 11:08:27 - INFO -   Iter 24000 | Tiempo:   20.5min (34.2%) | T =     3.64 | Fitness =    128.3 | Mejor =    159.8 | Aceptación =  98.5%
+2025-10-21 11:08:27 - INFO - Progreso iter 24000: T=3.64, Fitness=128.3, Mejor=159.8, Tasa_acept=98.5%
+2025-10-21 11:08:59 - INFO -   Iter 24500 | Tiempo:   21.1min (35.1%) | T =     3.55 | Fitness =    135.6 | Mejor =    159.8 | Aceptación =  98.5%
+2025-10-21 11:08:59 - INFO - Progreso iter 24500: T=3.55, Fitness=135.6, Mejor=159.8, Tasa_acept=98.5%
+2025-10-21 11:09:33 - INFO -   Iter 25000 | Tiempo:   21.6min (36.1%) | T =     3.46 | Fitness =    131.1 | Mejor =    159.8 | Aceptación =  98.5%
+2025-10-21 11:09:33 - INFO - Progreso iter 25000: T=3.46, Fitness=131.1, Mejor=159.8, Tasa_acept=98.5%
+2025-10-21 11:10:06 - INFO -   Iter 25500 | Tiempo:   22.2min (37.0%) | T =     3.36 | Fitness =    134.4 | Mejor =    159.8 | Aceptación =  98.5%
+2025-10-21 11:10:06 - INFO - Progreso iter 25500: T=3.36, Fitness=134.4, Mejor=159.8, Tasa_acept=98.5%
+2025-10-21 11:10:40 - INFO -   Iter 26000 | Tiempo:   22.8min (37.9%) | T =     3.27 | Fitness =    133.5 | Mejor =    159.8 | Aceptación =  98.5%
+2025-10-21 11:10:40 - INFO - Progreso iter 26000: T=3.27, Fitness=133.5, Mejor=159.8, Tasa_acept=98.5%
+2025-10-21 11:11:13 - INFO -   Iter 26500 | Tiempo:   23.3min (38.9%) | T =     3.19 | Fitness =    134.5 | Mejor =    159.8 | Aceptación =  98.5%
+2025-10-21 11:11:13 - INFO - Progreso iter 26500: T=3.19, Fitness=134.5, Mejor=159.8, Tasa_acept=98.5%
+2025-10-21 11:11:47 - INFO -   Iter 27000 | Tiempo:   23.9min (39.8%) | T =     3.10 | Fitness =    133.2 | Mejor =    159.8 | Aceptación =  98.4%
+2025-10-21 11:11:47 - INFO - Progreso iter 27000: T=3.10, Fitness=133.2, Mejor=159.8, Tasa_acept=98.4%
+2025-10-21 11:12:21 - INFO -   Iter 27500 | Tiempo:   24.4min (40.7%) | T =     3.02 | Fitness =    133.8 | Mejor =    159.8 | Aceptación =  98.4%
+2025-10-21 11:12:21 - INFO - Progreso iter 27500: T=3.02, Fitness=133.8, Mejor=159.8, Tasa_acept=98.4%
+2025-10-21 11:12:56 - INFO -   Iter 28000 | Tiempo:   25.0min (41.7%) | T =     2.93 | Fitness =    137.0 | Mejor =    159.8 | Aceptación =  98.4%
+2025-10-21 11:12:56 - INFO - Progreso iter 28000: T=2.93, Fitness=137.0, Mejor=159.8, Tasa_acept=98.4%
+2025-10-21 11:13:31 - INFO -   Iter 28500 | Tiempo:   25.6min (42.7%) | T =     2.85 | Fitness =    133.7 | Mejor =    159.8 | Aceptación =  98.4%
+2025-10-21 11:13:31 - INFO - Progreso iter 28500: T=2.85, Fitness=133.7, Mejor=159.8, Tasa_acept=98.4%
+2025-10-21 11:14:07 - INFO -   Iter 29000 | Tiempo:   26.2min (43.7%) | T =     2.77 | Fitness =    139.2 | Mejor =    159.8 | Aceptación =  98.4%
+2025-10-21 11:14:07 - INFO - Progreso iter 29000: T=2.77, Fitness=139.2, Mejor=159.8, Tasa_acept=98.4%
+2025-10-21 11:14:43 - INFO -   Iter 29500 | Tiempo:   26.8min (44.7%) | T =     2.69 | Fitness =    138.5 | Mejor =    159.8 | Aceptación =  98.4%
+2025-10-21 11:14:43 - INFO - Progreso iter 29500: T=2.69, Fitness=138.5, Mejor=159.8, Tasa_acept=98.4%
+2025-10-21 11:15:22 - INFO -   Iter 30000 | Tiempo:   27.5min (45.8%) | T =     2.61 | Fitness =    138.5 | Mejor =    159.8 | Aceptación =  98.3%
+2025-10-21 11:15:22 - INFO - Progreso iter 30000: T=2.61, Fitness=138.5, Mejor=159.8, Tasa_acept=98.3%
+2025-10-21 11:16:00 - INFO -   Iter 30500 | Tiempo:   28.1min (46.8%) | T =     2.53 | Fitness =    138.3 | Mejor =    159.8 | Aceptación =  98.3%
+2025-10-21 11:16:00 - INFO - Progreso iter 30500: T=2.53, Fitness=138.3, Mejor=159.8, Tasa_acept=98.3%
+2025-10-21 11:16:02 - WARNING - ================================================================================
+2025-10-21 11:16:02 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 30531
+2025-10-21 11:16:02 - WARNING -    Fitness actual: 136.6
+2025-10-21 11:16:02 - WARNING -    Fitness vecino: 105.1
+2025-10-21 11:16:02 - WARNING -    Delta: -31.5
+2025-10-21 11:16:02 - WARNING -    Temperatura: 2.53
+2025-10-21 11:16:02 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 11:16:02 - WARNING -    Vecino - Puntos: 17382, Tiempo: 16364.6min, Distancia: 312.5km
+2025-10-21 11:16:02 - WARNING -    Actual - Puntos: 17371, Tiempo: 14468.0min, Distancia: 164.4km
+2025-10-21 11:16:02 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 11:16:02 - WARNING - ================================================================================
+2025-10-21 11:16:02 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 30531
+2025-10-21 11:16:02 - WARNING -    Fitness: 136.6 → 105.1 (Δ=-31.5)
+2025-10-21 11:16:02 - WARNING -    Ver detalles en archivo de log
+2025-10-21 11:16:38 - INFO -   Iter 31000 | Tiempo:   28.7min (47.9%) | T =     2.45 | Fitness =    134.4 | Mejor =    159.8 | Aceptación =  98.3%
+2025-10-21 11:16:38 - INFO - Progreso iter 31000: T=2.45, Fitness=134.4, Mejor=159.8, Tasa_acept=98.3%
+2025-10-21 11:17:16 - INFO -   Iter 31500 | Tiempo:   29.4min (48.9%) | T =     2.38 | Fitness =    138.2 | Mejor =    159.8 | Aceptación =  98.3%
+2025-10-21 11:17:16 - INFO - Progreso iter 31500: T=2.38, Fitness=138.2, Mejor=159.8, Tasa_acept=98.3%
+2025-10-21 11:17:55 - INFO -   Iter 32000 | Tiempo:   30.0min (50.0%) | T =     2.31 | Fitness =    134.7 | Mejor =    159.8 | Aceptación =  98.2%
+2025-10-21 11:17:55 - INFO - Progreso iter 32000: T=2.31, Fitness=134.7, Mejor=159.8, Tasa_acept=98.2%
+2025-10-21 11:18:29 - WARNING - ================================================================================
+2025-10-21 11:18:29 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 32439
+2025-10-21 11:18:29 - WARNING -    Fitness actual: 134.9
+2025-10-21 11:18:29 - WARNING -    Fitness vecino: 112.6
+2025-10-21 11:18:29 - WARNING -    Delta: -22.3
+2025-10-21 11:18:29 - WARNING -    Temperatura: 2.25
+2025-10-21 11:18:29 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 11:18:29 - WARNING -    Vecino - Puntos: 17337, Tiempo: 15052.1min, Distancia: 248.9km
+2025-10-21 11:18:29 - WARNING -    Actual - Puntos: 17334, Tiempo: 13586.0min, Distancia: 145.5km
+2025-10-21 11:18:29 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 11:18:29 - WARNING - ================================================================================
+2025-10-21 11:18:29 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 32439
+2025-10-21 11:18:29 - WARNING -    Fitness: 134.9 → 112.6 (Δ=-22.3)
+2025-10-21 11:18:29 - WARNING -    Ver detalles en archivo de log
+2025-10-21 11:18:33 - INFO -   Iter 32500 | Tiempo:   30.6min (51.1%) | T =     2.24 | Fitness =    132.9 | Mejor =    159.8 | Aceptación =  98.2%
+2025-10-21 11:18:33 - INFO - Progreso iter 32500: T=2.24, Fitness=132.9, Mejor=159.8, Tasa_acept=98.2%
+2025-10-21 11:19:11 - INFO -   Iter 33000 | Tiempo:   31.3min (52.1%) | T =     2.17 | Fitness =    136.3 | Mejor =    159.8 | Aceptación =  98.2%
+2025-10-21 11:19:11 - INFO - Progreso iter 33000: T=2.17, Fitness=136.3, Mejor=159.8, Tasa_acept=98.2%
+2025-10-21 11:19:52 - INFO -   Iter 33500 | Tiempo:   32.0min (53.3%) | T =     2.10 | Fitness =    135.5 | Mejor =    159.8 | Aceptación =  98.2%
+2025-10-21 11:19:52 - INFO - Progreso iter 33500: T=2.10, Fitness=135.5, Mejor=159.8, Tasa_acept=98.2%
+2025-10-21 11:20:32 - INFO -   Iter 34000 | Tiempo:   32.6min (54.4%) | T =     2.04 | Fitness =    138.0 | Mejor =    159.8 | Aceptación =  98.1%
+2025-10-21 11:20:32 - INFO - Progreso iter 34000: T=2.04, Fitness=138.0, Mejor=159.8, Tasa_acept=98.1%
+2025-10-21 11:21:11 - INFO -   Iter 34500 | Tiempo:   33.3min (55.5%) | T =     1.98 | Fitness =    138.6 | Mejor =    159.8 | Aceptación =  98.1%
+2025-10-21 11:21:11 - INFO - Progreso iter 34500: T=1.98, Fitness=138.6, Mejor=159.8, Tasa_acept=98.1%
+2025-10-21 11:21:52 - INFO -   Iter 35000 | Tiempo:   34.0min (56.6%) | T =     1.91 | Fitness =    139.0 | Mejor =    159.8 | Aceptación =  98.1%
+2025-10-21 11:21:52 - INFO - Progreso iter 35000: T=1.91, Fitness=139.0, Mejor=159.8, Tasa_acept=98.1%
+2025-10-21 11:22:32 - INFO -   Iter 35500 | Tiempo:   34.6min (57.7%) | T =     1.85 | Fitness =    142.2 | Mejor =    159.8 | Aceptación =  98.0%
+2025-10-21 11:22:32 - INFO - Progreso iter 35500: T=1.85, Fitness=142.2, Mejor=159.8, Tasa_acept=98.0%
+2025-10-21 11:23:14 - INFO -   Iter 36000 | Tiempo:   35.3min (58.9%) | T =     1.79 | Fitness =    142.5 | Mejor =    159.8 | Aceptación =  98.0%
+2025-10-21 11:23:14 - INFO - Progreso iter 36000: T=1.79, Fitness=142.5, Mejor=159.8, Tasa_acept=98.0%
+2025-10-21 11:23:57 - INFO -   Iter 36500 | Tiempo:   36.0min (60.1%) | T =     1.73 | Fitness =    139.7 | Mejor =    159.8 | Aceptación =  98.0%
+2025-10-21 11:23:57 - INFO - Progreso iter 36500: T=1.73, Fitness=139.7, Mejor=159.8, Tasa_acept=98.0%
+2025-10-21 11:24:39 - INFO -   Iter 37000 | Tiempo:   36.7min (61.2%) | T =     1.68 | Fitness =    139.9 | Mejor =    159.8 | Aceptación =  97.9%
+2025-10-21 11:24:39 - INFO - Progreso iter 37000: T=1.68, Fitness=139.9, Mejor=159.8, Tasa_acept=97.9%
+2025-10-21 11:25:21 - INFO -   Iter 37500 | Tiempo:   37.4min (62.4%) | T =     1.62 | Fitness =    137.6 | Mejor =    159.8 | Aceptación =  97.9%
+2025-10-21 11:25:21 - INFO - Progreso iter 37500: T=1.62, Fitness=137.6, Mejor=159.8, Tasa_acept=97.9%
+2025-10-21 11:26:02 - INFO -   Iter 38000 | Tiempo:   38.1min (63.5%) | T =     1.57 | Fitness =    139.4 | Mejor =    159.8 | Aceptación =  97.9%
+2025-10-21 11:26:02 - INFO - Progreso iter 38000: T=1.57, Fitness=139.4, Mejor=159.8, Tasa_acept=97.9%
+2025-10-21 11:26:44 - INFO -   Iter 38500 | Tiempo:   38.8min (64.7%) | T =     1.52 | Fitness =    141.6 | Mejor =    159.8 | Aceptación =  97.8%
+2025-10-21 11:26:44 - INFO - Progreso iter 38500: T=1.52, Fitness=141.6, Mejor=159.8, Tasa_acept=97.8%
+2025-10-21 11:27:28 - INFO -   Iter 39000 | Tiempo:   39.6min (65.9%) | T =     1.47 | Fitness =    143.2 | Mejor =    159.8 | Aceptación =  97.8%
+2025-10-21 11:27:28 - INFO - Progreso iter 39000: T=1.47, Fitness=143.2, Mejor=159.8, Tasa_acept=97.8%
+2025-10-21 11:28:13 - INFO -   Iter 39500 | Tiempo:   40.3min (67.2%) | T =     1.42 | Fitness =    138.4 | Mejor =    159.8 | Aceptación =  97.7%
+2025-10-21 11:28:13 - INFO - Progreso iter 39500: T=1.42, Fitness=138.4, Mejor=159.8, Tasa_acept=97.7%
+2025-10-21 11:28:57 - INFO -   Iter 40000 | Tiempo:   41.0min (68.4%) | T =     1.37 | Fitness =    144.5 | Mejor =    159.8 | Aceptación =  97.7%
+2025-10-21 11:28:57 - INFO - Progreso iter 40000: T=1.37, Fitness=144.5, Mejor=159.8, Tasa_acept=97.7%
+2025-10-21 11:29:40 - INFO -   Iter 40500 | Tiempo:   41.8min (69.6%) | T =     1.33 | Fitness =    139.8 | Mejor =    159.8 | Aceptación =  97.6%
+2025-10-21 11:29:40 - INFO - Progreso iter 40500: T=1.33, Fitness=139.8, Mejor=159.8, Tasa_acept=97.6%
+2025-10-21 11:29:54 - INFO - --- Cambiando a Fase: Final (Refinamiento) (Progreso: 70.0%) ---
+2025-10-21 11:30:25 - INFO -   Iter 41000 | Tiempo:   42.5min (70.9%) | T =     1.28 | Fitness =    138.5 | Mejor =    159.8 | Aceptación =  97.5%
+2025-10-21 11:30:25 - INFO - Progreso iter 41000: T=1.28, Fitness=138.5, Mejor=159.8, Tasa_acept=97.5%
+2025-10-21 11:31:08 - INFO -   Iter 41500 | Tiempo:   43.2min (72.0%) | T =     1.24 | Fitness =    138.9 | Mejor =    159.8 | Aceptación =  97.5%
+2025-10-21 11:31:08 - INFO - Progreso iter 41500: T=1.24, Fitness=138.9, Mejor=159.8, Tasa_acept=97.5%
+2025-10-21 11:31:50 - INFO -   Iter 42000 | Tiempo:   43.9min (73.2%) | T =     1.20 | Fitness =    138.3 | Mejor =    159.8 | Aceptación =  97.5%
+2025-10-21 11:31:50 - INFO - Progreso iter 42000: T=1.20, Fitness=138.3, Mejor=159.8, Tasa_acept=97.5%
+2025-10-21 11:32:33 - INFO -   Iter 42500 | Tiempo:   44.6min (74.4%) | T =     1.16 | Fitness =    138.8 | Mejor =    159.8 | Aceptación =  97.4%
+2025-10-21 11:32:33 - INFO - Progreso iter 42500: T=1.16, Fitness=138.8, Mejor=159.8, Tasa_acept=97.4%
+2025-10-21 11:33:15 - INFO -   Iter 43000 | Tiempo:   45.4min (75.6%) | T =     1.13 | Fitness =    135.6 | Mejor =    159.8 | Aceptación =  97.4%
+2025-10-21 11:33:15 - INFO - Progreso iter 43000: T=1.13, Fitness=135.6, Mejor=159.8, Tasa_acept=97.4%
+2025-10-21 11:33:59 - INFO -   Iter 43500 | Tiempo:   46.1min (76.8%) | T =     1.09 | Fitness =    135.3 | Mejor =    159.8 | Aceptación =  97.3%
+2025-10-21 11:33:59 - INFO - Progreso iter 43500: T=1.09, Fitness=135.3, Mejor=159.8, Tasa_acept=97.3%
+2025-10-21 11:34:42 - INFO -   Iter 44000 | Tiempo:   46.8min (78.0%) | T =     1.05 | Fitness =    136.3 | Mejor =    159.8 | Aceptación =  97.3%
+2025-10-21 11:34:42 - INFO - Progreso iter 44000: T=1.05, Fitness=136.3, Mejor=159.8, Tasa_acept=97.3%
+2025-10-21 11:35:26 - INFO -   Iter 44500 | Tiempo:   47.5min (79.2%) | T =     1.02 | Fitness =    135.7 | Mejor =    159.8 | Aceptación =  97.2%
+2025-10-21 11:35:26 - INFO - Progreso iter 44500: T=1.02, Fitness=135.7, Mejor=159.8, Tasa_acept=97.2%
+2025-10-21 11:36:09 - INFO -   Iter 45000 | Tiempo:   48.2min (80.4%) | T =     0.99 | Fitness =    135.9 | Mejor =    159.8 | Aceptación =  97.2%
+2025-10-21 11:36:09 - INFO - Progreso iter 45000: T=0.99, Fitness=135.9, Mejor=159.8, Tasa_acept=97.2%
+2025-10-21 11:36:52 - INFO -   Iter 45500 | Tiempo:   49.0min (81.6%) | T =     0.96 | Fitness =    136.2 | Mejor =    159.8 | Aceptación =  97.2%
+2025-10-21 11:36:52 - INFO - Progreso iter 45500: T=0.96, Fitness=136.2, Mejor=159.8, Tasa_acept=97.2%
+2025-10-21 11:37:35 - INFO -   Iter 46000 | Tiempo:   49.7min (82.8%) | T =     0.93 | Fitness =    139.0 | Mejor =    159.8 | Aceptación =  97.1%
+2025-10-21 11:37:35 - INFO - Progreso iter 46000: T=0.93, Fitness=139.0, Mejor=159.8, Tasa_acept=97.1%
+2025-10-21 11:38:14 - WARNING - ================================================================================
+2025-10-21 11:38:14 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 46419
+2025-10-21 11:38:14 - WARNING -    Fitness actual: 136.6
+2025-10-21 11:38:14 - WARNING -    Fitness vecino: 103.6
+2025-10-21 11:38:14 - WARNING -    Delta: -33.0
+2025-10-21 11:38:14 - WARNING -    Temperatura: 0.90
+2025-10-21 11:38:14 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 11:38:14 - WARNING -    Vecino - Puntos: 17234, Tiempo: 15662.8min, Distancia: 305.2km
+2025-10-21 11:38:14 - WARNING -    Actual - Puntos: 17222, Tiempo: 13751.3min, Distancia: 157.2km
+2025-10-21 11:38:14 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 11:38:14 - WARNING - ================================================================================
+2025-10-21 11:38:14 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 46419
+2025-10-21 11:38:14 - WARNING -    Fitness: 136.6 → 103.6 (Δ=-33.0)
+2025-10-21 11:38:14 - WARNING -    Ver detalles en archivo de log
+2025-10-21 11:38:21 - INFO -   Iter 46500 | Tiempo:   50.4min (84.1%) | T =     0.89 | Fitness =    138.9 | Mejor =    159.8 | Aceptación =  97.1%
+2025-10-21 11:38:21 - INFO - Progreso iter 46500: T=0.89, Fitness=138.9, Mejor=159.8, Tasa_acept=97.1%
+2025-10-21 11:39:06 - INFO -   Iter 47000 | Tiempo:   51.2min (85.3%) | T =     0.87 | Fitness =    140.7 | Mejor =    159.8 | Aceptación =  97.0%
+2025-10-21 11:39:06 - INFO - Progreso iter 47000: T=0.87, Fitness=140.7, Mejor=159.8, Tasa_acept=97.0%
+2025-10-21 11:39:50 - INFO -   Iter 47500 | Tiempo:   51.9min (86.6%) | T =     0.84 | Fitness =    139.7 | Mejor =    159.8 | Aceptación =  97.0%
+2025-10-21 11:39:50 - INFO - Progreso iter 47500: T=0.84, Fitness=139.7, Mejor=159.8, Tasa_acept=97.0%
+2025-10-21 11:40:36 - INFO -   Iter 48000 | Tiempo:   52.7min (87.8%) | T =     0.81 | Fitness =    142.5 | Mejor =    159.8 | Aceptación =  96.9%
+2025-10-21 11:40:36 - INFO - Progreso iter 48000: T=0.81, Fitness=142.5, Mejor=159.8, Tasa_acept=96.9%
+2025-10-21 11:41:23 - INFO -   Iter 48500 | Tiempo:   53.5min (89.1%) | T =     0.78 | Fitness =    142.5 | Mejor =    159.8 | Aceptación =  96.8%
+2025-10-21 11:41:23 - INFO - Progreso iter 48500: T=0.78, Fitness=142.5, Mejor=159.8, Tasa_acept=96.8%
+2025-10-21 11:41:23 - WARNING - ================================================================================
+2025-10-21 11:41:23 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 48502
+2025-10-21 11:41:23 - WARNING -    Fitness actual: 142.5
+2025-10-21 11:41:23 - WARNING -    Fitness vecino: 115.6
+2025-10-21 11:41:23 - WARNING -    Delta: -26.9
+2025-10-21 11:41:23 - WARNING -    Temperatura: 0.78
+2025-10-21 11:41:23 - WARNING -    Tipo perturbación aplicada: (ver generar_vecino)
+2025-10-21 11:41:23 - WARNING -    Vecino - Puntos: 17288, Tiempo: 15308.2min, Distancia: 250.3km
+2025-10-21 11:41:23 - WARNING -    Actual - Puntos: 17298, Tiempo: 13954.3min, Distancia: 149.9km
+2025-10-21 11:41:23 - WARNING -    Validez restricciones - Vecino: True, Actual: True
+2025-10-21 11:41:23 - WARNING - ================================================================================
+2025-10-21 11:41:23 - WARNING - ⚠️  SALTO ANORMAL DETECTADO en iteración 48502
+2025-10-21 11:41:23 - WARNING -    Fitness: 142.5 → 115.6 (Δ=-26.9)
+2025-10-21 11:41:23 - WARNING -    Ver detalles en archivo de log
+2025-10-21 11:42:10 - INFO -   Iter 49000 | Tiempo:   54.3min (90.4%) | T =     0.76 | Fitness =    141.7 | Mejor =    159.8 | Aceptación =  96.7%
+2025-10-21 11:42:10 - INFO - Progreso iter 49000: T=0.76, Fitness=141.7, Mejor=159.8, Tasa_acept=96.7%
+2025-10-21 11:42:57 - INFO -   Iter 49500 | Tiempo:   55.0min (91.7%) | T =     0.73 | Fitness =    141.4 | Mejor =    159.8 | Aceptación =  96.6%
+2025-10-21 11:42:57 - INFO - Progreso iter 49500: T=0.73, Fitness=141.4, Mejor=159.8, Tasa_acept=96.6%
+2025-10-21 11:43:43 - INFO -   Iter 50000 | Tiempo:   55.8min (93.0%) | T =     0.71 | Fitness =    142.7 | Mejor =    159.8 | Aceptación =  96.5%
+2025-10-21 11:43:43 - INFO - Progreso iter 50000: T=0.71, Fitness=142.7, Mejor=159.8, Tasa_acept=96.5%
+2025-10-21 11:44:30 - INFO -   Iter 50500 | Tiempo:   56.6min (94.3%) | T =     0.68 | Fitness =    144.3 | Mejor =    159.8 | Aceptación =  96.4%
+2025-10-21 11:44:30 - INFO - Progreso iter 50500: T=0.68, Fitness=144.3, Mejor=159.8, Tasa_acept=96.4%
+2025-10-21 11:45:17 - INFO -   Iter 51000 | Tiempo:   57.4min (95.6%) | T =     0.66 | Fitness =    144.9 | Mejor =    159.8 | Aceptación =  96.3%
+2025-10-21 11:45:17 - INFO - Progreso iter 51000: T=0.66, Fitness=144.9, Mejor=159.8, Tasa_acept=96.3%
+2025-10-21 11:46:05 - INFO -   Iter 51500 | Tiempo:   58.2min (97.0%) | T =     0.64 | Fitness =    141.0 | Mejor =    159.8 | Aceptación =  96.2%
+2025-10-21 11:46:05 - INFO - Progreso iter 51500: T=0.64, Fitness=141.0, Mejor=159.8, Tasa_acept=96.2%
+2025-10-21 11:46:53 - INFO -   Iter 52000 | Tiempo:   59.0min (98.3%) | T =     0.62 | Fitness =    140.7 | Mejor =    159.8 | Aceptación =  96.1%
+2025-10-21 11:46:53 - INFO - Progreso iter 52000: T=0.62, Fitness=140.7, Mejor=159.8, Tasa_acept=96.1%
+2025-10-21 11:47:42 - INFO -   Iter 52500 | Tiempo:   59.8min (99.7%) | T =     0.60 | Fitness =    145.8 | Mejor =    159.8 | Aceptación =  96.0%
+2025-10-21 11:47:42 - INFO - Progreso iter 52500: T=0.60, Fitness=145.8, Mejor=159.8, Tasa_acept=96.0%
+2025-10-21 11:47:54 - INFO - ⏰ Tiempo máximo alcanzado: 60.0 minutos
+2025-10-21 11:47:55 - INFO - 💾 Gráfica guardada: graficas\evolucion_fitness_sa_21_11_47.png
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - ✅ ENFRIAMIENTO SIMULADO COMPLETADO
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - Iteraciones: 52,618
+2025-10-21 13:05:33 - INFO - Tiempo ejecución: 60.00 minutos
+2025-10-21 13:05:33 - INFO - Fitness inicial: 159.8
+2025-10-21 13:05:33 - INFO - Fitness final: 159.8
+2025-10-21 13:05:33 - INFO - Mejora: +0.0 (+0.00%)
+2025-10-21 13:05:33 - INFO - Mejoras encontradas: 0
+2025-10-21 13:05:33 - INFO - Tasa aceptación: 95.93%
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - ✅ ENFRIAMIENTO SIMULADO COMPLETADO
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - 
+2025-10-21 13:05:33 - INFO - 📈 Estadísticas:
+2025-10-21 13:05:33 - INFO -   • Iteraciones realizadas: 52,618
+2025-10-21 13:05:33 - INFO -   • Tiempo de ejecución: 60.00 minutos (1.00 horas)
+2025-10-21 13:05:33 - INFO -   • Temperatura final: 0.5929
+2025-10-21 13:05:33 - INFO -   • Total aceptaciones: 50,474 (95.9%)
+2025-10-21 13:05:33 - INFO -   • Total rechazos: 2,143
+2025-10-21 13:05:33 - INFO -   • Mejoras encontradas: 0
+2025-10-21 13:05:33 - INFO - 
+2025-10-21 13:05:33 - INFO - 🏆 Resultados:
+2025-10-21 13:05:33 - INFO -   • Fitness inicial: 159.8
+2025-10-21 13:05:33 - INFO -   • Fitness final: 159.8
+2025-10-21 13:05:33 - INFO -   • Mejora absoluta: +0.0
+2025-10-21 13:05:33 - INFO -   • Mejora porcentual: +0.00%
+2025-10-21 13:05:33 - INFO -   • Puntos totales: 17633
+2025-10-21 13:05:33 - INFO -   • Tiempo total: 242.6h
+2025-10-21 13:05:33 - INFO -   • Distancia total: 145.3km
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - ⚖️  COMPARACIÓN: ALGORITMO GENÉTICO vs ENFRIAMIENTO SIMULADO
+2025-10-21 13:05:33 - INFO - ================================================================================
+2025-10-21 13:05:33 - INFO - Métrica                        GA                   SA                   Diferencia          
+2025-10-21 13:05:33 - INFO - ------------------------------------------------------------------------------------------
+2025-10-21 13:05:33 - INFO - Fitness                        159.8                159.8                +0.0 =
+2025-10-21 13:05:33 - INFO - Puntos totales                 17633                17633                +0 =
+2025-10-21 13:05:33 - INFO - Tiempo total (h)               242.6                242.6                +0.0 =
+2025-10-21 13:05:33 - INFO - Distancia total (km)           145.3                145.3                +0.0 =
+2025-10-21 13:05:33 - INFO - ------------------------------------------------------------------------------------------
+2025-10-21 13:05:33 - INFO - 
+2025-10-21 13:05:33 - INFO - ⏱️  Tiempo de ejecución de algoritmos:
+2025-10-21 13:05:33 - INFO -   • GA: 0.00 minutos
+2025-10-21 13:05:33 - INFO -   • SA: 60.00 minutos
+2025-10-21 13:05:33 - INFO -   • Total híbrido: 60.00 minutos
+2025-10-21 13:05:33 - INFO - 🤝 Ambos algoritmos encontraron soluciones de calidad similar
+2025-10-21 13:05:34 - INFO - 💾 Gráfica comparativa guardada: graficas\comparacion_ga_vs_sa_21_13_05.png
+2025-10-21 13:05:38 - INFO - ================================================================================
+2025-10-21 13:05:38 - INFO - ================================================================================
+2025-10-21 13:05:38 - INFO - 📋 ANÁLISIS DE LA SOLUCIÓN FINAL (POST-SA)
+2025-10-21 13:05:38 - INFO - ================================================================================
+2025-10-21 13:05:38 - INFO - 
+================================================================================
+2025-10-21 13:05:38 - INFO - ANÁLISIS DE LA MEJOR SOLUCIÓN
+2025-10-21 13:05:38 - INFO - ================================================================================
+
+2025-10-21 13:05:38 - INFO - Métricas Globales:
+2025-10-21 13:05:38 - INFO - - Fitness total: 159.8
+2025-10-21 13:05:38 - INFO - - Puntos totales: 17633
+2025-10-21 13:05:38 - INFO - - Tiempo total: 242.6 horas (14558 minutos)
+2025-10-21 13:05:38 - INFO - - Tiempo promedio/día: 12.1 horas
+2025-10-21 13:05:38 - INFO - - Distancia total: 145.3 km
+2025-10-21 13:05:38 - INFO - - Ciudades visitadas: 8
+2025-10-21 13:05:38 - INFO - 
+ITINERARIO DETALLADO POR DÍAS:
+2025-10-21 13:05:38 - INFO - ================================================================================
+
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 1 - SALAMANCA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 875 puntos | 9.72h (583 min) | 6.9 km | 💰 73€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:00 │ Campo de San Francisco                      │ parque       │  72 pts │  0€
+2025-10-21 13:05:38 - INFO -    2. 10:10 - 10:55 │ Palacio de Anaya                            │ palacio      │  76 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    3. 11:00 - 12:00 │ Ribera del Tormes                           │ parque       │  70 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    4. 12:09 - 12:54 │ Calle Rúa Mayor                             │ turistico    │  74 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    5. 12:57 - 13:27 │ Iglesia de San Benito                       │ catedral     │  70 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    6. 13:30 - 14:00 │ Torre del Aire                              │ mirador      │  70 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    7. 14:08 - 14:53 │ Café Bretón                                 │ cafetería    │  72 pts │  5€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -    8. 15:07 - 15:37 │ Ermita del Humilladero                      │ catedral     │  65 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 14 min
+2025-10-21 13:05:38 - INFO -    9. 15:50 - 16:50 │ Bar Bambú                                   │ bar          │  68 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 13 min
+2025-10-21 13:05:38 - INFO -   10. 16:54 - 17:24 │ Colegio de Calatrava                        │ palacio      │  66 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   11. 17:28 - 17:48 │ Mirador del Tormes                          │ mirador      │  79 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   12. 17:58 - 18:43 │ Plaza Mayor de Salamanca                    │ plaza        │  93 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 18:43 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 2 - SALAMANCA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 906 puntos | 9.86h (591 min) | 5.1 km | 💰 93€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:30 │ Estadio Helmántico                          │ turistico    │  66 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 10:49 - 11:19 │ Cielo de Salamanca                          │ museo        │  81 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 19 min
+2025-10-21 13:05:38 - INFO -    3. 11:20 - 11:40 │ Plaza de Anaya                              │ plaza        │  75 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    4. 11:42 - 12:42 │ Clerecía de Salamanca                       │ catedral     │  86 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    5. 12:46 - 14:16 │ Casa Lis                                    │ museo        │  85 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    6. 14:16 - 15:16 │ Café Novelty                                │ cafetería    │  76 pts │  5€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 0 min
+2025-10-21 13:05:38 - INFO -    7. 15:26 - 15:41 │ Puente Enrique Estevan                      │ turistico    │  62 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    8. 15:47 - 16:17 │ Puente Romano                               │ turistico    │  78 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    9. 16:21 - 17:21 │ Catedral Vieja                              │ catedral     │  88 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   10. 17:23 - 17:53 │ Casa de las Muertes                         │ palacio      │  70 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   11. 17:58 - 18:13 │ Plaza de San Boal                           │ plaza        │  66 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   12. 18:21 - 18:51 │ Huerto de Calixto y Melibea                 │ parque       │  73 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 18:51 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 3 - SALAMANCA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 887 puntos | 11.08h (665 min) | 4.2 km | 💰 119€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:15 │ Puerta de San Pablo                         │ turistico    │  66 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:23 - 10:23 │ Calatrava Centro de Congresos               │ turistico    │  71 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    3. 10:35 - 11:20 │ Palacio de Fonseca                          │ palacio      │  78 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 12 min
+2025-10-21 13:05:38 - INFO -    4. 11:21 - 12:06 │ Biblioteca Pública Casa de las Conchas      │ museo        │  71 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    5. 12:09 - 12:24 │ Plaza del Corrillo                          │ plaza        │  68 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    6. 12:27 - 12:57 │ Calle Compañía                              │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    7. 12:58 - 13:28 │ Fonseca Jardines                            │ parque       │  67 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    8. 13:31 - 15:01 │ Restaurante Bambú                           │ restaurante  │  78 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    9. 15:02 - 16:17 │ Museo de Art Nouveau                        │ museo        │  80 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -   10. 16:18 - 16:48 │ Torre del Clavero                           │ palacio      │  72 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -   11. 16:53 - 18:23 │ Universidad de Salamanca                    │ turistico    │  95 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -   12. 18:35 - 20:05 │ Isla del Soto                               │ parque       │  68 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 12 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 20:05 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 4 - SALAMANCA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 11 lugares | 826 puntos | 9.61h (577 min) | 4.3 km | 💰 115€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:15 │ Puerta de Zamora                            │ turistico    │  64 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:23 - 10:08 │ Escuelas Menores                            │ turistico    │  79 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    3. 10:11 - 11:11 │ Bar Las Caballerizas                        │ bar          │  67 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    4. 11:16 - 12:16 │ Ieronimus (Torres Catedral)                 │ mirador      │  87 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    5. 12:16 - 13:31 │ Catedral Nueva                              │ catedral     │  90 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 0 min
+2025-10-21 13:05:38 - INFO -    6. 13:40 - 14:10 │ Iglesia de San Marcos                       │ catedral     │  72 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    7. 14:14 - 15:44 │ Mesón Cervantes                             │ restaurante  │  75 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    8. 15:50 - 16:50 │ Convento de San Esteban                     │ catedral     │  84 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    9. 16:58 - 17:28 │ Casa de Santa Teresa                        │ museo        │  65 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -   10. 17:30 - 18:00 │ Iglesia de San Martín                       │ catedral     │  71 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -   11. 18:06 - 18:36 │ Cueva de Salamanca                          │ turistico    │  72 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 18:36 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 5 - SEGOVIA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - ✈️ Transporte: Salamanca → Segovia | AVION (150 min, 15€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 937 puntos | 11.90h (714 min) | 8.2 km | 💰 134€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:00 │ Murallas de Segovia                         │ turistico    │  75 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 10:08 - 11:08 │ Casa-Museo de Antonio Machado               │ museo        │  74 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    3. 11:24 - 12:09 │ Iglesia de la Vera Cruz                     │ catedral     │  82 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 16 min
+2025-10-21 13:05:38 - INFO -    4. 12:25 - 12:55 │ Calle Cervantes                             │ turistico    │  72 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 16 min
+2025-10-21 13:05:38 - INFO -    5. 12:57 - 13:57 │ Centro Didáctico de la Judería              │ museo        │  75 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    6. 14:02 - 15:17 │ Restaurante Villena                         │ restaurante  │  78 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    7. 15:18 - 15:48 │ Acueducto de Segovia                        │ turistico    │  98 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    8. 15:56 - 16:26 │ Iglesia de San Andrés                       │ catedral     │  73 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -    9. 16:33 - 18:03 │ Mesón de Cándido                            │ restaurante  │  86 pts │ 25€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -   10. 18:19 - 19:04 │ Huertos del Eresma                          │ parque       │  67 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 16 min
+2025-10-21 13:05:38 - INFO -   11. 19:21 - 19:51 │ Plaza del Azoguejo                          │ plaza        │  82 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 16 min
+2025-10-21 13:05:38 - INFO -   12. 19:53 - 20:53 │ Limonería                                   │ bar          │  75 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 20:53 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 6 - SEGOVIA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 904 puntos | 10.62h (637 min) | 8.9 km | 💰 99€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:30 │ Calle Juan Bravo                            │ turistico    │  71 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:31 - 10:01 │ Casa del Sol                                │ turistico    │  69 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    3. 10:16 - 11:16 │ Convento de San Antonio el Real             │ catedral     │  80 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 15 min
+2025-10-21 13:05:38 - INFO -    4. 11:27 - 11:42 │ Puerta de Santiago                          │ turistico    │  67 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 11 min
+2025-10-21 13:05:38 - INFO -    5. 11:45 - 12:05 │ Plaza de San Martín                         │ plaza        │  76 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    6. 12:12 - 13:27 │ Catedral de Segovia                         │ catedral     │  91 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -    7. 13:29 - 13:44 │ Puerta de San Andrés                        │ turistico    │  68 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    8. 13:54 - 14:39 │ Cueva de San Pascual                        │ bar          │  69 pts │  8€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    9. 14:45 - 15:15 │ Plaza Mayor Segovia                         │ plaza        │  81 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -   10. 15:37 - 16:37 │ Parque de la Dehesa                         │ parque       │  69 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 22 min
+2025-10-21 13:05:38 - INFO -   11. 17:00 - 18:00 │ Judería de Segovia                          │ turistico    │  79 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 23 min
+2025-10-21 13:05:38 - INFO -   12. 18:07 - 19:37 │ Restaurante José María                      │ restaurante  │  84 pts │ 25€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 19:37 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 7 - SEGOVIA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 863 puntos | 8.66h (520 min) | 5.8 km | 💰 96€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:45 │ Iglesia de San Esteban                      │ catedral     │  76 pts │  8€
+2025-10-21 13:05:38 - INFO -    2. 09:48 - 10:03 │ Postigo del Consuelo                        │ turistico    │  66 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    3. 10:04 - 10:19 │ Mirador de la Canaleja                      │ mirador      │  76 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    4. 10:25 - 10:40 │ Plaza del Corpus                            │ plaza        │  69 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    5. 10:55 - 11:25 │ Ermita de San Marcos                        │ catedral     │  70 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 15 min
+2025-10-21 13:05:38 - INFO -    6. 11:45 - 12:30 │ Monasterio de San Vicente el Real           │ catedral     │  74 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 20 min
+2025-10-21 13:05:38 - INFO -    7. 12:32 - 13:02 │ Palacio del Conde de Alpuente               │ palacio      │  72 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    8. 13:05 - 13:35 │ Palacio de Quintanar                        │ palacio      │  71 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    9. 13:39 - 14:24 │ Convento de las Carmelitas Descalzas        │ catedral     │  75 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   10. 14:32 - 15:17 │ Cafetería La Colonial                       │ cafetería    │  71 pts │  5€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -   11. 15:19 - 16:04 │ Mercado Municipal                           │ tienda       │  70 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   12. 16:09 - 17:39 │ Teatro Juan Bravo                           │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 17:39 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 8 - CÁDIZ
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 🚄 Transporte: Segovia → Cádiz | TREN (0 min, 0€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 915 puntos | 14.26h (855 min) | 10.0 km | 💰 111€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:00 │ Puerto de Cádiz                             │ turistico    │  75 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 10:12 - 11:12 │ Yacimiento Arqueológico Gadir               │ museo        │  79 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 12 min
+2025-10-21 13:05:38 - INFO -    3. 11:21 - 11:51 │ Puertas de Tierra                           │ turistico    │  77 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    4. 12:04 - 12:49 │ Convento de Santo Domingo                   │ catedral     │  74 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 13 min
+2025-10-21 13:05:38 - INFO -    5. 12:51 - 13:51 │ Museo del Títere                            │ museo        │  74 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    6. 13:56 - 15:56 │ Restaurante El Faro                         │ restaurante  │  86 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    7. 16:03 - 16:48 │ Calle Ancha                                 │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -    8. 16:57 - 17:27 │ Jardines de la Diputación                   │ parque       │  68 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    9. 17:34 - 18:49 │ Barrio del Pópulo                           │ turistico    │  81 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -   10. 19:13 - 21:13 │ Pesetas Beach                               │ playa        │  74 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 24 min
+2025-10-21 13:05:38 - INFO -   11. 21:36 - 22:06 │ Plaza de las Flores                         │ plaza        │  78 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 23 min
+2025-10-21 13:05:38 - INFO -   12. 22:15 - 23:15 │ Taberna El Tío de la Tiza                   │ bar          │  76 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO - 
+  ⚠️  DÍA FINALIZADO: 23:15 | EXCESO: 15 min (0.3h) | PENALIZACIÓN: -15 pts
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 9 - ZARAGOZA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 🚄 Transporte: Cádiz → Zaragoza | TREN (0 min, 0€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 862 puntos | 12.33h (740 min) | 15.0 km | 💰 107€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:30 │ Mirador Torre del Agua                      │ mirador      │  77 pts │  5€
+2025-10-21 13:05:38 - INFO -    2. 09:59 - 10:44 │ Basílica de Santa Engracia                  │ catedral     │  77 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 29 min
+2025-10-21 13:05:38 - INFO -    3. 10:50 - 11:20 │ Ayuntamiento de Zaragoza                    │ palacio      │  69 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    4. 11:23 - 12:08 │ Torreón de la Zuda                          │ palacio      │  74 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    5. 12:22 - 13:07 │ Paseo Echegaray y Caballero                 │ turistico    │  64 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 14 min
+2025-10-21 13:05:38 - INFO -    6. 13:20 - 14:20 │ Bar La Miguería                             │ bar          │  67 pts │  8€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 13 min
+2025-10-21 13:05:38 - INFO -    7. 14:20 - 15:50 │ Restaurante Casa Lac                        │ restaurante  │  78 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 0 min
+2025-10-21 13:05:38 - INFO -    8. 15:51 - 16:36 │ Lonja de Zaragoza                           │ palacio      │  74 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    9. 17:08 - 18:08 │ Canal Imperial de Aragón                    │ turistico    │  66 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 32 min
+2025-10-21 13:05:38 - INFO -   10. 18:51 - 19:51 │ Torre del Agua                              │ mirador      │  76 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 42 min
+2025-10-21 13:05:38 - INFO -   11. 20:22 - 20:52 │ Plaza España Zaragoza                       │ plaza        │  71 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 31 min
+2025-10-21 13:05:38 - INFO -   12. 21:00 - 21:20 │ Plaza de los Sitios                         │ plaza        │  69 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 21:20 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 10 - ZARAGOZA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 872 puntos | 11.94h (716 min) | 9.3 km | 💰 113€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:20 │ Puente de Piedra                            │ turistico    │  76 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:21 - 10:51 │ El Tubo                                     │ turistico    │  75 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    3. 10:55 - 11:55 │ Museo del Fuego                             │ museo        │  70 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    4. 12:02 - 13:17 │ La Seo (Catedral)                           │ catedral     │  89 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -    5. 13:19 - 13:29 │ Estatua de Alfonso I                        │ turistico    │  65 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    6. 13:30 - 14:00 │ Mirador Torre Pilar                         │ mirador      │  82 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    7. 14:03 - 14:48 │ Café Levante                                │ cafetería    │  63 pts │  5€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    8. 15:27 - 16:27 │ Parque Miraflores                           │ parque       │  62 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 39 min
+2025-10-21 13:05:38 - INFO -    9. 17:06 - 18:21 │ Museo de Zaragoza                           │ museo        │  82 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 40 min
+2025-10-21 13:05:38 - INFO -   10. 18:32 - 18:52 │ Plaza del Justicia                          │ plaza        │  66 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -   11. 18:54 - 19:39 │ Calle Don Jaime I                           │ turistico    │  69 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -   12. 19:41 - 20:56 │ Casa Juanico                                │ restaurante  │  73 pts │ 25€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 20:56 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 11 - ZARAGOZA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 890 puntos | 14.23h (854 min) | 8.7 km | 💰 121€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:30 │ Basílica del Pilar                          │ catedral     │  97 pts │  8€
+2025-10-21 13:05:38 - INFO -    2. 10:31 - 11:16 │ Museo del Puerto Fluvial                    │ museo        │  73 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    3. 11:18 - 12:03 │ Palacio de los Condes de Morata             │ palacio      │  72 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    4. 12:06 - 12:51 │ Patio de la Infanta                         │ palacio      │  73 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    5. 12:56 - 14:11 │ Espacio Goya                                │ museo        │  72 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    6. 14:16 - 15:31 │ El Fuelle                                   │ bar          │  70 pts │  8€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    7. 15:36 - 17:06 │ Museo Goya                                  │ museo        │  85 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    8. 17:12 - 17:42 │ Iglesia de San Miguel                       │ catedral     │  72 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    9. 17:46 - 18:46 │ Mercado Central                             │ tienda       │  69 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   10. 18:53 - 19:38 │ Edificio Paraninfo                          │ turistico    │  66 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -   11. 20:08 - 21:38 │ Parque Grande José Antonio Labordeta        │ parque       │  72 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 31 min
+2025-10-21 13:05:38 - INFO -   12. 22:13 - 23:13 │ Bodega Almau                                │ bar          │  69 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 35 min
+2025-10-21 13:05:38 - INFO - 
+  ⚠️  DÍA FINALIZADO: 23:13 | EXCESO: 14 min (0.2h) | PENALIZACIÓN: -14 pts
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 12 - PAMPLONA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - ✈️ Transporte: Zaragoza → Pamplona | AVION (150 min, 15€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 11 lugares | 817 puntos | 11.17h (670 min) | 5.9 km | 💰 113€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:45 │ Cafetería Iruña                             │ cafetería    │  75 pts │  5€ DESAYUNO
+2025-10-21 13:05:38 - INFO -    2. 09:45 - 10:30 │ Calle Mayor                                 │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    3. 10:49 - 12:19 │ Planetario de Pamplona                      │ museo        │  70 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 18 min
+2025-10-21 13:05:38 - INFO -    4. 12:37 - 13:37 │ Bar Baserriberri                            │ bar          │  73 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 18 min
+2025-10-21 13:05:38 - INFO -    5. 13:39 - 14:24 │ Casa Consistorial                           │ palacio      │  72 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    6. 14:24 - 14:54 │ Ayuntamiento de Pamplona                    │ palacio      │  76 pts │ 12€
+2025-10-21 13:05:38 - INFO -    7. 14:59 - 15:44 │ Convento de las Carmelitas                  │ catedral     │  73 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    8. 15:55 - 16:55 │ Baluarte Palacio de Congresos               │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 11 min
+2025-10-21 13:05:38 - INFO -    9. 17:09 - 18:09 │ Bar Fitero                                  │ bar          │  74 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 13 min
+2025-10-21 13:05:38 - INFO -   10. 18:09 - 18:39 │ Plaza del Castillo                          │ plaza        │  80 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -   11. 18:40 - 20:10 │ Restaurante Alhambra                        │ restaurante  │  78 pts │ 25€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 20:10 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 13 - BURGOS
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 🚄 Transporte: Pamplona → Burgos | TREN (0 min, 0€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 933 puntos | 8.05h (483 min) | 1.9 km | 💰 117€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:30 │ Plaza Mayor Burgos                          │ plaza        │  74 pts │  0€
+2025-10-21 13:05:38 - INFO -    2. 09:30 - 10:00 │ Iglesia de San Nicolás                      │ catedral     │  76 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    3. 10:03 - 10:33 │ Arco de Santa María                         │ turistico    │  80 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    4. 10:36 - 11:36 │ Castillo de Burgos                          │ palacio      │  82 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    5. 11:37 - 11:57 │ Mirador del Castillo                        │ mirador      │  85 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 0 min
+2025-10-21 13:05:38 - INFO -    6. 12:01 - 12:46 │ Palacio de la Diputación                    │ palacio      │  74 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    7. 12:46 - 13:46 │ Museo del Retablo                           │ museo        │  76 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 0 min
+2025-10-21 13:05:38 - INFO -    8. 13:50 - 14:05 │ Arco de San Juan                            │ turistico    │  72 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    9. 14:08 - 14:38 │ Escalera Dorada de la Catedral              │ catedral     │  86 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   10. 14:39 - 15:09 │ Palacio de Castilfalé                       │ palacio      │  72 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -   11. 15:10 - 16:40 │ Asador de Aranda                            │ restaurante  │  83 pts │ 25€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 0 min
+2025-10-21 13:05:38 - INFO -   12. 16:43 - 17:03 │ Plaza del Mío Cid                           │ plaza        │  73 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 17:03 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 14 - BURGOS
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 909 puntos | 10.93h (656 min) | 3.0 km | 💰 125€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:15 │ Monasterio de las Huelgas                   │ catedral     │  89 pts │  8€
+2025-10-21 13:05:38 - INFO -    2. 10:21 - 11:21 │ Mercado Sur                                 │ tienda       │  69 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -    3. 11:24 - 12:39 │ Centro de Arte Caja de Burgos (CAB)         │ museo        │  77 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    4. 12:45 - 13:00 │ Estatua del Cid                             │ turistico    │  76 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    5. 13:02 - 13:22 │ Puente de Santa María                       │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    6. 13:23 - 15:23 │ Restaurante Casa Ojeda                      │ restaurante  │  84 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    7. 15:25 - 15:55 │ Iglesia de San Lorenzo                      │ catedral     │  75 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    8. 15:57 - 16:42 │ Sala Capitular de la Catedral               │ catedral     │  84 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    9. 16:45 - 17:15 │ Iglesia de San Lesmes                       │ catedral     │  74 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   10. 17:18 - 18:03 │ Archivo Municipal de Burgos                 │ museo        │  67 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   11. 18:05 - 18:50 │ Convento de Santa Dorotea                   │ catedral     │  71 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -   12. 18:55 - 19:55 │ Parque del Castillo                         │ parque       │  70 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 19:55 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 15 - BURGOS
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 914 puntos | 14.19h (851 min) | 9.7 km | 💰 115€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:00 │ Cartuja de Miraflores                       │ catedral     │  87 pts │  8€
+2025-10-21 13:05:38 - INFO -    2. 10:29 - 11:14 │ Capilla del Condestable                     │ catedral     │  88 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 29 min
+2025-10-21 13:05:38 - INFO -    3. 11:15 - 12:15 │ Biblioteca Pública de Burgos                │ museo        │  68 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    4. 12:17 - 13:47 │ Teatro Principal                            │ turistico    │  76 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    5. 13:50 - 14:05 │ Puerta de San Gil                           │ turistico    │  70 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    6. 14:10 - 14:55 │ Monasterio de San Juan                      │ catedral     │  73 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -    7. 14:58 - 16:28 │ Restaurante El Huerto de Roque              │ restaurante  │  82 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -    8. 16:32 - 17:47 │ Museo de Burgos                             │ museo        │  79 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    9. 17:51 - 18:36 │ Iglesia de San Gil                          │ catedral     │  77 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -   10. 18:42 - 19:42 │ Parque de la Quinta                         │ parque       │  68 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -   11. 20:08 - 21:38 │ Parque de Fuentes Blancas                   │ parque       │  72 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 26 min
+2025-10-21 13:05:38 - INFO -   12. 22:11 - 23:11 │ Bar Los Herreros                            │ bar          │  74 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 33 min
+2025-10-21 13:05:38 - INFO - 
+  ⚠️  DÍA FINALIZADO: 23:11 | EXCESO: 11 min (0.2h) | PENALIZACIÓN: -11 pts
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 16 - BURGOS
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 928 puntos | 11.91h (714 min) | 2.5 km | 💰 128€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:00 │ Paseo de la Isla                            │ parque       │  76 pts │  0€
+2025-10-21 13:05:38 - INFO -    2. 10:05 - 11:35 │ Catedral de Burgos                          │ catedral     │  97 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    3. 11:38 - 11:53 │ Arco de San Martín                          │ turistico    │  73 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    4. 11:55 - 12:25 │ Consulado del Mar                           │ palacio      │  73 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    5. 12:29 - 14:29 │ Museo de la Evolución Humana                │ museo        │  91 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    6. 14:32 - 14:52 │ Puente de San Pablo                         │ turistico    │  74 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    7. 14:53 - 16:23 │ Mesón del Cid                               │ restaurante  │  80 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    8. 16:25 - 17:25 │ Museo del Libro Fadrique de Basilea         │ museo        │  73 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    9. 17:26 - 18:26 │ Casa Museo Marceliano Santa María           │ museo        │  74 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -   10. 18:31 - 19:31 │ Mercado Norte                               │ tienda       │  70 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -   11. 19:33 - 20:33 │ Bar España                                  │ bar          │  75 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -   12. 20:34 - 20:54 │ Plaza del Rey San Fernando                  │ plaza        │  72 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 20:54 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 17 - GRANADA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 🚄 Transporte: Burgos → Granada | TREN (0 min, 0€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 803 puntos | 13.88h (833 min) | 6.9 km | 💰 121€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:45 │ Cármenes del Albaicín                       │ turistico    │  98 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:46 - 11:46 │ Albaicín                                    │ turistico    │  95 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    3. 11:55 - 12:40 │ Torres Bermejas                             │ palacio      │  42 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    4. 12:47 - 13:32 │ Calle Calderería Nueva                      │ turistico    │  57 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    5. 13:36 - 14:51 │ Hicuri Art Vegan                            │ restaurante  │  56 pts │ 25€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    6. 15:01 - 16:16 │ Abadía del Sacromonte                       │ catedral     │  90 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    7. 16:26 - 17:26 │ Palacio de los Olvidados                    │ museo        │  63 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    8. 17:36 - 18:36 │ Centro José Guerrero                        │ museo        │  45 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    9. 18:37 - 19:07 │ Convento Santa Isabel                       │ catedral     │  56 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -   10. 19:21 - 20:36 │ Jardines del Generalife                     │ parque       │  97 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 14 min
+2025-10-21 13:05:38 - INFO -   11. 20:42 - 21:27 │ Huerto del Carlos                           │ parque       │  57 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO -   12. 21:37 - 22:52 │ La Tana                                     │ bar          │  47 pts │  8€ CENA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 22:52 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 18 - GRANADA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 841 puntos | 14.59h (875 min) | 11.3 km | 💰 85€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:30 │ Vereda de Enmedio                           │ turistico    │  57 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:51 - 10:36 │ Gran Vía de Colón                           │ turistico    │  81 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 21 min
+2025-10-21 13:05:38 - INFO -    3. 10:49 - 13:49 │ La Alhambra                                 │ palacio      │  97 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 13 min
+2025-10-21 13:05:38 - INFO -    4. 13:58 - 14:43 │ Café 4 Gatos                                │ cafetería    │  47 pts │  5€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -    5. 14:50 - 15:50 │ Alcazaba de la Alhambra                     │ palacio      │  98 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 7 min
+2025-10-21 13:05:38 - INFO -    6. 15:58 - 16:28 │ Plaza Larga Albaicín                        │ plaza        │  96 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -    7. 16:38 - 17:08 │ Iglesia Santo Domingo                       │ catedral     │  57 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    8. 17:25 - 18:55 │ BioDomo                                     │ museo        │  42 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 17 min
+2025-10-21 13:05:38 - INFO -    9. 19:21 - 20:06 │ Mirador de San Nicolás                      │ mirador      │  94 pts │  5€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 26 min
+2025-10-21 13:05:38 - INFO -   10. 20:15 - 21:45 │ Generalife                                  │ parque       │  98 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 9 min
+2025-10-21 13:05:38 - INFO -   11. 21:55 - 22:15 │ Placeta de San Gregorio                     │ plaza        │  52 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -   12. 22:20 - 23:35 │ Bar Casa Julio                              │ bar          │  22 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 5 min
+2025-10-21 13:05:38 - INFO - 
+  ⚠️  DÍA FINALIZADO: 23:35 | EXCESO: 35 min (0.6h) | PENALIZACIÓN: -35 pts
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 19 - MÁLAGA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - ✈️ Transporte: Granada → Málaga | AVION (90 min, 12€)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 847 puntos | 12.64h (758 min) | 9.8 km | 💰 76€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 09:45 │ Calle Larios                                │ turistico    │  85 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 09:46 - 10:01 │ Monumento a Torrijos                        │ turistico    │  61 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    3. 10:07 - 11:37 │ Museo Ruso                                  │ museo        │  79 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    4. 11:52 - 12:37 │ Santuario de la Victoria                    │ catedral     │  73 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 14 min
+2025-10-21 13:05:38 - INFO -    5. 12:47 - 13:07 │ Plaza de Uncibay                            │ plaza        │  65 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 10 min
+2025-10-21 13:05:38 - INFO -    6. 13:07 - 13:52 │ Café Central                                │ cafetería    │  66 pts │  5€ COMIDA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO -    7. 13:58 - 14:58 │ Barrio del Perchel                          │ turistico    │  64 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -    8. 15:10 - 16:40 │ Muelle Uno                                  │ turistico    │  78 pts │ 10€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 12 min
+2025-10-21 13:05:38 - INFO -    9. 17:08 - 19:08 │ Playa de Pedregalejo                        │ playa        │  73 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 28 min
+2025-10-21 13:05:38 - INFO -   10. 19:43 - 20:03 │ Plaza Marina                                │ plaza        │  62 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 35 min
+2025-10-21 13:05:38 - INFO -   11. 20:06 - 20:36 │ Plaza de la Constitución                    │ plaza        │  72 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   12. 20:38 - 21:38 │ Lepanto                                     │ bar          │  69 pts │  8€ CENA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO - 
+  ✅ DÍA FINALIZADO: 21:38 | Dentro del límite (14h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - DÍA 20 - MÁLAGA
+2025-10-21 13:05:38 - INFO - ────────────────────────────────────────────────────────────────────────────────
+2025-10-21 13:05:38 - INFO - 📊 Resumen: 12 lugares | 904 puntos | 14.57h (874 min) | 7.8 km | 💰 123€ / 200€
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO -    1. 09:00 - 10:00 │ Paseo Marítimo Antonio Machado              │ turistico    │  70 pts │ 10€
+2025-10-21 13:05:38 - INFO -    2. 10:19 - 11:19 │ Fundación Picasso                           │ museo        │  78 pts │ 15€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 19 min
+2025-10-21 13:05:38 - INFO -    3. 11:31 - 12:46 │ Castillo de Gibralfaro                      │ palacio      │  91 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 13 min
+2025-10-21 13:05:38 - INFO -    4. 12:55 - 14:25 │ Alcazaba de Málaga                          │ palacio      │  94 pts │ 12€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -    5. 14:39 - 15:24 │ Basílica Santa María de la Victoria         │ catedral     │  74 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 14 min
+2025-10-21 13:05:38 - INFO -    6. 15:40 - 17:40 │ Restaurante José Carlos García              │ restaurante  │  82 pts │ 25€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 17 min
+2025-10-21 13:05:38 - INFO -    7. 17:44 - 18:44 │ Parque de Málaga                            │ parque       │  67 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 4 min
+2025-10-21 13:05:38 - INFO -    8. 18:45 - 19:30 │ Jardines de Pedro Luis Alonso               │ parque       │  64 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 2 min
+2025-10-21 13:05:38 - INFO -    9. 19:37 - 20:37 │ Antigua Casa de Guardia                     │ bar          │  70 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 6 min
+2025-10-21 13:05:38 - INFO -   10. 20:45 - 22:00 │ Terraza de la Alcazaba                      │ restaurante  │  76 pts │ 25€ CENA
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 8 min
+2025-10-21 13:05:38 - INFO -   11. 22:03 - 22:33 │ Plaza de la Merced                          │ plaza        │  71 pts │  0€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 3 min
+2025-10-21 13:05:38 - INFO -   12. 22:34 - 23:34 │ La Tranca                                   │ bar          │  67 pts │  8€
+2025-10-21 13:05:38 - INFO -                     └─ Tránsito: 1 min
+2025-10-21 13:05:38 - INFO - 
+  ⚠️  DÍA FINALIZADO: 23:34 | EXCESO: 34 min (0.6h) | PENALIZACIÓN: -34 pts
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ================================================================================
+2025-10-21 13:05:38 - INFO - 🚊 RESUMEN DE TRANSPORTES INTERCITY
+2025-10-21 13:05:38 - INFO - ================================================================================
+
+2025-10-21 13:05:38 - INFO - 📊 Estadísticas:
+2025-10-21 13:05:38 - INFO -   ✈️  Avión: 3 viajes
+2025-10-21 13:05:38 - INFO -   🚄 Tren:  4 viajes
+2025-10-21 13:05:38 - INFO -   🚌 Bus:   0 viajes
+2025-10-21 13:05:38 - INFO - 
+💰 Costo total transportes: 42€
+2025-10-21 13:05:38 - INFO - ⏱️  Tiempo total transportes: 390 min (6.5h)
+2025-10-21 13:05:38 - INFO - 
+2025-10-21 13:05:38 - INFO - ================================================================================
+2025-10-21 13:05:38 - INFO - ✅ ANÁLISIS COMPLETO
+2025-10-21 13:05:38 - INFO - ================================================================================
+
+2025-10-21 13:05:39 - INFO - 💾 Resultados exportados a: resultados_sa_hybrid_20251021_130538.json
+2025-10-21 13:05:39 - INFO - 
+2025-10-21 13:05:39 - INFO - ✅ Resultados guardados exitosamente:
+2025-10-21 13:05:39 - INFO -    • JSON: resultados_sa_hybrid_20251021_130538.json
+2025-10-21 13:05:39 - INFO -    • Gráfica comparativa: graficas/comparacion_ga_vs_sa_*.png
+2025-10-21 13:05:39 - INFO -    • Gráfica evolución: graficas/evolucion_fitness_sa_*.png
+2025-10-21 13:05:39 - INFO -    • Log: logs\21_09_47_sa.log
+2025-10-21 13:05:39 - INFO - ✅ Ejecución completada exitosamente!
