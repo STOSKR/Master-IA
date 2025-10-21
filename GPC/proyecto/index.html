@@ -10,6 +10,44 @@
 
 <body>
   <canvas class="game"></canvas>
+
+  <!-- Pantalla de inicio -->
+  <div id="start-screen">
+    <div class="start-content">
+      <h1 class="game-title">LONG LONG WAY</h1>
+
+      <div class="controls-display">
+        <div class="control-item">
+          <div class="key-button">▲</div>
+          <div class="control-arrow">↑</div>
+          <div class="control-label">Avanzar</div>
+        </div>
+
+        <div class="controls-row">
+          <div class="control-item">
+            <div class="key-button">◀</div>
+            <div class="control-arrow">←</div>
+            <div class="control-label">Izquierda</div>
+          </div>
+
+          <div class="control-item">
+            <div class="key-button">▼</div>
+            <div class="control-arrow">↓</div>
+            <div class="control-label">Retroceder</div>
+          </div>
+
+          <div class="control-item">
+            <div class="key-button">▶</div>
+            <div class="control-arrow">→</div>
+            <div class="control-label">Derecha</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="start-button" class="start-btn">PRESIONA ESPACIO PARA JUGAR</button>
+    </div>
+  </div>
+
   <div id="controls">
     <div>
       <button id="forward">▲</button>
@@ -23,7 +61,7 @@
     <div id="result">
       <h1>Good Game</h1>
       <p>Puntuación: <span id="final-score"></span></p>
-      <button id="retry">Volver a jugar</button>
+      <button id="retry">Presiona R para reiniciar</button>
     </div>
   </div>
   <script type="module" src="/src/main.js"></script>

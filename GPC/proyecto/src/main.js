@@ -16,6 +16,32 @@ import "./style.css";
 import "./collectUserInput";
 
 async function startGame() {
+  // Manejar pantalla de inicio
+  const startScreen = document.getElementById("start-screen");
+  const startButton = document.getElementById("start-button");
+  let gameStarted = false;
+
+  function hideStartScreen() {
+    if (startScreen) {
+      startScreen.classList.add("hidden");
+      gameStarted = true;
+      initializeGame();
+    }
+  }
+
+  // Click en el botón
+  if (startButton) {
+    startButton.addEventListener("click", hideStartScreen);
+  }
+
+  // Presionar Espacio
+  window.addEventListener("keydown", (event) => {
+    if (!gameStarted && event.code === "Space") {
+      event.preventDefault();
+      hideStartScreen();
+    }
+  });
+
   const stats = new Stats();
   stats.dom.style.position = 'absolute';
   stats.dom.style.top = '80px';
@@ -97,7 +123,8 @@ async function startGame() {
     }
   });
 
-  initializeGame();
+  // No inicializar el juego automáticamente, esperar a que se presione el botón
+  // initializeGame();
 
   function initializeGame() {
     clearDeathTimeout(); // Limpiar timeouts pendientes
