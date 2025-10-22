@@ -37,21 +37,7 @@ with open(log_sa_path, "r", encoding="utf-8") as f:
             mejores_sa.append(float(match.group(2)))
 df_sa = pd.DataFrame({"Tiempo_min": tiempos_sa, "Fitness": mejores_sa, "Algoritmo": "Enfriamiento Simulado"})
 
-# --- Gráfico comparativo ---
-plt.figure(figsize=(10, 6))
-plt.plot(df_sa["Tiempo_min"], df_sa["Fitness"], color="green", label="Enfriamiento Simulado", linewidth=2)
-plt.plot(df_ga["Tiempo_min"], df_ga["Fitness"], color="blue", label="Algoritmo Genético", linewidth=2)
-plt.xlabel("Tiempo (minutos)")
-plt.ylabel("Mejor Fitness histórico")
-plt.title("Comparación de Fitness - Enfriamiento Simulado vs Algoritmo Genético")
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-plt.savefig(os.path.join(output_dir, "comparacion_fitness.png"), dpi=300, bbox_inches='tight')
-plt.close()
-
 df_ga.tail()
-# Añadir líneas verticales donde el algoritmo genético se reinicia
 
 # Buscar los momentos de reinicio en el log GA
 reinicio_pattern = re.compile(r"REINICIANDO POBLACIÓN.*Tiempo:\s+([\d.]+)m")
@@ -80,7 +66,7 @@ plt.title("Fitness vs Tiempo - Algoritmo Genético")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, "fitness_genetico_reinicios.png"), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(output_dir, "GA_solo.png"), dpi=300, bbox_inches='tight')
 plt.close()
 
 # --- Gráfico comparativo con reinicios ---
@@ -91,11 +77,11 @@ for t in tiempos_reinicio:
     plt.axvline(x=t, color="red", linestyle="--", linewidth=1, label="Reinicio" if t == tiempos_reinicio[0] else "")
 plt.xlabel("Tiempo (minutos)")
 plt.ylabel("Mejor Fitness histórico")
-plt.title("Comparación de Fitness - Enfriamiento Simulado vs Algoritmo Genético (con reinicios)")
+plt.title("Comparación de Fitness - Enfriamiento Simulado vs Algoritmo Genético")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, "comparacion_fitness_reinicios.png"), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(output_dir, "GA_vs_SA.png"), dpi=300, bbox_inches='tight')
 plt.close()
 
 print(f"Gráficas guardadas en: {output_dir}")
