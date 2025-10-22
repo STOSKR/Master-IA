@@ -10,8 +10,8 @@ output_dir = ".\graficas_generadas"
 os.makedirs(output_dir, exist_ok=True)
 
 # Rutas de los archivos
-log_ga_path = ".\data\elit10.log"
-log_sa_path = ".\data\sa1.log"
+log_ga_path = ".\data\log\elit10.log"
+log_sa_path = ".\data\log\sa1.log"
 
 # Función para extraer tiempo y fitness
 def extraer_datos(log_path, label):
