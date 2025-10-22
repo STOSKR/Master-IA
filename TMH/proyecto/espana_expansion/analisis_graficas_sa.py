@@ -91,7 +91,8 @@ def grafica_evolucion_fitness(resultados: dict, carpeta: Path):
     textstr = f'Iteraciones: {stats["iteraciones_realizadas"]}\n'
     textstr += f'Mejora: {stats["mejora_absoluta"]:+.1f} ({stats["mejora_porcentual"]:+.2f}%)\n'
     textstr += f'Mejoras encontradas: {stats["mejoras_encontradas"]}\n'
-    textstr += f'Tasa aceptación: {stats["tasa_aceptacion"]:.1f}%'
+    tasa_aceptacion = stats.get("tasa_aceptacion_pct", stats.get("tasa_aceptacion", 0))
+    textstr += f'Tasa aceptación: {tasa_aceptacion:.1f}%'
     
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
     ax.text(0.02, 0.98, textstr, transform=ax.transAxes, 
@@ -228,7 +229,7 @@ def grafica_distribucion_ciudades(resultados: dict, carpeta: Path):
     Genera gráfica de la distribución de ciudades visitadas.
     """
     mejor_solucion = resultados['mejor_solucion']
-    itinerario = mejor_solucion['itinerario']
+    itinerario = resultados['itinerario']
     
     # Contar días por ciudad
     ciudades_contador = {}
@@ -333,7 +334,7 @@ def grafica_metricas_solucion(resultados: dict, carpeta: Path):
                 ha='center', va='bottom', fontweight='bold')
     
     # Gráfica 4: Lugares por día
-    itinerario = mejor_solucion['itinerario']
+    itinerario = resultados['itinerario']
     dias = [f"D{dia['dia']}" for dia in itinerario]
     lugares_por_dia = [dia['num_lugares'] for dia in itinerario]
     
@@ -425,7 +426,8 @@ def generar_reporte_texto(resultados: dict, carpeta: Path):
     reporte.append(f"Iteraciones realizadas:       {stats['iteraciones_realizadas']:,}")
     reporte.append(f"Temperatura inicial:          {resultados['historial']['temperatura'][0]:.2f}")
     reporte.append(f"Temperatura final:            {stats['temperatura_final']:.6f}")
-    reporte.append(f"Total de aceptaciones:        {stats['total_aceptaciones']:,} ({stats['tasa_aceptacion']:.2f}%)")
+    tasa_aceptacion = stats.get("tasa_aceptacion_pct", stats.get("tasa_aceptacion", 0))
+    reporte.append(f"Total de aceptaciones:        {stats['total_aceptaciones']:,} ({tasa_aceptacion:.2f}%)")
     reporte.append(f"Total de rechazos:            {stats['total_rechazos']:,}")
     reporte.append(f"Mejoras encontradas:          {stats['mejoras_encontradas']}")
     reporte.append("")
@@ -458,7 +460,7 @@ def generar_reporte_texto(resultados: dict, carpeta: Path):
     reporte.append("DISTRIBUCIÓN POR CIUDAD:")
     reporte.append("-" * 80)
     ciudades_contador = {}
-    for dia in mejor_solucion['itinerario']:
+    for dia in resultados['itinerario']:
         ciudad = dia['ciudad']
         ciudades_contador[ciudad] = ciudades_contador.get(ciudad, 0) + 1
     

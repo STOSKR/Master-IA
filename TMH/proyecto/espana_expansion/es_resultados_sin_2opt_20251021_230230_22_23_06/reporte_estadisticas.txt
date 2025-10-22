@@ -1,0 +1,55 @@
+================================================================================
+REPORTE DE ENFRIAMIENTO SIMULADO
+================================================================================
+
+CONFIGURACIÓN Y EJECUCIÓN:
+--------------------------------------------------------------------------------
+Iteraciones realizadas:       75,508
+Temperatura inicial:          20.00
+Temperatura final:            1.090816
+Total de aceptaciones:        67,750 (89.73%)
+Total de rechazos:            7,757
+Mejoras encontradas:          311
+
+RESULTADOS DE FITNESS:
+--------------------------------------------------------------------------------
+Fitness inicial:              99.83
+Fitness final:                148.63
+Mejora absoluta:              +48.80
+Mejora porcentual:            +48.89%
+
+MÉTRICAS DE LA SOLUCIÓN:
+--------------------------------------------------------------------------------
+Puntos iniciales:             15,233
+Puntos finales:               16,696
+Diferencia de puntos:         +1,463
+Tiempo total:                 226.62 horas
+Distancia total:              109.75 km
+Días totales:                 20
+Ciudades visitadas:           8
+
+CIUDADES VISITADAS:
+--------------------------------------------------------------------------------
+  • Málaga
+  • Burgos
+  • Salamanca
+  • Cádiz
+  • Granada
+  • Zaragoza
+  • Pamplona
+  • Segovia
+
+DISTRIBUCIÓN POR CIUDAD:
+--------------------------------------------------------------------------------
+  Segovia              :  4 días ( 20.0%)
+  Burgos               :  3 días ( 15.0%)
+  Cádiz                :  3 días ( 15.0%)
+  Salamanca            :  3 días ( 15.0%)
+  Pamplona             :  3 días ( 15.0%)
+  Zaragoza             :  2 días ( 10.0%)
+  Granada              :  1 días (  5.0%)
+  Málaga               :  1 días (  5.0%)
+
+================================================================================
+Reporte generado: 2025-10-22 23:07:00
+================================================================================
