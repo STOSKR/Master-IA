@@ -17,7 +17,7 @@ data_dir = ".\data\json"
 datos_experimentos = []
 
 for archivo in os.listdir(data_dir):
-    if archivo.endswith(".json"):
+    if archivo.endswith(".json") and archivo.startswith("Elit_"):
         ruta = os.path.join(data_dir, archivo)
         with open(ruta, "r", encoding="utf-8") as f:
             datos = json.load(f)
