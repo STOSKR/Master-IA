@@ -96,6 +96,10 @@ for poblaciones, titulo_comp, nombre_archivo in comparaciones:
     # Colores distintivos
     colores = ['#1f77b4', '#ff7f0e']
     
+    print(f"\n{'='*80}")
+    print(f"COMPARACIÓN: {titulo_comp}")
+    print(f"{'='*80}")
+    
     for idx, (_, exp) in enumerate(df_comp.iterrows()):
         if exp["historial_fitness"] and exp["historial_tiempos"]:
             tiempos_min = [t / 60 for t in exp["historial_tiempos"]]
@@ -106,8 +110,13 @@ for poblaciones, titulo_comp, nombre_archivo in comparaciones:
             tiempos_min = tiempos_min[:min_len]
             fitness = fitness[:min_len]
             
+            # Obtener el mejor fitness (último valor ya que es histórico)
+            mejor_fitness = fitness[-1] if fitness else 0
+            
+            print(f"\n  Población {exp['poblacion']:>5}: Mejor Fitness = {mejor_fitness:.2f}")
+            
             plt.plot(tiempos_min, fitness, 
-                    label=f"Población {exp['poblacion']}", 
+                    label=f"Población {exp['poblacion']} (Fitness: {mejor_fitness:.2f})", 
                     linewidth=2.5, alpha=0.9, color=colores[idx])
     
     plt.xlabel("Tiempo (minutos)", fontsize=12)
