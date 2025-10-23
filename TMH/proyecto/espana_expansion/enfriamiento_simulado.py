@@ -756,7 +756,7 @@ def enfriamiento_simulado(
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
     sa_logger.info(f"💾 Gráfica guardada: {fig_filename}")
     
-    plt.show()
+    # plt.show()  # Comentado para no mostrar gráfica en tiempo real
     
     # Estadísticas finales
     iteraciones_realizadas = iteracion + 1
@@ -1145,7 +1145,7 @@ def comparar_con_sin_2opt(
     fig_filename = os.path.join(graficas_dir, f"comparacion_2opt_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
     sa_logger.info(f"💾 Gráfica comparativa guardada: {fig_filename}")
-    plt.show()
+    # plt.show()  # Comentado para no mostrar gráfica en tiempo real
     
     sa_logger.info("="*80)
     
@@ -1286,7 +1286,7 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     fig_filename = os.path.join(graficas_dir, f"comparacion_ga_vs_sa_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
     sa_logger.info(f"💾 Gráfica comparativa guardada: {fig_filename}")
-    plt.show()
+    # plt.show()  # Comentado para no mostrar gráfica en tiempo real
     
     sa_logger.info("="*80)
 
@@ -1294,6 +1294,27 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
 # Ejecución principal
 if __name__ == "__main__":
     import sys
+    import argparse
+    
+    # Parsear argumentos de línea de comandos
+    parser = argparse.ArgumentParser(description='Enfriamiento Simulado - Ruta por España')
+    parser.add_argument('modo', type=str, nargs='?', default=None, 
+                       help='Modo de ejecución: 1 (SA desde cero), 2 (SA desde GA), 3 (Comparar 2-opt)')
+    parser.add_argument('--horas', type=float, default=2.0,
+                       help='Tiempo de ejecución en horas (default: 2.0)')
+    parser.add_argument('--temp', type=float, default=None,
+                       help='Temperatura inicial (default: 3 para modo 1, 10 para modo 2)')
+    parser.add_argument('--guardar-json', action='store_true',
+                       help='Guardar resultados en JSON')
+    parser.add_argument('--guardar-grafica', action='store_true',
+                       help='Guardar gráfica de evolución')
+    parser.add_argument('--output-dir', type=str, default=None,
+                       help='Directorio para guardar resultados')
+    
+    args = parser.parse_args()
+    
+    # Actualizar tiempo de ejecución
+    tiempo_ejecucion = args.horas
     
     # Inicializar logger global al inicio del programa
     sa_logger, log_file = configurar_logging_sa()
@@ -1328,8 +1349,8 @@ if __name__ == "__main__":
     
     print(f"{'='*80}")
     
-    if len(sys.argv) > 1:
-        seleccion = sys.argv[1]
+    if args.modo:
+        seleccion = args.modo
     else:
         seleccion = input("👉 Selecciona modo (1/2/3): ").strip()
     
@@ -1345,8 +1366,9 @@ if __name__ == "__main__":
         
         # Configuración ULTRA-CONSERVADORA para minimizar caídas
         # Con T_inicial=2-3, solo aceptará cambios pequeños (~20% prob para Δ=-2)
+        temp_inicial = args.temp if args.temp is not None else 3
         config_sa = {
-            "T_inicial": 3,            # MUY BAJA: minimiza aceptación de soluciones malas
+            "T_inicial": temp_inicial,  # Usar temperatura del argumento o default 3
             "T_minima": 0.1,
             "alpha": 0.9995,           # Solo usado si usar_temp_adaptativa=False
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
@@ -1426,8 +1448,9 @@ if __name__ == "__main__":
         sa_logger.info("="*80)
         
         # Configuración SA MEJORADA - Para refinamiento desde GA
+        temp_inicial = args.temp if args.temp is not None else 10
         config_sa = {
-            "T_inicial": 10,           # Temperatura baja para refinamiento
+            "T_inicial": temp_inicial,  # Usar temperatura del argumento o default 10
             "T_minima": 0.1,
             "alpha": 0.99,             # Solo usado si usar_temp_adaptativa=False
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
