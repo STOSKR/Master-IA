@@ -1,6 +1,6 @@
 ﻿Ranking,Modelo,Categoría,ROC-AUC,Accuracy,ROC-AUC (%),Accuracy (%)
-1,Random Forest,Modelos de Árboles,0.9777911548937464,0.9265546134497177,97.78%,92.66%
-2,DNN (Keras),Redes Neuronales Profundas,0.9446006417274475,0.8624544143676758,94.46%,86.25%
+1,Random Forest,Modelos de Árboles,0.9777909367836684,0.9265546134497177,97.78%,92.66%
+2,DNN (Keras),Redes Neuronales Profundas,0.9439399838447571,0.858206570148468,94.39%,85.82%
 3,MLP (Scikit-learn),Redes Neuronales Simples,0.9381782954326454,0.8503939631190551,93.82%,85.04%
 4,Árbol de Decisión,Modelos de Árboles,0.9201335484494682,0.9209241891689294,92.01%,92.09%
 5,LightGBM,Modelos de Árboles,0.9063700196025327,0.8141959987339874,90.64%,81.42%
