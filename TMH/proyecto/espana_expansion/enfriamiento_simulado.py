@@ -965,10 +965,8 @@ def comparar_con_sin_2opt(
     
     plt.tight_layout()
     
-    # Guardar gráfica
     import os
     
-    # Crear carpeta de graficas si no existe
     graficas_dir = "graficas"
     if not os.path.exists(graficas_dir):
         os.makedirs(graficas_dir)
@@ -976,8 +974,7 @@ def comparar_con_sin_2opt(
     timestamp = datetime.now().strftime("%d_%H_%M")
     fig_filename = os.path.join(graficas_dir, f"comparacion_2opt_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    sa_logger.info(f"Gráfica comparativa guardada: {fig_filename}")
-    # plt.show()  # Comentado para no mostrar gráfica en tiempo real
+    sa_logger.info(f"Grafica comparativa guardada: {fig_filename}")
     
     sa_logger.info("="*80)
     
@@ -1000,19 +997,19 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     sa_logger.info("-"*90)
     
     diff_fitness = mejor_sa.fitness - mejor_ga.fitness
-    simbolo_fitness = "✅" if diff_fitness > 0 else "⚠️" if diff_fitness < 0 else "="
+    simbolo_fitness = "[OK]" if diff_fitness > 0 else "[WARN]" if diff_fitness < 0 else "="
     sa_logger.info(f"{'Fitness':<30} {mejor_ga.fitness:<20.1f} {mejor_sa.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
     
     diff_puntos = mejor_sa.puntos_totales - mejor_ga.puntos_totales
-    simbolo_puntos = "✅" if diff_puntos > 0 else "⚠️" if diff_puntos < 0 else "="
+    simbolo_puntos = "[OK]" if diff_puntos > 0 else "[WARN]" if diff_puntos < 0 else "="
     sa_logger.info(f"{'Puntos totales':<30} {mejor_ga.puntos_totales:<20} {mejor_sa.puntos_totales:<20} {diff_puntos:+d} {simbolo_puntos}")
     
     diff_tiempo = (mejor_sa.tiempo_total - mejor_ga.tiempo_total) / 60
-    simbolo_tiempo = "⚠️" if diff_tiempo > 0 else "✅" if diff_tiempo < 0 else "="
+    simbolo_tiempo = "[WARN]" if diff_tiempo > 0 else "[OK]" if diff_tiempo < 0 else "="
     sa_logger.info(f"{'Tiempo total (h)':<30} {mejor_ga.tiempo_total/60:<20.1f} {mejor_sa.tiempo_total/60:<20.1f} {diff_tiempo:+.1f} {simbolo_tiempo}")
     
     diff_distancia = mejor_sa.distancia_total - mejor_ga.distancia_total
-    simbolo_distancia = "⚠️" if diff_distancia > 0 else "✅" if diff_distancia < 0 else "="
+    simbolo_distancia = "[WARN]" if diff_distancia > 0 else "[OK]" if diff_distancia < 0 else "="
     sa_logger.info(f"{'Distancia total (km)':<30} {mejor_ga.distancia_total:<20.1f} {mejor_sa.distancia_total:<20.1f} {diff_distancia:+.1f} {simbolo_distancia}")
     
     sa_logger.info("-"*90)
@@ -1020,17 +1017,17 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     tiempo_ga = resultados_ga.get("tiempo_ejecucion_segundos", 0) / 60
     tiempo_sa = resultados_sa["estadisticas"]["tiempo_ejecucion_minutos"]
     sa_logger.info("")
-    sa_logger.info("⏱️  Tiempo de ejecución de algoritmos:")
-    sa_logger.info(f"  • GA: {tiempo_ga:.2f} minutos")
-    sa_logger.info(f"  • SA: {tiempo_sa:.2f} minutos")
-    sa_logger.info(f"  • Total híbrido: {tiempo_ga + tiempo_sa:.2f} minutos")
+    sa_logger.info("Tiempo de ejecucion de algoritmos:")
+    sa_logger.info(f"  GA: {tiempo_ga:.2f} minutos")
+    sa_logger.info(f"  SA: {tiempo_sa:.2f} minutos")
+    sa_logger.info(f"  Total hibrido: {tiempo_ga + tiempo_sa:.2f} minutos")
     
     if diff_fitness > 0:
         mejora_pct = (diff_fitness / abs(mejor_ga.fitness)) * 100
-        sa_logger.info(f"El enfriamiento simulado MEJORÓ la solución del GA en {mejora_pct:.2f}%")
+        sa_logger.info(f"El enfriamiento simulado mejoro la solucion del GA en {mejora_pct:.2f}%")
     elif diff_fitness < 0:
         empeora_pct = (abs(diff_fitness) / abs(mejor_ga.fitness)) * 100
-        sa_logger.info(f"El enfriamiento simulado empeoró ligeramente ({empeora_pct:.2f}%)")
+        sa_logger.info(f"El enfriamiento simulado empeoro ligeramente ({empeora_pct:.2f}%)")
     else:
         sa_logger.info(f"Ambos algoritmos encontraron soluciones de calidad similar")
     
@@ -1042,8 +1039,8 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     
     axes[0, 0].bar(['GA', 'SA'], [mejor_ga.fitness, mejor_sa.fitness], color=['#3498db', '#e74c3c'])
     axes[0, 0].set_title('Fitness Final')
-    axes[0, 0].set_ylabel('Fitness (escala logarítmica)')
-    axes[0, 0].set_yscale('log')  # Escala logarítmica
+    axes[0, 0].set_ylabel('Fitness (escala logaritmica)')
+    axes[0, 0].set_yscale('log')
     axes[0, 0].grid(axis='y', alpha=0.3, which='both', linestyle='--')
     for i, v in enumerate([mejor_ga.fitness, mejor_sa.fitness]):
         axes[0, 0].text(i, v, f'{v:.1f}', ha='center', va='bottom', fontweight='bold')
@@ -1088,10 +1085,8 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     
     plt.tight_layout()
     
-    # Guardar gráfica
     import os
     
-    # Crear carpeta de graficas si no existe
     graficas_dir = "graficas"
     if not os.path.exists(graficas_dir):
         os.makedirs(graficas_dir)
@@ -1124,17 +1119,15 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    # Actualizar tiempo de ejecución
     tiempo_ejecucion = args.horas
     
-    # Inicializar logger global al inicio del programa
     sa_logger, log_file = configurar_logging_sa()
     sa_logger.info(f"Log iniciado: {log_file}")
     
     modos = {
         "1": {
             "nombre": "SA desde CERO (Random start)",
-            "descripcion": "Genera solución inicial aleatoria y ejecuta SA",
+            "descripcion": "Genera solucion inicial aleatoria y ejecuta SA",
             "funcion": "standalone"
         },
         "2": {
@@ -1166,29 +1159,26 @@ if __name__ == "__main__":
         seleccion = input("Selecciona modo (1/2/3): ").strip()
     
     if seleccion not in modos:
-        print(f"\nERROR: Modo '{seleccion}' no válido. Usa: 1, 2 o 3")
+        print(f"\nERROR: Modo '{seleccion}' no valido. Usa: 1, 2 o 3")
         sys.exit(1)
     
     modo_elegido = modos[seleccion]["funcion"]
     
     if modo_elegido == "standalone":
-        # Modo 1: SA desde cero
-        sa_logger.info("Modo 1: Enfriamiento Simulado desde solución aleatoria")
+        sa_logger.info("Modo 1: Enfriamiento Simulado desde solucion aleatoria")
         
-        # Configuración ULTRA-CONSERVADORA para minimizar caídas
-        # Con T_inicial=2-3, solo aceptará cambios pequeños (~20% prob para Δ=-2)
         temp_inicial = args.temp if args.temp is not None else 3
         config_sa = {
-            "T_inicial": temp_inicial,  # Usar temperatura del argumento o default 3
+            "T_inicial": temp_inicial,
             "T_minima": 0.1,
-            "alpha": 0.9995,           # Solo usado si usar_temp_adaptativa=False
+            "alpha": 0.9995,
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
             "usar_2opt": True,
-            "usar_temp_adaptativa": True  # Usar enfriamiento adaptativo exponencial
+            "usar_temp_adaptativa": True
         }
         
         resultados = enfriamiento_simulado(
-            solucion_inicial=None,  # Generará una aleatoria
+            solucion_inicial=None,
             T_inicial=config_sa["T_inicial"],
             T_minima=config_sa["T_minima"],
             alpha=config_sa["alpha"],
@@ -1200,38 +1190,33 @@ if __name__ == "__main__":
             debug_saltos=True
         )
         
-        # Analizar solución
         sa_logger.info("="*80)
-        sa_logger.info("📋 ANÁLISIS DE LA SOLUCIÓN FINAL")
+        sa_logger.info("ANALISIS DE LA SOLUCION FINAL")
         sa_logger.info("="*80)
         analizar_solucion(resultados["mejor_solucion"])
         
-        # Guardar resultados con timestamp
         from datetime import datetime
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         archivo_json = exportar_resultados_sa(resultados, archivo=f"resultados_sa_standalone_{timestamp}.json", config=config_sa)
         
         sa_logger.info("")
-        sa_logger.info("✅ Resultados guardados exitosamente:")
-        sa_logger.info(f"   • JSON: {archivo_json}")
-        sa_logger.info(f"   • Log: {log_file}")
-        sa_logger.info(f"   • Gráfica: graficas/evolucion_fitness_sa_*.png")
+        sa_logger.info("Resultados guardados exitosamente:")
+        sa_logger.info(f"   JSON: {archivo_json}")
+        sa_logger.info(f"   Log: {log_file}")
+        sa_logger.info(f"   Grafica: graficas/evolucion_fitness_sa_*.png")
     
     elif modo_elegido == "hybrid":
-        # Modo 2: GA + SA (híbrido)
-        sa_logger.info("🔗 Modo 2: Algoritmo Híbrido (GA + SA)")
+        sa_logger.info("Modo 2: Algoritmo Hibrido (GA + SA)")
         sa_logger.info("="*80)
-        sa_logger.info("FASE 1: ALGORITMO GENÉTICO (Exploración Global)")
+        sa_logger.info("FASE 1: ALGORITMO GENETICO (Exploracion Global)")
         sa_logger.info("="*80)
         
         from algoritmo_espana import algoritmo_genetico_espana
         
-        # IMPORTANTE: Configurar el logging del GA antes de ejecutarlo
         from algoritmo_espana import configurar_logging as configurar_logging_ga
         configurar_logging_ga(output_dir="logs", prefijo="ga_desde_sa")
         
-        # Ejecutar GA con configuración rápida
-        sa_logger.info(f"⏳ Ejecutando GA por {tiempo_ejecucion} hora(s)...")
+        sa_logger.info(f"Ejecutando GA por {tiempo_ejecucion} hora(s)...")
         sa_logger.info("   (Esto puede tardar. Si se cuelga, usa Ctrl+C y ejecuta modo 1)")
         sa_logger.info("")
         
@@ -1244,12 +1229,12 @@ if __name__ == "__main__":
                 tasa_elitismo=0.10
             )
             sa_logger.info("")
-            sa_logger.info("✅ GA completado exitosamente")
+            sa_logger.info("GA completado exitosamente")
         except KeyboardInterrupt:
-            sa_logger.error("❌ Ejecución cancelada por el usuario")
+            sa_logger.error("Ejecucion cancelada por el usuario")
             sys.exit(1)
         except Exception as e:
-            sa_logger.error(f"❌ Error en GA: {e}")
+            sa_logger.error(f"Error en GA: {e}")
             import traceback
             sa_logger.error(traceback.format_exc())
             sys.exit(1)
@@ -1258,18 +1243,16 @@ if __name__ == "__main__":
         sa_logger.info("FASE 2: ENFRIAMIENTO SIMULADO (Refinamiento Local)")
         sa_logger.info("="*80)
         
-        # Configuración SA MEJORADA - Para refinamiento desde GA
         temp_inicial = args.temp if args.temp is not None else 10
         config_sa = {
-            "T_inicial": temp_inicial,  # Usar temperatura del argumento o default 10
+            "T_inicial": temp_inicial,
             "T_minima": 0.1,
-            "alpha": 0.99,             # Solo usado si usar_temp_adaptativa=False
+            "alpha": 0.99,
             "max_tiempo_segundos": tiempo_ejecucion * 3600,
             "usar_2opt": True,
-            "usar_temp_adaptativa": False  # Enfriamiento adaptativo
+            "usar_temp_adaptativa": False
         }
         
-        # Ejecutar SA desde el mejor del GA
         resultados_sa = enfriamiento_desde_genetico(
             resultados_genetico=resultados_ga,
             usar_mejor=True,
@@ -1278,45 +1261,38 @@ if __name__ == "__main__":
             max_tiempo_segundos=config_sa["max_tiempo_segundos"]
         )
         
-        # Comparar resultados
         comparar_ga_vs_sa(resultados_ga, resultados_sa)
         
-        # Analizar y exportar la mejor solución final
         sa_logger.info("="*80)
-        sa_logger.info("📋 ANÁLISIS DE LA SOLUCIÓN FINAL (POST-SA)")
+        sa_logger.info("ANALISIS DE LA SOLUCION FINAL (POST-SA)")
         sa_logger.info("="*80)
         analizar_solucion(resultados_sa["mejor_solucion"])
         
-        # Guardar resultados automáticamente con timestamp
         from datetime import datetime
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         archivo_json = exportar_resultados_sa(resultados_sa, archivo=f"resultados_sa_hybrid_{timestamp}.json", config=config_sa)
         
         sa_logger.info("")
-        sa_logger.info("✅ Resultados guardados exitosamente:")
-        sa_logger.info(f"   • JSON: {archivo_json}")
-        sa_logger.info(f"   • Gráfica comparativa: graficas/comparacion_ga_vs_sa_*.png")
-        sa_logger.info(f"   • Gráfica evolución: graficas/evolucion_fitness_sa_*.png")
-        sa_logger.info(f"   • Log: {log_file}")
+        sa_logger.info("Resultados guardados exitosamente:")
+        sa_logger.info(f"   JSON: {archivo_json}")
+        sa_logger.info(f"   Grafica comparativa: graficas/comparacion_ga_vs_sa_*.png")
+        sa_logger.info(f"   Grafica evolucion: graficas/evolucion_fitness_sa_*.png")
+        sa_logger.info(f"   Log: {log_file}")
     
     elif modo_elegido == "comparar_2opt":
-        # Modo 3: Comparar con/sin 2-opt
-        sa_logger.info("🔬 Modo 3: Comparación del impacto de 2-opt")
+        sa_logger.info("Modo 3: Comparacion del impacto de 2-opt")
         
-        # Generar solución inicial común
-        sa_logger.info("🎲 Generando solución inicial aleatoria...")
+        sa_logger.info("Generando solucion inicial aleatoria...")
         solucion_inicial = crear_individuo_aleatorio(num_dias=20, lugares_por_dia=12)
         evaluar_individuo(solucion_inicial)
         
-        # Configuración común
         config_base = {
             "T_inicial": 20,
             "T_minima": 0.1,
             "alpha": 0.999,
-            "max_tiempo_segundos": tiempo_ejecucion * 3600  # 30 minutos cada uno
+            "max_tiempo_segundos": tiempo_ejecucion * 3600
         }
         
-        # Ejecutar comparación
         resultados_comp = comparar_con_sin_2opt(
             solucion_inicial=solucion_inicial,
             T_inicial=config_base["T_inicial"],
@@ -1325,11 +1301,10 @@ if __name__ == "__main__":
             verbose=True
         )
         
-        # Guardar resultados con timestamp
         from datetime import datetime
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        sa_logger.info("💾 Guardando resultados...")
+        sa_logger.info("Guardando resultados...")
         
         config_con = config_base.copy()
         config_con["usar_2opt"] = True
@@ -1347,12 +1322,12 @@ if __name__ == "__main__":
             config=config_sin
         )
         
-        sa_logger.info(f"✅ Comparación completada. Mejor configuración: {resultados_comp['mejor_configuracion']}")
+        sa_logger.info(f"Comparacion completada. Mejor configuracion: {resultados_comp['mejor_configuracion']}")
         sa_logger.info("")
-        sa_logger.info("📊 Archivos generados:")
-        sa_logger.info(f"   • JSON con 2-opt: {archivo_con}")
-        sa_logger.info(f"   • JSON sin 2-opt: {archivo_sin}")
-        sa_logger.info(f"   • Gráfica comparativa: graficas/comparacion_2opt_{timestamp}.png")
-        sa_logger.info(f"   • Logs: {log_file}")
+        sa_logger.info("Archivos generados:")
+        sa_logger.info(f"   JSON con 2-opt: {archivo_con}")
+        sa_logger.info(f"   JSON sin 2-opt: {archivo_sin}")
+        sa_logger.info(f"   Grafica comparativa: graficas/comparacion_2opt_{timestamp}.png")
+        sa_logger.info(f"   Logs: {log_file}")
     
-    sa_logger.info("✅ Ejecución completada exitosamente!")
+    sa_logger.info("Ejecucion completada exitosamente!")
