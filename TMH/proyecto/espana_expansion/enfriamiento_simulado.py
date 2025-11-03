@@ -10,7 +10,6 @@ from utils_espana import (
     get_lugares_ciudad,
 )
 
-# Importar componentes reutilizables del algoritmo genético
 from algoritmo_espana import (
     Individual,
     crear_individuo_aleatorio,
@@ -21,10 +20,8 @@ from algoritmo_espana import (
 )
 tiempo_ejecucion = 2
 def configurar_logging_sa(nombre_archivo: str = None):
-    """Configura el sistema de logging para enfriamiento simulado"""
     import os
     
-    # Crear carpeta de logs si no existe
     logs_dir = "logs"
     if not os.path.exists(logs_dir):
         os.makedirs(logs_dir)
@@ -33,25 +30,19 @@ def configurar_logging_sa(nombre_archivo: str = None):
         timestamp = datetime.now().strftime("%d_%H_%M")
         nombre_archivo = f"{timestamp}_sa.log"
     
-    # Guardar el log en la carpeta logs
     ruta_log = os.path.join(logs_dir, nombre_archivo)
     
-    # Crear logger
     logger = logging.getLogger('EnfriamientoSimulado')
     logger.setLevel(logging.DEBUG)
     
-    # Limpiar handlers existentes
     logger.handlers.clear()
     
-    # Handler para archivo
     fh = logging.FileHandler(ruta_log, encoding='utf-8')
     fh.setLevel(logging.DEBUG)
     
-    # Handler para consola
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
     
-    # Formato
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
@@ -61,7 +52,6 @@ def configurar_logging_sa(nombre_archivo: str = None):
     
     return logger, ruta_log
 
-# Inicializar logger global
 sa_logger = None
 
 
@@ -70,9 +60,7 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
         dia = individuo.dias[dia_idx]
         ciudad = individuo.ciudades[dia_idx]
         
-        # Verificar si hay duplicados
         if len(dia) != len(set(dia)):
-            # Hay duplicados, necesitamos reemplazarlos
             lugares_ciudad = get_lugares_ciudad(ciudad)
             lugares_unicos = []
             lugares_usados = set()
@@ -82,7 +70,6 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
                     lugares_unicos.append(lugar_id)
                     lugares_usados.add(lugar_id)
                 else:
-                    # Buscar un reemplazo que no esté usado
                     lugares_disponibles = [l["id"] for l in lugares_ciudad 
                                           if l["id"] not in lugares_usados]
                     if lugares_disponibles:
@@ -90,7 +77,6 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
                         lugares_unicos.append(nuevo_lugar)
                         lugares_usados.add(nuevo_lugar)
                     else:
-                        # Si no hay más lugares, mantener el duplicado (caso extremo)
                         lugares_unicos.append(lugar_id)
             
             individuo.dias[dia_idx] = lugares_unicos
@@ -100,74 +86,44 @@ def eliminar_duplicados_dia(individuo: Individual) -> Individual:
 
 def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0, max_tiempo_segundos: float = 3600.0, usar_2opt: bool = True,   
                     fase_anterior: str = "") -> Tuple[Individual, str]:
-    # Crear copia profunda para no modificar la original
     vecino = Individual(
         [dia[:] for dia in solucion_actual.dias],
         solucion_actual.ciudades[:]
     )
 
-    # AJUSTE CLAVE: Calcular progreso basado en tiempo
     progreso = tiempo_transcurrido / max_tiempo_segundos if max_tiempo_segundos > 0 else 0
-    # Asegurarse de que el progreso no supere 1.0 (por si acaso)
     progreso = min(progreso, 1.0)
     
-    # Determinar fase actual con 3 etapas claras
     fase_actual = ""
-    if progreso < 0.3:  # Primeros 30% del tiempo
+    if progreso < 0.3:
         fase_actual = "Inicial (Exploración)"
-    elif progreso < 0.7:  # 30-70% del tiempo
+    elif progreso < 0.7:
         fase_actual = "Intermedia (Balance)"
-    else:  # Últimos 30% del tiempo
+    else:
         fase_actual = "Final (Refinamiento)"
 
-    # --- IMPRIMIR SOLO SI LA FASE CAMBIA ---
     if fase_actual != fase_anterior:
         sa_logger.info(f"--- Cambiando a Fase: {fase_actual} (Progreso: {progreso:.1%}) ---")
-    # ----------------------------------------
     if usar_2opt:
         if fase_actual == "Inicial (Exploración)":
-            # Exploración agresiva: más cambios grandes
-            # swap, 2opt, reemplazar, swap_intercity, cambiar_ciudad
             probabilidades = [0.25, 0.20, 0.25, 0.20, 0.10] 
         elif fase_actual == "Intermedia (Balance)":
-            # Balance: reducir cambios drásticos
             probabilidades = [0.35, 0.25, 0.25, 0.10, 0.05]
-        else: # Final (Refinamiento)
-            # Solo ajustes finos: swap y 2opt
+        else:
             probabilidades = [0.50, 0.40, 0.10, 0.0, 0.0]
     else:
         if fase_actual == "Inicial (Exploración)":
-            # Sin 2opt: compensar con más swaps
             probabilidades = [0.40, 0.0, 0.25, 0.20, 0.15]
         elif fase_actual == "Intermedia (Balance)":
             probabilidades = [0.55, 0.0, 0.25, 0.12, 0.08]
-        else: # Final
+        else:
             probabilidades = [0.70, 0.0, 0.20, 0.10, 0.0]
-
-    
-    """
-    if usar_2opt:
-        if fase_actual == "Inicial (Exploración)":
-            probabilidades = [0.45, 0.35, 0.20, 0.0, 0.0]  
-        elif fase_actual == "Intermedia (Balance)":
-            probabilidades = [0.50, 0.40, 0.10, 0.0, 0.0]
-        else:  
-            probabilidades = [0.60, 0.35, 0.05, 0.0, 0.0]
-    else:
-        if fase_actual == "Inicial (Exploración)":
-            probabilidades = [0.60, 0.0, 0.40, 0.0, 0.0]
-        elif fase_actual == "Intermedia (Balance)":
-            probabilidades = [0.70, 0.0, 0.30, 0.0, 0.0]
-        else:  # Final
-            probabilidades = [0.80, 0.0, 0.20, 0.0, 0.0]
-    """
     tipo_perturbacion = random.choices(
         ["swap", "ruta_2opt", "reemplazar", "swap_intercity", "cambiar_ciudad"],
         weights=probabilidades
     )[0]
     
     if tipo_perturbacion == "swap":
-        # Swap de dos lugares en un día aleatorio (MÍNIMA PERTURBACIÓN)
         dia_idx = random.randint(0, len(vecino.dias) - 1)
         dia = vecino.dias[dia_idx]
         
@@ -176,19 +132,15 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
             dia[i], dia[j] = dia[j], dia[i]
     
     elif tipo_perturbacion == "ruta_2opt" and usar_2opt:
-        # Optimización 2-opt dentro de un día (MÍNIMA PERTURBACIÓN)
         dia_idx = random.randint(0, len(vecino.dias) - 1)
         dia = vecino.dias[dia_idx]
         
         if len(dia) >= 4:
-            # Elegir dos puntos de corte
             i = random.randint(0, len(dia) - 3)
             j = random.randint(i + 2, len(dia))
-            # Invertir el segmento entre i y j
             vecino.dias[dia_idx] = dia[:i+1] + dia[i+1:j][::-1] + dia[j:]
     
     elif tipo_perturbacion == "reemplazar":
-        # Reemplazar un lugar por otro de la misma ciudad (PERTURBACIÓN MEDIA)
         dia_idx = random.randint(0, len(vecino.dias) - 1)
         ciudad = vecino.ciudades[dia_idx]
         lugares_ciudad = get_lugares_ciudad(ciudad)
@@ -196,7 +148,6 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
         if lugares_ciudad and len(vecino.dias[dia_idx]) > 0:
             idx_lugar = random.randint(0, len(vecino.dias[dia_idx]) - 1)
             
-            # Buscar un lugar que no esté ya en el día
             lugares_disponibles = [l["id"] for l in lugares_ciudad if l["id"] not in vecino.dias[dia_idx]]
             
             if lugares_disponibles:
@@ -204,42 +155,32 @@ def generar_vecino(solucion_actual: Individual, tiempo_transcurrido: float = 0.0
                 vecino.dias[dia_idx][idx_lugar] = nuevo_lugar
     
     elif tipo_perturbacion == "swap_intercity":
-        # Intercambiar dos días completos (PERTURBACIÓN FUERTE - solo al inicio)
         if len(vecino.dias) >= 2:
             i, j = random.sample(range(len(vecino.dias)), 2)
-            # Intercambiar días
             vecino.dias[i], vecino.dias[j] = vecino.dias[j], vecino.dias[i]
-            # Intercambiar ciudades
             vecino.ciudades[i], vecino.ciudades[j] = vecino.ciudades[j], vecino.ciudades[i]
     elif tipo_perturbacion == "cambiar_ciudad":
-        # PERTURBACIÓN MEDIA/ALTA: Cambiar la ciudad de un día
         if len(vecino.dias) > 0:
             dia_idx = random.randint(0, len(vecino.dias) - 1)
             ciudad_actual_del_dia = vecino.ciudades[dia_idx]
 
-            # Obtener una nueva ciudad (que no sea la misma)
             candidatas = [c for c in COORDENADAS_CIUDADES.keys() if c != ciudad_actual_del_dia]
             if candidatas:
                 nueva_ciudad = random.choice(candidatas)
                 vecino.ciudades[dia_idx] = nueva_ciudad
                 
-                # Reconstruir el día con lugares de la nueva ciudad
                 lugares_nueva = get_lugares_ciudad(nueva_ciudad)
                 if lugares_nueva:
-                    # Asegurarse de que el día tenga el mismo número de lugares
                     num_lugares = len(vecino.dias[dia_idx])
-                    if num_lugares == 0: num_lugares = 12 # Default si el día estaba vacío
+                    if num_lugares == 0: num_lugares = 12
                     
-                    # Usar choices para permitir repetición si no hay suficientes lugares únicos
                     vecino.dias[dia_idx] = [
                         random.choice(lugares_nueva)["id"] for _ in range(num_lugares)
                     ]
     
-    # Validar y reparar si es necesario
     if not validar_restricciones_ciudades(vecino):
         vecino = reparar_individuo(vecino)
     
-    # Eliminar duplicados en cada día
     vecino = eliminar_duplicados_dia(vecino)
 
     return vecino, fase_actual
@@ -255,46 +196,27 @@ def calcular_temperatura_inicial(solucion_inicial: Individual, num_muestras: int
         deltas.append(abs(delta))
     
     if deltas:
-        # Usar la desviación estándar como base
         import statistics
         std_delta = statistics.stdev(deltas) if len(deltas) > 1 else statistics.mean(deltas)
-        # Factor multiplicador para asegurar exploración inicial
         T0 = std_delta * 2.0
         
-        # Asegurar un mínimo y máximo razonable
-        T0 = max(10, min(T0, 100))  # Rango ajustado: 10-100 (antes 500-5000)
+        T0 = max(10, min(T0, 100))
     else:
-        T0 = 50  # Valor por defecto más bajo
+        T0 = 50
     
     return T0
 
 
 def calcular_temperatura_adaptativa(tiempo_transcurrido: float, max_tiempo: float, 
                                      T_inicial: float, T_final: float = 0.1) -> float:
-    """
-    Calcula temperatura usando enfriamiento NO-LINEAL basado en tiempo.
-    Usa una curva exponencial para enfriar más rápido al inicio.
-    
-    Args:
-        tiempo_transcurrido: Tiempo en segundos desde el inicio
-        max_tiempo: Tiempo máximo de ejecución en segundos
-        T_inicial: Temperatura inicial
-        T_final: Temperatura final mínima
-    
-    Returns:
-        Temperatura actual
-    """
     if max_tiempo <= 0:
         return T_final
     
     progreso = min(tiempo_transcurrido / max_tiempo, 1.0)
     
-    # Enfriamiento EXPONENCIAL: enfría rápido al inicio, lento al final
-    # Esto permite explorar al inicio y refinar al final
     import math
-    factor_exp = math.exp(-3 * progreso)  # e^(-3*p): 1.0 → 0.05
+    factor_exp = math.exp(-3 * progreso)
     
-    # Interpolación con curva exponencial
     temperatura = T_final + (T_inicial - T_final) * factor_exp
     
     return max(temperatura, T_final)
@@ -302,16 +224,12 @@ def calcular_temperatura_adaptativa(tiempo_transcurrido: float, max_tiempo: floa
 
 def aceptar_solucion(delta_fitness: float, temperatura: float) -> bool:
     if delta_fitness > 0:
-        # Solución MEJOR: siempre aceptar
         return True
     else:
-        # Solución PEOR: aceptar con probabilidad exponencial
-        # Cuanto mayor sea T, mayor probabilidad de aceptar
         if temperatura > 0:
             probabilidad = math.exp(delta_fitness / temperatura)
             return random.random() < probabilidad
         else:
-            # Si T=0, nunca aceptar soluciones peores (comportamiento greedy)
             return False
 
 
@@ -330,44 +248,35 @@ def enfriamiento_simulado(
 ) -> Dict:
     global sa_logger
     
-    # Configurar logging
     if sa_logger is None:
         sa_logger, log_file = configurar_logging_sa()
-        sa_logger.info(f"📝 Log guardándose en: {log_file}")
+        sa_logger.info(f"Log guardándose en: {log_file}")
     
     sa_logger.info("="*80)
-    sa_logger.info("🔥 INICIANDO ENFRIAMIENTO SIMULADO")
+    sa_logger.info("INICIANDO ENFRIAMIENTO SIMULADO")
     sa_logger.info("="*80)
     
-    # Importar time para medir tiempo de ejecución
     import time
     tiempo_inicio = time.time()
     
-    # Generar o usar solución inicial
     if solucion_inicial is None:
-        sa_logger.info("🎲 Generando solución inicial aleatoria...")
-        # Usar parámetros por defecto
+        sa_logger.info("Generando solución inicial aleatoria...")
         solucion_inicial = crear_individuo_aleatorio(num_dias=20, lugares_por_dia=12)
-        # Evaluar solución inicial aleatoria
         evaluar_individuo(solucion_inicial)
         sa_logger.info(f"Solución inicial creada - Fitness: {solucion_inicial.fitness:.1f}, Puntos: {solucion_inicial.puntos_totales}")
     else:
-        sa_logger.info("🚀 Usando solución inicial proporcionada (warm start)...")
-        sa_logger.info(f"  • Fitness reportado por el GA: {solucion_inicial.fitness:.1f}")
-        sa_logger.info(f"  • Puntos reportados por el GA: {solucion_inicial.puntos_totales}")
+        sa_logger.info("Usando solución inicial proporcionada (warm start)...")
+        sa_logger.info(f"  Fitness reportado por el GA: {solucion_inicial.fitness:.1f}")
+        sa_logger.info(f"  Puntos reportados por el GA: {solucion_inicial.puntos_totales}")
         
         sa_logger.info(f"Usando solución inicial proporcionada - Fitness: {solucion_inicial.fitness:.1f}, Puntos: {solucion_inicial.puntos_totales}")
         
-        # CRÍTICO: Hacer copia profunda SIN perder el fitness
-        # El módulo copy ya está importado al inicio del archivo
         solucion_inicial = copy.deepcopy(solucion_inicial)
         
-        sa_logger.debug(f"  • Fitness después de copia (sin cambios): {solucion_inicial.fitness:.1f}")
+        sa_logger.debug(f"  Fitness después de copia (sin cambios): {solucion_inicial.fitness:.1f}")
         
         sa_logger.debug(f"Copia profunda realizada - Fitness: {solucion_inicial.fitness:.1f}")
     
-    # Eliminar duplicados de la solución inicial (si los hay)
-    # IMPORTANTE: Solo si realmente hay duplicados, para no re-evaluar
     tiene_duplicados = False
     for dia in solucion_inicial.dias:
         if len(dia) != len(set(dia)):
@@ -375,58 +284,48 @@ def enfriamiento_simulado(
             break
     
     if tiene_duplicados:
-        sa_logger.warning("⚠️  ¡ATENCIÓN! La solución del GA contiene lugares duplicados en el mismo día.")
+        sa_logger.warning("La solución del GA contiene lugares duplicados en el mismo día.")
         sa_logger.warning("Esto infla artificialmente el fitness del GA porque no los penaliza.")
         sa_logger.warning("Procedo a limpiar la solución y a re-evaluarla para obtener el fitness REAL.")
         solucion_inicial = eliminar_duplicados_dia(solucion_inicial)
-        # Re-evaluar solo si modificamos
         evaluar_individuo(solucion_inicial)
-        sa_logger.info(f"  • Fitness REAL después de limpiar duplicados: {solucion_inicial.fitness:.1f}")
+        sa_logger.info(f"  Fitness REAL después de limpiar duplicados: {solucion_inicial.fitness:.1f}")
     else:
-        sa_logger.info("  ✅ La solución del GA es válida (sin duplicados).")
+        sa_logger.info("  La solución del GA es válida (sin duplicados).")
     
-    # Calcular temperatura inicial si no se proporcionó
     if T_inicial is None:
-        sa_logger.info("🌡️  Calculando temperatura inicial adaptativa...")
+        sa_logger.info("Calculando temperatura inicial adaptativa...")
         T_inicial = calcular_temperatura_inicial(solucion_inicial)
     
-    # AJUSTE CRÍTICO: Si usa temperatura adaptativa, la temperatura inicial
-    # debe ser proporcional al tiempo disponible para evitar sobre-exploración
     if usar_temp_adaptativa and max_tiempo_segundos > 0:
-        # Regla empírica: T_inicial óptima depende del tiempo
-        # Para 2h (7200s): T=5-10 es suficiente
-        # Para 1h (3600s): T=3-5
-        # Para 30min (1800s): T=2-3
-        factor_tiempo = max_tiempo_segundos / 3600  # Normalizar por 1 hora
-        T_inicial_sugerida = 5 * factor_tiempo  # Escala lineal
+        factor_tiempo = max_tiempo_segundos / 3600
+        T_inicial_sugerida = 5 * factor_tiempo
         
-        if T_inicial > T_inicial_sugerida * 3:  # Si es más de 3x lo sugerido
+        if T_inicial > T_inicial_sugerida * 3:
             T_vieja = T_inicial
             T_inicial = T_inicial_sugerida
-            sa_logger.warning(f"⚠️  T_inicial={T_vieja:.1f} es muy alta para temp. adaptativa con {max_tiempo_segundos/60:.0f}min")
+            sa_logger.warning(f"T_inicial={T_vieja:.1f} es muy alta para temp. adaptativa con {max_tiempo_segundos/60:.0f}min")
             sa_logger.warning(f"   Ajustada automáticamente a T_inicial={T_inicial:.1f} para evitar sobre-exploración")
     
-    sa_logger.info("📊 Configuración para Enfriamiento Simulado:")
-    sa_logger.info(f"  • Temperatura inicial: {T_inicial:.1f}")
-    sa_logger.info(f"  • Temperatura mínima: {T_minima}")
-    sa_logger.info(f"  • Tipo de enfriamiento: {'🔄 ADAPTATIVO (lineal por tiempo)' if usar_temp_adaptativa else f'🌡️  GEOMÉTRICO (α={alpha})'}")
+    sa_logger.info("Configuración para Enfriamiento Simulado:")
+    sa_logger.info(f"  Temperatura inicial: {T_inicial:.1f}")
+    sa_logger.info(f"  Temperatura mínima: {T_minima}")
+    sa_logger.info(f"  Tipo de enfriamiento: {'ADAPTATIVO (lineal por tiempo)' if usar_temp_adaptativa else f'GEOMÉTRICO (α={alpha})'}")
     if not usar_temp_adaptativa:
-        sa_logger.info(f"  • Factor de enfriamiento (α): {alpha}")
+        sa_logger.info(f"  Factor de enfriamiento (α): {alpha}")
     if max_iteraciones:
-        sa_logger.info(f"  • Máx. iteraciones: {max_iteraciones:,}")
-    sa_logger.info(f"  • Máx. tiempo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
-    sa_logger.info(f"  • Máx. iter. sin mejora: {iteraciones_sin_mejora_max:,}")
-    sa_logger.info(f"  • Usar optimización 2-opt: {'✅ SÍ' if usar_2opt else '❌ NO'}")
-    sa_logger.info(f"  • Fitness inicial (REAL): {solucion_inicial.fitness:.1f}")
-    sa_logger.info(f"  • Puntos iniciales (REAL): {solucion_inicial.puntos_totales}")
+        sa_logger.info(f"  Máx. iteraciones: {max_iteraciones:,}")
+    sa_logger.info(f"  Máx. tiempo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
+    sa_logger.info(f"  Máx. iter. sin mejora: {iteraciones_sin_mejora_max:,}")
+    sa_logger.info(f"  Usar optimización 2-opt: {'SÍ' if usar_2opt else 'NO'}")
+    sa_logger.info(f"  Fitness inicial (REAL): {solucion_inicial.fitness:.1f}")
+    sa_logger.info(f"  Puntos iniciales (REAL): {solucion_inicial.puntos_totales}")
     sa_logger.info("="*80)
     
-    # Inicializar variables
     solucion_actual = solucion_inicial
     mejor_solucion = copy.deepcopy(solucion_inicial)
     temperatura = T_inicial
     
-    # Estadísticas
     iteraciones_sin_mejora = 0
     total_aceptaciones = 0
     total_rechazos = 0
@@ -437,7 +336,6 @@ def enfriamiento_simulado(
     
     
     
-    # Configuración de visualización en tiempo real
     import matplotlib.pyplot as plt
     plt.ion()
     fig, ax = plt.subplots()
@@ -454,128 +352,108 @@ def enfriamiento_simulado(
     
     
     
-    sa_logger.info("🔄 Iniciando búsqueda...")
+    sa_logger.info("Iniciando búsqueda...")
     
     sa_logger.info("Iniciando búsqueda por vecindario")
     sa_logger.info(f"Configuración: T_inicial={T_inicial}, alpha={alpha}, max_tiempo={max_tiempo_segundos}s, usar_2opt={usar_2opt}")
     
-    # Bucle principal
     iteracion = 0
-    fitness_anterior = solucion_actual.fitness  # Para detectar saltos
+    fitness_anterior = solucion_actual.fitness
     fase_actual_sa = ""
     
-    # NUEVO: Detección de degradación
     ultima_mejora_iter = 0
-    fitness_medio_reciente = []  # Ventana deslizante de fitness
-    VENTANA_DEGRADACION = 50  # Cada 200 iteraciones (más frecuente)
-    UMBRAL_DEGRADACION = 20   # Si cae más de 40 puntos (más estricto)
+    fitness_medio_reciente = []
+    VENTANA_DEGRADACION = 50
+    UMBRAL_DEGRADACION = 20
     
     while True:
-        # Verificar tiempo transcurrido PRIMERO
         tiempo_transcurrido = time.time() - tiempo_inicio
         
-        # Verificar límite de tiempo
         if tiempo_transcurrido >= max_tiempo_segundos:
-            sa_logger.info(f"⏰ Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
+            sa_logger.info(f"Tiempo máximo alcanzado: {tiempo_transcurrido/60:.1f} minutos")
             break
         
-        # Verificar límite de iteraciones si está definido
         if max_iteraciones is not None and iteracion >= max_iteraciones:
-            sa_logger.info(f"🔢 Máximo de iteraciones alcanzado: {iteracion:,}")
+            sa_logger.info(f"Máximo de iteraciones alcanzado: {iteracion:,}")
             break
         
         tiempo_transcurrido = time.time() - tiempo_inicio
         
-        # NUEVO: Detección de degradación cada VENTANA_DEGRADACION iteraciones
         if iteracion > 0 and iteracion % VENTANA_DEGRADACION == 0:
             if len(fitness_medio_reciente) > 0:
                 fitness_promedio = sum(fitness_medio_reciente) / len(fitness_medio_reciente)
                 
-                # Si el fitness promedio es muy bajo comparado con el mejor
                 degradacion = mejor_solucion.fitness - fitness_promedio
                 
-                # Si hay degradación significativa y hace mucho que no mejora
                 iteraciones_sin_mejora_real = iteracion - ultima_mejora_iter
                 if degradacion > UMBRAL_DEGRADACION and iteraciones_sin_mejora_real > 100:
-                    sa_logger.warning(f"⚠️  DEGRADACIÓN DETECTADA en iter {iteracion}:")
+                    sa_logger.warning(f"DEGRADACIÓN DETECTADA en iter {iteracion}:")
                     sa_logger.warning(f"   Mejor fitness: {mejor_solucion.fitness:.1f}")
                     sa_logger.warning(f"   Fitness promedio reciente: {fitness_promedio:.1f}")
                     sa_logger.warning(f"   Degradación: {degradacion:.1f}")
-                    sa_logger.warning(f"   🔄 RESTAURANDO mejor solución...")
+                    sa_logger.warning(f"   RESTAURANDO mejor solución...")
                     
-                    # Restaurar la mejor solución encontrada
                     solucion_actual = copy.deepcopy(mejor_solucion)
                     fitness_medio_reciente.clear()
             
             fitness_medio_reciente.clear()
         
-        # Guardar fitness actual en ventana
         fitness_medio_reciente.append(solucion_actual.fitness)
         
-        # Generar solución vecina
         vecino, fase_actual_sa = generar_vecino(
             solucion_actual,
             tiempo_transcurrido,
             max_tiempo_segundos,
             usar_2opt,
-            fase_anterior=fase_actual_sa # Pasa la fase guardada
+            fase_anterior=fase_actual_sa
         )
         evaluar_individuo(vecino)
         
-        # Log detallado cada 100 iteraciones
         if iteracion % 100 == 0:
             sa_logger.debug(f"Iter {iteracion}: T={temperatura:.2f}, Fitness_actual={solucion_actual.fitness:.1f}, Mejor={mejor_solucion.fitness:.1f}")
         
-        # Calcular diferencia de fitness
         delta_fitness = vecino.fitness - solucion_actual.fitness
         
-        # DETECCIÓN DE SALTOS GRANDES (más de 20 en fitness escalado ~ 2000 en fitness original)
         if debug_saltos and abs(delta_fitness) > 20:
             sa_logger.warning("="*80)
-            sa_logger.warning(f"⚠️  SALTO ANORMAL DETECTADO en iteración {iteracion}")
+            sa_logger.warning(f"SALTO ANORMAL DETECTADO en iteración {iteracion}")
             sa_logger.warning(f"   Fitness actual: {solucion_actual.fitness:.1f}")
             sa_logger.warning(f"   Fitness vecino: {vecino.fitness:.1f}")
             sa_logger.warning(f"   Delta: {delta_fitness:+.1f}")
             sa_logger.warning(f"   Temperatura: {temperatura:.2f}")
             sa_logger.warning(f"   Tipo perturbación aplicada: (ver generar_vecino)")
             
-            # Detalles del vecino
             sa_logger.warning(f"   Vecino - Puntos: {vecino.puntos_totales}, Tiempo: {vecino.tiempo_total:.1f}min, Distancia: {vecino.distancia_total:.1f}km")
             sa_logger.warning(f"   Actual - Puntos: {solucion_actual.puntos_totales}, Tiempo: {solucion_actual.tiempo_total:.1f}min, Distancia: {solucion_actual.distancia_total:.1f}km")
             
-            # Verificar si tiene duplicados
             tiene_duplicados_vecino = False
             for dia_idx, dia in enumerate(vecino.dias):
                 if len(dia) != len(set(dia)):
                     tiene_duplicados_vecino = True
                     duplicados = [x for x in dia if dia.count(x) > 1]
-                    sa_logger.warning(f"   ⚠️ Vecino tiene DUPLICADOS en día {dia_idx+1}: {set(duplicados)}")
+                    sa_logger.warning(f"   Vecino tiene DUPLICADOS en día {dia_idx+1}: {set(duplicados)}")
             
             tiene_duplicados_actual = False
             for dia_idx, dia in enumerate(solucion_actual.dias):
                 if len(dia) != len(set(dia)):
                     tiene_duplicados_actual = True
                     duplicados = [x for x in dia if dia.count(x) > 1]
-                    sa_logger.warning(f"   ⚠️ Actual tiene DUPLICADOS en día {dia_idx+1}: {set(duplicados)}")
+                    sa_logger.warning(f"   Actual tiene DUPLICADOS en día {dia_idx+1}: {set(duplicados)}")
             
-            # Verificar restricciones
             es_valido_vecino = validar_restricciones_ciudades(vecino)
             es_valido_actual = validar_restricciones_ciudades(solucion_actual)
             sa_logger.warning(f"   Validez restricciones - Vecino: {es_valido_vecino}, Actual: {es_valido_actual}")
             
             sa_logger.warning("="*80)
             
-            # Imprimir en consola también
             if verbose:
-                sa_logger.warning(f"⚠️  SALTO ANORMAL DETECTADO en iteración {iteracion}")
+                sa_logger.warning(f"SALTO ANORMAL DETECTADO en iteración {iteracion}")
                 sa_logger.warning(f"   Fitness: {solucion_actual.fitness:.1f} → {vecino.fitness:.1f} (Δ={delta_fitness:+.1f})")
                 sa_logger.warning(f"   Ver detalles en archivo de log")
         
-        # Decidir si aceptar
         aceptado = aceptar_solucion(delta_fitness, temperatura)
         
         if aceptado:
-            # Actualizar solución actual (puede ser peor que la anterior)
             fitness_antes_actualizar = solucion_actual.fitness
             puntos_antes = solucion_actual.puntos_totales
             tiempo_antes = solucion_actual.tiempo_total
@@ -584,109 +462,96 @@ def enfriamiento_simulado(
             solucion_actual = vecino
             total_aceptaciones += 1
             
-            # Log si hubo un cambio significativo (>10 en fitness escalado ~ 1000 original)
             if debug_saltos and abs(delta_fitness) > 10:
                 sa_logger.info(f"Iter {iteracion}: Aceptada solución con delta={delta_fitness:+.1f} (T={temperatura:.2f})")
                 
-                # Detalles del cambio
                 delta_puntos_cambio = solucion_actual.puntos_totales - puntos_antes
                 delta_tiempo_cambio = solucion_actual.tiempo_total - tiempo_antes
                 delta_distancia_cambio = solucion_actual.distancia_total - distancia_antes
                 
-                sa_logger.info(f"  📊 Desglose del cambio:")
+                sa_logger.info(f"  Desglose del cambio:")
                 sa_logger.info(f"     Puntos: {delta_puntos_cambio:+d} → {solucion_actual.puntos_totales} total")
                 sa_logger.info(f"     Tiempo: {delta_tiempo_cambio:+.1f}min → {solucion_actual.tiempo_total:.1f}min total")
                 sa_logger.info(f"     Distancia: {delta_distancia_cambio:+.1f}km → {solucion_actual.distancia_total:.1f}km total")
                 
-                # Verificar duplicados
                 duplicados_despues = sum(1 for dia in solucion_actual.dias if len(dia) != len(set(dia)))
                 if duplicados_despues > 0:
-                    sa_logger.warning(f"     ⚠️ Nueva solución tiene duplicados en {duplicados_despues} día(s)")
+                    sa_logger.warning(f"     Nueva solución tiene duplicados en {duplicados_despues} día(s)")
             
-            # Verificar si es la MEJOR GLOBAL encontrada hasta ahora
             if solucion_actual.fitness > mejor_solucion.fitness:
                 mejora_sobre_mejor = solucion_actual.fitness - mejor_solucion.fitness
                 
-                # Log detallado para mejoras grandes (>10 en fitness escalado ~ 1000 original)
                 if mejora_sobre_mejor > 10:
                     sa_logger.info(f"="*80)
-                    sa_logger.info(f"🎯 GRAN MEJORA DETECTADA: +{mejora_sobre_mejor:.1f} puntos de fitness")
+                    sa_logger.info(f"GRAN MEJORA DETECTADA: +{mejora_sobre_mejor:.1f} puntos de fitness")
                     sa_logger.info(f"  ANTES (mejor anterior):")
-                    sa_logger.info(f"    • Fitness: {mejor_solucion.fitness:.1f}")
-                    sa_logger.info(f"    • Puntos: {mejor_solucion.puntos_totales}")
-                    sa_logger.info(f"    • Tiempo: {mejor_solucion.tiempo_total:.1f}min")
-                    sa_logger.info(f"    • Distancia: {mejor_solucion.distancia_total:.1f}km")
+                    sa_logger.info(f"    Fitness: {mejor_solucion.fitness:.1f}")
+                    sa_logger.info(f"    Puntos: {mejor_solucion.puntos_totales}")
+                    sa_logger.info(f"    Tiempo: {mejor_solucion.tiempo_total:.1f}min")
+                    sa_logger.info(f"    Distancia: {mejor_solucion.distancia_total:.1f}km")
                     
                     sa_logger.info(f"  DESPUÉS (nueva mejor):")
-                    sa_logger.info(f"    • Fitness: {solucion_actual.fitness:.1f}")
-                    sa_logger.info(f"    • Puntos: {solucion_actual.puntos_totales}")
-                    sa_logger.info(f"    • Tiempo: {solucion_actual.tiempo_total:.1f}min")
-                    sa_logger.info(f"    • Distancia: {solucion_actual.distancia_total:.1f}km")
+                    sa_logger.info(f"    Fitness: {solucion_actual.fitness:.1f}")
+                    sa_logger.info(f"    Puntos: {solucion_actual.puntos_totales}")
+                    sa_logger.info(f"    Tiempo: {solucion_actual.tiempo_total:.1f}min")
+                    sa_logger.info(f"    Distancia: {solucion_actual.distancia_total:.1f}km")
                     
                     sa_logger.info(f"  DIFERENCIAS:")
                     delta_puntos = solucion_actual.puntos_totales - mejor_solucion.puntos_totales
                     delta_tiempo = solucion_actual.tiempo_total - mejor_solucion.tiempo_total
                     delta_distancia = solucion_actual.distancia_total - mejor_solucion.distancia_total
                     
-                    sa_logger.info(f"    • Δ Puntos: {delta_puntos:+d}")
-                    sa_logger.info(f"    • Δ Tiempo: {delta_tiempo:+.1f}min")
-                    sa_logger.info(f"    • Δ Distancia: {delta_distancia:+.1f}km")
+                    sa_logger.info(f"    Δ Puntos: {delta_puntos:+d}")
+                    sa_logger.info(f"    Δ Tiempo: {delta_tiempo:+.1f}min")
+                    sa_logger.info(f"    Δ Distancia: {delta_distancia:+.1f}km")
                     
-                    # Calcular contribución de cada componente al fitness
-                    # Fitness = (puntos - distancia * 0.3) / FITNESS_SCALE_FACTOR
                     contrib_puntos = delta_puntos / FITNESS_SCALE_FACTOR
                     contrib_distancia = -delta_distancia * 0.3 / FITNESS_SCALE_FACTOR
                     
                     sa_logger.info(f"  CONTRIBUCIÓN AL FITNESS:")
-                    sa_logger.info(f"    • Puntos: {contrib_puntos:+.1f} (Δ{delta_puntos:+d} × 1.0 ÷ {FITNESS_SCALE_FACTOR})")
-                    sa_logger.info(f"    • Distancia: {contrib_distancia:+.1f} (Δ{delta_distancia:+.1f}km × 0.3 ÷ {FITNESS_SCALE_FACTOR})")
-                    sa_logger.info(f"    • TOTAL calculado: {contrib_puntos + contrib_distancia:+.2f}")
-                    sa_logger.info(f"    • TOTAL real: {mejora_sobre_mejor:+.2f}")
+                    sa_logger.info(f"    Puntos: {contrib_puntos:+.1f} (Δ{delta_puntos:+d} × 1.0 ÷ {FITNESS_SCALE_FACTOR})")
+                    sa_logger.info(f"    Distancia: {contrib_distancia:+.1f} (Δ{delta_distancia:+.1f}km × 0.3 ÷ {FITNESS_SCALE_FACTOR})")
+                    sa_logger.info(f"    TOTAL calculado: {contrib_puntos + contrib_distancia:+.2f}")
+                    sa_logger.info(f"    TOTAL real: {mejora_sobre_mejor:+.2f}")
                     diferencia_calc = abs((contrib_puntos + contrib_distancia) - mejora_sobre_mejor)
-                    if diferencia_calc > 1:  # Ajustado a escala (era 10)
-                        sa_logger.warning(f"    ⚠️ Discrepancia de {diferencia_calc:.2f} (probablemente por penalizaciones)")
+                    if diferencia_calc > 1:
+                        sa_logger.warning(f"    Discrepancia de {diferencia_calc:.2f} (probablemente por penalizaciones)")
                     
-                    # Verificar duplicados
                     for dia_idx, dia in enumerate(solucion_actual.dias):
                         if len(dia) != len(set(dia)):
                             duplicados = [x for x in dia if dia.count(x) > 1]
-                            sa_logger.warning(f"    ⚠️ Día {dia_idx+1} tiene duplicados: {set(duplicados)}")
+                            sa_logger.warning(f"    Día {dia_idx+1} tiene duplicados: {set(duplicados)}")
                     
-                    sa_logger.info(f"="*80)
+                    sa_logger.info("="*80)
                 
                 mejor_solucion = copy.deepcopy(solucion_actual)
                 iteraciones_sin_mejora = 0
                 mejoras_encontradas += 1
-                ultima_mejora_iter = iteracion  # NUEVO: Actualizar última mejora
+                ultima_mejora_iter = iteracion
                 
-                sa_logger.info(f"🌟 MEJORA #{mejoras_encontradas} en iter {iteracion}: Fitness={mejor_solucion.fitness:.1f} (+{mejora_sobre_mejor:.1f}), Puntos={mejor_solucion.puntos_totales}")
+                sa_logger.info(f"MEJORA #{mejoras_encontradas} en iter {iteracion}: Fitness={mejor_solucion.fitness:.1f} (+{mejora_sobre_mejor:.1f}), Puntos={mejor_solucion.puntos_totales}")
                 
                 if verbose and mejoras_encontradas % 5 == 0:
-                    sa_logger.info(f"  ✨ Mejora #{mejoras_encontradas} en iteración {iteracion+1}: "
+                    sa_logger.info(f"  Mejora #{mejoras_encontradas} en iteración {iteracion+1}: "
                           f"Fitness = {mejor_solucion.fitness:.1f} | "
                           f"Puntos = {mejor_solucion.puntos_totales} | "
                           f"T = {temperatura:.2f}")
             else:
                 iteraciones_sin_mejora += 1
         else:
-            # Solución rechazada, mantener la actual
             total_rechazos += 1
             iteraciones_sin_mejora += 1
             
-            # Log rechazos significativos (>20 en fitness escalado ~ 2000 original)
             if debug_saltos and delta_fitness > 20:
                 probabilidad = math.exp(delta_fitness / temperatura) if temperatura > 0 else 0
                 sa_logger.debug(f"Iter {iteracion}: Rechazada mejora de {delta_fitness:+.1f} (prob={probabilidad:.4f}, T={temperatura:.2f})")
         
-        # Actualizar fitness_anterior para próxima iteración
         fitness_anterior = solucion_actual.fitness
         
-        # Guardar historial
         historial_fitness.append(solucion_actual.fitness)
         historial_mejor_fitness.append(mejor_solucion.fitness)
         historial_temperatura.append(temperatura)
         
-        # Actualizar visualización en tiempo real
         line_actual.set_xdata(range(len(historial_fitness)))
         line_actual.set_ydata(historial_fitness)
         line_mejor.set_xdata(range(len(historial_mejor_fitness)))
@@ -695,9 +560,7 @@ def enfriamiento_simulado(
         ax.autoscale_view()
         plt.pause(0.01)
         
-        # Actualizar temperatura según el método elegido
         if usar_temp_adaptativa:
-            # Enfriamiento adaptativo (lineal por tiempo)
             temperatura = calcular_temperatura_adaptativa(
                 tiempo_transcurrido, 
                 max_tiempo_segundos, 
@@ -705,10 +568,8 @@ def enfriamiento_simulado(
                 T_minima
             )
         else:
-            # Enfriamiento geométrico tradicional
             temperatura = temperatura * alpha
         
-        # Mostrar progreso periódicamente
         if verbose and (iteracion + 1) % 500 == 0:
             tasa_aceptacion = total_aceptaciones / (iteracion + 1) * 100
             tiempo_transcurrido = time.time() - tiempo_inicio
@@ -723,30 +584,23 @@ def enfriamiento_simulado(
             sa_logger.info(f"Progreso iter {iteracion+1}: T={temperatura:.2f}, Fitness={solucion_actual.fitness:.1f}, "
                           f"Mejor={mejor_solucion.fitness:.1f}, Tasa_acept={tasa_aceptacion:.1f}%")
         
-        # Condiciones de parada
         if not usar_temp_adaptativa and temperatura < T_minima:
-            sa_logger.info(f"❄️  Temperatura mínima alcanzada: {temperatura:.4f} < {T_minima}")
+            sa_logger.info(f"Temperatura mínima alcanzada: {temperatura:.4f} < {T_minima}")
             break
         
-        # Incrementar contador de iteraciones
         iteracion += 1
         
-        # Condición de seguridad: si lleva muchas iteraciones sin mejora, parar
         if iteraciones_sin_mejora > iteraciones_sin_mejora_max:
-            sa_logger.info(f"⏸️  Detenido por iteraciones sin mejora: {iteraciones_sin_mejora:,} > {iteraciones_sin_mejora_max:,}")
+            sa_logger.info(f"Detenido por iteraciones sin mejora: {iteraciones_sin_mejora:,} > {iteraciones_sin_mejora_max:,}")
             break
     
-    # Cerrar visualización y guardar
     plt.ioff()
     
-    # Calcular tiempo total de ejecución
     tiempo_total_ejecucion = time.time() - tiempo_inicio
     
-    # Guardar la figura antes de cerrarla
     import os
     from datetime import datetime
     
-    # Crear carpeta de graficas si no existe
     graficas_dir = "graficas"
     if not os.path.exists(graficas_dir):
         os.makedirs(graficas_dir)
@@ -754,18 +608,15 @@ def enfriamiento_simulado(
     timestamp = datetime.now().strftime("%d_%H_%M")
     fig_filename = os.path.join(graficas_dir, f"evolucion_fitness_sa_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    sa_logger.info(f"💾 Gráfica guardada: {fig_filename}")
+    sa_logger.info(f"Gráfica guardada: {fig_filename}")
     
-    # plt.show()  # Comentado para no mostrar gráfica en tiempo real
-    
-    # Estadísticas finales
     iteraciones_realizadas = iteracion + 1
     tasa_aceptacion_final = total_aceptaciones / iteraciones_realizadas * 100
     mejora_absoluta = mejor_solucion.fitness - solucion_inicial.fitness
     mejora_porcentual = (mejora_absoluta / abs(solucion_inicial.fitness) * 100) if solucion_inicial.fitness != 0 else 0
     
     sa_logger.info("="*80)
-    sa_logger.info("✅ ENFRIAMIENTO SIMULADO COMPLETADO")
+    sa_logger.info("ENFRIAMIENTO SIMULADO COMPLETADO")
     sa_logger.info("="*80)
     sa_logger.info(f"Iteraciones: {iteraciones_realizadas:,}")
     sa_logger.info(f"Tiempo ejecución: {tiempo_total_ejecucion/60:.2f} minutos")
@@ -777,25 +628,25 @@ def enfriamiento_simulado(
     sa_logger.info("="*80)
     
     sa_logger.info("="*80)
-    sa_logger.info("✅ ENFRIAMIENTO SIMULADO COMPLETADO")
+    sa_logger.info("ENFRIAMIENTO SIMULADO COMPLETADO")
     sa_logger.info("="*80)
     sa_logger.info("")
-    sa_logger.info("📈 Estadísticas:")
-    sa_logger.info(f"  • Iteraciones realizadas: {iteraciones_realizadas:,}")
-    sa_logger.info(f"  • Tiempo de ejecución: {tiempo_total_ejecucion/60:.2f} minutos ({tiempo_total_ejecucion/3600:.2f} horas)")
-    sa_logger.info(f"  • Temperatura final: {temperatura:.4f}")
-    sa_logger.info(f"  • Total aceptaciones: {total_aceptaciones:,} ({tasa_aceptacion_final:.1f}%)")
-    sa_logger.info(f"  • Total rechazos: {total_rechazos:,}")
-    sa_logger.info(f"  • Mejoras encontradas: {mejoras_encontradas}")
+    sa_logger.info("Estadísticas:")
+    sa_logger.info(f"  Iteraciones realizadas: {iteraciones_realizadas:,}")
+    sa_logger.info(f"  Tiempo de ejecución: {tiempo_total_ejecucion/60:.2f} minutos ({tiempo_total_ejecucion/3600:.2f} horas)")
+    sa_logger.info(f"  Temperatura final: {temperatura:.4f}")
+    sa_logger.info(f"  Total aceptaciones: {total_aceptaciones:,} ({tasa_aceptacion_final:.1f}%)")
+    sa_logger.info(f"  Total rechazos: {total_rechazos:,}")
+    sa_logger.info(f"  Mejoras encontradas: {mejoras_encontradas}")
     sa_logger.info("")
-    sa_logger.info("🏆 Resultados:")
-    sa_logger.info(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
-    sa_logger.info(f"  • Fitness final: {mejor_solucion.fitness:.1f}")
-    sa_logger.info(f"  • Mejora absoluta: {mejora_absoluta:+.1f}")
-    sa_logger.info(f"  • Mejora porcentual: {mejora_porcentual:+.2f}%")
-    sa_logger.info(f"  • Puntos totales: {mejor_solucion.puntos_totales}")
-    sa_logger.info(f"  • Tiempo total: {mejor_solucion.tiempo_total/60:.1f}h")
-    sa_logger.info(f"  • Distancia total: {mejor_solucion.distancia_total:.1f}km")
+    sa_logger.info("Resultados:")
+    sa_logger.info(f"  Fitness inicial: {solucion_inicial.fitness:.1f}")
+    sa_logger.info(f"  Fitness final: {mejor_solucion.fitness:.1f}")
+    sa_logger.info(f"  Mejora absoluta: {mejora_absoluta:+.1f}")
+    sa_logger.info(f"  Mejora porcentual: {mejora_porcentual:+.2f}%")
+    sa_logger.info(f"  Puntos totales: {mejor_solucion.puntos_totales}")
+    sa_logger.info(f"  Tiempo total: {mejor_solucion.tiempo_total/60:.1f}h")
+    sa_logger.info(f"  Distancia total: {mejor_solucion.distancia_total:.1f}km")
     sa_logger.info("="*80)
     
     return {
@@ -824,38 +675,37 @@ def enfriamiento_simulado(
 def enfriamiento_desde_genetico(
     resultados_genetico: Dict,
     usar_mejor: bool = True,
-    T_inicial: float = 10,  # Temperatura baja para refinamiento (era 20)
-    alpha: float = 0.98,    # Solo usado si no se usa temp. adaptativa
-    max_tiempo_segundos: float = 3600,  # 1 hora por defecto
-    usar_temp_adaptativa: bool = True  # NUEVO: usar temperatura adaptativa
+    T_inicial: float = 10,
+    alpha: float = 0.98,
+    max_tiempo_segundos: float = 3600,
+    usar_temp_adaptativa: bool = True
 ) -> Dict:
     sa_logger.info("="*80)
-    sa_logger.info("🔗 ENFRIAMIENTO SIMULADO DESDE ALGORITMO GENÉTICO (HÍBRIDO GA+SA)")
+    sa_logger.info("ENFRIAMIENTO SIMULADO DESDE ALGORITMO GENÉTICO (HÍBRIDO GA+SA)")
     sa_logger.info("="*80)
     
     if usar_mejor:
-        sa_logger.info("📍 Estrategia: Partir del MEJOR individuo del GA")
+        sa_logger.info("Estrategia: Partir del MEJOR individuo del GA")
         solucion_inicial = resultados_genetico["mejor_individuo"]
     else:
-        sa_logger.info("📍 Estrategia: Partir de un individuo del TOP 10 del GA")
+        sa_logger.info("Estrategia: Partir de un individuo del TOP 10 del GA")
         poblacion_final = resultados_genetico.get("poblacion_final", [])
         if poblacion_final:
             top_10 = sorted(poblacion_final, key=lambda x: x.fitness, reverse=True)[:10]
             solucion_inicial = random.choice(top_10)
-            sa_logger.info(f"  • Seleccionado individuo con fitness: {solucion_inicial.fitness:.1f}")
+            sa_logger.info(f"  Seleccionado individuo con fitness: {solucion_inicial.fitness:.1f}")
         else:
-            sa_logger.warning("  ⚠️  No hay población final, usando mejor individuo")
+            sa_logger.warning("  No hay población final, usando mejor individuo")
             solucion_inicial = resultados_genetico["mejor_individuo"]
     
     sa_logger.info("")
-    sa_logger.info("💡 Configuración OPTIMIZADA de refinamiento:")
-    sa_logger.info(f"  • Temperatura inicial: {T_inicial} (baja para refinamiento local)")
-    sa_logger.info(f"  • Enfriamiento: {'Adaptativo (lineal por tiempo)' if usar_temp_adaptativa else f'Geométrico (α={alpha})'}")
-    sa_logger.info(f"  • Tiempo máximo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
-    sa_logger.info(f"  • Vecindad adaptativa: 5 tipos de perturbaciones con probabilidades dinámicas")
-    sa_logger.info(f"  • Estrategia: Perturbaciones conservadoras que preservan calidad del GA")
+    sa_logger.info("Configuración OPTIMIZADA de refinamiento:")
+    sa_logger.info(f"  Temperatura inicial: {T_inicial} (baja para refinamiento local)")
+    sa_logger.info(f"  Enfriamiento: {'Adaptativo (lineal por tiempo)' if usar_temp_adaptativa else f'Geométrico (α={alpha})'}")
+    sa_logger.info(f"  Tiempo máximo: {max_tiempo_segundos/60:.1f} minutos ({max_tiempo_segundos/3600:.1f} horas)")
+    sa_logger.info(f"  Vecindad adaptativa: 5 tipos de perturbaciones con probabilidades dinámicas")
+    sa_logger.info(f"  Estrategia: Perturbaciones conservadoras que preservan calidad del GA")
     
-    # Ejecutar enfriamiento simulado
     resultados_sa = enfriamiento_simulado(
         solucion_inicial=solucion_inicial,
         T_inicial=T_inicial,
@@ -873,7 +723,6 @@ def exportar_resultados_sa(resultados: Dict, archivo: str = None, config: Dict =
     import json
     from datetime import datetime
     
-    # Generar nombre de archivo automáticamente si no se proporciona
     if archivo is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         archivo = f"resultados_sa_{timestamp}.json"
@@ -882,7 +731,6 @@ def exportar_resultados_sa(resultados: Dict, archivo: str = None, config: Dict =
     inicial = resultados["solucion_inicial"]
     stats = resultados["estadisticas"]
     
-    # Contar tipos de transporte
     transportes_summary = {"avion": 0, "tren": 0, "tren_ave": 0, "bus": 0, "coche": 0, "ferry": 0}
     costo_total_transporte = 0
     tiempo_total_transporte = 0
@@ -974,7 +822,7 @@ def exportar_resultados_sa(resultados: Dict, archivo: str = None, config: Dict =
         json.dump(data, f, indent=2, ensure_ascii=False)
     
     if sa_logger:
-        sa_logger.info(f"💾 Resultados exportados a: {archivo}")
+        sa_logger.info(f"Resultados exportados a: {archivo}")
     
     return archivo
 
@@ -989,22 +837,20 @@ def comparar_con_sin_2opt(
     import copy
     
     sa_logger.info("="*80)
-    sa_logger.info("🔬 EXPERIMENTO: COMPARACIÓN CON/SIN OPTIMIZACIÓN 2-OPT")
+    sa_logger.info("EXPERIMENTO: COMPARACIÓN CON/SIN OPTIMIZACIÓN 2-OPT")
     sa_logger.info("="*80)
     
-    # Hacer copias de la solución inicial
     solucion_con = copy.deepcopy(solucion_inicial)
     solucion_sin = copy.deepcopy(solucion_inicial)
     
-    sa_logger.info("📋 Configuración del experimento:")
+    sa_logger.info("Configuración del experimento:")
     sa_logger.info(f"  • Temperatura inicial: {T_inicial}")
     sa_logger.info(f"  • Factor α: {alpha}")
     sa_logger.info(f"  • Tiempo máximo por ejecución: {max_tiempo_segundos/60:.1f} minutos")
-    sa_logger.info(f"  • Fitness inicial: {solucion_inicial.fitness:.1f}")
+    sa_logger.info(f"  Fitness inicial: {solucion_inicial.fitness:.1f}")
     
-    # Ejecución CON 2-opt
     sa_logger.info("="*80)
-    sa_logger.info("🟢 EJECUCIÓN 1: CON Optimización 2-opt")
+    sa_logger.info("EJECUCIÓN 1: CON Optimización 2-opt")
     sa_logger.info("="*80)
     
     resultados_con = enfriamiento_simulado(
@@ -1016,9 +862,8 @@ def comparar_con_sin_2opt(
         verbose=verbose
     )
     
-    # Ejecución SIN 2-opt
     sa_logger.info("="*80)
-    sa_logger.info("🔴 EJECUCIÓN 2: SIN Optimización 2-opt")
+    sa_logger.info("EJECUCIÓN 2: SIN Optimización 2-opt")
     sa_logger.info("="*80)
     
     resultados_sin = enfriamiento_simulado(
@@ -1030,67 +875,57 @@ def comparar_con_sin_2opt(
         verbose=verbose
     )
     
-    # Comparación
     mejor_con = resultados_con["mejor_solucion"]
     mejor_sin = resultados_sin["mejor_solucion"]
     stats_con = resultados_con["estadisticas"]
     stats_sin = resultados_sin["estadisticas"]
     
     sa_logger.info("="*80)
-    sa_logger.info("📊 RESULTADOS DE LA COMPARACIÓN 2-OPT")
+    sa_logger.info("RESULTADOS DE LA COMPARACIÓN 2-OPT")
     sa_logger.info("="*80)
     
     sa_logger.info(f"{'Métrica':<35} {'CON 2-opt':<20} {'SIN 2-opt':<20} {'Diferencia':<20}")
     sa_logger.info("-"*95)
     
-    # Fitness final
     diff_fitness = mejor_con.fitness - mejor_sin.fitness
-    simbolo_fitness = "✅ CON" if diff_fitness > 0 else "✅ SIN" if diff_fitness < 0 else "="
+    simbolo_fitness = "CON" if diff_fitness > 0 else "SIN" if diff_fitness < 0 else "="
     sa_logger.info(f"{'Fitness final':<35} {mejor_con.fitness:<20.1f} {mejor_sin.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
     
-    # Puntos
     diff_puntos = mejor_con.puntos_totales - mejor_sin.puntos_totales
     sa_logger.info(f"{'Puntos totales':<35} {mejor_con.puntos_totales:<20} {mejor_sin.puntos_totales:<20} {diff_puntos:+d}")
     
-    # Iteraciones
     diff_iter = stats_con["iteraciones_realizadas"] - stats_sin["iteraciones_realizadas"]
     sa_logger.info(f"{'Iteraciones realizadas':<35} {stats_con['iteraciones_realizadas']:<20,} {stats_sin['iteraciones_realizadas']:<20,} {diff_iter:+,}")
     
-    # Mejoras encontradas
     diff_mejoras = stats_con["mejoras_encontradas"] - stats_sin["mejoras_encontradas"]
-    simbolo_mejoras = "✅ CON" if diff_mejoras > 0 else "✅ SIN" if diff_mejoras < 0 else "="
+    simbolo_mejoras = "CON" if diff_mejoras > 0 else "SIN" if diff_mejoras < 0 else "="
     sa_logger.info(f"{'Mejoras encontradas':<35} {stats_con['mejoras_encontradas']:<20} {stats_sin['mejoras_encontradas']:<20} {diff_mejoras:+d} {simbolo_mejoras}")
     
-    # Tasa de aceptación
     diff_tasa = stats_con["tasa_aceptacion"] - stats_sin["tasa_aceptacion"]
     sa_logger.info(f"{'Tasa de aceptación (%)':<35} {stats_con['tasa_aceptacion']:<20.2f} {stats_sin['tasa_aceptacion']:<20.2f} {diff_tasa:+.2f}")
     
-    # Tiempo
     diff_tiempo = stats_con["tiempo_ejecucion_minutos"] - stats_sin["tiempo_ejecucion_minutos"]
     sa_logger.info(f"{'Tiempo de ejecución (min)':<35} {stats_con['tiempo_ejecucion_minutos']:<20.2f} {stats_sin['tiempo_ejecucion_minutos']:<20.2f} {diff_tiempo:+.2f}")
     
     sa_logger.info("-"*95)
     
-    # Conclusiones
     if diff_fitness > 0:
         mejora_pct = (diff_fitness / abs(mejor_sin.fitness)) * 100 if mejor_sin.fitness != 0 else 0
-        sa_logger.info(f"🏆 CONCLUSIÓN: El uso de 2-opt MEJORÓ el resultado en {mejora_pct:.2f}%")
+        sa_logger.info(f"CONCLUSIÓN: El uso de 2-opt MEJORÓ el resultado en {mejora_pct:.2f}%")
         sa_logger.info(f"   La optimización 2-opt ayuda a encontrar mejores rutas locales.")
     elif diff_fitness < 0:
         empeora_pct = (abs(diff_fitness) / abs(mejor_con.fitness)) * 100 if mejor_con.fitness != 0 else 0
-        sa_logger.info(f"⚠️  CONCLUSIÓN: El uso de 2-opt EMPEORÓ el resultado en {empeora_pct:.2f}%")
+        sa_logger.info(f"CONCLUSIÓN: El uso de 2-opt EMPEORÓ el resultado en {empeora_pct:.2f}%")
         sa_logger.info(f"   Esto puede indicar que 2-opt consume tiempo que podría usarse en más iteraciones.")
     else:
-        sa_logger.info(f"🤝 CONCLUSIÓN: Ambas configuraciones produjeron resultados similares")
+        sa_logger.info(f"CONCLUSIÓN: Ambas configuraciones produjeron resultados similares")
     
-    # Crear gráficas comparativas
     import matplotlib.pyplot as plt
     from datetime import datetime
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle('Comparación: Con vs Sin Optimización 2-opt', fontsize=16, fontweight='bold')
     
-    # Gráfica 1: Evolución del fitness
     axes[0, 0].plot(resultados_con["historial_mejor_fitness"], label='Con 2-opt', linewidth=2, color='green')
     axes[0, 0].plot(resultados_sin["historial_mejor_fitness"], label='Sin 2-opt', linewidth=2, color='red')
     axes[0, 0].set_title('Evolución del Mejor Fitness')
@@ -1100,7 +935,6 @@ def comparar_con_sin_2opt(
     axes[0, 0].legend()
     axes[0, 0].grid(alpha=0.3, which='both', linestyle='--')
     
-    # Gráfica 2: Fitness final
     axes[0, 1].bar(['Con 2-opt', 'Sin 2-opt'], [mejor_con.fitness, mejor_sin.fitness], 
                    color=['green', 'red'], alpha=0.7)
     axes[0, 1].set_title('Fitness Final')
@@ -1110,7 +944,6 @@ def comparar_con_sin_2opt(
     for i, v in enumerate([mejor_con.fitness, mejor_sin.fitness]):
         axes[0, 1].text(i, v, f'{v:.1f}', ha='center', va='bottom', fontweight='bold')
     
-    # Gráfica 3: Mejoras encontradas
     axes[1, 0].bar(['Con 2-opt', 'Sin 2-opt'], 
                    [stats_con['mejoras_encontradas'], stats_sin['mejoras_encontradas']], 
                    color=['green', 'red'], alpha=0.7)
@@ -1120,7 +953,6 @@ def comparar_con_sin_2opt(
     for i, v in enumerate([stats_con['mejoras_encontradas'], stats_sin['mejoras_encontradas']]):
         axes[1, 0].text(i, v, f'{v}', ha='center', va='bottom', fontweight='bold')
     
-    # Gráfica 4: Iteraciones por segundo
     iter_por_seg_con = stats_con['iteraciones_realizadas'] / stats_con['tiempo_ejecucion_segundos']
     iter_por_seg_sin = stats_sin['iteraciones_realizadas'] / stats_sin['tiempo_ejecucion_segundos']
     axes[1, 1].bar(['Con 2-opt', 'Sin 2-opt'], [iter_por_seg_con, iter_por_seg_sin], 
@@ -1144,7 +976,7 @@ def comparar_con_sin_2opt(
     timestamp = datetime.now().strftime("%d_%H_%M")
     fig_filename = os.path.join(graficas_dir, f"comparacion_2opt_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    sa_logger.info(f"💾 Gráfica comparativa guardada: {fig_filename}")
+    sa_logger.info(f"Gráfica comparativa guardada: {fig_filename}")
     # plt.show()  # Comentado para no mostrar gráfica en tiempo real
     
     sa_logger.info("="*80)
@@ -1157,47 +989,34 @@ def comparar_con_sin_2opt(
 
 
 def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
-    """
-    Compara los resultados del algoritmo genético vs enfriamiento simulado.
-    Genera gráficas comparativas y tabla de resultados.
-    
-    Args:
-        resultados_ga: Resultados del GA
-        resultados_sa: Resultados del SA
-    """
     mejor_ga = resultados_ga["mejor_individuo"]
     mejor_sa = resultados_sa["mejor_solucion"]
     
     sa_logger.info("="*80)
-    sa_logger.info("⚖️  COMPARACIÓN: ALGORITMO GENÉTICO vs ENFRIAMIENTO SIMULADO")
+    sa_logger.info("COMPARACIÓN: ALGORITMO GENÉTICO vs ENFRIAMIENTO SIMULADO")
     sa_logger.info("="*80)
     
     sa_logger.info(f"{'Métrica':<30} {'GA':<20} {'SA':<20} {'Diferencia':<20}")
     sa_logger.info("-"*90)
     
-    # Fitness
     diff_fitness = mejor_sa.fitness - mejor_ga.fitness
     simbolo_fitness = "✅" if diff_fitness > 0 else "⚠️" if diff_fitness < 0 else "="
     sa_logger.info(f"{'Fitness':<30} {mejor_ga.fitness:<20.1f} {mejor_sa.fitness:<20.1f} {diff_fitness:+.1f} {simbolo_fitness}")
     
-    # Puntos
     diff_puntos = mejor_sa.puntos_totales - mejor_ga.puntos_totales
     simbolo_puntos = "✅" if diff_puntos > 0 else "⚠️" if diff_puntos < 0 else "="
     sa_logger.info(f"{'Puntos totales':<30} {mejor_ga.puntos_totales:<20} {mejor_sa.puntos_totales:<20} {diff_puntos:+d} {simbolo_puntos}")
     
-    # Tiempo
     diff_tiempo = (mejor_sa.tiempo_total - mejor_ga.tiempo_total) / 60
     simbolo_tiempo = "⚠️" if diff_tiempo > 0 else "✅" if diff_tiempo < 0 else "="
     sa_logger.info(f"{'Tiempo total (h)':<30} {mejor_ga.tiempo_total/60:<20.1f} {mejor_sa.tiempo_total/60:<20.1f} {diff_tiempo:+.1f} {simbolo_tiempo}")
     
-    # Distancia
     diff_distancia = mejor_sa.distancia_total - mejor_ga.distancia_total
     simbolo_distancia = "⚠️" if diff_distancia > 0 else "✅" if diff_distancia < 0 else "="
     sa_logger.info(f"{'Distancia total (km)':<30} {mejor_ga.distancia_total:<20.1f} {mejor_sa.distancia_total:<20.1f} {diff_distancia:+.1f} {simbolo_distancia}")
     
     sa_logger.info("-"*90)
     
-    # Tiempo de ejecución de algoritmos
     tiempo_ga = resultados_ga.get("tiempo_ejecucion_segundos", 0) / 60
     tiempo_sa = resultados_sa["estadisticas"]["tiempo_ejecucion_minutos"]
     sa_logger.info("")
@@ -1208,21 +1027,19 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     
     if diff_fitness > 0:
         mejora_pct = (diff_fitness / abs(mejor_ga.fitness)) * 100
-        sa_logger.info(f"🏆 El enfriamiento simulado MEJORÓ la solución del GA en {mejora_pct:.2f}%")
+        sa_logger.info(f"El enfriamiento simulado MEJORÓ la solución del GA en {mejora_pct:.2f}%")
     elif diff_fitness < 0:
         empeora_pct = (abs(diff_fitness) / abs(mejor_ga.fitness)) * 100
-        sa_logger.info(f"📉 El enfriamiento simulado empeoró ligeramente ({empeora_pct:.2f}%)")
+        sa_logger.info(f"El enfriamiento simulado empeoró ligeramente ({empeora_pct:.2f}%)")
     else:
-        sa_logger.info(f"🤝 Ambos algoritmos encontraron soluciones de calidad similar")
+        sa_logger.info(f"Ambos algoritmos encontraron soluciones de calidad similar")
     
-    # Crear gráfica comparativa
     import matplotlib.pyplot as plt
     from datetime import datetime
     
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle('Comparación GA vs SA', fontsize=16, fontweight='bold')
     
-    # Gráfica 1: Fitness
     axes[0, 0].bar(['GA', 'SA'], [mejor_ga.fitness, mejor_sa.fitness], color=['#3498db', '#e74c3c'])
     axes[0, 0].set_title('Fitness Final')
     axes[0, 0].set_ylabel('Fitness (escala logarítmica)')
@@ -1231,7 +1048,6 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     for i, v in enumerate([mejor_ga.fitness, mejor_sa.fitness]):
         axes[0, 0].text(i, v, f'{v:.1f}', ha='center', va='bottom', fontweight='bold')
     
-    # Gráfica 2: Puntos totales
     axes[0, 1].bar(['GA', 'SA'], [mejor_ga.puntos_totales, mejor_sa.puntos_totales], color=['#3498db', '#e74c3c'])
     axes[0, 1].set_title('Puntos Totales')
     axes[0, 1].set_ylabel('Puntos')
@@ -1239,7 +1055,6 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     for i, v in enumerate([mejor_ga.puntos_totales, mejor_sa.puntos_totales]):
         axes[0, 1].text(i, v, f'{v}', ha='center', va='bottom', fontweight='bold')
     
-    # Gráfica 3: Tiempo y distancia
     x = ['Tiempo (h)', 'Distancia (km)']
     ga_vals = [mejor_ga.tiempo_total/60, mejor_ga.distancia_total]
     sa_vals = [mejor_sa.tiempo_total/60, mejor_sa.distancia_total]
@@ -1254,13 +1069,12 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     axes[1, 0].legend()
     axes[1, 0].grid(axis='y', alpha=0.3)
     
-    # Gráfica 4: Mejora porcentual
     metricas = ['Fitness', 'Puntos', 'Tiempo', 'Distancia']
     mejoras = [
         (diff_fitness / abs(mejor_ga.fitness)) * 100 if mejor_ga.fitness != 0 else 0,
         (diff_puntos / mejor_ga.puntos_totales) * 100 if mejor_ga.puntos_totales != 0 else 0,
-        -(diff_tiempo / (mejor_ga.tiempo_total/60)) * 100 if mejor_ga.tiempo_total != 0 else 0,  # Negativo porque menos tiempo es mejor
-        -(diff_distancia / mejor_ga.distancia_total) * 100 if mejor_ga.distancia_total != 0 else 0  # Negativo porque menos distancia es mejor
+        -(diff_tiempo / (mejor_ga.tiempo_total/60)) * 100 if mejor_ga.tiempo_total != 0 else 0,
+        -(diff_distancia / mejor_ga.distancia_total) * 100 if mejor_ga.distancia_total != 0 else 0
     ]
     
     colores = ['green' if m > 0 else 'red' if m < 0 else 'gray' for m in mejoras]
@@ -1285,18 +1099,15 @@ def comparar_ga_vs_sa(resultados_ga: Dict, resultados_sa: Dict):
     timestamp = datetime.now().strftime("%d_%H_%M")
     fig_filename = os.path.join(graficas_dir, f"comparacion_ga_vs_sa_{timestamp}.png")
     plt.savefig(fig_filename, dpi=150, bbox_inches='tight')
-    sa_logger.info(f"💾 Gráfica comparativa guardada: {fig_filename}")
-    # plt.show()  # Comentado para no mostrar gráfica en tiempo real
+    sa_logger.info(f"Gráfica comparativa guardada: {fig_filename}")
     
     sa_logger.info("="*80)
 
 
-# Ejecución principal
 if __name__ == "__main__":
     import sys
     import argparse
     
-    # Parsear argumentos de línea de comandos
     parser = argparse.ArgumentParser(description='Enfriamiento Simulado - Ruta por España')
     parser.add_argument('modo', type=str, nargs='?', default=None, 
                        help='Modo de ejecución: 1 (SA desde cero), 2 (SA desde GA), 3 (Comparar 2-opt)')
@@ -1318,7 +1129,7 @@ if __name__ == "__main__":
     
     # Inicializar logger global al inicio del programa
     sa_logger, log_file = configurar_logging_sa()
-    sa_logger.info(f"📝 Log iniciado: {log_file}")
+    sa_logger.info(f"Log iniciado: {log_file}")
     
     modos = {
         "1": {
@@ -1339,12 +1150,12 @@ if __name__ == "__main__":
     }
     
     print(f"\n{'='*80}")
-    print(f"🔥 ENFRIAMIENTO SIMULADO - RUTA POR ESPAÑA")
+    print(f"ENFRIAMIENTO SIMULADO - RUTA POR ESPAÑA")
     print(f"{'='*80}\n")
     
     for key, modo in modos.items():
         print(f"[{key}] {modo['nombre']}")
-        print(f"    📝 {modo['descripcion']}")
+        print(f"    {modo['descripcion']}")
         print()
     
     print(f"{'='*80}")
@@ -1352,17 +1163,17 @@ if __name__ == "__main__":
     if args.modo:
         seleccion = args.modo
     else:
-        seleccion = input("👉 Selecciona modo (1/2/3): ").strip()
+        seleccion = input("Selecciona modo (1/2/3): ").strip()
     
     if seleccion not in modos:
-        print(f"\n❌ ERROR: Modo '{seleccion}' no válido. Usa: 1, 2 o 3")
+        print(f"\nERROR: Modo '{seleccion}' no válido. Usa: 1, 2 o 3")
         sys.exit(1)
     
     modo_elegido = modos[seleccion]["funcion"]
     
     if modo_elegido == "standalone":
         # Modo 1: SA desde cero
-        sa_logger.info("🎲 Modo 1: Enfriamiento Simulado desde solución aleatoria")
+        sa_logger.info("Modo 1: Enfriamiento Simulado desde solución aleatoria")
         
         # Configuración ULTRA-CONSERVADORA para minimizar caídas
         # Con T_inicial=2-3, solo aceptará cambios pequeños (~20% prob para Δ=-2)
