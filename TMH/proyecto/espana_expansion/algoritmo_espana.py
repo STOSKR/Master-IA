@@ -19,6 +19,7 @@ from restricciones_espana import (
     validar_limite_ciudad
 )
 import time
+
 probabilidad_reparacion = 0.7 
 
 def configurar_logging(output_dir="logs", prefijo="ag_espana"):
@@ -29,36 +30,33 @@ def configurar_logging(output_dir="logs", prefijo="ag_espana"):
     timestamp = datetime.now().strftime("%d_%H_%M")
     log_filename = os.path.join(output_dir, f"{timestamp}_{prefijo}.log")
     
-    # Crear handler para consola con flush inmediato
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(logging.Formatter('%(message)s'))
     
-    # Crear handler para archivo
     file_handler = logging.FileHandler(log_filename, encoding='utf-8')
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', 
                                                   datefmt='%Y-%m-%d %H:%M:%S'))
     
-    # Configurar logging
     logging.basicConfig(
         level=logging.INFO,
         handlers=[file_handler, console_handler],
-        force=True  # Forzar reconfiguración si ya existe
+        force=True
     )
     
     logger = logging.getLogger(__name__)
     logger.info(f"{'='*80}")
-    logger.info(f"INICIO DE EJECUCIÓN - Algoritmo Genético España")
+    logger.info(f"INICIO DE EJECUCION - Algoritmo Genetico Espana")
     logger.info(f"Log guardado en: {log_filename}")
     logger.info(f"{'='*80}")
-    sys.stdout.flush()  # Flush inmediato
+    sys.stdout.flush()
     
     return log_filename
 
 def log(mensaje):
     logging.info(mensaje)
-    sys.stdout.flush()  # Forzar flush inmediato para ver output en consola
+    sys.stdout.flush()
 
 class Individual:
     def __init__(self, dias: List[List[int]], ciudades: List[str]):
@@ -101,15 +99,10 @@ def eliminar_duplicados_globales(individuo: Individual) -> Individual:
 
 
 def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias_consecutivos_actual: int) -> str:
-    """
-    Obtiene la ciudad más cercana respetando MAX_DIAS_POR_CIUDAD.
-    NUNCA debe quedarse más de MAX_DIAS_POR_CIUDAD días en una misma ciudad.
-    """
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
     
     debe_cambiar = dias_consecutivos_actual >= MAX_DIAS_POR_CIUDAD
     
-    # PRIORIDAD 1: Buscar ciudades no visitadas (excluyendo actual si debe_cambiar)
     candidatas = []
     for ciudad in ciudades_disponibles:
         if debe_cambiar and ciudad == ciudad_actual:
@@ -118,15 +111,12 @@ def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias
             continue
         candidatas.append(ciudad)
     
-    # PRIORIDAD 2: Si no hay ciudades nuevas, revisar ciudades YA visitadas (excepto la actual si debe cambiar)
     if not candidatas:
         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
     
-    # PRIORIDAD 3: Si aún no hay candidatas (caso extremo), forzar cualquier ciudad diferente
     if not candidatas:
-        # Esto fuerza cambiar a CUALQUIER otra ciudad
         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
-        if not candidatas:  # Solo si hay UNA ciudad (imposible con 10 ciudades)
+        if not candidatas:
             return random.choice(ciudades_disponibles)
 
     coord_actual = COORDENADAS_CIUDADES[ciudad_actual]
@@ -153,53 +143,33 @@ def obtener_ciudad_mas_cercana(ciudad_actual: str, ciudades_visitadas: set, dias
     return distancias[0][0]
 
 def validar_restricciones_ciudades(individuo: Individual) -> bool:
-    """
-    Valida que un individuo respete las restricciones de ciudades:
-    1. No regresar a una ciudad ya visitada (sin agrupar días consecutivos)
-    2. NO quedarse más de MAX_DIAS_POR_CIUDAD días consecutivos en una ciudad
-    """
     ciudades = individuo.ciudades
     
-    # Validar que no se repitan ciudades sin agrupar (no regresar)
     ciudades_vistas = set()
     for i, ciudad in enumerate(ciudades):
         if ciudad in ciudades_vistas:
-            # Si ya se visitó, debe ser consecutiva
             if i > 0 and ciudades[i-1] == ciudad:
-                continue  # OK: Días consecutivos en la misma ciudad
+                continue
             else:
-                return False  # ERROR: Regreso a ciudad ya visitada
+                return False
         if i > 0 and ciudades[i-1] != ciudad:
             ciudades_vistas.add(ciudades[i-1])
     
-    # VALIDACIÓN CRÍTICA: Verificar que NUNCA se quede más de MAX_DIAS_POR_CIUDAD días consecutivos
     dias_consecutivos = 1
     ciudad_actual_check = ciudades[0]
     for i in range(1, len(ciudades)):
         if ciudades[i] == ciudad_actual_check:
             dias_consecutivos += 1
             if dias_consecutivos > MAX_DIAS_POR_CIUDAD:
-                return False  # PROHIBIDO: Más de MAX_DIAS_POR_CIUDAD días en una ciudad
+                return False
         else:
-            # Cambió de ciudad, resetear contador
             ciudad_actual_check = ciudades[i]
             dias_consecutivos = 1
     
     return True
 
 def reparar_individuo(individuo: Individual) -> Individual:
-    
     ciudades_disponibles = list(COORDENADAS_CIUDADES.keys())
-    
-    DEBUG_REPARAR = False  # ⚠️ DEBUG DESACTIVADO
-    
-    if DEBUG_REPARAR:
-        print(f"\n🔧 [DEBUG] INICIANDO REPARACIÓN")
-        print(f"   Total días: {len(individuo.ciudades)}")
-    
-    if DEBUG_REPARAR:
-        print(f"\n🔧 [DEBUG] PASO 0: Ajustar tiempo por día")
-        print(f"   Límite: TIEMPO_DIA = {TIEMPO_DIA} min ({TIEMPO_DIA/60:.1f} horas)")
     
     for dia_idx in range(len(individuo.dias)):
         dia = individuo.dias[dia_idx]
@@ -215,10 +185,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
         if tiempo_dia > TIEMPO_DIA:
             exceso = tiempo_dia - TIEMPO_DIA
             
-            if DEBUG_REPARAR:
-                print(f"   ⚠️ Día {dia_idx+1} ({ciudad}): {tiempo_dia:.0f} min > {TIEMPO_DIA} min (exceso: {exceso:.0f} min)")
-            
-            # Obtener información de lugares con puntuaciones
             lugares_info = get_lugares_por_ids(dia)
             
             # Crear lista de (índice, puntos, tiempo) para ordenar
@@ -248,43 +214,20 @@ def reparar_individuo(individuo: Individual) -> Individual:
                     tiempo_dia -= 15  # ~3km a 5km/h
                 
                 lugares_eliminados += 1
-                
-                if DEBUG_REPARAR:
-                    print(f"      🗑️  Eliminando lugar #{idx+1} (puntos={puntos}, tiempo={tiempo} min)")
             
-            # Eliminar lugares (de mayor índice a menor para no afectar índices)
             for idx in sorted(indices_a_eliminar, reverse=True):
                 dia.pop(idx)
             
             # Verificar que quede al menos 1 lugar
             if not dia:
-                # Si eliminamos todo, poner al menos el mejor lugar de la ciudad
                 lugares_ciudad = get_lugares_ciudad(ciudad)
                 if lugares_ciudad:
                     mejor_lugar = max(lugares_ciudad, key=lambda x: x['puntos'])
                     dia.append(mejor_lugar['id'])
-                    if DEBUG_REPARAR:
-                        print(f"      ℹ️  Día quedó vacío, añadiendo mejor lugar: {mejor_lugar['nombre']}")
             
-            # Actualizar el día en el individuo
             individuo.dias[dia_idx] = dia
-            
-            # Recalcular tiempo final
             tiempo_final, _, _ = calcular_tiempo_dia(individuo, dia_idx)
-            
-            if DEBUG_REPARAR:
-                simbolo = "✅" if tiempo_final <= TIEMPO_DIA else "❌"
-                print(f"      {simbolo} Tiempo final: {tiempo_final:.0f} min (eliminados {lugares_eliminados} lugares)")
     
-    # ========================================================================
-    # PASO 1: CORREGIR BLOQUES QUE EXCEDEN MAX_DIAS_POR_CIUDAD
-    # ========================================================================
-    
-    if DEBUG_REPARAR:
-        print(f"\n🔧 [DEBUG] PASO 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD")
-        print(f"   Total días: {len(individuo.ciudades)}")
-    
-    # Paso 1: Corregir bloques que exceden MAX_DIAS_POR_CIUDAD
     i = 0
     while i < len(individuo.ciudades):
         ciudad_actual = individuo.ciudades[i]
@@ -295,39 +238,20 @@ def reparar_individuo(individuo: Individual) -> Individual:
         
         dias_consecutivos = i - inicio_bloque
         
-        if DEBUG_REPARAR:
-            simbolo = "✅" if dias_consecutivos <= MAX_DIAS_POR_CIUDAD else "❌"
-            print(f"   {simbolo} Bloque: {ciudad_actual} (días {inicio_bloque+1}-{i}, {dias_consecutivos} días)")
-        
         if dias_consecutivos > MAX_DIAS_POR_CIUDAD:
-            if DEBUG_REPARAR:
-                print(f"      ⚠️  EXCEDE LÍMITE! Reparando...")
-            
-            # ⚠️ IMPORTANTE: Analizar cuántos días tiene cada ciudad hasta este punto
             contador_dias_ciudad = {}
             for idx in range(inicio_bloque):
                 c = individuo.ciudades[idx]
                 contador_dias_ciudad[c] = contador_dias_ciudad.get(c, 0) + 1
             
             ciudades_previas = set(contador_dias_ciudad.keys())
-            
-            # ⚠️ CORRECCIÓN: Dividir en pedazos, cada pedazo de ciudad diferente
             pedazos_necesarios = (dias_consecutivos + MAX_DIAS_POR_CIUDAD - 1) // MAX_DIAS_POR_CIUDAD
-            
-            if DEBUG_REPARAR:
-                print(f"      🔪 Dividiendo en {pedazos_necesarios} pedazos")
-                print(f"      � Días por ciudad hasta ahora: {contador_dias_ciudad}")
             
             for pedazo_idx in range(1, pedazos_necesarios):
                 dia_inicio_pedazo = inicio_bloque + (pedazo_idx * MAX_DIAS_POR_CIUDAD)
                 dia_fin_pedazo = min(dia_inicio_pedazo + MAX_DIAS_POR_CIUDAD, i)
                 dias_pedazo = dia_fin_pedazo - dia_inicio_pedazo
                 
-                if DEBUG_REPARAR:
-                    print(f"      🔄 Pedazo {pedazo_idx+1}: días {dia_inicio_pedazo+1}-{dia_fin_pedazo} ({dias_pedazo} días a repartir)")
-                
-                # 📊 ESTRATEGIA DE REPARTO CON INSERCIÓN:
-                # 1. Identificar ciudades incompletas y su última posición
                 ciudades_incompletas = []
                 for c in ciudades_disponibles:
                     if c != ciudad_actual:
@@ -337,7 +261,7 @@ def reparar_individuo(individuo: Individual) -> Individual:
                             ultima_pos = -1
                             for idx in range(inicio_bloque - 1, -1, -1):
                                 if individuo.ciudades[idx] == c:
-                                    ultima_pos = idx
+                                    ultima_pos = idx 
                                     break
                             
                             espacio = MAX_DIAS_POR_CIUDAD - dias_actuales
@@ -351,13 +275,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                 # Ordenar por última posición (para insertar en orden)
                 ciudades_incompletas.sort(key=lambda x: x['ultima_posicion'])
                 
-                if DEBUG_REPARAR:
-                    print(f"         📋 Ciudades incompletas disponibles:")
-                    for info in ciudades_incompletas:
-                        pos_str = f"posición {info['ultima_posicion']+1}" if info['ultima_posicion'] >= 0 else "nueva"
-                        print(f"            - {info['ciudad']}: {info['dias_actuales']} días (espacio: {info['espacio']}, {pos_str})")
-                
-                # 2. Reemplazar los días del pedazo con ciudades incompletas (reparto cíclico)
                 dias_a_repartir = []
                 idx_ciudad = 0
                 
@@ -400,15 +317,8 @@ def reparar_individuo(individuo: Individual) -> Individual:
                             random.choice(lugares_nueva)["id"] 
                             for _ in range(len(individuo.dias[dia_idx]))
                         ]
-                    
-                    if DEBUG_REPARAR:
-                        print(f"            Día {dia_idx+1} → {ciudad_elegida}")
                 
-                # Si faltan días por asignar, crear regresos
                 if len(dias_a_repartir) < dias_pedazo:
-                    if DEBUG_REPARAR:
-                        print(f"         ⚠️  Faltan {dias_pedazo - len(dias_a_repartir)} días, creando regresos...")
-                    
                     for idx_pedazo in range(len(dias_a_repartir), dias_pedazo):
                         dia_idx = dia_inicio_pedazo + idx_pedazo
                         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
@@ -423,37 +333,20 @@ def reparar_individuo(individuo: Individual) -> Individual:
                                     random.choice(lugares_nueva)["id"] 
                                     for _ in range(len(individuo.dias[dia_idx]))
                                 ]
-                            
-                            if DEBUG_REPARAR:
-                                print(f"            Día {dia_idx+1} → {ciudad_regreso} (REGRESO)")
     
-    # Paso 2: Eliminar TODOS los regresos (intentar múltiples veces)
-    # ⚠️ IMPORTANTE: Solo si AGRUPAR=False, porque con AGRUPAR=True 
-    # el Paso 1 ya garantiza que no hay bloques > MAX_DIAS_POR_CIUDAD
     if not AGRUPAR:
-        if DEBUG_REPARAR:
-            print(f"\n🔄 [DEBUG] PASO 2: Eliminar regresos...")
-        
         for intento in range(3):
             ciudades_vistas = set()
             cambios = False
-            
-            if DEBUG_REPARAR:
-                print(f"\n   Intento {intento+1}/3")
             
             i = 0
             while i < len(individuo.ciudades):
                 ciudad_actual = individuo.ciudades[i]
                 
-                # Detectar regreso
                 es_regreso = (ciudad_actual in ciudades_vistas and 
                              (i == 0 or individuo.ciudades[i-1] != ciudad_actual))
                 
                 if es_regreso:
-                    if DEBUG_REPARAR:
-                        print(f"      ⚠️  Día {i+1}: {ciudad_actual} es REGRESO (ya visitada)")
-                    
-                    # Buscar ciudad NO visitada
                     candidatas = [c for c in ciudades_disponibles 
                                  if c not in ciudades_vistas]
                     
@@ -465,9 +358,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                         nueva_ciudad = random.choice(candidatas)
                         individuo.ciudades[i] = nueva_ciudad
                         cambios = True
-                        
-                        if DEBUG_REPARAR:
-                            print(f"         🔄 Cambiando a {nueva_ciudad}")
                         
                         lugares_nueva = get_lugares_ciudad(nueva_ciudad)
                         if lugares_nueva:
@@ -485,25 +375,10 @@ def reparar_individuo(individuo: Individual) -> Individual:
             
             if not cambios:
                 break
-    else:
-        if DEBUG_REPARAR:
-            print(f"\n🔄 [DEBUG] PASO 2: OMITIDO (AGRUPAR=True, Paso 1 suficiente)")
     
     return individuo
 
 def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos: int = 50) -> Individual:
-    """
-    Crea un individuo aleatorio, intentando múltiples veces hasta obtener uno válido
-    (sin violaciones de horario) o alcanzar el límite de intentos.
-    
-    Args:
-        num_dias: Número de días del viaje
-        lugares_por_dia: Número de lugares por día
-        max_intentos: Número máximo de intentos para crear un individuo válido (default: 50)
-    
-    Returns:
-        Individual creado (válido si fue posible)
-    """
     mejor_individuo = None
     menor_violaciones = float('inf')
     
@@ -518,35 +393,24 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos:
             dia_actual = 0
             ciudad_actual = random.choice(ciudades_disponibles)
             dias_consecutivos_ciudad = 0
-            ciudades_usadas = []  # Lista ordenada de ciudades ya visitadas
+            ciudades_usadas = []
             
             while dia_actual < num_dias:
                 dias_restantes = num_dias - dia_actual
-                
-                # Calcular cuántos días PUEDE quedarse en esta ciudad (máximo MAX_DIAS_POR_CIUDAD)
                 max_permitido = MAX_DIAS_POR_CIUDAD - dias_consecutivos_ciudad
                 
-                # Si llegó al límite, DEBE cambiar de ciudad
                 if max_permitido <= 0:
                     ciudades_usadas.append(ciudad_actual)
-                    # Buscar ciudad NO visitada
                     candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
                     if not candidatas:
-                        # Si todas fueron visitadas, reiniciar (permitir reutilizar ciudades)
                         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
                     
                     ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
                     dias_consecutivos_ciudad = 0
                     max_permitido = MAX_DIAS_POR_CIUDAD
                 
-                # Calcular días a asignar: mínimo entre max_permitido y días_restantes
                 dias_en_ciudad = random.randint(1, min(max_permitido, dias_restantes))
-                
-                # Asignar días
                 lugares_ciudad = get_lugares_ciudad(ciudad_actual)
-                
-                # ⚠️ CRÍTICO: Si no hay suficientes lugares, permitir repeticiones
-                # NO usar lugares de otras ciudades (causaría distancias intercity enormes)
                 permitir_repeticiones = len(lugares_ciudad) < lugares_por_dia
                 
                 for _ in range(dias_en_ciudad):
@@ -561,12 +425,9 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos:
                     if len(lugares_disponibles) < lugares_por_dia:
                         lugares_disponibles = lugares_ciudad
                     
-                    # Si hay suficientes lugares, usar sample (sin repetición)
-                    # Si no, usar choices (con repetición permitida)
                     if len(lugares_disponibles) >= lugares_por_dia:
                         lugares_dia = random.sample(lugares_disponibles, lugares_por_dia)
                     else:
-                        # Con repetición: podemos elegir el mismo lugar varias veces si es necesario
                         lugares_dia = random.choices(lugares_disponibles, k=lugares_por_dia)
                     
                     ids_dia = [l["id"] for l in lugares_dia]
@@ -579,18 +440,15 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos:
                     dia_actual += 1
                     dias_consecutivos_ciudad += 1
                 
-                # Si quedan días y estamos cerca del límite o terminamos los días de esta ciudad
-                # cambiar proactivamente
                 if dia_actual < num_dias and dias_consecutivos_ciudad >= MAX_DIAS_POR_CIUDAD:
                     ciudades_usadas.append(ciudad_actual)
-                    # Buscar ciudad NO visitada
                     candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
                     if not candidatas:
                         candidatas = [c for c in ciudades_disponibles if c != ciudad_actual]
                     
                     ciudad_actual = random.choice(candidatas) if candidatas else ciudad_actual
                     dias_consecutivos_ciudad = 0
-                elif dia_actual < num_dias and random.random() < 0.5:  # 50% probabilidad de cambiar voluntariamente
+                elif dia_actual < num_dias and random.random() < 0.5:
                     ciudades_usadas.append(ciudad_actual)
                     candidatas = [c for c in ciudades_disponibles if c not in ciudades_usadas]
                     if candidatas:
@@ -628,39 +486,25 @@ def crear_individuo_aleatorio(num_dias: int, lugares_por_dia: int, max_intentos:
         if not validar_restricciones_ciudades(individuo):
             individuo = reparar_individuo(individuo)
         
-        # Intentar reparar horarios
         individuo = reparar_horarios_individuo(individuo, max_intentos=2)
-        
-        # Contar violaciones
         violaciones = contar_violaciones_horario(individuo)
         
-        # Si es válido (sin violaciones), devolverlo inmediatamente
         if violaciones == 0:
             return individuo
         
-        # Si es el mejor hasta ahora, guardarlo
         if violaciones < menor_violaciones:
             menor_violaciones = violaciones
             mejor_individuo = copy.deepcopy(individuo)
     
-    # Si no se encontró uno perfecto, devolver el mejor
     if mejor_individuo is None:
-        # Esto no debería pasar, pero por seguridad
         mejor_individuo = Individual(dias, ciudades_plan)
     
     return mejor_individuo
 
 def crear_poblacion_inicial(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
-    """
-    Crea la población inicial con reparación probabilística para mantener diversidad.
-    
-    El 70% de los individuos se reparan (válidos desde el inicio)
-    El 30% mantienen pequeñas "imperfecciones" que pueden aportar diversidad genética
-    """
     poblacion = []
     for _ in range(tam_poblacion):
         individuo = crear_individuo_aleatorio(num_dias, lugares_por_dia)
-        # Reparación probabilística: solo el 70% se repara inmediatamente
         if random.random() < probabilidad_reparacion:
             individuo = reparar_individuo(individuo)
         poblacion.append(individuo)
@@ -689,16 +533,6 @@ def calcular_tiempo_dia(individuo: Individual, dia_idx: int) -> Tuple[int, int, 
     return tiempo_total, distancia_total, puntos_total
 
 def contar_violaciones_horario(individuo: Individual) -> int:
-    """
-    Cuenta el número de violaciones de horario en un individuo.
-    
-    Args:
-        individuo: El individuo a verificar
-    
-    Returns:
-        Número de lugares visitados fuera de su horario de apertura
-    """
-    # Asegurar que los transportes estén calculados
     if not hasattr(individuo, 'transportes_intercity') or not individuo.transportes_intercity:
         individuo.transportes_intercity = []
         for dia_idx in range(1, len(individuo.dias)):
@@ -740,7 +574,6 @@ def contar_violaciones_horario(individuo: Individual) -> int:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
                 
-                # Caso especial: bares
                 if tipo == "bar" and cierre < apertura:
                     cierre = 26 * 60
                 
@@ -749,7 +582,6 @@ def contar_violaciones_horario(individuo: Individual) -> int:
             
             hora_actual = hora_fin_visita
             
-            # Añadir tiempo de desplazamiento
             idx_lugar = lugares_dia.index(lugar)
             if idx_lugar < len(lugares_dia) - 1:
                 dist = distancia_haversine(lugar, lugares_dia[idx_lugar + 1])
@@ -758,43 +590,20 @@ def contar_violaciones_horario(individuo: Individual) -> int:
     return violaciones
 
 def verificar_lugar_en_horario(lugar: Dict, hora_inicio: int, hora_fin: int) -> bool:
-    """
-    Verifica si un lugar puede ser visitado en el rango de tiempo especificado.
-    
-    Args:
-        lugar: Diccionario con información del lugar (debe incluir 'tipo')
-        hora_inicio: Hora de inicio de la visita en minutos desde medianoche
-        hora_fin: Hora de fin de la visita en minutos desde medianoche
-    
-    Returns:
-        True si el lugar está abierto durante todo el periodo de visita
-    """
     tipo = lugar.get('tipo', '')
     
     if tipo not in HORARIOS_TIPO:
-        return True  # Si no tiene horario definido, se considera siempre disponible
+        return True
     
     apertura = HORARIOS_TIPO[tipo]["apertura"]
     cierre = HORARIOS_TIPO[tipo]["cierre"]
     
-    # Caso especial: bares abiertos después de medianoche
     if tipo == "bar" and cierre < apertura:
         cierre = 26 * 60
     
-    # El lugar debe estar abierto al inicio Y al final de la visita
     return hora_inicio >= apertura and hora_fin <= cierre
 
 def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
-    """
-    Intenta intercambiar lugares dentro del mismo día para que todos queden dentro de horario.
-    
-    Args:
-        individuo: El individuo a reparar
-        dia_idx: Índice del día a reparar
-    
-    Returns:
-        True si se logró hacer algún intercambio que mejore los horarios
-    """
     dia = individuo.dias[dia_idx]
     if len(dia) < 2:
         return False
@@ -802,7 +611,6 @@ def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
     lugares_dia = get_lugares_por_ids(dia)
     ciudad = individuo.ciudades[dia_idx]
     
-    # Calcular hora inicial considerando transporte intercity si es necesario
     hora_actual = HORA_INICIO
     if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
         for transporte in individuo.transportes_intercity:
@@ -810,7 +618,6 @@ def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
                 hora_actual += transporte[4]
                 break
     
-    # Identificar lugares fuera de horario
     lugares_problematicos = []
     hora_simulada = hora_actual
     
@@ -823,25 +630,21 @@ def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
         
         hora_simulada += tiempo_visita
         
-        # Añadir tiempo de desplazamiento al siguiente lugar
         if idx < len(lugares_dia) - 1:
             dist = distancia_haversine(lugar, lugares_dia[idx + 1])
             hora_simulada += dist / VELOCIDAD_MEDIA * 60
     
     if not lugares_problematicos:
-        return False  # No hay problemas
+        return False
     
-    # Intentar intercambios: probar swaps entre lugares problemáticos y otros
     for idx_problema in lugares_problematicos:
         for idx_otro in range(len(dia)):
             if idx_otro == idx_problema:
                 continue
             
-            # Crear copia temporal para probar el intercambio
             dia_temp = dia[:]
             dia_temp[idx_problema], dia_temp[idx_otro] = dia_temp[idx_otro], dia_temp[idx_problema]
             
-            # Verificar si el intercambio mejora la situación
             lugares_temp = get_lugares_por_ids(dia_temp)
             hora_simulada = hora_actual
             problemas_nuevos = 0
@@ -859,7 +662,6 @@ def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
                     dist = distancia_haversine(lugar, lugares_temp[idx + 1])
                     hora_simulada += dist / VELOCIDAD_MEDIA * 60
             
-            # Si hay menos problemas, aplicar el intercambio
             if problemas_nuevos < len(lugares_problematicos):
                 individuo.dias[dia_idx] = dia_temp
                 return True
@@ -868,36 +670,21 @@ def intentar_intercambio_horarios(individuo: Individual, dia_idx: int) -> bool:
 
 def buscar_lugar_alternativo_horario(individuo: Individual, dia_idx: int, lugar_idx: int, 
                                      hora_visita: int) -> bool:
-    """
-    Busca un lugar alternativo de la misma ciudad que esté disponible en el horario especificado.
-    
-    Args:
-        individuo: El individuo a reparar
-        dia_idx: Índice del día
-        lugar_idx: Índice del lugar problemático dentro del día
-        hora_visita: Hora en minutos a la que se visitaría el lugar
-    
-    Returns:
-        True si se encontró y aplicó un reemplazo
-    """
     ciudad = individuo.ciudades[dia_idx]
     dia = individuo.dias[dia_idx]
     lugar_actual_id = dia[lugar_idx]
     lugar_actual = get_lugares_por_ids([lugar_actual_id])[0]
     
-    # Obtener todos los lugares de la ciudad
     lugares_ciudad = get_lugares_ciudad(ciudad)
     
-    # Filtrar lugares ya visitados en este viaje (no solo este día)
     lugares_visitados_global = set()
     for d in individuo.dias:
         lugares_visitados_global.update(d)
     
-    # Buscar lugares alternativos que estén dentro del horario
     candidatos = []
     for lugar in lugares_ciudad:
         if lugar["id"] in lugares_visitados_global and lugar["id"] != lugar_actual_id:
-            continue  # Ya visitado
+            continue
         
         tiempo_visita = lugar["tiempo_visita"]
         hora_fin = hora_visita + tiempo_visita
@@ -908,8 +695,6 @@ def buscar_lugar_alternativo_horario(individuo: Individual, dia_idx: int, lugar_
     if not candidatos:
         return False
     
-    # Elegir el mejor candidato (por puntos o aleatoriamente)
-    # Priorizar lugares con puntos similares al original
     puntos_original = lugar_actual.get("puntos", 0)
     candidatos.sort(key=lambda x: abs(x.get("puntos", 0) - puntos_original))
     
@@ -919,24 +704,8 @@ def buscar_lugar_alternativo_horario(individuo: Individual, dia_idx: int, lugar_
     return True
 
 def reparar_horarios_individuo(individuo: Individual, max_intentos: int = 3) -> Individual:
-    """
-    Repara un individuo intentando corregir lugares visitados fuera de horario.
-    
-    Estrategia:
-    1. Intentar intercambiar lugares dentro del mismo día
-    2. Si no funciona, buscar lugares alternativos en la misma ciudad
-    
-    Args:
-        individuo: El individuo a reparar
-        max_intentos: Número máximo de intentos de reparación por día
-    
-    Returns:
-        El individuo reparado
-    """
     for dia_idx in range(len(individuo.dias)):
-        # Intentar reparar este día
         for intento in range(max_intentos):
-            # Calcular hora inicial del día
             hora_actual = HORA_INICIO
             if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
                 for transporte in individuo.transportes_intercity:
@@ -944,7 +713,6 @@ def reparar_horarios_individuo(individuo: Individual, max_intentos: int = 3) -> 
                         hora_actual += transporte[4]
                         break
             
-            # Identificar lugares problemáticos
             lugares_dia = get_lugares_por_ids(individuo.dias[dia_idx])
             hora_simulada = hora_actual
             indices_problematicos = []
@@ -965,21 +733,19 @@ def reparar_horarios_individuo(individuo: Individual, max_intentos: int = 3) -> 
                     hora_simulada += dist / VELOCIDAD_MEDIA * 60
             
             if not indices_problematicos:
-                break  # Este día está bien, pasar al siguiente
+                break
             
-            # Estrategia 1: Intentar intercambios
             if intentar_intercambio_horarios(individuo, dia_idx):
-                continue  # Volver a verificar con el nuevo orden
+                continue
             
-            # Estrategia 2: Buscar lugares alternativos
             se_hizo_cambio = False
             for idx_problema, hora_problema in zip(indices_problematicos, horas_problematicas):
                 if buscar_lugar_alternativo_horario(individuo, dia_idx, idx_problema, hora_problema):
                     se_hizo_cambio = True
-                    break  # Hacer un cambio a la vez y volver a verificar
+                    break
             
             if not se_hizo_cambio:
-                break  # No se pudo hacer más, continuar con el siguiente día
+                break
     
     return individuo
 
@@ -1010,11 +776,9 @@ def evaluar_individuo(individuo: Individual) -> float:
     gasto_acumulado = 0
     individuo.transportes_intercity = []
     
-    # ⚠️ CONTADOR DE VIOLACIONES CRÍTICAS
     violaciones_ciudades = 0
     violaciones_horarios = 0
     
-    # ⚠️ VALIDACIÓN: Si el individuo viola restricciones de ciudades
     if not validar_restricciones_ciudades(individuo):
         violaciones_ciudades += 1
     
@@ -1057,7 +821,6 @@ def evaluar_individuo(individuo: Individual) -> float:
         if not validar_limite_ciudad(individuo.ciudades[:dia_idx + 1], individuo.ciudades[dia_idx])[0]:
             fitness -= PENALIZACION_LIMITE_CIUDAD
         
-        # Calcular tiempo sin transporte para verificar límite del día
         tiempo_dia_sin_transporte = tiempo_dia
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
             transporte_dia = next((t for t in individuo.transportes_intercity if t[0] == dia_idx), None)
@@ -1094,12 +857,10 @@ def evaluar_individuo(individuo: Individual) -> float:
                 apertura = HORARIOS_TIPO[tipo]["apertura"]
                 cierre = HORARIOS_TIPO[tipo]["cierre"]
                 
-                # Caso especial: bares abiertos después de medianoche
                 if tipo == "bar" and cierre < apertura:
                     cierre = 26 * 60
                 
                 if hora_actual < apertura or hora_fin_visita > cierre:
-                    # Contar violación en lugar de retornar inmediatamente
                     violaciones_horarios += 1
                     fitness -= PENALIZACION_FUERA_HORARIO_APERTURA
             
@@ -1119,7 +880,7 @@ def evaluar_individuo(individuo: Individual) -> float:
             else:
                 restaurantes_consecutivos = 0
             
-            hora_actual += tiempo_visita  # Usar la variable local
+            hora_actual += tiempo_visita
         
         gasto_acumulado += gasto_dia
         
@@ -1143,8 +904,6 @@ def evaluar_individuo(individuo: Individual) -> float:
     fitness += puntos_acum
     fitness -= distancia_acum * 0.3
     
-    # Escalar fitness para trabajar con números más manejables
-    # Esto hace que los logs y gráficas sean más legibles
     fitness = fitness / FITNESS_SCALE_FACTOR
     
     individuo.tiempo_total = tiempo_acum
@@ -1152,21 +911,14 @@ def evaluar_individuo(individuo: Individual) -> float:
     individuo.puntos_totales = puntos_acum
     individuo.fitness = fitness
     
-    # ⚠️ NUEVO: Si hay violaciones de horario, intentar reparar
     if violaciones_horarios > 0:
-        # Guardar fitness actual para comparar
         fitness_antes = fitness
-        
-        # Intentar reparar horarios
         individuo_reparado = reparar_horarios_individuo(individuo, max_intentos=2)
         
-        # Re-evaluar después de reparar (llamada recursiva, pero solo una vez)
-        # Para evitar recursión infinita, marcamos que ya se intentó reparar
         if not hasattr(individuo, '_reparacion_horarios_intentada'):
             individuo._reparacion_horarios_intentada = True
             individuo.dias = individuo_reparado.dias
             individuo.ciudades = individuo_reparado.ciudades
-            # Re-evaluar con los cambios
             return evaluar_individuo(individuo)
     
     return fitness
@@ -1212,7 +964,6 @@ def crossover_dos_puntos(padre1: Individual, padre2: Individual) -> Tuple[Indivi
     hijo1 = Individual(hijo1_dias, hijo1_ciudades)
     hijo2 = Individual(hijo2_dias, hijo2_ciudades)
     
-    # Reparación probabilística: permitir que algunos hijos mantengan variaciones
     if not validar_restricciones_ciudades(hijo1):
         if random.random() < probabilidad_reparacion:
             hijo1 = reparar_individuo(hijo1)
@@ -1227,7 +978,7 @@ def mutar(individuo: Individual):
         dia = individuo.dias[dia_idx]
         ciudad = individuo.ciudades[dia_idx]
 
-        if not dia:  # Evitar mutaciones en días vacíos
+        if not dia:
             continue
 
         if random.random() < PROBABILIDAD_MUTACION:
@@ -1274,15 +1025,12 @@ def mutar(individuo: Individual):
                         random.choice(lugares_nueva)["id"] for _ in range(len(dia))
                     ]
     
-    # Reparación probabilística: validar y reparar con probabilidad controlada
     if not validar_restricciones_ciudades(individuo):
         if random.random() < probabilidad_reparacion:
-            # La reparación devuelve un nuevo individuo, hay que copiarlo
             individuo_reparado = reparar_individuo(individuo)
             individuo.dias = individuo_reparado.dias
             individuo.ciudades = individuo_reparado.ciudades
     
-    # Reparar horarios también con probabilidad (más permisiva para mantener diversidad)
     if random.random() < probabilidad_reparacion:
         individuo_reparado = reparar_horarios_individuo(individuo, max_intentos=1)
         individuo.dias = individuo_reparado.dias
@@ -1290,7 +1038,7 @@ def mutar(individuo: Individual):
 
 
 def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int) -> List[Individual]:
-    log(f"\n🔄 REINICIANDO POBLACIÓN (con reparación probabilística)")
+    log(f"\nREINICIANDO POBLACION")
     
     nueva_poblacion = []
     
@@ -1302,7 +1050,7 @@ def reiniciar_poblacion(tam_poblacion: int, num_dias: int, lugares_por_dia: int)
         evaluar_individuo(nuevo_ind)
         nueva_poblacion.append(nuevo_ind)
     
-    log(f"Nueva población creada ({tam_poblacion} individuos, {int(probabilidad_reparacion*100)}% reparados)\n")
+    log(f"Nueva poblacion creada ({tam_poblacion} individuos, {int(probabilidad_reparacion*100)}% reparados)\n")
     return nueva_poblacion
 
 
@@ -1326,11 +1074,9 @@ def algoritmo_genetico_espana(
         raise ValueError("Debe especificar num_generaciones o tiempo_limite_horas")
     
     modo_tiempo = tiempo_limite_segundos is not None
-    detencion_manual = [False]  # Lista mutable para compartir entre threads
+    detencion_manual = [False]
     
-    # Thread para detectar la tecla 'q'
     def monitor_tecla():
-        """Monitorea la entrada del teclado en un thread separado"""
         try:
             import msvcrt
             while not detencion_manual[0]:
@@ -1341,10 +1087,8 @@ def algoritmo_genetico_espana(
                         break
                 time_module.sleep(0.1)
         except Exception as e:
-            # Si falla msvcrt, intentar con input estándar
             pass
     
-    # Iniciar thread de monitoreo
     thread_teclado = threading.Thread(target=monitor_tecla, daemon=True)
     thread_teclado.start()
     
@@ -1361,9 +1105,9 @@ def algoritmo_genetico_espana(
     else:
         log(f"Generaciones: {num_generaciones}")
     log(f"Elitismo: {tasa_elitismo*100:.0f}%")
-    log(f"Reparación probabilística: {probabilidad_reparacion*100:.0f}% ({(1-probabilidad_reparacion)*100:.0f}% mantienen diversidad)")
+    log(f"Reparacion probabilistica: {probabilidad_reparacion*100:.0f}% ({(1-probabilidad_reparacion)*100:.0f}% mantienen diversidad)")
     log(f"Dataset: {len(lugares_turisticos_espana)} lugares en 20 ciudades")
-    log(f"💡 Presiona 'q' + ENTER en cualquier momento para detener y guardar el mejor resultado")
+    log(f"Presiona 'q' + ENTER en cualquier momento para detener y guardar el mejor resultado")
     log(f"{'='*80}\n")
     
     tiempo_inicio_total = time_module.time()
@@ -1378,11 +1122,10 @@ def algoritmo_genetico_espana(
     mejor_global = copy.deepcopy(max(poblacion, key=lambda ind: ind.fitness))
     historial_fitness = [mejor_global.fitness]
     historial_mejor_gen = [mejor_global.fitness]
-    historial_tiempos = [0]  # Tiempo acumulado
+    historial_tiempos = [0]
     
     num_elite = int(tam_poblacion * tasa_elitismo)
     
-    # Variables para control de estancamiento
     mejor_fitness_era = mejor_global.fitness
     generaciones_estancadas = 0
     umbral_estancamiento = 100
@@ -1396,13 +1139,11 @@ def algoritmo_genetico_espana(
     ultimo_reporte = time_module.time()
     
     while True:
-        # Verificar si se presionó 'q' para detener
         if detencion_manual[0]:
-            log(f"\n  DETENCIÓN MANUAL - Tecla 'q' presionada")
+            log(f"\n  DETENCION MANUAL - Tecla 'q' presionada")
             log(f"   Guardando mejor resultado encontrado hasta ahora...")
             break
         
-        # Verificar criterio de parada
         tiempo_transcurrido = time_module.time() - tiempo_inicio_total
         
         if modo_tiempo:
@@ -1443,10 +1184,9 @@ def algoritmo_genetico_espana(
         historial_fitness.append(mejor_global.fitness)
         historial_tiempos.append(tiempo_transcurrido)
         
-        # Comprobar estancamiento
         if mejor_gen.fitness > mejor_fitness_era:
-            mejor_fitness_era = mejor_gen.fitness # Nuevo récord de la era
-            generaciones_estancadas = 0  # Reiniciar contador porque hubo mejora
+            mejor_fitness_era = mejor_gen.fitness
+            generaciones_estancadas = 0
         else:
             generaciones_estancadas += 1 
             
@@ -1480,15 +1220,15 @@ def algoritmo_genetico_espana(
     tiempo_total_ejecucion = time_module.time() - tiempo_inicio_total
     
     if detencion_manual[0]:
-        log(f"\n✅ Ejecución detenida manualmente!")
-        log(f"🏆 Mejor fitness encontrado: {mejor_global.fitness:.1f}")
-        log(f"📊 Generaciones completadas: {gen}")
-        log(f"⏱️  Tiempo transcurrido: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
+        log(f"\nEjecucion detenida manualmente")
+        log(f"Mejor fitness encontrado: {mejor_global.fitness:.1f}")
+        log(f"Generaciones completadas: {gen}")
+        log(f"Tiempo transcurrido: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
     else:
-        log(f"\n✅ Evolución completada!")
-        log(f"🏆 Mejor fitness global: {mejor_global.fitness:.1f}")
-        log(f"📊 Generaciones ejecutadas: {gen}")
-        log(f"⏱️  Tiempo total: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
+        log(f"\nEvolucion completada")
+        log(f"Mejor fitness global: {mejor_global.fitness:.1f}")
+        log(f"Generaciones ejecutadas: {gen}")
+        log(f"Tiempo total: {tiempo_total_ejecucion:.2f}s ({tiempo_total_ejecucion/60:.2f}m)")
     
     return {
         "mejor_individuo": mejor_global,
@@ -1503,20 +1243,19 @@ def algoritmo_genetico_espana(
 
 
 def analizar_solucion(individuo: Individual):
-    """Muestra análisis detallado de una solución con itinerario completo"""
     log(f"\n{'='*80}")
-    log(f"ANÁLISIS DE LA MEJOR SOLUCIÓN")
+    log(f"ANALISIS DE LA MEJOR SOLUCION")
     log(f"{'='*80}\n")
     
-    log(f"Métricas Globales:")
+    log(f"Metricas Globales:")
     log(f"- Fitness total: {individuo.fitness:.1f}")
     log(f"- Puntos totales: {individuo.puntos_totales}")
     log(f"- Tiempo total: {individuo.tiempo_total/60:.1f} horas ({individuo.tiempo_total:.0f} minutos)")
-    log(f"- Tiempo promedio/día: {(individuo.tiempo_total/len(individuo.dias))/60:.1f} horas")
+    log(f"- Tiempo promedio/dia: {(individuo.tiempo_total/len(individuo.dias))/60:.1f} horas")
     log(f"- Distancia total: {individuo.distancia_total:.1f} km")
     log(f"- Ciudades visitadas: {len(set(individuo.ciudades))}")
     
-    log(f"\nITINERARIO DETALLADO POR DÍAS:")
+    log(f"\nITINERARIO DETALLADO POR DIAS:")
     log(f"{'='*80}\n")
     
     for dia_idx, (dia, ciudad) in enumerate(zip(individuo.dias, individuo.ciudades), 1):
@@ -1532,24 +1271,24 @@ def analizar_solucion(individuo: Individual):
                 gasto_dia += 10
         
         log(f"{'─'*80}")
-        log(f"DÍA {dia_idx} - {ciudad.upper()}")
+        log(f"DIA {dia_idx} - {ciudad.upper()}")
         log(f"{'─'*80}")
         
         transport_info = next((t for t in individuo.transportes_intercity if t[0] == dia_idx - 1), None)
         if transport_info:
             _, origen, destino, tipo_elegido, tiempo_trans, costo_trans = transport_info
-            tipo_icons = {"avion": "✈️", "tren": "🚄", "bus": "🚌"}
-            icon = tipo_icons.get(tipo_elegido, "🚗")
-            log(f"{icon} Transporte: {origen} → {destino} | "
-                  f"{tipo_elegido.upper()} ({tiempo_trans} min, {costo_trans}€)")
+            tipo_icons = {"avion": "Avion", "tren": "Tren", "bus": "Bus"}
+            icon = tipo_icons.get(tipo_elegido, "Transporte")
+            log(f"{icon}: {origen} -> {destino} | "
+                  f"{tipo_elegido.upper()} ({tiempo_trans} min, {costo_trans} euros)")
             log(f"")
         
         if gasto_dia > PRESUPUESTO_DIARIO:
-            presupuesto_str = f"💰 {gasto_dia}€ ⚠️ EXCEDE ({PRESUPUESTO_DIARIO}€)"
+            presupuesto_str = f"{gasto_dia} euros EXCEDE ({PRESUPUESTO_DIARIO} euros)"
         else:
-            presupuesto_str = f"💰 {gasto_dia}€ / {PRESUPUESTO_DIARIO}€"
+            presupuesto_str = f"{gasto_dia} euros / {PRESUPUESTO_DIARIO} euros"
         
-        log(f"📊 Resumen: {len(lugares_dia)} lugares | "
+        log(f"Resumen: {len(lugares_dia)} lugares | "
               f"{puntos_dia} puntos | "
               f"{tiempo_dia/60:.2f}h ({tiempo_dia:.0f} min) | "
               f"{dist_dia:.1f} km | "
@@ -1596,7 +1335,7 @@ def analizar_solucion(individuo: Individual):
                     cierre = 26 * 60
                 
                 if hora_actual < apertura or hora_actual > cierre:
-                    fuera_horario = " ⚠️ FUERA HORARIO"
+                    fuera_horario = " FUERA HORARIO"
             
             icono_comida = ""
             if es_restaurante:
@@ -1616,13 +1355,13 @@ def analizar_solucion(individuo: Individual):
             else:
                 precio = 10
             
-            log(f"  {i:2d}. {hora_str_llegada} - {hora_str_salida} │ {nombre_corto:43s} │ {tipo_lugar:12s} │ {lugar['puntos']:3d} pts │ {precio:2d}€{icono_comida}{fuera_horario}")
+            log(f"  {i:2d}. {hora_str_llegada} - {hora_str_salida} | {nombre_corto:43s} | {tipo_lugar:12s} | {lugar['puntos']:3d} pts | {precio:2d} euros{icono_comida}{fuera_horario}")
             
             if tiempo_transito > 0:
                 if tiempo_transito > 60:
-                    log(f"      {'':13s} └─ Tránsito: {tiempo_transito/60:.1f}h ({tiempo_transito:.0f} min)")
+                    log(f"      {'':13s} Transito: {tiempo_transito/60:.1f}h ({tiempo_transito:.0f} min)")
                 else:
-                    log(f"      {'':13s} └─ Tránsito: {tiempo_transito:.0f} min")
+                    log(f"      {'':13s} Transito: {tiempo_transito:.0f} min")
             
             hora_actual += lugar['tiempo_visita']
         
@@ -1632,17 +1371,17 @@ def analizar_solucion(individuo: Individual):
         
         exceso = max(0, tiempo_dia - TIEMPO_DIA)
         if exceso > 0:
-            log(f"\n  ⚠️  DÍA FINALIZADO: {hora_str_fin} | EXCESO: {exceso:.0f} min ({exceso/60:.1f}h) | PENALIZACIÓN: -{PENALIZACION_EXCESO_TIEMPO * exceso:.0f} pts")
+            log(f"\n  DIA FINALIZADO: {hora_str_fin} | EXCESO: {exceso:.0f} min ({exceso/60:.1f}h) | PENALIZACION: -{PENALIZACION_EXCESO_TIEMPO * exceso:.0f} pts")
             if exceso > 120:
-                log(f"      ❌ EXCESO CRÍTICO (>2h): Penalización adicional de -10,000 pts")
+                log(f"      EXCESO CRITICO (>2h): Penalizacion adicional de -10,000 pts")
         else:
-            log(f"\n  ✅ DÍA FINALIZADO: {hora_str_fin} | Dentro del límite ({TIEMPO_DIA/60:.0f}h)")
+            log(f"\n  DIA FINALIZADO: {hora_str_fin} | Dentro del limite ({TIEMPO_DIA/60:.0f}h)")
         
         log(f"")
     
     if individuo.transportes_intercity:
         log(f"{'='*80}")
-        log(f"🚊 RESUMEN DE TRANSPORTES INTERCITY")
+        log(f"RESUMEN DE TRANSPORTES INTERCITY")
         log(f"{'='*80}\n")
         
         transportes_summary = {"avion": 0, "tren": 0, "bus": 0}
@@ -1657,21 +1396,20 @@ def analizar_solucion(individuo: Individual):
             costo_total_transporte += costo
             tiempo_total_transporte += tiempo
         
-        log(f"📊 Estadísticas:")
-        log(f"  ✈️  Avión: {transportes_summary['avion']} viajes")
-        log(f"  🚄 Tren:  {transportes_summary['tren']} viajes")
-        log(f"  🚌 Bus:   {transportes_summary['bus']} viajes")
-        log(f"\n💰 Costo total transportes: {costo_total_transporte}€")
-        log(f"⏱️  Tiempo total transportes: {tiempo_total_transporte} min ({tiempo_total_transporte/60:.1f}h)")
+        log(f"Estadisticas:")
+        log(f"  Avion: {transportes_summary['avion']} viajes")
+        log(f"  Tren:  {transportes_summary['tren']} viajes")
+        log(f"  Bus:   {transportes_summary['bus']} viajes")
+        log(f"\nCosto total transportes: {costo_total_transporte} euros")
+        log(f"Tiempo total transportes: {tiempo_total_transporte} min ({tiempo_total_transporte/60:.1f}h)")
         log(f"")
     
     log(f"{'='*80}")
-    log(f"✅ ANÁLISIS COMPLETO")
+    log(f"ANALISIS COMPLETO")
     log(f"{'='*80}\n")
 
 
 def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json", config: Dict = None):
-    """Exporta resultados a JSON incluyendo configuración del algoritmo"""
     import json
     
     mejor = resultados["mejor_individuo"]
@@ -1701,36 +1439,33 @@ def exportar_resultados(resultados: Dict, archivo: str = "resultados_espana.json
             }
             for i, (dia, ciudad) in enumerate(zip(mejor.dias, mejor.ciudades))
         ],
-        "historial_fitness": resultados["historial_fitness"],  # Mejor global
-        "historial_mejor_gen": resultados.get("historial_mejor_gen", resultados["historial_fitness"])  # Mejor por gen
+        "historial_fitness": resultados["historial_fitness"],
+        "historial_mejor_gen": resultados.get("historial_mejor_gen", resultados["historial_fitness"])
     }
     
     with open(archivo, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     
-    log(f"💾 Resultados exportados a: {archivo}")
-
-# Ejecución principal
+    log(f"Resultados exportados a: {archivo}")
 
 if __name__ == "__main__":
     import sys
     
     seed = int(time.time() * 1000) % (2**32)
     random.seed(seed)
-    log(f"🔖 Semilla aleatoria inicial: {seed}")
+    log(f"Semilla aleatoria inicial: {seed}")
     
-    # CONFIGURAR LOGGING AL INICIO
     log_file = configurar_logging(output_dir="logs", prefijo="ag_espana")
     
     configuraciones = {
         "1": {
-            "nombre": "RÁPIDA (10-15 min)",
+            "nombre": "RAPIDA (10-15 min)",
             "num_dias": 20,
             "lugares_por_dia": 12,
             "tam_poblacion": 1000,
             "num_generaciones": 500,
             "tasa_elitismo": 0.20,
-            "descripcion": "Testing y validación rápida"
+            "descripcion": "Testing y validacion rapida"
         },
         "2": {
             "nombre": "INTENSIVA (45-60 min)",
@@ -1739,7 +1474,7 @@ if __name__ == "__main__":
             "tam_poblacion": 15000,
             "num_generaciones": 800,
             "tasa_elitismo": 0.15,
-            "descripcion": "Mayor exploración y convergencia"
+            "descripcion": "Mayor exploracion y convergencia"
         },
         "3": {
             "nombre": "ULTRA-COMPLEJA (1.5-2 horas)",
@@ -1748,40 +1483,38 @@ if __name__ == "__main__":
             "tam_poblacion": 100,
             "num_generaciones": 100,
             "tasa_elitismo": 0.10,
-            "descripcion": "Máxima calidad de solución"
+            "descripcion": "Maxima calidad de solucion"
         }
     }
     
     if len(sys.argv) > 1:
         modo = sys.argv[1]
     else:
-        # Estos prints SÍ van a consola para interacción del usuario
         print(f"\n{'='*80}")
-        print(f"🎯 SELECCIONA MODO DE EJECUCIÓN")
+        print(f"SELECCIONA MODO DE EJECUCION")
         print(f"{'='*80}\n")
         
         for key, config in configuraciones.items():
             print(f"[{key}] {config['nombre']}")
-            print(f"    📊 {config['descripcion']}")
-            print(f"    ⚙️  {config['num_dias']} días | {config['lugares_por_dia']} lugares/día | "
-                  f"{config['tam_poblacion']:,} población | {config['num_generaciones']} gen")
+            print(f"    {config['descripcion']}")
+            print(f"    {config['num_dias']} dias | {config['lugares_por_dia']} lugares/dia | "
+                  f"{config['tam_poblacion']:,} poblacion | {config['num_generaciones']} gen")
             print()
         
         print(f"{'='*80}")
-        modo = input("👉 Selecciona modo (1/2/3): ").strip()
+        modo = input("Selecciona modo (1/2/3): ").strip()
     
     if modo not in configuraciones:
-        print(f"\n❌ ERROR: Modo '{modo}' no válido. Usa: 1, 2 o 3")
-        print(f"💡 Uso: python algoritmo_espana.py [1|2|3]")
+        print(f"\nERROR: Modo '{modo}' no valido. Usa: 1, 2 o 3")
+        print(f"Uso: python algoritmo_espana.py [1|2|3]")
         sys.exit(1)
     
     config = configuraciones[modo]
     
-    # Registrar configuración elegida en el log
     log(f"\n{'='*80}")
-    log(f"CONFIGURACIÓN SELECCIONADA: Modo {modo}")
+    log(f"CONFIGURACION SELECCIONADA: Modo {modo}")
     log(f"Nombre: {config['nombre']}")
-    log(f"Descripción: {config['descripcion']}")
+    log(f"Descripcion: {config['descripcion']}")
     log(f"{'='*80}\n")
     
     resultados = algoritmo_genetico_espana(
@@ -1797,5 +1530,5 @@ if __name__ == "__main__":
     exportar_resultados(resultados, archivo=f"ag_{modo}.json", config=config)
     
     log(f"\n{'='*80}")
-    log(f"EJECUCIÓN COMPLETADA - Log guardado en: {log_file}")
+    log(f"EJECUCION COMPLETADA - Log guardado en: {log_file}")
     log(f"{'='*80}")
