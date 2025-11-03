@@ -175,50 +175,41 @@ def reparar_individuo(individuo: Individual) -> Individual:
         dia = individuo.dias[dia_idx]
         ciudad = individuo.ciudades[dia_idx]
         
-        if not dia:  # Día vacío, skip
+        if not dia:
             continue
         
-        # Calcular tiempo total del día (sin penalizaciones, solo tiempo real)
         tiempo_dia, dist_dia, puntos_dia = calcular_tiempo_dia(individuo, dia_idx)
         
-        # Si el día excede el límite, REDUCIR lugares
         if tiempo_dia > TIEMPO_DIA:
             exceso = tiempo_dia - TIEMPO_DIA
             
             lugares_info = get_lugares_por_ids(dia)
             
-            # Crear lista de (índice, puntos, tiempo) para ordenar
             lugares_con_info = [
                 (i, lugar['puntos'], lugar['tiempo_visita'], lugar['id']) 
                 for i, lugar in enumerate(lugares_info)
             ]
             
-            # Ordenar por puntos ASCENDENTE (peores primero)
             lugares_con_info.sort(key=lambda x: x[1])
             
-            # Eliminar lugares de menor puntuación hasta cumplir el límite
             lugares_eliminados = 0
             indices_a_eliminar = []
             
             for idx, puntos, tiempo, lugar_id in lugares_con_info:
                 if tiempo_dia <= TIEMPO_DIA:
-                    break  # Ya cumple el límite
+                    break
                 
-                # Marcar para eliminar
                 indices_a_eliminar.append(idx)
                 
-                # Recalcular tiempo si quitamos este lugar
-                # (aproximación: restar tiempo_visita + tiempo_desplazamiento promedio)
                 tiempo_dia -= tiempo
-                if len(dia) > 1:  # Si hay más de un lugar, restar desplazamiento estimado
-                    tiempo_dia -= 15  # ~3km a 5km/h
+                if len(dia) > 1:
+                    tiempo_dia -= 15
                 
                 lugares_eliminados += 1
             
             for idx in sorted(indices_a_eliminar, reverse=True):
                 dia.pop(idx)
             
-            # Verificar que quede al menos 1 lugar
             if not dia:
                 lugares_ciudad = get_lugares_ciudad(ciudad)
                 if lugares_ciudad:
@@ -257,7 +248,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                     if c != ciudad_actual:
                         dias_actuales = contador_dias_ciudad.get(c, 0)
                         if dias_actuales < MAX_DIAS_POR_CIUDAD:
-                            # Buscar la última posición donde aparece esta ciudad
                             ultima_pos = -1
                             for idx in range(inicio_bloque - 1, -1, -1):
                                 if individuo.ciudades[idx] == c:
@@ -272,7 +262,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                                 'ultima_posicion': ultima_pos
                             })
                 
-                # Ordenar por última posición (para insertar en orden)
                 ciudades_incompletas.sort(key=lambda x: x['ultima_posicion'])
                 
                 dias_a_repartir = []
@@ -288,20 +277,16 @@ def reparar_individuo(individuo: Individual) -> Individual:
                         'insertar_despues': info_ciudad['ultima_posicion']
                     })
                     
-                    # Actualizar contadores
                     info_ciudad['dias_actuales'] += 1
                     info_ciudad['espacio'] -= 1
                     
-                    # Actualizar última posición (se desplaza por las inserciones previas)
                     info_ciudad['ultima_posicion'] += 1
                     
-                    # Si se completó, quitar de la lista
                     if info_ciudad['dias_actuales'] >= MAX_DIAS_POR_CIUDAD:
                         ciudades_incompletas.pop(idx_ciudad % len(ciudades_incompletas))
                     else:
                         idx_ciudad += 1
                 
-                # 3. Reemplazar los días en el pedazo con las ciudades elegidas
                 for idx_pedazo, info_dia in enumerate(dias_a_repartir):
                     dia_idx = dia_inicio_pedazo + idx_pedazo
                     ciudad_elegida = info_dia['ciudad']
@@ -310,7 +295,6 @@ def reparar_individuo(individuo: Individual) -> Individual:
                     contador_dias_ciudad[ciudad_elegida] = contador_dias_ciudad.get(ciudad_elegida, 0) + 1
                     ciudades_previas.add(ciudad_elegida)
                     
-                    # Actualizar lugares del día
                     lugares_nueva = get_lugares_ciudad(ciudad_elegida)
                     if lugares_nueva and individuo.dias[dia_idx]:
                         individuo.dias[dia_idx] = [
@@ -556,7 +540,6 @@ def contar_violaciones_horario(individuo: Individual) -> int:
     for dia_idx in range(len(individuo.dias)):
         hora_actual = HORA_INICIO
         
-        # Considerar transporte intercity
         if dia_idx > 0 and individuo.ciudades[dia_idx] != individuo.ciudades[dia_idx - 1]:
             for transporte in individuo.transportes_intercity:
                 if transporte[0] == dia_idx:
@@ -1308,7 +1291,6 @@ def analizar_solucion(individuo: Individual):
                     dist = distancia_haversine(lugar_anterior, lugar)
                     tiempo_transito = dist / VELOCIDAD_MEDIA * 60
                 else:
-                    # calcular_transporte_intercity devuelve (tiempo, costo), necesitamos solo tiempo
                     tiempo_trans, _ = calcular_transporte_intercity(ciudad_anterior_lugar, ciudad_actual_lugar, "tren")
                     tiempo_transito = tiempo_trans if tiempo_trans is not None else 60
                 
