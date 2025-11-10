@@ -26,25 +26,24 @@ class WeatherSystem {
     }
 
     // Crear gotas de lluvia
-    createRainDrops(playerPosition, count = 50) {
-        const geometry = new THREE.BoxGeometry(0.5, 0.5, 4);
+    createRainDrops(playerPosition, count = 200) {
+        const geometry = new THREE.BoxGeometry(1, 1, 8);
 
         for (let i = 0; i < count; i++) {
             const material = new THREE.MeshLambertMaterial({
-                color: 0x88ccff,
+                color: 0xaaddff,
                 transparent: true,
-                opacity: 0.6,
+                opacity: 0.8,
                 flatShading: true
             });
 
             const drop = new THREE.Mesh(geometry, material);
 
-            // Posicionar alrededor del jugador
-            drop.position.x = playerPosition.x + (Math.random() - 0.5) * 400;
-            drop.position.y = playerPosition.y + (Math.random() - 0.5) * 400;
-            drop.position.z = 100 + Math.random() * 50;
+            drop.position.x = playerPosition.x + (Math.random() - 0.5) * 800;
+            drop.position.y = playerPosition.y + (Math.random() - 0.5) * 800;
+            drop.position.z = 100 + Math.random() * 100;
 
-            drop.userData.velocity = -3 - Math.random() * 2;
+            drop.userData.velocity = -5 - Math.random() * 3;
             drop.userData.startZ = drop.position.z;
 
             this.rainGroup.add(drop);
@@ -69,7 +68,7 @@ class WeatherSystem {
 
         // Gestionar cantidad de gotas
         if (this.isRaining || this.rainIntensity > 0) {
-            const targetCount = Math.floor(100 * this.rainIntensity);
+            const targetCount = Math.floor(500 * this.rainIntensity);
 
             // Añadir gotas si hace falta
             if (this.rainParticles.length < targetCount) {
@@ -83,14 +82,14 @@ class WeatherSystem {
                 drop.position.z += drop.userData.velocity * this.rainIntensity;
 
                 // Ajustar opacidad basada en la intensidad de la lluvia
-                drop.material.opacity = 0.6 * this.rainIntensity;
+                drop.material.opacity = 0.8 * this.rainIntensity;
 
                 // Resetear gota si toca el suelo
                 if (drop.position.z < 0) {
                     if (this.rainIntensity > 0.1) {
                         drop.position.z = drop.userData.startZ;
-                        drop.position.x = playerPosition.x + (Math.random() - 0.5) * 400;
-                        drop.position.y = playerPosition.y + (Math.random() - 0.5) * 400;
+                        drop.position.x = playerPosition.x + (Math.random() - 0.5) * 800;
+                        drop.position.y = playerPosition.y + (Math.random() - 0.5) * 800;
                     } else {
                         // Remover gota si ya no llueve
                         this.rainGroup.remove(drop);
