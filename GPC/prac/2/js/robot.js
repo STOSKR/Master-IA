@@ -200,16 +200,16 @@ function onDocumentKeyDown(event) {
     const velocidad = 5;
     switch (event.keyCode) {
         case 37: // Flecha izquierda
-            robot.position.x -= velocidad;
+            base.position.x -= velocidad;
             break;
         case 38: // Flecha arriba
-            robot.position.z -= velocidad;
+            base.position.z -= velocidad;
             break;
         case 39: // Flecha derecha
-            robot.position.x += velocidad;
+            base.position.x += velocidad;
             break;
         case 40: // Flecha abajo
-            robot.position.z += velocidad;
+            base.position.z += velocidad;
             break;
     }
 }
