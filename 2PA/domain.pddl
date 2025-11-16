@@ -1,5 +1,5 @@
 (define (domain airport-baggage)
-  (:requirements :strips :typing :disjunctive-preconditions)
+  (:requirements :strips :typing)
   
   (:types
     location number machine wagon baggage - object
@@ -28,7 +28,7 @@
   )
   
   (:action attach
-    :parameters (?v - wagon ?obj - (either machine wagon) ?u - location)
+    :parameters (?v - wagon ?obj - object ?u - location)
     :precondition (and
       (on-loc ?v ?u)
       (on-loc ?obj ?u)
@@ -41,7 +41,7 @@
   )
   
   (:action detach
-    :parameters (?v - wagon ?obj - (either machine wagon) ?u - location)
+    :parameters (?v - wagon ?obj - object ?u - location)
     :precondition (and
       (on-loc ?obj ?u)
       (attached ?v ?obj)
@@ -58,12 +58,7 @@
     :precondition (and
       (on-loc ?s ?u)
       (on-loc ?m ?u)
-      (or
-        (attached ?v ?m)
-        (exists (?w - wagon)
-          (and (attached ?v ?w) (attached ?w ?m))
-        )
-      )
+      (attached ?v ?m)
       (quantity ?v ?n_now)
       (next_num ?n_now ?n_next)
     )
@@ -79,12 +74,7 @@
     :parameters (?s - baggage ?v - wagon ?m - machine ?u - location ?n_now - number ?n_next - number)
     :precondition (and
       (on-loc ?m ?u)
-      (or
-        (attached ?v ?m)
-        (exists (?w - wagon)
-          (and (attached ?v ?w) (attached ?w ?m))
-        )
-      )
+      (attached ?v ?m)
       (in-wagon ?s ?v)
       (quantity ?v ?n_now)
       (next_num ?n_next ?n_now)
@@ -101,12 +91,7 @@
     :parameters (?s - baggage ?v - wagon ?m - machine)
     :precondition (and
       (on-loc ?m inspeccion)
-      (or
-        (attached ?v ?m)
-        (exists (?w - wagon)
-          (and (attached ?v ?w) (attached ?w ?m))
-        )
-      )
+      (attached ?v ?m)
       (in-wagon ?s ?v)
       (suspect ?s)
     )
