@@ -79,13 +79,33 @@ async function startGame() {
   // Conectar el sistema de partículas con animatePlayer
   setParticleSystem(particleSystem);
 
-  // Activar lluvia ocasionalmente (ejemplo: cada 30 segundos)
-  setInterval(() => {
-    if (Math.random() > 0.5) {
-      weatherSystem.startRain(0.3 + Math.random() * 0.4);
-      setTimeout(() => weatherSystem.stopRain(), 10000 + Math.random() * 10000);
+  // Control manual de lluvia con botón y tecla F
+  const rainToggleButton = document.getElementById('rain-toggle');
+
+  function toggleRain() {
+    const isRaining = weatherSystem.toggleRain();
+    if (rainToggleButton) {
+      if (isRaining) {
+        rainToggleButton.classList.add('active');
+      } else {
+        rainToggleButton.classList.remove('active');
+      }
     }
-  }, 30000);  // Renamed for clarity
+  }
+
+  // Click en el botón
+  if (rainToggleButton) {
+    rainToggleButton.addEventListener('click', toggleRain);
+  }
+
+  // Tecla F para alternar lluvia
+  window.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'f') {
+      event.preventDefault();
+      toggleRain();
+    }
+  });
+
   const mainCamera = Camera();
 
   // --- CÁMARA DEL MINIMAPA (AJUSTADA) ---

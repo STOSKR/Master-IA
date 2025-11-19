@@ -299,3 +299,62 @@ body {
     cursor: pointer;
   }
 }
+
+#weather-control {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+#rain-toggle {
+  width: 60px;
+  height: 60px;
+  font-size: 2em;
+  background: linear-gradient(145deg, #4a90e2, #357abd);
+  border: 3px solid #2c5f8d;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+#rain-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
+
+#rain-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#rain-toggle.active {
+  background: linear-gradient(145deg, #00d4ff, #0099cc);
+  border-color: #00ffff;
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.6),
+    0 0 40px rgba(0, 212, 255, 0.4),
+    0 4px 6px rgba(0, 0, 0, 0.3);
+  animation: rainGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes rainGlow {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(0, 212, 255, 0.6),
+      0 0 40px rgba(0, 212, 255, 0.4),
+      0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  50% {
+    box-shadow:
+      0 0 30px rgba(0, 212, 255, 0.8),
+      0 0 60px rgba(0, 212, 255, 0.6),
+      0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+}

@@ -25,6 +25,17 @@ class WeatherSystem {
         }, 2000);
     }
 
+    // Alternar lluvia
+    toggleRain() {
+        if (this.isRaining && this.targetIntensity > 0) {
+            this.stopRain();
+            return false;
+        } else {
+            this.startRain(0.6);
+            return true;
+        }
+    }
+
     // Crear gotas de lluvia
     createRainDrops(playerPosition, count = 200) {
         const geometry = new THREE.BoxGeometry(1, 1, 8);
