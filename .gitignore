@@ -1,0 +1,38 @@
+# Datos de MNIST
+2RNA/.data/
+
+# Modelos entrenados
+*.pt
+*.pth
+*.ckpt
+
+# Notebooks con outputs temporales
+*_error_*.ipynb
+*_output_*.ipynb
+
+# Logs de SLURM
+*.out
+slurm-*.out
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
