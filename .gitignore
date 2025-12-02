@@ -8,7 +8,6 @@
 
 # Notebooks con outputs temporales
 *_error_*.ipynb
-*_output_*.ipynb
 
 # Logs de SLURM
 *.out
