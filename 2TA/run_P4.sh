@@ -2,10 +2,10 @@
 
 #SBATCH -p long
 #SBATCH --cpus-per-task=8
-#SBATCH --job-name=LLAMA_Prompt
+#SBATCH --job-name=P4
 #SBATCH --mem=32G
 #SBATCH --gres=gpu:1
-#SBATCH -o logs/salida_llama_prompting_%j.log
+#SBATCH -o logs/P4_%j.log
 
 # Initialize conda
 source /opt/miniconda3/etc/profile.d/conda.sh
@@ -22,8 +22,8 @@ import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
 from datetime import datetime
 
-notebook_path = "P3_LLAMA_Prompting_RU-ZH.ipynb"
-output_path = f"P3_LLAMA_Prompting_RU-ZH_output_{datetime.now().strftime('%Y%m%d_%H%M%S')}.ipynb"
+notebook_path = "P4_LLAMA_Prompting_RU-ZH.ipynb"
+output_path = f"P4_LLAMA_Prompting_RU-ZH_output_{datetime.now().strftime('%Y%m%d_%H%M%S')}.ipynb"
 
 print(f"Ejecutando notebook: {notebook_path}")
 print(f"Hora de inicio: {datetime.now()}")
@@ -44,7 +44,7 @@ try:
     
 except Exception as e:
     print(f"✗ Error durante la ejecución:\n  {e}")
-    error_path = f"P3_LLAMA_Prompting_RU-ZH_error_{datetime.now().strftime('%Y%m%d_%H%M%S')}.ipynb"
+    error_path = f"P4_LLAMA_Prompting_RU-ZH_error_{datetime.now().strftime('%Y%m%d_%H%M%S')}.ipynb"
     with open(error_path, 'w', encoding='utf-8') as f:
         nbformat.write(nb, f)
     print(f"✓ Notebook parcial guardado en: {error_path}")

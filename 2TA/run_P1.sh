@@ -2,10 +2,10 @@
 
 #SBATCH -p long
 #SBATCH --cpus-per-task=8
-#SBATCH --job-name=P1_NLLB
+#SBATCH --job-name=P1
 #SBATCH --mem=32G
 #SBATCH --gres=gpu:1
-#SBATCH -o logs/salida_p1_nllb_%j.log
+#SBATCH -o logs/P1_%j.log
 
 # Initialize conda
 source /opt/miniconda3/etc/profile.d/conda.sh

@@ -2,10 +2,10 @@
 
 #SBATCH -p long
 #SBATCH --cpus-per-task=8
-#SBATCH --job-name=LLAMA_Finetune
+#SBATCH --job-name=P3
 #SBATCH --mem=40G
 #SBATCH --gres=gpu:1
-#SBATCH -o logs/salida_llama_finetuning_%j.log
+#SBATCH -o logs/P3_%j.log
 
 # Initialize conda
 source /opt/miniconda3/etc/profile.d/conda.sh
