@@ -14,6 +14,6 @@ source /opt/miniconda3/etc/profile.d/conda.sh
 conda activate RFA2526pt
 
 # Install required packages if not already installed
-pip install nbformat nbconvert ipykernel
+pip install nbformat nbconvert ipykernel torch
 
 python run_notebook_execution.py
