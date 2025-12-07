@@ -1,6 +1,10 @@
 # Datos de MNIST
 2RNA/.data/
 
+# Datos de audio para augmentation
+2TLH/trabajo/musan_small/
+2TLH/trabajo/RIRS_NOISES_small/
+
 # Modelos entrenados
 *.pt
 *.pth
